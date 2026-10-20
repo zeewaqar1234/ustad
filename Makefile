@@ -1,4 +1,4 @@
-.PHONY: dev backend frontend install test lint migrate seed-build seed-load password lt-up lt-down lt-check
+.PHONY: dev backend frontend install test lint migrate seed-build seed-build-fast seed-load password lt-up lt-down lt-check
 
 install:
 	cd backend && uv sync
@@ -31,6 +31,10 @@ migrate:
 # Seed decks: build (LanguageTool check -> data/seed/*.json) needs `make lt-up`; load is idempotent.
 seed-build:
 	cd backend && uv run python -m scripts.build_seed
+
+# No LanguageTool: unchanged items keep their earlier result, new/changed items are marked needs_review.
+seed-build-fast:
+	cd backend && uv run python -m scripts.build_seed --skip-lt
 
 seed-load: migrate
 	cd backend && uv run python -m scripts.load_seed
