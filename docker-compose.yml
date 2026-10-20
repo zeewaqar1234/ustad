@@ -1,0 +1,17 @@
+# Phase 0: LanguageTool only. The app + Caddy services are added in Phase 1 (deploy).
+# Self-hosted because the public LanguageTool API forbids automated requests (SPEC §11).
+# Image pulled via mirror.gcr.io (Docker Hub mirror) to avoid Docker Hub pull rate limits.
+services:
+  languagetool:
+    image: mirror.gcr.io/erikvl87/languagetool:6.8
+    ports:
+      - "127.0.0.1:8010:8010"
+    environment:
+      Java_Xms: 512m
+      Java_Xmx: 1g
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8010/v2/languages >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
