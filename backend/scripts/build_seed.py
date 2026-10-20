@@ -2,7 +2,11 @@
 
 Items with LanguageTool matches are marked needs_review (they stay out of Sabaq until approved).
 Needs the self-hosted LanguageTool container (make lt-up). Never the public API.
-Usage: uv run python -m scripts.build_seed
+Usage: uv run python -m scripts.build_seed [deck ...]
+
+--skip-lt: no LanguageTool call. Items already in the built deck with unchanged content keep their
+earlier LanguageTool result; every new or changed item is marked needs_review (note rule LT_SKIPPED).
+Usage: uv run python -m scripts.build_seed --skip-lt [deck ...]
 """
 
 import json
@@ -81,24 +85,42 @@ def lt_issues(text: str) -> list[dict]:
     ]
 
 
-def build(deck_name: str) -> tuple[int, int]:
+LT_SKIPPED = {"rule": "LT_SKIPPED", "message": "LanguageTool not run; review by hand."}
+
+
+def previous_results(deck_name: str) -> dict[str, dict]:
+    """Built items from the last run, keyed by their source content, for --skip-lt reuse."""
+    out = settings.seed_dir / f"{deck_name}.json"
+    if not out.exists():
+        return {}
+    prev = {}
+    for unit in json.loads(out.read_text())["units"]:
+        for it in unit["items"]:
+            src = SeedItem.model_validate(it).model_dump_json()
+            prev[src] = {"status": it["status"], "review_notes": it["review_notes"]}
+    return prev
+
+
+def build(deck_name: str, skip_lt: bool = False) -> tuple[int, int]:
     src = settings.seed_dir / "source" / f"{deck_name}.json"
     deck = SeedDeck.model_validate_json(src.read_text())
+    prev = previous_results(deck_name) if skip_lt else {}
     out_units, flagged, total = [], 0, 0
     for n, unit in enumerate(deck.units, start=1):
         items = []
         for it in unit.items:
-            texts = [it.example_de] + ([it.de] if it.kind == "chunk" else [])
-            notes = [issue for t in texts for issue in lt_issues(t)]
-            total += 1
-            flagged += bool(notes)
-            items.append(
-                {
-                    **it.model_dump(),
-                    "status": "needs_review" if notes else "ok",
-                    "review_notes": notes,
+            if skip_lt:
+                result = prev.get(it.model_dump_json()) or {
+                    "status": "needs_review",
+                    "review_notes": [{"text": it.de, **LT_SKIPPED}],
                 }
-            )
+            else:
+                texts = [it.example_de] + ([it.de] if it.kind == "chunk" else [])
+                notes = [issue for t in texts for issue in lt_issues(t)]
+                result = {"status": "needs_review" if notes else "ok", "review_notes": notes}
+            total += 1
+            flagged += result["status"] == "needs_review"
+            items.append({**it.model_dump(), **result})
         out_units.append(
             {"unit": n, "title": unit.title, "scenario": unit.scenario, "items": items}
         )
@@ -110,8 +132,11 @@ def build(deck_name: str) -> tuple[int, int]:
 
 
 def main() -> int:
-    for name in sys.argv[1:] or ["connector", "work", "life"]:
-        total, flagged = build(name)
+    args = sys.argv[1:]
+    skip_lt = "--skip-lt" in args
+    names = [a for a in args if a != "--skip-lt"] or ["connector", "work", "life"]
+    for name in names:
+        total, flagged = build(name, skip_lt)
         print(f"{name}: {total} items, {flagged} needs_review")
     return 0
 
