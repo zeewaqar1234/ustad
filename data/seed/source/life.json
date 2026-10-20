@@ -1,0 +1,2505 @@
+{
+  "deck": "life",
+  "units": [
+    {
+      "title": "Train: delays and tickets",
+      "scenario": "On the platform in Rüsselsheim or at Frankfurt Hbf, buying tickets and dealing with delays.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Mein Zug hat Verspätung",
+          "en": "My train is delayed.",
+          "alt": [
+            "Mein Zug ist verspätet"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich komme später ins Büro, mein Zug hat Verspätung.",
+          "example_en": "I'll be late to the office, my train is delayed."
+        },
+        {
+          "kind": "chunk",
+          "de": "Der Zug fällt aus",
+          "en": "The train is cancelled.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "Der Zug nach Frankfurt fällt heute leider aus.",
+          "example_en": "Unfortunately the train to Frankfurt is cancelled today."
+        },
+        {
+          "kind": "chunk",
+          "de": "Wie viel Verspätung hat die S-Bahn?",
+          "en": "How late is the S-Bahn?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "B1",
+          "example_de": "Entschuldigung, wie viel Verspätung hat die S-Bahn?",
+          "example_en": "Excuse me, how late is the S-Bahn?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Eine Fahrkarte nach Frankfurt, bitte",
+          "en": "One ticket to Frankfurt, please.",
+          "alt": [
+            "Ein Ticket nach Frankfurt, bitte"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "Guten Morgen, eine Fahrkarte nach Frankfurt, bitte.",
+          "example_en": "Good morning, one ticket to Frankfurt, please."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe ein Deutschlandticket",
+          "en": "I have a Deutschlandticket.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich brauche keine Fahrkarte, ich habe ein Deutschlandticket.",
+          "example_en": "I don't need a ticket, I have a Deutschlandticket."
+        },
+        {
+          "kind": "chunk",
+          "de": "Von welchem Gleis fährt der Zug?",
+          "en": "Which platform does the train leave from?",
+          "alt": [
+            "Von welchem Gleis fährt der Zug ab?"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "Von welchem Gleis fährt der Zug nach Wiesbaden?",
+          "example_en": "Which platform does the train to Wiesbaden leave from?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ist dieser Platz noch frei?",
+          "en": "Is this seat still free?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "Entschuldigung, ist dieser Platz noch frei?",
+          "example_en": "Excuse me, is this seat still free?"
+        },
+        {
+          "kind": "word",
+          "de": "Verspätung",
+          "en": "delay",
+          "alt": [],
+          "gender": "f",
+          "plural": "Verspätungen",
+          "pos": "noun",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "Heute hat die S-Bahn wieder zehn Minuten Verspätung.",
+          "example_en": "Today the S-Bahn is ten minutes late again."
+        },
+        {
+          "kind": "word",
+          "de": "Gleis",
+          "en": "platform, track",
+          "alt": [],
+          "gender": "n",
+          "plural": "Gleise",
+          "pos": "noun",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "Die S8 fährt heute von Gleis 3.",
+          "example_en": "The S8 leaves from platform 3 today."
+        },
+        {
+          "kind": "word",
+          "de": "Fahrkarte",
+          "en": "ticket (train or bus)",
+          "alt": [],
+          "gender": "f",
+          "plural": "Fahrkarten",
+          "pos": "noun",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich kaufe die Fahrkarte am Automaten.",
+          "example_en": "I buy the ticket at the machine."
+        }
+      ]
+    },
+    {
+      "title": "Train: missed connection and alternatives",
+      "scenario": "Stuck at Frankfurt Hbf or the airport station, finding another way home to Rüsselsheim.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich habe meinen Anschluss verpasst",
+          "en": "I missed my connection. (Perfekt)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "B1",
+          "example_de": "Wegen der Verspätung habe ich meinen Anschluss verpasst.",
+          "example_en": "Because of the delay I missed my connection."
+        },
+        {
+          "kind": "chunk",
+          "de": "Wann fährt der nächste Zug nach Rüsselsheim?",
+          "en": "When does the next train to Rüsselsheim leave?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "Entschuldigung, wann fährt der nächste Zug nach Rüsselsheim?",
+          "example_en": "Excuse me, when does the next train to Rüsselsheim leave?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Gibt es eine andere Verbindung?",
+          "en": "Is there another connection?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "B1",
+          "example_de": "Die S-Bahn fällt aus. Gibt es eine andere Verbindung?",
+          "example_en": "The S-Bahn is cancelled. Is there another connection?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Muss ich umsteigen?",
+          "en": "Do I have to change trains?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich fahre nach Darmstadt. Muss ich umsteigen?",
+          "example_en": "I'm going to Darmstadt. Do I have to change trains?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich steige am Hauptbahnhof um",
+          "en": "I change trains at the main station.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "B1",
+          "example_de": "Morgens steige ich am Hauptbahnhof in die U-Bahn um.",
+          "example_en": "In the morning I change to the underground at the main station."
+        },
+        {
+          "kind": "chunk",
+          "de": "Fährt dieser Zug über den Flughafen?",
+          "en": "Does this train go via the airport?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "B1",
+          "example_de": "Entschuldigung, fährt dieser Zug über den Flughafen?",
+          "example_en": "Excuse me, does this train go via the airport?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Es gibt Schienenersatzverkehr",
+          "en": "There is a rail replacement bus service.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "B2",
+          "example_de": "Am Wochenende gibt es Schienenersatzverkehr zwischen Rüsselsheim und Frankfurt.",
+          "example_en": "At the weekend there is a rail replacement bus service between Rüsselsheim and Frankfurt."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich komme etwa zwanzig Minuten später",
+          "en": "I'll arrive about twenty minutes late.",
+          "alt": [
+            "Ich komme ungefähr zwanzig Minuten später"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "B1",
+          "example_de": "Mein Zug steht, ich komme etwa zwanzig Minuten später.",
+          "example_en": "My train is stuck, I'll arrive about twenty minutes late."
+        },
+        {
+          "kind": "word",
+          "de": "Anschluss",
+          "en": "connection (train)",
+          "alt": [],
+          "gender": "m",
+          "plural": "Anschlüsse",
+          "pos": "noun",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "B1",
+          "example_de": "Den Anschluss in Frankfurt schaffe ich heute nicht.",
+          "example_en": "I won't make the connection in Frankfurt today."
+        },
+        {
+          "kind": "word",
+          "de": "umsteigen",
+          "en": "to change (trains)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "verb",
+          "tags": [
+            "bahn"
+          ],
+          "cefr": "A2",
+          "example_de": "In Frankfurt muss ich in die S9 umsteigen.",
+          "example_en": "In Frankfurt I have to change to the S9."
+        }
+      ]
+    },
+    {
+      "title": "Bürgeramt: registration and appointments",
+      "scenario": "At the Bürgeramt in Rüsselsheim: Anmeldung, appointments, documents, residence permit.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich möchte mich anmelden",
+          "en": "I'd like to register my address.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "buergeramt",
+            "official"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich bin umgezogen und möchte mich anmelden.",
+          "example_en": "I have moved and would like to register my address."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich hätte gern einen Termin",
+          "en": "I would like an appointment.",
+          "alt": [
+            "Ich hätte gerne einen Termin"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "buergeramt",
+            "official"
+          ],
+          "cefr": "A2",
+          "example_de": "Guten Tag, ich hätte gern einen Termin für die Anmeldung.",
+          "example_en": "Hello, I would like an appointment for the registration."
+        },
+        {
+          "kind": "chunk",
+          "de": "Welche Unterlagen brauche ich?",
+          "en": "Which documents do I need?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "buergeramt",
+            "official"
+          ],
+          "cefr": "B1",
+          "example_de": "Welche Unterlagen brauche ich für die Anmeldung?",
+          "example_en": "Which documents do I need for the registration?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bin vor Kurzem umgezogen",
+          "en": "I moved recently. (Perfekt)",
+          "alt": [
+            "Ich bin vor kurzem umgezogen"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "buergeramt",
+            "official"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich bin vor Kurzem von Frankfurt nach Rüsselsheim umgezogen.",
+          "example_en": "I recently moved from Frankfurt to Rüsselsheim."
+        },
+        {
+          "kind": "chunk",
+          "de": "Mein Aufenthaltstitel läuft bald ab",
+          "en": "My residence permit expires soon.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "buergeramt",
+            "official"
+          ],
+          "cefr": "B2",
+          "example_de": "Mein Aufenthaltstitel läuft bald ab, deshalb brauche ich einen Termin.",
+          "example_en": "My residence permit expires soon, so I need an appointment."
+        },
+        {
+          "kind": "chunk",
+          "de": "Wo muss ich unterschreiben?",
+          "en": "Where do I have to sign?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "buergeramt",
+            "official"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich habe das Formular ausgefüllt. Wo muss ich unterschreiben?",
+          "example_en": "I have filled in the form. Where do I have to sign?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Kann ich auch ohne Termin kommen?",
+          "en": "Can I also come without an appointment?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "buergeramt",
+            "official"
+          ],
+          "cefr": "B1",
+          "example_de": "Kann ich auch ohne Termin kommen, oder muss ich online buchen?",
+          "example_en": "Can I also come without an appointment, or do I have to book online?"
+        },
+        {
+          "kind": "word",
+          "de": "Anmeldung",
+          "en": "registration (of address)",
+          "alt": [],
+          "gender": "f",
+          "plural": "Anmeldungen",
+          "pos": "noun",
+          "tags": [
+            "buergeramt",
+            "official"
+          ],
+          "cefr": "B1",
+          "example_de": "Für die Anmeldung brauche ich die Wohnungsgeberbestätigung.",
+          "example_en": "For the registration I need the landlord's confirmation."
+        },
+        {
+          "kind": "word",
+          "de": "Termin",
+          "en": "appointment",
+          "alt": [],
+          "gender": "m",
+          "plural": "Termine",
+          "pos": "noun",
+          "tags": [
+            "buergeramt",
+            "official"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich habe morgen um neun einen Termin beim Bürgeramt.",
+          "example_en": "I have an appointment at the Bürgeramt tomorrow at nine."
+        },
+        {
+          "kind": "word",
+          "de": "Aufenthaltstitel",
+          "en": "residence permit",
+          "alt": [],
+          "gender": "m",
+          "plural": "Aufenthaltstitel",
+          "pos": "noun",
+          "tags": [
+            "buergeramt",
+            "official"
+          ],
+          "cefr": "B2",
+          "example_de": "Ich muss meinen Aufenthaltstitel verlängern.",
+          "example_en": "I have to extend my residence permit."
+        }
+      ]
+    },
+    {
+      "title": "Doctor: making an appointment by phone",
+      "scenario": "Calling a Hausarzt practice in Rüsselsheim to book, move or cancel an appointment.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich möchte einen Termin vereinbaren",
+          "en": "I'd like to make an appointment.",
+          "alt": [
+            "Ich möchte einen Termin machen"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Guten Tag, ich möchte einen Termin vereinbaren.",
+          "example_en": "Hello, I'd like to make an appointment."
+        },
+        {
+          "kind": "chunk",
+          "de": "Haben Sie diese Woche noch einen Termin frei?",
+          "en": "Do you still have an appointment free this week? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich habe Fieber. Haben Sie diese Woche noch einen Termin frei?",
+          "example_en": "I have a fever. Do you still have an appointment free this week?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bin ein neuer Patient",
+          "en": "I am a new patient.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "phone"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich bin ein neuer Patient und war noch nie bei Ihnen.",
+          "example_en": "I am a new patient and have never been to your practice."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bin gesetzlich versichert",
+          "en": "I have statutory health insurance.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Ja, ich bin gesetzlich versichert, bei der Techniker Krankenkasse.",
+          "example_en": "Yes, I have statutory health insurance, with the Techniker Krankenkasse."
+        },
+        {
+          "kind": "chunk",
+          "de": "Donnerstag um zehn passt mir gut",
+          "en": "Thursday at ten works well for me.",
+          "alt": [
+            "Donnerstag um zehn Uhr passt mir gut"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Donnerstag um zehn passt mir gut, vielen Dank.",
+          "example_en": "Thursday at ten works well for me, thank you very much."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich muss meinen Termin absagen",
+          "en": "I have to cancel my appointment.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Leider muss ich meinen Termin am Montag absagen.",
+          "example_en": "Unfortunately I have to cancel my appointment on Monday."
+        },
+        {
+          "kind": "chunk",
+          "de": "Kann ich den Termin verschieben?",
+          "en": "Can I move the appointment?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich habe eine Prüfung. Kann ich den Termin verschieben?",
+          "example_en": "I have an exam. Can I move the appointment?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich brauche eine Krankschreibung",
+          "en": "I need a sick note.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich kann heute nicht arbeiten und brauche eine Krankschreibung.",
+          "example_en": "I can't work today and need a sick note."
+        },
+        {
+          "kind": "word",
+          "de": "Praxis",
+          "en": "(doctor's) practice",
+          "alt": [],
+          "gender": "f",
+          "plural": "Praxen",
+          "pos": "noun",
+          "tags": [
+            "arzt",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Praxis ist am Mittwochnachmittag geschlossen.",
+          "example_en": "The practice is closed on Wednesday afternoon."
+        },
+        {
+          "kind": "word",
+          "de": "Krankenkasse",
+          "en": "health insurance fund",
+          "alt": [],
+          "gender": "f",
+          "plural": "Krankenkassen",
+          "pos": "noun",
+          "tags": [
+            "arzt",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Meine Krankenkasse bezahlt die Untersuchung.",
+          "example_en": "My health insurance pays for the examination."
+        }
+      ]
+    },
+    {
+      "title": "Doctor: symptoms",
+      "scenario": "In the consulting room, describing what is wrong.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich habe Kopfschmerzen",
+          "en": "I have a headache.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "health"
+          ],
+          "cefr": "A2",
+          "example_de": "Seit heute Morgen habe ich Kopfschmerzen.",
+          "example_en": "I have had a headache since this morning."
+        },
+        {
+          "kind": "chunk",
+          "de": "Mir ist schlecht",
+          "en": "I feel sick (nauseous).",
+          "alt": [
+            "Mir ist übel"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "health"
+          ],
+          "cefr": "A2",
+          "example_de": "Mir ist schlecht, ich glaube, ich habe etwas Falsches gegessen.",
+          "example_en": "I feel sick, I think I ate something bad."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe seit drei Tagen Fieber",
+          "en": "I've had a fever for three days.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "health"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich habe seit drei Tagen Fieber und kann nicht schlafen.",
+          "example_en": "I've had a fever for three days and can't sleep."
+        },
+        {
+          "kind": "chunk",
+          "de": "Mein Hals tut weh",
+          "en": "My throat hurts.",
+          "alt": [
+            "Mir tut der Hals weh"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "health"
+          ],
+          "cefr": "A2",
+          "example_de": "Mein Hals tut weh, wenn ich schlucke.",
+          "example_en": "My throat hurts when I swallow."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe starken Husten",
+          "en": "I have a bad cough.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "health"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich habe starken Husten, vor allem nachts.",
+          "example_en": "I have a bad cough, especially at night."
+        },
+        {
+          "kind": "chunk",
+          "de": "Es tut hier weh",
+          "en": "It hurts here.",
+          "alt": [
+            "Hier tut es weh"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "health"
+          ],
+          "cefr": "A2",
+          "example_de": "Es tut hier weh, wenn ich den Arm hebe.",
+          "example_en": "It hurts here when I lift my arm."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bin allergisch gegen Penicillin",
+          "en": "I am allergic to penicillin.",
+          "alt": [
+            "Ich bin gegen Penicillin allergisch"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "health"
+          ],
+          "cefr": "B1",
+          "example_de": "Bevor Sie mir etwas verschreiben: Ich bin allergisch gegen Penicillin.",
+          "example_en": "Before you prescribe anything: I am allergic to penicillin."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich fühle mich schwach",
+          "en": "I feel weak.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "arzt",
+            "health"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich fühle mich schwach und bin ständig müde.",
+          "example_en": "I feel weak and am constantly tired."
+        },
+        {
+          "kind": "word",
+          "de": "Schmerz",
+          "en": "pain",
+          "alt": [],
+          "gender": "m",
+          "plural": "Schmerzen",
+          "pos": "noun",
+          "tags": [
+            "arzt",
+            "health"
+          ],
+          "cefr": "A2",
+          "example_de": "Der Schmerz ist am Abend stärker.",
+          "example_en": "The pain is stronger in the evening."
+        },
+        {
+          "kind": "word",
+          "de": "Rezept",
+          "en": "prescription",
+          "alt": [],
+          "gender": "n",
+          "plural": "Rezepte",
+          "pos": "noun",
+          "tags": [
+            "arzt",
+            "health"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Ärztin hat mir ein Rezept gegeben.",
+          "example_en": "The doctor gave me a prescription."
+        }
+      ]
+    },
+    {
+      "title": "Pharmacy",
+      "scenario": "At the Apotheke, buying medicine and asking how to take it.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich hätte gern etwas gegen Erkältung",
+          "en": "I'd like something for a cold.",
+          "alt": [
+            "Ich hätte gerne etwas gegen Erkältung"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "apotheke",
+            "health"
+          ],
+          "cefr": "B1",
+          "example_de": "Guten Tag, ich hätte gern etwas gegen Erkältung.",
+          "example_en": "Hello, I'd like something for a cold."
+        },
+        {
+          "kind": "chunk",
+          "de": "Brauche ich dafür ein Rezept?",
+          "en": "Do I need a prescription for that?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "apotheke",
+            "health"
+          ],
+          "cefr": "B1",
+          "example_de": "Das Medikament klingt gut. Brauche ich dafür ein Rezept?",
+          "example_en": "The medicine sounds good. Do I need a prescription for that?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Wie oft muss ich das nehmen?",
+          "en": "How often do I have to take this?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "apotheke",
+            "health"
+          ],
+          "cefr": "A2",
+          "example_de": "Wie oft muss ich das nehmen, und wie lange?",
+          "example_en": "How often do I have to take this, and for how long?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Dreimal täglich nach dem Essen",
+          "en": "Three times a day after meals.",
+          "alt": [
+            "Dreimal am Tag nach dem Essen"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "apotheke",
+            "health"
+          ],
+          "cefr": "B1",
+          "example_de": "Nehmen Sie die Tabletten dreimal täglich nach dem Essen.",
+          "example_en": "Take the tablets three times a day after meals."
+        },
+        {
+          "kind": "chunk",
+          "de": "Haben Sie das auch als Tabletten?",
+          "en": "Do you also have this as tablets? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "apotheke",
+            "health"
+          ],
+          "cefr": "B1",
+          "example_de": "Den Saft mag ich nicht. Haben Sie das auch als Tabletten?",
+          "example_en": "I don't like the syrup. Do you also have this as tablets?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Gibt es Nebenwirkungen?",
+          "en": "Are there side effects?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "apotheke",
+            "health"
+          ],
+          "cefr": "B1",
+          "example_de": "Gibt es Nebenwirkungen, zum Beispiel Müdigkeit?",
+          "example_en": "Are there side effects, for example tiredness?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich möchte dieses Rezept einlösen",
+          "en": "I'd like to fill this prescription.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "apotheke",
+            "health"
+          ],
+          "cefr": "B2",
+          "example_de": "Guten Tag, ich möchte dieses Rezept einlösen.",
+          "example_en": "Hello, I'd like to fill this prescription."
+        },
+        {
+          "kind": "word",
+          "de": "Tablette",
+          "en": "tablet, pill",
+          "alt": [],
+          "gender": "f",
+          "plural": "Tabletten",
+          "pos": "noun",
+          "tags": [
+            "apotheke",
+            "health"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich nehme abends eine Tablette.",
+          "example_en": "I take a tablet in the evening."
+        },
+        {
+          "kind": "word",
+          "de": "Nebenwirkung",
+          "en": "side effect",
+          "alt": [],
+          "gender": "f",
+          "plural": "Nebenwirkungen",
+          "pos": "noun",
+          "tags": [
+            "apotheke",
+            "health"
+          ],
+          "cefr": "B2",
+          "example_de": "Eine mögliche Nebenwirkung sind Kopfschmerzen.",
+          "example_en": "One possible side effect is headaches."
+        },
+        {
+          "kind": "word",
+          "de": "Medikament",
+          "en": "medicine, medication",
+          "alt": [],
+          "gender": "n",
+          "plural": "Medikamente",
+          "pos": "noun",
+          "tags": [
+            "apotheke",
+            "health"
+          ],
+          "cefr": "A2",
+          "example_de": "Dieses Medikament gibt es nur in der Apotheke.",
+          "example_en": "This medicine is only available at the pharmacy."
+        }
+      ]
+    },
+    {
+      "title": "Flat: landlord and repairs",
+      "scenario": "Reporting problems in the flat to the Vermieter by phone, email or WhatsApp.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Die Heizung ist kaputt",
+          "en": "The heating is broken.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "landlord"
+          ],
+          "cefr": "A2",
+          "example_de": "Seit gestern ist die Heizung kaputt und die Wohnung ist kalt.",
+          "example_en": "The heating has been broken since yesterday and the flat is cold."
+        },
+        {
+          "kind": "chunk",
+          "de": "Das Wasser wird nicht warm",
+          "en": "The water doesn't get hot.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "landlord"
+          ],
+          "cefr": "B1",
+          "example_de": "In der Dusche wird das Wasser nicht warm.",
+          "example_en": "The water doesn't get hot in the shower."
+        },
+        {
+          "kind": "chunk",
+          "de": "Können Sie bitte einen Handwerker schicken?",
+          "en": "Can you please send a repair person? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "landlord"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Heizung funktioniert nicht. Können Sie bitte einen Handwerker schicken?",
+          "example_en": "The heating isn't working. Can you please send a repair person?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Wann kann der Handwerker kommen?",
+          "en": "When can the repair person come?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "landlord"
+          ],
+          "cefr": "B1",
+          "example_de": "Wann kann der Handwerker kommen? Ich bin ab 18 Uhr zu Hause.",
+          "example_en": "When can the repair person come? I'm at home from 6 pm."
+        },
+        {
+          "kind": "chunk",
+          "de": "Im Bad ist Schimmel",
+          "en": "There is mould in the bathroom.",
+          "alt": [
+            "Im Badezimmer ist Schimmel"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "landlord"
+          ],
+          "cefr": "B1",
+          "example_de": "Im Bad ist Schimmel an der Decke.",
+          "example_en": "There is mould on the ceiling in the bathroom."
+        },
+        {
+          "kind": "chunk",
+          "de": "Das Fenster lässt sich nicht schließen",
+          "en": "The window won't close.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "landlord"
+          ],
+          "cefr": "B2",
+          "example_de": "Das Fenster im Schlafzimmer lässt sich nicht schließen.",
+          "example_en": "The bedroom window won't close."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich schicke Ihnen ein Foto",
+          "en": "I'll send you a photo. (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "landlord"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich schicke Ihnen ein Foto von dem Schaden.",
+          "example_en": "I'll send you a photo of the damage."
+        },
+        {
+          "kind": "word",
+          "de": "Vermieter",
+          "en": "landlord",
+          "alt": [],
+          "gender": "m",
+          "plural": "Vermieter",
+          "pos": "noun",
+          "tags": [
+            "wohnung",
+            "landlord"
+          ],
+          "cefr": "B1",
+          "example_de": "Mein Vermieter antwortet meistens schnell.",
+          "example_en": "My landlord usually answers quickly."
+        },
+        {
+          "kind": "word",
+          "de": "Heizung",
+          "en": "heating",
+          "alt": [],
+          "gender": "f",
+          "plural": "Heizungen",
+          "pos": "noun",
+          "tags": [
+            "wohnung",
+            "landlord"
+          ],
+          "cefr": "A2",
+          "example_de": "Im Winter läuft die Heizung den ganzen Tag.",
+          "example_en": "In winter the heating runs all day."
+        },
+        {
+          "kind": "word",
+          "de": "Miete",
+          "en": "rent",
+          "alt": [],
+          "gender": "f",
+          "plural": "Mieten",
+          "pos": "noun",
+          "tags": [
+            "wohnung",
+            "landlord"
+          ],
+          "cefr": "A2",
+          "example_de": "Die Miete überweise ich am Anfang des Monats.",
+          "example_en": "I transfer the rent at the start of the month."
+        }
+      ]
+    },
+    {
+      "title": "Flat: neighbours and waste sorting",
+      "scenario": "In the building and at the bins: talking to neighbours, Mülltrennung.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Wohin kommt der Biomüll?",
+          "en": "Where does the organic waste go?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "neighbours"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich bin neu hier. Wohin kommt der Biomüll?",
+          "example_en": "I'm new here. Where does the organic waste go?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Das kommt in die gelbe Tonne",
+          "en": "That goes in the yellow bin.",
+          "alt": [
+            "Das gehört in die gelbe Tonne"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "neighbours"
+          ],
+          "cefr": "B1",
+          "example_de": "Joghurtbecher aus Plastik? Das kommt in die gelbe Tonne.",
+          "example_en": "Plastic yoghurt pots? That goes in the yellow bin."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bringe das Altglas zum Container",
+          "en": "I take the used glass to the bottle bank.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "neighbours"
+          ],
+          "cefr": "B1",
+          "example_de": "Am Samstag bringe ich das Altglas zum Container.",
+          "example_en": "On Saturday I take the used glass to the bottle bank."
+        },
+        {
+          "kind": "chunk",
+          "de": "Könnten Sie die Musik etwas leiser machen?",
+          "en": "Could you turn the music down a little? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "neighbours"
+          ],
+          "cefr": "B1",
+          "example_de": "Entschuldigung, es ist schon spät. Könnten Sie die Musik etwas leiser machen?",
+          "example_en": "Sorry, it's already late. Could you turn the music down a little?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bin Ihr neuer Nachbar",
+          "en": "I'm your new neighbour. (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "neighbours"
+          ],
+          "cefr": "A2",
+          "example_de": "Guten Tag, ich bin Ihr neuer Nachbar aus dem zweiten Stock.",
+          "example_en": "Hello, I'm your new neighbour from the second floor."
+        },
+        {
+          "kind": "chunk",
+          "de": "Haben Sie ein Paket für mich angenommen?",
+          "en": "Did you take in a parcel for me? (formal, Sie, Perfekt)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "neighbours"
+          ],
+          "cefr": "B1",
+          "example_de": "Entschuldigung, haben Sie ein Paket für mich angenommen?",
+          "example_en": "Excuse me, did you take in a parcel for me?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Wann wird der Müll abgeholt?",
+          "en": "When is the rubbish collected?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "wohnung",
+            "neighbours"
+          ],
+          "cefr": "B1",
+          "example_de": "Wissen Sie, wann der Müll abgeholt wird?",
+          "example_en": "Do you know when the rubbish is collected?"
+        },
+        {
+          "kind": "word",
+          "de": "Mülltonne",
+          "en": "rubbish bin",
+          "alt": [],
+          "gender": "f",
+          "plural": "Mülltonnen",
+          "pos": "noun",
+          "tags": [
+            "wohnung",
+            "neighbours"
+          ],
+          "cefr": "A2",
+          "example_de": "Die Mülltonnen stehen im Hof.",
+          "example_en": "The rubbish bins are in the courtyard."
+        },
+        {
+          "kind": "word",
+          "de": "Nachbar",
+          "en": "neighbour (male)",
+          "alt": [],
+          "gender": "m",
+          "plural": "Nachbarn",
+          "pos": "noun",
+          "tags": [
+            "wohnung",
+            "neighbours"
+          ],
+          "cefr": "A2",
+          "example_de": "Unser Nachbar hilft uns oft.",
+          "example_en": "Our neighbour often helps us."
+        },
+        {
+          "kind": "word",
+          "de": "trennen",
+          "en": "to separate, to sort (waste)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "verb",
+          "tags": [
+            "wohnung",
+            "neighbours"
+          ],
+          "cefr": "B1",
+          "example_de": "In Deutschland trennt man den Müll sehr genau.",
+          "example_en": "In Germany people sort their rubbish very carefully."
+        }
+      ]
+    },
+    {
+      "title": "Supermarket",
+      "scenario": "Shopping at REWE, Lidl or the Turkish supermarket near the station.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Wo finde ich die Milch?",
+          "en": "Where can I find the milk?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "supermarkt",
+            "shopping"
+          ],
+          "cefr": "A2",
+          "example_de": "Entschuldigung, wo finde ich die Milch?",
+          "example_en": "Excuse me, where can I find the milk?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Haben Sie auch Halal-Fleisch?",
+          "en": "Do you also have halal meat? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "supermarkt",
+            "shopping"
+          ],
+          "cefr": "B1",
+          "example_de": "Haben Sie auch Halal-Fleisch, oder nur an der Theke?",
+          "example_en": "Do you also have halal meat, or only at the counter?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich brauche keine Tüte",
+          "en": "I don't need a bag.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "supermarkt",
+            "shopping"
+          ],
+          "cefr": "A2",
+          "example_de": "Danke, ich brauche keine Tüte, ich habe einen Rucksack.",
+          "example_en": "Thanks, I don't need a bag, I have a backpack."
+        },
+        {
+          "kind": "chunk",
+          "de": "Kann ich mit Karte zahlen?",
+          "en": "Can I pay by card?",
+          "alt": [
+            "Kann ich mit Karte bezahlen?"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "supermarkt",
+            "shopping"
+          ],
+          "cefr": "A2",
+          "example_de": "Kann ich mit Karte zahlen, oder nur bar?",
+          "example_en": "Can I pay by card, or only cash?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Das ist im Angebot",
+          "en": "That's on special offer.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "supermarkt",
+            "shopping"
+          ],
+          "cefr": "B1",
+          "example_de": "Der Reis ist diese Woche im Angebot.",
+          "example_en": "The rice is on special offer this week."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ein halbes Kilo Tomaten, bitte",
+          "en": "Half a kilo of tomatoes, please.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "supermarkt",
+            "shopping"
+          ],
+          "cefr": "A2",
+          "example_de": "Ein halbes Kilo Tomaten, bitte, und zwei Gurken.",
+          "example_en": "Half a kilo of tomatoes, please, and two cucumbers."
+        },
+        {
+          "kind": "chunk",
+          "de": "Wie lange haben Sie heute geöffnet?",
+          "en": "How long are you open today? (formal, Sie)",
+          "alt": [
+            "Wie lange haben Sie heute offen?"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "supermarkt",
+            "shopping"
+          ],
+          "cefr": "B1",
+          "example_de": "Wie lange haben Sie heute geöffnet? Ich komme erst um neun.",
+          "example_en": "How long are you open today? I won't get here until nine."
+        },
+        {
+          "kind": "word",
+          "de": "Kasse",
+          "en": "checkout, till",
+          "alt": [],
+          "gender": "f",
+          "plural": "Kassen",
+          "pos": "noun",
+          "tags": [
+            "supermarkt",
+            "shopping"
+          ],
+          "cefr": "A2",
+          "example_de": "An der Kasse ist heute eine lange Schlange.",
+          "example_en": "There is a long queue at the checkout today."
+        },
+        {
+          "kind": "word",
+          "de": "Pfand",
+          "en": "deposit (on bottles)",
+          "alt": [],
+          "gender": "n",
+          "plural": "-",
+          "pos": "noun",
+          "tags": [
+            "supermarkt",
+            "shopping"
+          ],
+          "cefr": "B1",
+          "example_de": "Auf dieser Flasche sind 25 Cent Pfand.",
+          "example_en": "There is a 25 cent deposit on this bottle."
+        },
+        {
+          "kind": "word",
+          "de": "Kassenbon",
+          "en": "receipt (shop)",
+          "alt": [],
+          "gender": "m",
+          "plural": "Kassenbons",
+          "pos": "noun",
+          "tags": [
+            "supermarkt",
+            "shopping"
+          ],
+          "cefr": "B1",
+          "example_de": "Den Kassenbon brauche ich nicht, danke.",
+          "example_en": "I don't need the receipt, thanks."
+        }
+      ]
+    },
+    {
+      "title": "Canteen and food",
+      "scenario": "Lunch at the work Kantine or the Mensa at uni, with colleagues and classmates.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Was gibt es heute?",
+          "en": "What's on the menu today?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "kantine",
+            "food"
+          ],
+          "cefr": "A2",
+          "example_de": "Was gibt es heute in der Kantine?",
+          "example_en": "What's on the menu in the canteen today?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ist da Schweinefleisch drin?",
+          "en": "Is there pork in it?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "kantine",
+            "food"
+          ],
+          "cefr": "B1",
+          "example_de": "Entschuldigung, ist da Schweinefleisch drin?",
+          "example_en": "Excuse me, is there pork in it?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich esse kein Schweinefleisch",
+          "en": "I don't eat pork.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "kantine",
+            "food"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich esse kein Schweinefleisch, deshalb nehme ich das Hähnchen.",
+          "example_en": "I don't eat pork, so I'll have the chicken."
+        },
+        {
+          "kind": "chunk",
+          "de": "Gehen wir zusammen in die Kantine?",
+          "en": "Shall we go to the canteen together?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "kantine",
+            "food"
+          ],
+          "cefr": "A2",
+          "example_de": "Es ist schon zwölf. Gehen wir zusammen in die Kantine?",
+          "example_en": "It's already twelve. Shall we go to the canteen together?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Guten Appetit",
+          "en": "Enjoy your meal.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "kantine",
+            "food"
+          ],
+          "cefr": "A2",
+          "example_de": "Guten Appetit, bis später.",
+          "example_en": "Enjoy your meal, see you later."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich nehme das vegetarische Gericht",
+          "en": "I'll have the vegetarian dish.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "kantine",
+            "food"
+          ],
+          "cefr": "B1",
+          "example_de": "Heute nehme ich das vegetarische Gericht mit Reis.",
+          "example_en": "Today I'll have the vegetarian dish with rice."
+        },
+        {
+          "kind": "chunk",
+          "de": "Das schmeckt richtig gut",
+          "en": "This tastes really good.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "kantine",
+            "food"
+          ],
+          "cefr": "A2",
+          "example_de": "Probier mal die Suppe, das schmeckt richtig gut.",
+          "example_en": "Try the soup, it tastes really good."
+        },
+        {
+          "kind": "chunk",
+          "de": "Zum Mitnehmen, bitte",
+          "en": "To take away, please.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "kantine",
+            "food"
+          ],
+          "cefr": "A2",
+          "example_de": "Einen Kaffee zum Mitnehmen, bitte.",
+          "example_en": "A coffee to take away, please."
+        },
+        {
+          "kind": "word",
+          "de": "Gericht",
+          "en": "dish (meal)",
+          "alt": [],
+          "gender": "n",
+          "plural": "Gerichte",
+          "pos": "noun",
+          "tags": [
+            "kantine",
+            "food"
+          ],
+          "cefr": "B1",
+          "example_de": "Das Gericht des Tages kostet 4,50 Euro.",
+          "example_en": "The dish of the day costs 4.50 euros."
+        },
+        {
+          "kind": "word",
+          "de": "Nachtisch",
+          "en": "dessert",
+          "alt": [],
+          "gender": "m",
+          "plural": "Nachtische",
+          "pos": "noun",
+          "tags": [
+            "kantine",
+            "food"
+          ],
+          "cefr": "A2",
+          "example_de": "Zum Nachtisch gibt es heute Obstsalat.",
+          "example_en": "There is fruit salad for dessert today."
+        }
+      ]
+    },
+    {
+      "title": "Bank, post and parcels",
+      "scenario": "At the bank branch, the post office or a DHL Packstation.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich möchte ein Konto eröffnen",
+          "en": "I'd like to open an account.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bank",
+            "post"
+          ],
+          "cefr": "B1",
+          "example_de": "Guten Tag, ich möchte ein Girokonto eröffnen.",
+          "example_en": "Hello, I'd like to open a current account."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich möchte dieses Paket nach Pakistan schicken",
+          "en": "I'd like to send this parcel to Pakistan.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bank",
+            "post"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich möchte dieses Paket nach Pakistan schicken. Was kostet das?",
+          "example_en": "I'd like to send this parcel to Pakistan. How much does it cost?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich möchte ein Paket abholen",
+          "en": "I'd like to pick up a parcel.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bank",
+            "post"
+          ],
+          "cefr": "A2",
+          "example_de": "Guten Tag, ich möchte ein Paket abholen. Hier ist mein Ausweis.",
+          "example_en": "Hello, I'd like to pick up a parcel. Here is my ID."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe eine Benachrichtigung bekommen",
+          "en": "I received a notification. (Perfekt)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bank",
+            "post"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich habe eine Benachrichtigung bekommen, aber ich war zu Hause.",
+          "example_en": "I received a notification, but I was at home."
+        },
+        {
+          "kind": "chunk",
+          "de": "Mein Paket ist nicht angekommen",
+          "en": "My parcel hasn't arrived. (Perfekt)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bank",
+            "post"
+          ],
+          "cefr": "B1",
+          "example_de": "Mein Paket ist nach zwei Wochen immer noch nicht angekommen.",
+          "example_en": "After two weeks my parcel still hasn't arrived."
+        },
+        {
+          "kind": "chunk",
+          "de": "Wie lange dauert die Lieferung?",
+          "en": "How long does delivery take?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bank",
+            "post"
+          ],
+          "cefr": "A2",
+          "example_de": "Wie lange dauert die Lieferung nach Pakistan?",
+          "example_en": "How long does delivery to Pakistan take?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe meine Karte verloren",
+          "en": "I've lost my card. (Perfekt)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bank",
+            "post"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich habe meine Karte in der S-Bahn verloren.",
+          "example_en": "I lost my card on the S-Bahn."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich möchte meine Karte sperren lassen",
+          "en": "I'd like to have my card blocked.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "bank",
+            "post"
+          ],
+          "cefr": "B2",
+          "example_de": "Ich habe meine Karte verloren und möchte sie sperren lassen.",
+          "example_en": "I've lost my card and would like to have it blocked."
+        },
+        {
+          "kind": "word",
+          "de": "Überweisung",
+          "en": "bank transfer",
+          "alt": [],
+          "gender": "f",
+          "plural": "Überweisungen",
+          "pos": "noun",
+          "tags": [
+            "bank",
+            "post"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Überweisung dauert ein bis zwei Tage.",
+          "example_en": "The transfer takes one to two days."
+        },
+        {
+          "kind": "word",
+          "de": "Briefmarke",
+          "en": "stamp (postage)",
+          "alt": [],
+          "gender": "f",
+          "plural": "Briefmarken",
+          "pos": "noun",
+          "tags": [
+            "bank",
+            "post"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich brauche eine Briefmarke für diesen Brief.",
+          "example_en": "I need a stamp for this letter."
+        }
+      ]
+    },
+    {
+      "title": "Small talk: weekend and weather",
+      "scenario": "Monday morning at the coffee machine or on the platform with a classmate.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Wie war dein Wochenende?",
+          "en": "How was your weekend? (du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Hey, wie war dein Wochenende?",
+          "example_en": "Hey, how was your weekend?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Was hast du am Wochenende gemacht?",
+          "en": "What did you do at the weekend? (du, Perfekt)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Was hast du am Wochenende gemacht? Warst du unterwegs?",
+          "example_en": "What did you do at the weekend? Were you out and about?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe nicht viel gemacht",
+          "en": "I didn't do much. (Perfekt)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Ehrlich gesagt habe ich nicht viel gemacht, ich habe gelernt.",
+          "example_en": "To be honest I didn't do much, I studied."
+        },
+        {
+          "kind": "chunk",
+          "de": "Heute ist es ziemlich kalt",
+          "en": "It's pretty cold today.",
+          "alt": [
+            "Es ist heute ziemlich kalt"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Heute ist es ziemlich kalt, ich habe meine Mütze vergessen.",
+          "example_en": "It's pretty cold today, I forgot my hat."
+        },
+        {
+          "kind": "chunk",
+          "de": "Morgen soll es regnen",
+          "en": "It's supposed to rain tomorrow.",
+          "alt": [
+            "Es soll morgen regnen"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "smalltalk"
+          ],
+          "cefr": "B1",
+          "example_de": "Morgen soll es regnen, nimm einen Schirm mit.",
+          "example_en": "It's supposed to rain tomorrow, take an umbrella."
+        },
+        {
+          "kind": "chunk",
+          "de": "Endlich scheint die Sonne",
+          "en": "Finally the sun is shining.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Endlich scheint die Sonne, lass uns draußen essen.",
+          "example_en": "Finally the sun is shining, let's eat outside."
+        },
+        {
+          "kind": "chunk",
+          "de": "Schönes Wochenende",
+          "en": "Have a nice weekend.",
+          "alt": [
+            "Ein schönes Wochenende"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Bis Montag und schönes Wochenende.",
+          "example_en": "See you Monday and have a nice weekend."
+        },
+        {
+          "kind": "chunk",
+          "de": "Danke, gleichfalls",
+          "en": "Thanks, you too.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Schönes Wochenende! Danke, gleichfalls.",
+          "example_en": "Have a nice weekend! Thanks, you too."
+        },
+        {
+          "kind": "word",
+          "de": "Wetter",
+          "en": "weather",
+          "alt": [],
+          "gender": "n",
+          "plural": "-",
+          "pos": "noun",
+          "tags": [
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Bei diesem Wetter bleibe ich lieber zu Hause.",
+          "example_en": "In this weather I'd rather stay at home."
+        },
+        {
+          "kind": "word",
+          "de": "Wochenende",
+          "en": "weekend",
+          "alt": [],
+          "gender": "n",
+          "plural": "Wochenenden",
+          "pos": "noun",
+          "tags": [
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Am Wochenende fahre ich nach Mainz.",
+          "example_en": "At the weekend I'm going to Mainz."
+        }
+      ]
+    },
+    {
+      "title": "University and exams",
+      "scenario": "At Goethe University: lectures, exams, deadlines and the thesis.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich studiere an der Goethe-Universität",
+          "en": "I study at Goethe University.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "uni",
+            "exams"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich arbeite als Werkstudent und studiere an der Goethe-Universität.",
+          "example_en": "I work as a working student and study at Goethe University."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich mache meinen Master in Frankfurt",
+          "en": "I'm doing my master's in Frankfurt.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "uni",
+            "exams"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich mache meinen Master in Frankfurt, im Bereich Wirtschaft.",
+          "example_en": "I'm doing my master's in Frankfurt, in economics."
+        },
+        {
+          "kind": "chunk",
+          "de": "Nächste Woche schreibe ich eine Klausur",
+          "en": "I have an exam next week.",
+          "alt": [
+            "Ich schreibe nächste Woche eine Klausur"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "uni",
+            "exams"
+          ],
+          "cefr": "B1",
+          "example_de": "Nächste Woche schreibe ich eine Klausur, deshalb habe ich wenig Zeit.",
+          "example_en": "I have an exam next week, so I have little time."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich muss für die Prüfung lernen",
+          "en": "I have to study for the exam.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "uni",
+            "exams"
+          ],
+          "cefr": "A2",
+          "example_de": "Heute Abend kann ich nicht, ich muss für die Prüfung lernen.",
+          "example_en": "I can't tonight, I have to study for the exam."
+        },
+        {
+          "kind": "chunk",
+          "de": "Wann ist die Anmeldefrist?",
+          "en": "When is the registration deadline?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "uni",
+            "exams"
+          ],
+          "cefr": "B2",
+          "example_de": "Wann ist die Anmeldefrist für die Prüfungen im Februar?",
+          "example_en": "When is the registration deadline for the exams in February?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe die Prüfung bestanden",
+          "en": "I passed the exam. (Perfekt)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "uni",
+            "exams"
+          ],
+          "cefr": "B1",
+          "example_de": "Gute Nachrichten: Ich habe die Prüfung bestanden.",
+          "example_en": "Good news: I passed the exam."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich schreibe gerade meine Masterarbeit",
+          "en": "I'm writing my master's thesis at the moment.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "uni",
+            "exams"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich schreibe gerade meine Masterarbeit über Kryptowährungen.",
+          "example_en": "I'm writing my master's thesis on cryptocurrencies at the moment."
+        },
+        {
+          "kind": "word",
+          "de": "Klausur",
+          "en": "written exam",
+          "alt": [],
+          "gender": "f",
+          "plural": "Klausuren",
+          "pos": "noun",
+          "tags": [
+            "uni",
+            "exams"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Klausur dauert zwei Stunden.",
+          "example_en": "The exam lasts two hours."
+        },
+        {
+          "kind": "word",
+          "de": "Vorlesung",
+          "en": "lecture",
+          "alt": [],
+          "gender": "f",
+          "plural": "Vorlesungen",
+          "pos": "noun",
+          "tags": [
+            "uni",
+            "exams"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Vorlesung fängt um zehn nach zwei an.",
+          "example_en": "The lecture starts at ten past two."
+        },
+        {
+          "kind": "word",
+          "de": "Frist",
+          "en": "deadline",
+          "alt": [],
+          "gender": "f",
+          "plural": "Fristen",
+          "pos": "noun",
+          "tags": [
+            "uni",
+            "exams"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Frist für die Hausarbeit endet am Freitag.",
+          "example_en": "The deadline for the term paper ends on Friday."
+        }
+      ]
+    },
+    {
+      "title": "Phone basics",
+      "scenario": "Any phone call in German: asking to repeat, slow down or switch to email.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Wie bitte?",
+          "en": "Sorry, what did you say? (polite)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "phone"
+          ],
+          "cefr": "A2",
+          "example_de": "Wie bitte? Ich habe Sie nicht verstanden.",
+          "example_en": "Sorry? I didn't understand you."
+        },
+        {
+          "kind": "chunk",
+          "de": "Könnten Sie bitte langsamer sprechen?",
+          "en": "Could you speak more slowly, please? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "phone"
+          ],
+          "cefr": "A2",
+          "example_de": "Entschuldigung, könnten Sie bitte langsamer sprechen?",
+          "example_en": "Sorry, could you speak more slowly, please?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Können Sie das bitte wiederholen?",
+          "en": "Can you repeat that, please? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "phone"
+          ],
+          "cefr": "A2",
+          "example_de": "Die Verbindung war schlecht. Können Sie das bitte wiederholen?",
+          "example_en": "The connection was bad. Can you repeat that, please?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Können Sie das bitte buchstabieren?",
+          "en": "Can you spell that, please? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "phone"
+          ],
+          "cefr": "A2",
+          "example_de": "Ihren Namen habe ich nicht verstanden. Können Sie das bitte buchstabieren?",
+          "example_en": "I didn't catch your name. Can you spell that, please?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Die Verbindung ist schlecht",
+          "en": "The connection is bad.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "phone"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich bin im Zug, die Verbindung ist schlecht.",
+          "example_en": "I'm on the train, the connection is bad."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich rufe wegen meines Termins an",
+          "en": "I'm calling about my appointment.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "phone"
+          ],
+          "cefr": "B2",
+          "example_de": "Guten Tag, ich rufe wegen meines Termins am Freitag an.",
+          "example_en": "Hello, I'm calling about my appointment on Friday."
+        },
+        {
+          "kind": "chunk",
+          "de": "Kann ich Sie später zurückrufen?",
+          "en": "Can I call you back later? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich sitze gerade in der S-Bahn. Kann ich Sie später zurückrufen?",
+          "example_en": "I'm on the S-Bahn right now. Can I call you back later?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich schreibe Ihnen lieber eine E-Mail",
+          "en": "I'd rather write you an email. (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Das ist kompliziert, ich schreibe Ihnen lieber eine E-Mail.",
+          "example_en": "That's complicated, I'd rather write you an email."
+        },
+        {
+          "kind": "chunk",
+          "de": "Mein Deutsch ist noch nicht so gut",
+          "en": "My German is not that good yet.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "phone"
+          ],
+          "cefr": "A2",
+          "example_de": "Entschuldigung, mein Deutsch ist noch nicht so gut.",
+          "example_en": "Sorry, my German is not that good yet."
+        },
+        {
+          "kind": "word",
+          "de": "zurückrufen",
+          "en": "to call back",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "verb",
+          "tags": [
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Praxis ruft mich morgen zurück.",
+          "example_en": "The practice will call me back tomorrow."
+        }
+      ]
+    },
+    {
+      "title": "Invitations and plans with friends",
+      "scenario": "Making plans with friends by message or in person, always du.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Hast du am Samstag Zeit?",
+          "en": "Are you free on Saturday? (du)",
+          "alt": [
+            "Hast du Samstag Zeit?"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "friends",
+            "plans"
+          ],
+          "cefr": "A2",
+          "example_de": "Hast du am Samstag Zeit? Wir wollen grillen.",
+          "example_en": "Are you free on Saturday? We want to have a barbecue."
+        },
+        {
+          "kind": "chunk",
+          "de": "Wollen wir zusammen essen gehen?",
+          "en": "Shall we go out to eat together?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "friends",
+            "plans"
+          ],
+          "cefr": "A2",
+          "example_de": "Wollen wir nach der Uni zusammen essen gehen?",
+          "example_en": "Shall we go out to eat together after uni?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich komme gern",
+          "en": "I'd be happy to come.",
+          "alt": [
+            "Ich komme gerne"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "friends",
+            "plans"
+          ],
+          "cefr": "A2",
+          "example_de": "Danke, ich komme gern! Um wie viel Uhr?",
+          "example_en": "Thanks, I'd be happy to come! What time?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Leider kann ich am Freitag nicht",
+          "en": "Unfortunately I can't on Friday.",
+          "alt": [
+            "Am Freitag kann ich leider nicht"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "friends",
+            "plans"
+          ],
+          "cefr": "A2",
+          "example_de": "Leider kann ich am Freitag nicht, ich habe eine Klausur.",
+          "example_en": "Unfortunately I can't on Friday, I have an exam."
+        },
+        {
+          "kind": "chunk",
+          "de": "Wann sollen wir uns treffen?",
+          "en": "When should we meet?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "friends",
+            "plans"
+          ],
+          "cefr": "A2",
+          "example_de": "Wann sollen wir uns treffen, um sieben oder um acht?",
+          "example_en": "When should we meet, at seven or at eight?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Treffen wir uns am Bahnhof?",
+          "en": "Shall we meet at the station?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "friends",
+            "plans"
+          ],
+          "cefr": "A2",
+          "example_de": "Treffen wir uns am Bahnhof und fahren dann zusammen?",
+          "example_en": "Shall we meet at the station and then go together?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Soll ich etwas mitbringen?",
+          "en": "Should I bring something?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "friends",
+            "plans"
+          ],
+          "cefr": "A2",
+          "example_de": "Danke für die Einladung! Soll ich etwas mitbringen?",
+          "example_en": "Thanks for the invitation! Should I bring something?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Danke für die Einladung",
+          "en": "Thanks for the invitation.",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "friends",
+            "plans"
+          ],
+          "cefr": "A2",
+          "example_de": "Danke für die Einladung, ich freue mich schon.",
+          "example_en": "Thanks for the invitation, I'm already looking forward to it."
+        },
+        {
+          "kind": "word",
+          "de": "Einladung",
+          "en": "invitation",
+          "alt": [],
+          "gender": "f",
+          "plural": "Einladungen",
+          "pos": "noun",
+          "tags": [
+            "friends",
+            "plans"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich habe eine Einladung zu ihrem Geburtstag bekommen.",
+          "example_en": "I received an invitation to her birthday."
+        },
+        {
+          "kind": "word",
+          "de": "sich verabreden",
+          "en": "to arrange to meet",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "verb",
+          "tags": [
+            "friends",
+            "plans"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich habe mich mit Bilal für Samstag verabredet.",
+          "example_en": "I've arranged to meet Bilal on Saturday."
+        }
+      ]
+    }
+  ]
+}

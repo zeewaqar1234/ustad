@@ -1,0 +1,2616 @@
+{
+  "deck": "work",
+  "units": [
+    {
+      "title": "Morning meeting",
+      "scenario": "Daily stand-up on the desk: what you did yesterday and plan today.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Gestern habe ich an der Auswertung gearbeitet",
+          "en": "Yesterday I worked on the analysis (Perfekt)",
+          "alt": [
+            "Ich habe gestern an der Auswertung gearbeitet"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "meeting"
+          ],
+          "cefr": "B1",
+          "example_de": "Gestern habe ich an der Auswertung gearbeitet, heute mache ich sie fertig.",
+          "example_en": "Yesterday I worked on the analysis; today I'll finish it."
+        },
+        {
+          "kind": "chunk",
+          "de": "Heute kümmere ich mich um die Abstimmung",
+          "en": "Today I'm taking care of the reconciliation",
+          "alt": [
+            "Ich kümmere mich heute um die Abstimmung"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "meeting"
+          ],
+          "cefr": "B2",
+          "example_de": "Heute kümmere ich mich um die Abstimmung der Provisionen.",
+          "example_en": "Today I'm taking care of the commission reconciliation."
+        },
+        {
+          "kind": "chunk",
+          "de": "Von meiner Seite gibt es nichts Neues",
+          "en": "There's nothing new from my side",
+          "alt": [
+            "Es gibt nichts Neues von meiner Seite"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "meeting"
+          ],
+          "cefr": "B1",
+          "example_de": "Von meiner Seite gibt es nichts Neues, danke.",
+          "example_en": "There's nothing new from my side, thanks."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bin noch nicht fertig",
+          "en": "I'm not finished yet",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "meeting"
+          ],
+          "cefr": "A2",
+          "example_de": "Mit dem Bericht bin ich noch nicht fertig.",
+          "example_en": "I'm not finished with the report yet."
+        },
+        {
+          "kind": "chunk",
+          "de": "Das mache ich heute Nachmittag",
+          "en": "I'll do that this afternoon",
+          "alt": [
+            "Ich mache das heute Nachmittag"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "meeting"
+          ],
+          "cefr": "A2",
+          "example_de": "Die Liste für das Team? Das mache ich heute Nachmittag.",
+          "example_en": "The list for the team? I'll do that this afternoon."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe eine kurze Frage",
+          "en": "I have a quick question",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "meeting"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich habe eine kurze Frage zur Auswertung von gestern.",
+          "example_en": "I have a quick question about yesterday's analysis."
+        },
+        {
+          "kind": "chunk",
+          "de": "Kann ich kurz etwas ergänzen?",
+          "en": "Can I quickly add something?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "meeting"
+          ],
+          "cefr": "B1",
+          "example_de": "Kann ich kurz etwas ergänzen? Die Zahlen sind seit heute Morgen aktuell.",
+          "example_en": "Can I quickly add something? The figures have been up to date since this morning."
+        },
+        {
+          "kind": "word",
+          "de": "Besprechung",
+          "en": "meeting",
+          "alt": [],
+          "gender": "f",
+          "plural": "Besprechungen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "meeting"
+          ],
+          "cefr": "A2",
+          "example_de": "Die Besprechung beginnt um halb neun.",
+          "example_en": "The meeting starts at half past eight."
+        },
+        {
+          "kind": "word",
+          "de": "Aufgabe",
+          "en": "task",
+          "alt": [],
+          "gender": "f",
+          "plural": "Aufgaben",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "meeting"
+          ],
+          "cefr": "A2",
+          "example_de": "Diese Aufgabe ist bis Freitag fällig.",
+          "example_en": "This task is due by Friday."
+        },
+        {
+          "kind": "word",
+          "de": "Auswertung",
+          "en": "analysis, evaluation (of data)",
+          "alt": [],
+          "gender": "f",
+          "plural": "Auswertungen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "meeting"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Auswertung zeigt, dass das Volumen gestiegen ist.",
+          "example_en": "The analysis shows that volume has risen."
+        }
+      ]
+    },
+    {
+      "title": "Status updates",
+      "scenario": "Telling a colleague or the desk where a task stands.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich bin fast fertig",
+          "en": "I'm almost finished",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "status"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich bin fast fertig, gib mir noch zehn Minuten.",
+          "example_en": "I'm almost finished, give me ten more minutes."
+        },
+        {
+          "kind": "chunk",
+          "de": "Das ist schon erledigt",
+          "en": "That's already done",
+          "alt": [
+            "Das ist bereits erledigt"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "status"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Tabelle? Das ist schon erledigt.",
+          "example_en": "The spreadsheet? That's already done."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bin gerade dabei",
+          "en": "I'm working on it right now",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "status"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Präsentation? Ich bin gerade dabei.",
+          "example_en": "The presentation? I'm working on it right now."
+        },
+        {
+          "kind": "chunk",
+          "de": "Es dauert noch etwa eine Stunde",
+          "en": "It will take about another hour",
+          "alt": [
+            "Es dauert noch ungefähr eine Stunde"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "status"
+          ],
+          "cefr": "B1",
+          "example_de": "Es dauert noch etwa eine Stunde, dann schicke ich dir alles.",
+          "example_en": "It will take about another hour, then I'll send you everything."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich warte noch auf eine Antwort",
+          "en": "I'm still waiting for an answer",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "status"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich warte noch auf eine Antwort von der IT.",
+          "example_en": "I'm still waiting for an answer from IT."
+        },
+        {
+          "kind": "chunk",
+          "de": "Das schaffe ich bis morgen",
+          "en": "I can get that done by tomorrow",
+          "alt": [
+            "Ich schaffe das bis morgen"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "status"
+          ],
+          "cefr": "B1",
+          "example_de": "Keine Sorge, das schaffe ich bis morgen.",
+          "example_en": "Don't worry, I can get that done by tomorrow."
+        },
+        {
+          "kind": "chunk",
+          "de": "Es gibt eine Verzögerung",
+          "en": "There is a delay",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "status"
+          ],
+          "cefr": "B1",
+          "example_de": "Es gibt eine Verzögerung, weil die Daten noch fehlen.",
+          "example_en": "There is a delay because the data is still missing."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich gebe dir Bescheid",
+          "en": "I'll let you know (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "status"
+          ],
+          "cefr": "B1",
+          "example_de": "Sobald ich fertig bin, gebe ich dir Bescheid.",
+          "example_en": "As soon as I'm finished, I'll let you know."
+        },
+        {
+          "kind": "word",
+          "de": "Frist",
+          "en": "deadline",
+          "alt": [],
+          "gender": "f",
+          "plural": "Fristen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "status"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Frist endet am Freitag um zwölf Uhr.",
+          "example_en": "The deadline ends on Friday at twelve."
+        },
+        {
+          "kind": "word",
+          "de": "erledigen",
+          "en": "to get done, to complete (a task)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "verb",
+          "tags": [
+            "work",
+            "status"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich erledige das gleich nach der Besprechung.",
+          "example_en": "I'll get that done right after the meeting."
+        }
+      ]
+    },
+    {
+      "title": "Asking a colleague for help",
+      "scenario": "Getting help at the desk without feeling awkward.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Hast du kurz Zeit?",
+          "en": "Do you have a moment? (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "help"
+          ],
+          "cefr": "A2",
+          "example_de": "Hast du kurz Zeit? Ich brauche deine Hilfe.",
+          "example_en": "Do you have a moment? I need your help."
+        },
+        {
+          "kind": "chunk",
+          "de": "Kannst du mir kurz helfen?",
+          "en": "Can you help me for a moment? (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "help"
+          ],
+          "cefr": "A2",
+          "example_de": "Kannst du mir kurz helfen? Die Formel funktioniert nicht.",
+          "example_en": "Can you help me for a moment? The formula isn't working."
+        },
+        {
+          "kind": "chunk",
+          "de": "Wie funktioniert das genau?",
+          "en": "How exactly does this work?",
+          "alt": [
+            "Wie genau funktioniert das?"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "help"
+          ],
+          "cefr": "B1",
+          "example_de": "Wie funktioniert das genau mit der Freigabe?",
+          "example_en": "How exactly does the approval work?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Kannst du mir das zeigen?",
+          "en": "Can you show me that? (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "help"
+          ],
+          "cefr": "A2",
+          "example_de": "Kannst du mir das zeigen, wenn du Zeit hast?",
+          "example_en": "Can you show me that when you have time?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich komme hier nicht weiter",
+          "en": "I'm stuck here",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "help"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich komme hier nicht weiter, kannst du mal schauen?",
+          "example_en": "I'm stuck here, can you have a look?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Wen kann ich dazu fragen?",
+          "en": "Who can I ask about this?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "help"
+          ],
+          "cefr": "B1",
+          "example_de": "Wen kann ich dazu fragen, wenn du nicht da bist?",
+          "example_en": "Who can I ask about this when you're not here?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Danke, das hilft mir sehr",
+          "en": "Thanks, that helps me a lot",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "help"
+          ],
+          "cefr": "A2",
+          "example_de": "Danke, das hilft mir sehr für morgen.",
+          "example_en": "Thanks, that helps me a lot for tomorrow."
+        },
+        {
+          "kind": "chunk",
+          "de": "Wo finde ich die Vorlage?",
+          "en": "Where do I find the template?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "help"
+          ],
+          "cefr": "B1",
+          "example_de": "Wo finde ich die Vorlage für den Wochenbericht?",
+          "example_en": "Where do I find the template for the weekly report?"
+        },
+        {
+          "kind": "word",
+          "de": "Vorlage",
+          "en": "template",
+          "alt": [],
+          "gender": "f",
+          "plural": "Vorlagen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "help"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich habe die Vorlage vom letzten Monat benutzt.",
+          "example_en": "I used last month's template."
+        },
+        {
+          "kind": "word",
+          "de": "Kollege",
+          "en": "colleague (male)",
+          "alt": [],
+          "gender": "m",
+          "plural": "Kollegen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "help"
+          ],
+          "cefr": "A2",
+          "example_de": "Mein Kollege hat mir das System erklärt.",
+          "example_en": "My colleague explained the system to me."
+        }
+      ]
+    },
+    {
+      "title": "Phone calls",
+      "scenario": "Answering the desk phone; a bank employee asks about an order (formal, Sie).",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Was kann ich für Sie tun?",
+          "en": "What can I do for you? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "phone"
+          ],
+          "cefr": "A2",
+          "example_de": "Guten Tag, was kann ich für Sie tun?",
+          "example_en": "Good afternoon, what can I do for you?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Einen Moment bitte, ich schaue nach",
+          "en": "One moment please, I'll check",
+          "alt": [
+            "Einen Moment, ich schaue nach"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Einen Moment bitte, ich schaue nach.",
+          "example_en": "One moment please, I'll check."
+        },
+        {
+          "kind": "chunk",
+          "de": "Um welche Order geht es?",
+          "en": "Which order is this about?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Um welche Order geht es, und wann wurde sie erteilt?",
+          "example_en": "Which order is this about, and when was it placed?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Die Order ist noch offen",
+          "en": "The order is still open",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Order ist noch offen, weil das Limit noch nicht erreicht wurde.",
+          "example_en": "The order is still open because the limit has not been reached yet."
+        },
+        {
+          "kind": "chunk",
+          "de": "Die Order wurde teilweise ausgeführt",
+          "en": "The order was partially executed",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "phone"
+          ],
+          "cefr": "B2",
+          "example_de": "Die Order wurde teilweise ausgeführt, der Rest ist noch offen.",
+          "example_en": "The order was partially executed; the rest is still open."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich rufe Sie gleich zurück",
+          "en": "I'll call you right back (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich kläre das kurz und rufe Sie gleich zurück.",
+          "example_en": "I'll quickly clarify that and call you right back."
+        },
+        {
+          "kind": "chunk",
+          "de": "Können Sie das bitte buchstabieren?",
+          "en": "Can you spell that, please? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Können Sie das bitte buchstabieren? Ich möchte den Namen richtig schreiben.",
+          "example_en": "Can you spell that, please? I want to write the name correctly."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich verbinde Sie mit einem Kollegen",
+          "en": "I'll put you through to a colleague (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "phone"
+          ],
+          "cefr": "B1",
+          "example_de": "Dafür bin ich nicht zuständig, ich verbinde Sie mit einem Kollegen.",
+          "example_en": "I'm not responsible for that; I'll put you through to a colleague."
+        },
+        {
+          "kind": "chunk",
+          "de": "Vielen Dank für Ihren Anruf",
+          "en": "Thank you for your call (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "phone"
+          ],
+          "cefr": "A2",
+          "example_de": "Vielen Dank für Ihren Anruf und einen schönen Tag noch.",
+          "example_en": "Thank you for your call and have a nice day."
+        },
+        {
+          "kind": "word",
+          "de": "Anruf",
+          "en": "phone call",
+          "alt": [],
+          "gender": "m",
+          "plural": "Anrufe",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "phone"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich hatte heute schon drei Anrufe wegen derselben Frage.",
+          "example_en": "I've already had three calls today about the same question."
+        }
+      ]
+    },
+    {
+      "title": "Emails: meeting request",
+      "scenario": "Writing a short formal email to set up a meeting.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Sehr geehrte Damen und Herren",
+          "en": "Dear Sir or Madam (formal email opening)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email"
+          ],
+          "cefr": "A2",
+          "example_de": "Sehr geehrte Damen und Herren, vielen Dank für Ihre Nachricht.",
+          "example_en": "Dear Sir or Madam, thank you for your message."
+        },
+        {
+          "kind": "chunk",
+          "de": "Hätten Sie nächste Woche Zeit für ein kurzes Gespräch?",
+          "en": "Would you have time for a short talk next week? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email"
+          ],
+          "cefr": "B2",
+          "example_de": "Hätten Sie nächste Woche Zeit für ein kurzes Gespräch über das Projekt?",
+          "example_en": "Would you have time for a short talk about the project next week?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Passt Ihnen Dienstag um zehn Uhr?",
+          "en": "Does Tuesday at ten work for you? (formal, Sie)",
+          "alt": [
+            "Passt Ihnen Dienstag um 10 Uhr?"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email"
+          ],
+          "cefr": "B1",
+          "example_de": "Passt Ihnen Dienstag um zehn Uhr, oder ist Mittwoch besser?",
+          "example_en": "Does Tuesday at ten work for you, or is Wednesday better?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich schicke Ihnen eine Einladung",
+          "en": "I'll send you an invitation (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich schicke Ihnen eine Einladung für Donnerstag.",
+          "example_en": "I'll send you an invitation for Thursday."
+        },
+        {
+          "kind": "chunk",
+          "de": "Anbei finden Sie die Unterlagen",
+          "en": "Please find the documents attached (formal)",
+          "alt": [
+            "Die Unterlagen finden Sie anbei"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email"
+          ],
+          "cefr": "B2",
+          "example_de": "Anbei finden Sie die Unterlagen für unser Gespräch.",
+          "example_en": "Please find attached the documents for our meeting."
+        },
+        {
+          "kind": "chunk",
+          "de": "Könnten Sie mir das bitte schicken?",
+          "en": "Could you please send me that? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email"
+          ],
+          "cefr": "B1",
+          "example_de": "Könnten Sie mir das bitte bis Freitag schicken?",
+          "example_en": "Could you please send me that by Friday?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich freue mich auf Ihre Rückmeldung",
+          "en": "I look forward to your reply (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich freue mich auf Ihre Rückmeldung und wünsche Ihnen eine gute Woche.",
+          "example_en": "I look forward to your reply and wish you a good week."
+        },
+        {
+          "kind": "chunk",
+          "de": "Mit freundlichen Grüßen",
+          "en": "Kind regards (formal email closing)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email"
+          ],
+          "cefr": "A2",
+          "example_de": "Mit freundlichen Grüßen und bis nächste Woche.",
+          "example_en": "Kind regards, and see you next week."
+        },
+        {
+          "kind": "word",
+          "de": "Einladung",
+          "en": "invitation",
+          "alt": [],
+          "gender": "f",
+          "plural": "Einladungen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "email"
+          ],
+          "cefr": "A2",
+          "example_de": "Hast du die Einladung zur Besprechung bekommen?",
+          "example_en": "Did you get the invitation to the meeting?"
+        },
+        {
+          "kind": "word",
+          "de": "Anhang",
+          "en": "attachment (email)",
+          "alt": [],
+          "gender": "m",
+          "plural": "Anhänge",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "email"
+          ],
+          "cefr": "B1",
+          "example_de": "Im Anhang finden Sie die Präsentation.",
+          "example_en": "You will find the presentation in the attachment."
+        }
+      ]
+    },
+    {
+      "title": "Emails: absence and sick note",
+      "scenario": "Telling the team you are sick, on holiday or out of the office.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich bin heute leider krank",
+          "en": "Unfortunately I'm sick today",
+          "alt": [
+            "Leider bin ich heute krank"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email",
+            "absence"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich bin heute leider krank und komme nicht ins Büro.",
+          "example_en": "Unfortunately I'm sick today and won't come to the office."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe mich krankgemeldet",
+          "en": "I've called in sick (Perfekt)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email",
+            "absence"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich habe mich heute Morgen bei meinem Chef krankgemeldet.",
+          "example_en": "I called in sick to my boss this morning."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bin morgen wieder im Büro",
+          "en": "I'll be back in the office tomorrow",
+          "alt": [
+            "Morgen bin ich wieder im Büro"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email",
+            "absence"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich bin morgen wieder im Büro und kümmere mich dann darum.",
+          "example_en": "I'll be back in the office tomorrow and will take care of it then."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bin ab Montag im Urlaub",
+          "en": "I'm on holiday from Monday",
+          "alt": [
+            "Ab Montag bin ich im Urlaub"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email",
+            "absence"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich bin ab Montag im Urlaub und ab dem 14. wieder da.",
+          "example_en": "I'm on holiday from Monday and back from the 14th."
+        },
+        {
+          "kind": "chunk",
+          "de": "In dringenden Fällen erreichen Sie mich per Handy",
+          "en": "In urgent cases you can reach me on my mobile (formal, Sie)",
+          "alt": [
+            "In dringenden Fällen erreichen Sie mich auf dem Handy"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email",
+            "absence"
+          ],
+          "cefr": "B2",
+          "example_de": "In dringenden Fällen erreichen Sie mich per Handy.",
+          "example_en": "In urgent cases you can reach me on my mobile."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe einen Arzttermin",
+          "en": "I have a doctor's appointment",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email",
+            "absence"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich habe einen Arzttermin und komme erst um elf.",
+          "example_en": "I have a doctor's appointment and won't come until eleven."
+        },
+        {
+          "kind": "chunk",
+          "de": "Bitte wenden Sie sich an meine Kollegin",
+          "en": "Please contact my colleague (female colleague; formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "email",
+            "absence"
+          ],
+          "cefr": "B2",
+          "example_de": "Bitte wenden Sie sich in dieser Zeit an meine Kollegin.",
+          "example_en": "During this time, please contact my colleague."
+        },
+        {
+          "kind": "word",
+          "de": "Krankmeldung",
+          "en": "sick note, notice of sickness",
+          "alt": [],
+          "gender": "f",
+          "plural": "Krankmeldungen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "email",
+            "absence"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Krankmeldung schicke ich morgen an die Personalabteilung.",
+          "example_en": "I'll send the sick note to HR tomorrow."
+        },
+        {
+          "kind": "word",
+          "de": "Urlaub",
+          "en": "holiday, vacation",
+          "alt": [],
+          "gender": "m",
+          "plural": "Urlaube",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "email",
+            "absence"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich nehme im Dezember zwei Wochen Urlaub.",
+          "example_en": "I'm taking two weeks of holiday in December."
+        },
+        {
+          "kind": "word",
+          "de": "sich krankmelden",
+          "en": "to call in sick",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "verb",
+          "tags": [
+            "work",
+            "email",
+            "absence"
+          ],
+          "cefr": "B1",
+          "example_de": "Wenn du Fieber hast, solltest du dich krankmelden.",
+          "example_en": "If you have a fever, you should call in sick."
+        }
+      ]
+    },
+    {
+      "title": "Chat messages",
+      "scenario": "Short informal messages to colleagues in the team chat (du).",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich bin gleich da",
+          "en": "I'll be there in a moment",
+          "alt": [
+            "Bin gleich da"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "chat"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich bin gleich da, fangt schon mal an.",
+          "example_en": "I'll be there in a moment, go ahead and start."
+        },
+        {
+          "kind": "chunk",
+          "de": "Hast du das gesehen?",
+          "en": "Did you see that? (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "chat"
+          ],
+          "cefr": "A2",
+          "example_de": "Hast du das gesehen? Der Termin wurde verschoben.",
+          "example_en": "Did you see that? The meeting has been moved."
+        },
+        {
+          "kind": "chunk",
+          "de": "Kein Problem, mache ich",
+          "en": "No problem, I'll do it",
+          "alt": [
+            "Kein Problem, ich mache das"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "chat"
+          ],
+          "cefr": "A2",
+          "example_de": "Kein Problem, mache ich nach der Mittagspause.",
+          "example_en": "No problem, I'll do it after the lunch break."
+        },
+        {
+          "kind": "chunk",
+          "de": "Kannst du mich kurz anrufen?",
+          "en": "Can you give me a quick call? (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "chat"
+          ],
+          "cefr": "A2",
+          "example_de": "Kannst du mich kurz anrufen? Schreiben dauert zu lange.",
+          "example_en": "Can you give me a quick call? Typing takes too long."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich schaue es mir an",
+          "en": "I'll take a look at it",
+          "alt": [
+            "Ich schaue mir das an",
+            "Ich sehe es mir an"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "chat"
+          ],
+          "cefr": "B1",
+          "example_de": "Schick mir die Datei, ich schaue es mir an.",
+          "example_en": "Send me the file, I'll take a look at it."
+        },
+        {
+          "kind": "chunk",
+          "de": "Danke dir!",
+          "en": "Thanks! (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "chat"
+          ],
+          "cefr": "A2",
+          "example_de": "Danke dir! Das hat mir viel Zeit gespart.",
+          "example_en": "Thanks! That saved me a lot of time."
+        },
+        {
+          "kind": "chunk",
+          "de": "Entschuldigung, das habe ich übersehen",
+          "en": "Sorry, I missed that (overlooked it)",
+          "alt": [
+            "Sorry, das habe ich übersehen"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "chat"
+          ],
+          "cefr": "B1",
+          "example_de": "Entschuldigung, das habe ich übersehen, ich korrigiere es sofort.",
+          "example_en": "Sorry, I missed that, I'll correct it right away."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bin gerade in einer Besprechung",
+          "en": "I'm in a meeting right now",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "chat"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich bin gerade in einer Besprechung, ich melde mich danach.",
+          "example_en": "I'm in a meeting right now, I'll get back to you afterwards."
+        },
+        {
+          "kind": "word",
+          "de": "Nachricht",
+          "en": "message",
+          "alt": [],
+          "gender": "f",
+          "plural": "Nachrichten",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "chat"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich habe dir eine Nachricht im Chat geschrieben.",
+          "example_en": "I wrote you a message in the chat."
+        },
+        {
+          "kind": "word",
+          "de": "Rückmeldung",
+          "en": "feedback, reply",
+          "alt": [],
+          "gender": "f",
+          "plural": "Rückmeldungen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "chat"
+          ],
+          "cefr": "B1",
+          "example_de": "Danke für die schnelle Rückmeldung.",
+          "example_en": "Thanks for the quick reply."
+        }
+      ]
+    },
+    {
+      "title": "Trading vocabulary",
+      "scenario": "Core words on an equities and commission-trading desk.",
+      "items": [
+        {
+          "kind": "word",
+          "de": "Order",
+          "en": "order (exchange order, loanword)",
+          "alt": [],
+          "gender": "f",
+          "plural": "Orders",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "trading"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Order geht direkt an die Börse.",
+          "example_en": "The order goes straight to the exchange."
+        },
+        {
+          "kind": "word",
+          "de": "Auftrag",
+          "en": "order, instruction (German word)",
+          "alt": [],
+          "gender": "m",
+          "plural": "Aufträge",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "trading"
+          ],
+          "cefr": "B1",
+          "example_de": "Der Kunde hat einen neuen Auftrag erteilt.",
+          "example_en": "The client has placed a new order."
+        },
+        {
+          "kind": "word",
+          "de": "Kurs",
+          "en": "price (of a security), quote",
+          "alt": [],
+          "gender": "m",
+          "plural": "Kurse",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "trading"
+          ],
+          "cefr": "B1",
+          "example_de": "Der Kurs der Aktie liegt bei 52 Euro.",
+          "example_en": "The share price is 52 euros."
+        },
+        {
+          "kind": "word",
+          "de": "Aktie",
+          "en": "share, stock",
+          "alt": [],
+          "gender": "f",
+          "plural": "Aktien",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "trading"
+          ],
+          "cefr": "A2",
+          "example_de": "Viele Kunden kaufen deutsche Aktien über Xetra.",
+          "example_en": "Many clients buy German shares via Xetra."
+        },
+        {
+          "kind": "word",
+          "de": "Börse",
+          "en": "stock exchange",
+          "alt": [],
+          "gender": "f",
+          "plural": "Börsen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "trading"
+          ],
+          "cefr": "A2",
+          "example_de": "Die Börse Stuttgart ist auch abends geöffnet.",
+          "example_en": "Börse Stuttgart is also open in the evening."
+        },
+        {
+          "kind": "word",
+          "de": "Provision",
+          "en": "commission (fee)",
+          "alt": [],
+          "gender": "f",
+          "plural": "Provisionen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "trading"
+          ],
+          "cefr": "B1",
+          "example_de": "Für jede ausgeführte Order fällt eine Provision an.",
+          "example_en": "A commission is charged for every executed order."
+        },
+        {
+          "kind": "word",
+          "de": "Handelszeit",
+          "en": "trading hours, trading session",
+          "alt": [],
+          "gender": "f",
+          "plural": "Handelszeiten",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "trading"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Handelszeit auf Xetra endet um 17:30 Uhr.",
+          "example_en": "Trading hours on Xetra end at 5:30 pm."
+        },
+        {
+          "kind": "word",
+          "de": "ausführen",
+          "en": "to execute (an order)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "verb",
+          "tags": [
+            "work",
+            "trading"
+          ],
+          "cefr": "B1",
+          "example_de": "Wir führen die Order sofort aus.",
+          "example_en": "We are executing the order immediately."
+        },
+        {
+          "kind": "chunk",
+          "de": "Die Order wurde ausgeführt",
+          "en": "The order was executed",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "trading"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Order wurde um 9:15 Uhr an der Börse ausgeführt.",
+          "example_en": "The order was executed on the exchange at 9:15."
+        },
+        {
+          "kind": "chunk",
+          "de": "Der Kurs ist gestiegen",
+          "en": "The price has risen",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "trading"
+          ],
+          "cefr": "B1",
+          "example_de": "Der Kurs ist seit heute Morgen um zwei Prozent gestiegen.",
+          "example_en": "The price has risen by two percent since this morning."
+        }
+      ]
+    },
+    {
+      "title": "Markets small talk",
+      "scenario": "Chatting about the market with colleagues over coffee.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Der DAX ist heute im Minus",
+          "en": "The DAX is down today",
+          "alt": [
+            "Der DAX steht heute im Minus"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "markets",
+            "smalltalk"
+          ],
+          "cefr": "B1",
+          "example_de": "Der DAX ist heute im Minus, vor allem wegen der Autowerte.",
+          "example_en": "The DAX is down today, mainly because of the car stocks."
+        },
+        {
+          "kind": "chunk",
+          "de": "Der DAX hat ein neues Rekordhoch erreicht",
+          "en": "The DAX has reached a new record high",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "markets",
+            "smalltalk"
+          ],
+          "cefr": "B2",
+          "example_de": "Der DAX hat ein neues Rekordhoch erreicht, obwohl die Konjunktur schwach ist.",
+          "example_en": "The DAX has reached a new record high, although the economy is weak."
+        },
+        {
+          "kind": "chunk",
+          "de": "Die Zinsen bleiben unverändert",
+          "en": "Interest rates remain unchanged",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "markets",
+            "smalltalk"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Zinsen bleiben unverändert, das hat der Markt erwartet.",
+          "example_en": "Interest rates remain unchanged; the market expected that."
+        },
+        {
+          "kind": "chunk",
+          "de": "Die Inflation ist wieder gesunken",
+          "en": "Inflation has fallen again",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "markets",
+            "smalltalk"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Inflation ist wieder gesunken, deshalb hofft man auf niedrigere Zinsen.",
+          "example_en": "Inflation has fallen again, so people are hoping for lower interest rates."
+        },
+        {
+          "kind": "chunk",
+          "de": "Die EZB senkt die Zinsen",
+          "en": "The ECB is cutting interest rates",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "markets",
+            "smalltalk"
+          ],
+          "cefr": "B1",
+          "example_de": "Wenn die EZB die Zinsen senkt, steigen oft die Aktienkurse.",
+          "example_en": "When the ECB cuts interest rates, share prices often rise."
+        },
+        {
+          "kind": "chunk",
+          "de": "Was meinst du dazu?",
+          "en": "What do you think about that? (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "markets",
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Die Zahlen aus den USA waren schwach. Was meinst du dazu?",
+          "example_en": "The figures from the US were weak. What do you think about that?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Der Markt ist heute sehr ruhig",
+          "en": "The market is very quiet today",
+          "alt": [
+            "Heute ist der Markt sehr ruhig"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "markets",
+            "smalltalk"
+          ],
+          "cefr": "B1",
+          "example_de": "Der Markt ist heute sehr ruhig, weil in den USA Feiertag ist.",
+          "example_en": "The market is very quiet today because it's a holiday in the US."
+        },
+        {
+          "kind": "word",
+          "de": "Zins",
+          "en": "interest (on money)",
+          "alt": [],
+          "gender": "m",
+          "plural": "Zinsen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "markets",
+            "smalltalk"
+          ],
+          "cefr": "B1",
+          "example_de": "Der Zins für Tagesgeld ist wieder gefallen.",
+          "example_en": "The interest on overnight deposits has fallen again."
+        },
+        {
+          "kind": "word",
+          "de": "Inflation",
+          "en": "inflation",
+          "alt": [],
+          "gender": "f",
+          "plural": "-",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "markets",
+            "smalltalk"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Inflation liegt im Moment bei etwa zwei Prozent.",
+          "example_en": "Inflation is currently around two percent."
+        },
+        {
+          "kind": "word",
+          "de": "Anleihe",
+          "en": "bond",
+          "alt": [],
+          "gender": "f",
+          "plural": "Anleihen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "markets",
+            "smalltalk"
+          ],
+          "cefr": "B2",
+          "example_de": "Viele Anleger kaufen wieder Anleihen.",
+          "example_en": "Many investors are buying bonds again."
+        }
+      ]
+    },
+    {
+      "title": "Crypto and compliance monitoring",
+      "scenario": "Reviewing alerts on retail crypto trading (generic, no case data).",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Diese Transaktion ist auffällig",
+          "en": "This transaction looks suspicious",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "crypto",
+            "compliance"
+          ],
+          "cefr": "B2",
+          "example_de": "Diese Transaktion ist auffällig, weil der Betrag sehr hoch ist.",
+          "example_en": "This transaction looks suspicious because the amount is very high."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe einen Alarm geprüft",
+          "en": "I checked an alert (Perfekt)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "crypto",
+            "compliance"
+          ],
+          "cefr": "B1",
+          "example_de": "Heute Morgen habe ich einen Alarm geprüft und alles dokumentiert.",
+          "example_en": "This morning I checked an alert and documented everything."
+        },
+        {
+          "kind": "chunk",
+          "de": "Das gebe ich an Compliance weiter",
+          "en": "I'll pass that on to Compliance",
+          "alt": [
+            "Ich gebe das an Compliance weiter"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "crypto",
+            "compliance"
+          ],
+          "cefr": "B2",
+          "example_de": "Das gebe ich an Compliance weiter, weil ich nicht sicher bin.",
+          "example_en": "I'll pass that on to Compliance because I'm not sure."
+        },
+        {
+          "kind": "chunk",
+          "de": "Der Fall ist abgeschlossen",
+          "en": "The case is closed",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "crypto",
+            "compliance"
+          ],
+          "cefr": "B1",
+          "example_de": "Der Fall ist abgeschlossen, es gab keinen Verdacht.",
+          "example_en": "The case is closed; there was no suspicion."
+        },
+        {
+          "kind": "chunk",
+          "de": "Das sieht nach einem Fehlalarm aus",
+          "en": "That looks like a false alarm",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "crypto",
+            "compliance"
+          ],
+          "cefr": "B2",
+          "example_de": "Das sieht nach einem Fehlalarm aus, aber ich prüfe es noch einmal.",
+          "example_en": "That looks like a false alarm, but I'll check it again."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich dokumentiere den Fall",
+          "en": "I'm documenting the case",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "crypto",
+            "compliance"
+          ],
+          "cefr": "B1",
+          "example_de": "Bevor ich gehe, dokumentiere ich den Fall.",
+          "example_en": "Before I leave, I'll document the case."
+        },
+        {
+          "kind": "word",
+          "de": "Transaktion",
+          "en": "transaction",
+          "alt": [],
+          "gender": "f",
+          "plural": "Transaktionen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "crypto",
+            "compliance"
+          ],
+          "cefr": "B1",
+          "example_de": "Jede Transaktion wird automatisch überwacht.",
+          "example_en": "Every transaction is monitored automatically."
+        },
+        {
+          "kind": "word",
+          "de": "Kryptowährung",
+          "en": "cryptocurrency",
+          "alt": [],
+          "gender": "f",
+          "plural": "Kryptowährungen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "crypto",
+            "compliance"
+          ],
+          "cefr": "B1",
+          "example_de": "Immer mehr Privatkunden handeln Kryptowährungen.",
+          "example_en": "More and more retail clients trade cryptocurrencies."
+        },
+        {
+          "kind": "word",
+          "de": "Geldwäsche",
+          "en": "money laundering",
+          "alt": [],
+          "gender": "f",
+          "plural": "-",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "crypto",
+            "compliance"
+          ],
+          "cefr": "B2",
+          "example_de": "Die Regeln gegen Geldwäsche gelten auch für Kryptowerte.",
+          "example_en": "The anti-money-laundering rules also apply to crypto assets."
+        },
+        {
+          "kind": "word",
+          "de": "Verdachtsfall",
+          "en": "suspicious case",
+          "alt": [],
+          "gender": "m",
+          "plural": "Verdachtsfälle",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "crypto",
+            "compliance"
+          ],
+          "cefr": "B2",
+          "example_de": "Jeder Verdachtsfall muss gemeldet werden.",
+          "example_en": "Every suspicious case must be reported."
+        }
+      ]
+    },
+    {
+      "title": "IT incidents and on-call",
+      "scenario": "On-call weeks, outages and tickets.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich habe diese Woche Rufbereitschaft",
+          "en": "I'm on call this week",
+          "alt": [
+            "Diese Woche habe ich Rufbereitschaft"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "it",
+            "oncall"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich habe diese Woche Rufbereitschaft, also bin ich abends erreichbar.",
+          "example_en": "I'm on call this week, so I'm reachable in the evenings."
+        },
+        {
+          "kind": "chunk",
+          "de": "Es gibt eine Störung",
+          "en": "There is an outage",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "it",
+            "oncall"
+          ],
+          "cefr": "B1",
+          "example_de": "Es gibt eine Störung, die Kurse werden nicht angezeigt.",
+          "example_en": "There is an outage; the prices aren't being displayed."
+        },
+        {
+          "kind": "chunk",
+          "de": "Das System ist gerade nicht erreichbar",
+          "en": "The system is not reachable right now",
+          "alt": [
+            "Das System ist im Moment nicht erreichbar"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "it",
+            "oncall"
+          ],
+          "cefr": "B1",
+          "example_de": "Das System ist gerade nicht erreichbar, ich habe die IT informiert.",
+          "example_en": "The system is not reachable right now; I've informed IT."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe ein Ticket aufgemacht",
+          "en": "I've opened a ticket",
+          "alt": [
+            "Ich habe ein Ticket erstellt"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "it",
+            "oncall"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich habe ein Ticket aufgemacht und warte auf die IT.",
+          "example_en": "I've opened a ticket and am waiting for IT."
+        },
+        {
+          "kind": "chunk",
+          "de": "Die Störung ist behoben",
+          "en": "The outage has been fixed",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "it",
+            "oncall"
+          ],
+          "cefr": "B2",
+          "example_de": "Die Störung ist behoben, alles läuft wieder normal.",
+          "example_en": "The outage has been fixed; everything is running normally again."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich kann mich nicht einloggen",
+          "en": "I can't log in",
+          "alt": [
+            "Ich kann mich nicht anmelden"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "it",
+            "oncall"
+          ],
+          "cefr": "A2",
+          "example_de": "Seit dem Update kann ich mich nicht einloggen.",
+          "example_en": "Since the update I can't log in."
+        },
+        {
+          "kind": "chunk",
+          "de": "Hast du es schon neu gestartet?",
+          "en": "Have you already restarted it? (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "it",
+            "oncall"
+          ],
+          "cefr": "B1",
+          "example_de": "Hast du es schon neu gestartet, oder soll ich die IT anrufen?",
+          "example_en": "Have you already restarted it, or should I call IT?"
+        },
+        {
+          "kind": "word",
+          "de": "Rufbereitschaft",
+          "en": "on-call duty",
+          "alt": [],
+          "gender": "f",
+          "plural": "Rufbereitschaften",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "it",
+            "oncall"
+          ],
+          "cefr": "B2",
+          "example_de": "Während der Rufbereitschaft habe ich immer mein Handy dabei.",
+          "example_en": "During on-call duty I always have my phone with me."
+        },
+        {
+          "kind": "word",
+          "de": "Störung",
+          "en": "outage, disruption, fault",
+          "alt": [],
+          "gender": "f",
+          "plural": "Störungen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "it",
+            "oncall"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Störung hat fast eine Stunde gedauert.",
+          "example_en": "The outage lasted almost an hour."
+        },
+        {
+          "kind": "word",
+          "de": "Ticket",
+          "en": "ticket (IT support)",
+          "alt": [],
+          "gender": "n",
+          "plural": "Tickets",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "it",
+            "oncall"
+          ],
+          "cefr": "A2",
+          "example_de": "Das Ticket ist seit gestern offen.",
+          "example_en": "The ticket has been open since yesterday."
+        }
+      ]
+    },
+    {
+      "title": "Asking for more responsibility",
+      "scenario": "A one-to-one with your manager about growing in the role (du).",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich würde gern mehr Verantwortung übernehmen",
+          "en": "I would like to take on more responsibility",
+          "alt": [
+            "Ich würde gerne mehr Verantwortung übernehmen"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "career"
+          ],
+          "cefr": "B2",
+          "example_de": "Ich würde gern mehr Verantwortung im Team übernehmen.",
+          "example_en": "I would like to take on more responsibility in the team."
+        },
+        {
+          "kind": "chunk",
+          "de": "Kann ich dabei unterstützen?",
+          "en": "Can I help out with that?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "career"
+          ],
+          "cefr": "B1",
+          "example_de": "Ihr arbeitet an dem neuen Bericht. Kann ich dabei unterstützen?",
+          "example_en": "You're working on the new report. Can I help out with that?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich möchte mich weiterentwickeln",
+          "en": "I'd like to develop further (professionally)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "career"
+          ],
+          "cefr": "B2",
+          "example_de": "Ich möchte mich weiterentwickeln, deshalb suche ich neue Aufgaben.",
+          "example_en": "I'd like to develop further, so I'm looking for new tasks."
+        },
+        {
+          "kind": "chunk",
+          "de": "Hast du Feedback für mich?",
+          "en": "Do you have feedback for me? (to your manager, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "career"
+          ],
+          "cefr": "B1",
+          "example_de": "Hast du Feedback für mich nach den ersten drei Monaten?",
+          "example_en": "Do you have feedback for me after the first three months?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich könnte diese Aufgabe übernehmen",
+          "en": "I could take over this task",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "career"
+          ],
+          "cefr": "B1",
+          "example_de": "Wenn du willst, könnte ich diese Aufgabe übernehmen.",
+          "example_en": "If you like, I could take over this task."
+        },
+        {
+          "kind": "chunk",
+          "de": "Was kann ich besser machen?",
+          "en": "What can I do better?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "career"
+          ],
+          "cefr": "A2",
+          "example_de": "Sei bitte ehrlich: Was kann ich besser machen?",
+          "example_en": "Please be honest: what can I do better?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Hättest du diese Woche kurz Zeit für ein Gespräch?",
+          "en": "Would you have a moment for a talk this week? (to your manager, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "career"
+          ],
+          "cefr": "B2",
+          "example_de": "Hättest du diese Woche kurz Zeit für ein Gespräch über meine Ziele?",
+          "example_en": "Would you have a moment this week for a talk about my goals?"
+        },
+        {
+          "kind": "word",
+          "de": "Verantwortung",
+          "en": "responsibility",
+          "alt": [],
+          "gender": "f",
+          "plural": "-",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "career"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich übernehme die Verantwortung für den Wochenbericht.",
+          "example_en": "I'm taking responsibility for the weekly report."
+        },
+        {
+          "kind": "word",
+          "de": "Ziel",
+          "en": "goal",
+          "alt": [],
+          "gender": "n",
+          "plural": "Ziele",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "career"
+          ],
+          "cefr": "A2",
+          "example_de": "Mein Ziel ist es, im Meeting mehr Deutsch zu sprechen.",
+          "example_en": "My goal is to speak more German in the meeting."
+        },
+        {
+          "kind": "word",
+          "de": "übernehmen",
+          "en": "to take on, to take over",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "verb",
+          "tags": [
+            "work",
+            "career"
+          ],
+          "cefr": "B1",
+          "example_de": "Kannst du meine Aufgaben übernehmen, während ich im Urlaub bin?",
+          "example_en": "Can you take over my tasks while I'm on holiday?"
+        }
+      ]
+    },
+    {
+      "title": "Clarifying and not understanding",
+      "scenario": "When you didn't catch something, without stress.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Kannst du das bitte wiederholen?",
+          "en": "Can you repeat that, please? (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "clarify"
+          ],
+          "cefr": "A2",
+          "example_de": "Entschuldigung, kannst du das bitte wiederholen?",
+          "example_en": "Sorry, can you repeat that, please?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Könnten Sie bitte etwas langsamer sprechen?",
+          "en": "Could you speak a bit more slowly, please? (formal, Sie)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "clarify"
+          ],
+          "cefr": "B1",
+          "example_de": "Könnten Sie bitte etwas langsamer sprechen? Die Verbindung ist schlecht.",
+          "example_en": "Could you speak a bit more slowly, please? The line is bad."
+        },
+        {
+          "kind": "chunk",
+          "de": "Was bedeutet das genau?",
+          "en": "What exactly does that mean?",
+          "alt": [
+            "Was genau bedeutet das?"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "clarify"
+          ],
+          "cefr": "A2",
+          "example_de": "Du hast gerade eine Abkürzung benutzt. Was bedeutet das genau?",
+          "example_en": "You just used an abbreviation. What exactly does that mean?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Das habe ich nicht verstanden",
+          "en": "I didn't understand that",
+          "alt": [
+            "Ich habe das nicht verstanden"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "clarify"
+          ],
+          "cefr": "A2",
+          "example_de": "Das habe ich nicht verstanden, kannst du ein Beispiel geben?",
+          "example_en": "I didn't understand that, can you give an example?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Habe ich das richtig verstanden?",
+          "en": "Did I understand that correctly?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "clarify"
+          ],
+          "cefr": "B1",
+          "example_de": "Die Frist ist also Freitag. Habe ich das richtig verstanden?",
+          "example_en": "So the deadline is Friday. Did I understand that correctly?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Wie schreibt man das?",
+          "en": "How do you spell that?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "clarify"
+          ],
+          "cefr": "A2",
+          "example_de": "Wie schreibt man das, mit einem oder zwei T?",
+          "example_en": "How do you spell that, with one or two Ts?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Kannst du das anders erklären?",
+          "en": "Can you explain that differently? (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "clarify"
+          ],
+          "cefr": "B1",
+          "example_de": "Kannst du das anders erklären? Ich kenne das Wort nicht.",
+          "example_en": "Can you explain that differently? I don't know the word."
+        },
+        {
+          "kind": "chunk",
+          "de": "Mein Deutsch ist noch nicht perfekt",
+          "en": "My German isn't perfect yet",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "clarify"
+          ],
+          "cefr": "A2",
+          "example_de": "Mein Deutsch ist noch nicht perfekt, aber ich lerne jeden Tag.",
+          "example_en": "My German isn't perfect yet, but I study every day."
+        },
+        {
+          "kind": "word",
+          "de": "Abkürzung",
+          "en": "abbreviation",
+          "alt": [],
+          "gender": "f",
+          "plural": "Abkürzungen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "clarify"
+          ],
+          "cefr": "B1",
+          "example_de": "Im Team benutzen alle viele Abkürzungen.",
+          "example_en": "Everyone in the team uses a lot of abbreviations."
+        },
+        {
+          "kind": "word",
+          "de": "erklären",
+          "en": "to explain",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "verb",
+          "tags": [
+            "work",
+            "clarify"
+          ],
+          "cefr": "A2",
+          "example_de": "Kannst du mir erklären, wie die Provision berechnet wird?",
+          "example_en": "Can you explain to me how the commission is calculated?"
+        }
+      ]
+    },
+    {
+      "title": "Kantine with colleagues",
+      "scenario": "Lunch small talk in the canteen.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Gehen wir zusammen essen?",
+          "en": "Shall we go to lunch together?",
+          "alt": [
+            "Wollen wir zusammen essen gehen?"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "kantine",
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Es ist schon zwölf. Gehen wir zusammen essen?",
+          "example_en": "It's already twelve. Shall we go to lunch together?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Was gibt es heute in der Kantine?",
+          "en": "What's on in the canteen today?",
+          "alt": [
+            "Was gibt's heute in der Kantine?"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "kantine",
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Was gibt es heute in der Kantine? Ich habe großen Hunger.",
+          "example_en": "What's on in the canteen today? I'm very hungry."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ist hier noch frei?",
+          "en": "Is this seat free?",
+          "alt": [
+            "Ist der Platz noch frei?"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "kantine",
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Entschuldigung, ist hier noch frei?",
+          "example_en": "Excuse me, is this seat free?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Wie war dein Wochenende?",
+          "en": "How was your weekend? (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "kantine",
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Wie war dein Wochenende? Warst du wieder wandern?",
+          "example_en": "How was your weekend? Did you go hiking again?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich nehme das vegetarische Gericht",
+          "en": "I'll have the vegetarian dish",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "kantine",
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Heute nehme ich das vegetarische Gericht, das sieht gut aus.",
+          "example_en": "Today I'll have the vegetarian dish; it looks good."
+        },
+        {
+          "kind": "chunk",
+          "de": "Hast du am Wochenende etwas vor?",
+          "en": "Do you have plans for the weekend? (to a colleague, du)",
+          "alt": [
+            "Hast du am Wochenende was vor?"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "kantine",
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Hast du am Wochenende etwas vor, oder bleibst du zu Hause?",
+          "example_en": "Do you have plans for the weekend, or are you staying at home?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Lass uns einen Kaffee holen",
+          "en": "Let's get a coffee (to a colleague, du)",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "kantine",
+            "smalltalk"
+          ],
+          "cefr": "B1",
+          "example_de": "Lass uns einen Kaffee holen, bevor die Besprechung anfängt.",
+          "example_en": "Let's get a coffee before the meeting starts."
+        },
+        {
+          "kind": "word",
+          "de": "Kantine",
+          "en": "canteen",
+          "alt": [],
+          "gender": "f",
+          "plural": "Kantinen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "kantine",
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "Die Kantine ist im Erdgeschoss.",
+          "example_en": "The canteen is on the ground floor."
+        },
+        {
+          "kind": "word",
+          "de": "Mittagspause",
+          "en": "lunch break",
+          "alt": [],
+          "gender": "f",
+          "plural": "Mittagspausen",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "kantine",
+            "smalltalk"
+          ],
+          "cefr": "A2",
+          "example_de": "In der Mittagspause gehe ich kurz spazieren.",
+          "example_en": "In my lunch break I go for a short walk."
+        },
+        {
+          "kind": "word",
+          "de": "Gericht",
+          "en": "dish (meal)",
+          "alt": [],
+          "gender": "n",
+          "plural": "Gerichte",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "kantine",
+            "smalltalk"
+          ],
+          "cefr": "B1",
+          "example_de": "Das Gericht des Tages ist heute Fisch.",
+          "example_en": "The dish of the day is fish today."
+        }
+      ]
+    },
+    {
+      "title": "Office logistics",
+      "scenario": "Home office days, rooms and appointments.",
+      "items": [
+        {
+          "kind": "chunk",
+          "de": "Ich bin morgen im Homeoffice",
+          "en": "I'm working from home tomorrow",
+          "alt": [
+            "Morgen bin ich im Homeoffice"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "office"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich bin morgen im Homeoffice, aber per Chat erreichbar.",
+          "example_en": "I'm working from home tomorrow but reachable via chat."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ist der Besprechungsraum frei?",
+          "en": "Is the meeting room free?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "office"
+          ],
+          "cefr": "A2",
+          "example_de": "Ist der Besprechungsraum frei, oder hat jemand ihn gebucht?",
+          "example_en": "Is the meeting room free, or has someone booked it?"
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich habe den Raum gebucht",
+          "en": "I've booked the room",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "office"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich habe den Raum von zwei bis drei gebucht.",
+          "example_en": "I've booked the room from two to three."
+        },
+        {
+          "kind": "chunk",
+          "de": "Der Termin wurde verschoben",
+          "en": "The appointment has been postponed",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "office"
+          ],
+          "cefr": "B1",
+          "example_de": "Der Termin wurde auf nächsten Montag verschoben.",
+          "example_en": "The appointment has been postponed to next Monday."
+        },
+        {
+          "kind": "chunk",
+          "de": "Können wir den Termin verschieben?",
+          "en": "Can we move the appointment?",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "office"
+          ],
+          "cefr": "B1",
+          "example_de": "Können wir den Termin verschieben? Ich habe um zehn eine Vorlesung.",
+          "example_en": "Can we move the appointment? I have a lecture at ten."
+        },
+        {
+          "kind": "chunk",
+          "de": "Ich bin heute erst ab zehn da",
+          "en": "I'm only in from ten today",
+          "alt": [
+            "Ich bin heute erst ab 10 da"
+          ],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "office"
+          ],
+          "cefr": "B1",
+          "example_de": "Ich bin heute erst ab zehn da, weil ich eine Prüfung habe.",
+          "example_en": "I'm only in from ten today because I have an exam."
+        },
+        {
+          "kind": "chunk",
+          "de": "Meine Bahn hat Verspätung",
+          "en": "My train is delayed",
+          "alt": [],
+          "gender": null,
+          "plural": null,
+          "pos": "phrase",
+          "tags": [
+            "work",
+            "office"
+          ],
+          "cefr": "A2",
+          "example_de": "Meine Bahn hat Verspätung, ich komme etwa zwanzig Minuten später.",
+          "example_en": "My train is delayed; I'll be about twenty minutes late."
+        },
+        {
+          "kind": "word",
+          "de": "Termin",
+          "en": "appointment",
+          "alt": [],
+          "gender": "m",
+          "plural": "Termine",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "office"
+          ],
+          "cefr": "A2",
+          "example_de": "Ich habe heute drei Termine hintereinander.",
+          "example_en": "I have three appointments in a row today."
+        },
+        {
+          "kind": "word",
+          "de": "Besprechungsraum",
+          "en": "meeting room",
+          "alt": [],
+          "gender": "m",
+          "plural": "Besprechungsräume",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "office"
+          ],
+          "cefr": "B1",
+          "example_de": "Alle Besprechungsräume sind heute belegt.",
+          "example_en": "All meeting rooms are taken today."
+        },
+        {
+          "kind": "word",
+          "de": "Homeoffice",
+          "en": "working from home, home office",
+          "alt": [],
+          "gender": "n",
+          "plural": "-",
+          "pos": "noun",
+          "tags": [
+            "work",
+            "office"
+          ],
+          "cefr": "A2",
+          "example_de": "Zweimal pro Woche arbeite ich im Homeoffice.",
+          "example_en": "I work from home twice a week."
+        }
+      ]
+    }
+  ]
+}

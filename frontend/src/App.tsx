@@ -1,21 +1,69 @@
-import { useEffect, useState } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Link, Navigate, Route, Routes, useParams } from 'react-router'
+import { Home } from './features/daily/Home'
+import { ReviewSession } from './features/review/ReviewSession'
+import { Sabaq } from './features/sabaq/Sabaq'
+import { api, AuthError } from './lib/api'
+import { CheckQueue } from './pages/CheckQueue'
+import { Login } from './pages/Login'
 
-type Health = 'checking' | 'ok' | 'down'
+function ReviewRoute() {
+  const { block } = useParams()
+  if (block !== 'manzil' && block !== 'sabqi') return <Navigate to="/" />
+  return <ReviewSession key={block} block={block} />
+}
+
+function Shell({ children }: { children: React.ReactNode }) {
+  const qc = useQueryClient()
+  return (
+    <div className="mx-auto min-h-dvh max-w-md bg-neutral-50">
+      <nav className="flex h-14 items-center justify-between border-b border-neutral-300 px-4">
+        <Link to="/" className="text-lg font-bold">
+          Ustad
+        </Link>
+        <div className="flex gap-4 text-sm">
+          <Link to="/check">Check queue</Link>
+          <button
+            onClick={async () => {
+              await api('/auth/logout', {})
+              qc.clear()
+              location.assign('/login')
+            }}
+          >
+            Log out
+          </button>
+        </div>
+      </nav>
+      {children}
+    </div>
+  )
+}
 
 export default function App() {
-  const [health, setHealth] = useState<Health>('checking')
-
-  useEffect(() => {
-    fetch('/api/health')
-      .then((r) => r.json())
-      .then((d) => setHealth(d.status === 'ok' ? 'ok' : 'down'))
-      .catch(() => setHealth('down'))
-  }, [])
-
+  const me = useQuery({ queryKey: ['me'], queryFn: () => api('/auth/me'), retry: false })
+  if (me.isPending) return <p className="p-4">Loading…</p>
+  const loggedIn = !(me.error instanceof AuthError) && !me.isError
   return (
-    <main className="mx-auto max-w-md p-4 font-sans text-neutral-900">
-      <h1 className="text-2xl font-bold">Ustad</h1>
-      <p className="mt-2 text-sm">Backend: {health}</p>
-    </main>
+    <Routes>
+      <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <Login />} />
+      <Route
+        path="*"
+        element={
+          loggedIn ? (
+            <Shell>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/review/:block" element={<ReviewRoute />} />
+                <Route path="/sabaq" element={<Sabaq />} />
+                <Route path="/check" element={<CheckQueue />} />
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </Shell>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+    </Routes>
   )
 }

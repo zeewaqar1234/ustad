@@ -31,3 +31,6 @@ coverage/
 
 # Logs
 *.log
+
+# Playwright
+frontend/e2e/.results/

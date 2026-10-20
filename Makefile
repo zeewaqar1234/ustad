@@ -1,4 +1,4 @@
-.PHONY: dev backend frontend install test lint migrate lt-up lt-down lt-check
+.PHONY: dev backend frontend install test lint migrate seed-build seed-load password lt-up lt-down lt-check
 
 install:
 	cd backend && uv sync
@@ -25,9 +25,18 @@ lint:
 	cd backend && uv run ruff check . && uv run ruff format --check .
 	cd frontend && npm run lint && npm run typecheck
 
-# SQLAlchemy + Alembic arrive in Phase 1 (first tables).
 migrate:
-	@echo "No migrations yet: Alembic is set up in Phase 1."
+	cd backend && uv run alembic upgrade head
+
+# Seed decks: build (LanguageTool check -> data/seed/*.json) needs `make lt-up`; load is idempotent.
+seed-build:
+	cd backend && uv run python -m scripts.build_seed
+
+seed-load: migrate
+	cd backend && uv run python -m scripts.load_seed
+
+password:
+	cd backend && uv run python -m scripts.set_password
 
 lt-up:
 	docker compose up -d languagetool

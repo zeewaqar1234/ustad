@@ -1,4 +1,4 @@
-# Phase 0: LanguageTool only. The app + Caddy services are added in Phase 1 (deploy).
+# Dev: `docker compose up -d languagetool`. Production (VPS): `docker compose --profile prod up -d --build`.
 # Self-hosted because the public LanguageTool API forbids automated requests (SPEC §11).
 # Image pulled via mirror.gcr.io (Docker Hub mirror) to avoid Docker Hub pull rate limits.
 services:
@@ -15,3 +15,38 @@ services:
       interval: 10s
       timeout: 5s
       retries: 12
+
+  app:
+    profiles: ["prod"]
+    build: .
+    env_file: .env
+    environment:
+      APP_ENV: prod
+      DATABASE_URL: sqlite:////data/ustad.db
+      LANGUAGETOOL_URL: http://languagetool:8010
+    volumes:
+      - ustad-data:/data
+    depends_on:
+      - languagetool
+    restart: unless-stopped
+
+  caddy:
+    profiles: ["prod"]
+    image: mirror.gcr.io/library/caddy:2
+    env_file: .env
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - app
+    restart: unless-stopped
+
+volumes:
+  ustad-data:
+  caddy-data:
+  caddy-config:

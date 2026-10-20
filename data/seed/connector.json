@@ -1,0 +1,1358 @@
+{
+ "deck": "connector",
+ "units": [
+  {
+   "unit": 1,
+   "title": "Group 0: no change to word order",
+   "scenario": "Joining two main clauses in a chat message or at the Kantine table.",
+   "items": [
+    {
+     "kind": "word",
+     "de": "und",
+     "en": "and (no word-order change)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "bahn"
+     ],
+     "cefr": "A2",
+     "example_de": "Ich fahre mit dem Zug nach Frankfurt und mein Kollege kommt mit dem Auto.",
+     "example_en": "I take the train to Frankfurt and my colleague comes by car.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "aber",
+     "en": "but (most common, no word-order change)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "kantine"
+     ],
+     "cefr": "A2",
+     "example_de": "Ich habe Hunger, aber die Kantine ist schon zu.",
+     "example_en": "I'm hungry, but the Kantine is already closed.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "oder",
+     "en": "or (no word-order change)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "kantine"
+     ],
+     "cefr": "A2",
+     "example_de": "Wir essen in der Kantine oder wir holen uns etwas beim Bäcker.",
+     "example_en": "We eat in the Kantine or we get something at the bakery.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "denn",
+     "en": "because (no word-order change, never at the start of a sentence)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "bahn",
+      "work"
+     ],
+     "cefr": "A2",
+     "example_de": "Ich komme heute später, denn meine S-Bahn hat Verspätung.",
+     "example_en": "I'm coming in later today, because my S-Bahn is delayed.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "sondern",
+     "en": "but rather (after a negation, no word-order change)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "work"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich arbeite heute nicht im Büro, sondern ich bin im Homeoffice.",
+     "example_en": "I'm not working in the office today, but rather I'm working from home.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "doch",
+     "en": "yet, but (conjunction, more written than aber, no word-order change)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "bahn"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich wollte die S-Bahn um 7:40 Uhr nehmen, doch sie war schon weg.",
+     "example_en": "I wanted to take the 7:40 S-Bahn, yet it had already left.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "sowie",
+     "en": "as well as (formal, in lists, no word-order change)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "work",
+      "email"
+     ],
+     "cefr": "B2",
+     "example_de": "Bitte schicken Sie mir den Bericht sowie die Präsentation bis Freitag.",
+     "example_en": "Please send me the report as well as the presentation by Friday.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "beziehungsweise",
+     "en": "respectively, or rather (formal, written as bzw., no word-order change)",
+     "alt": [
+      "bzw."
+     ],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "work"
+     ],
+     "cefr": "B2",
+     "example_de": "Mein Kollege und ich arbeiten montags beziehungsweise dienstags im Homeoffice.",
+     "example_en": "My colleague and I work from home on Mondays and Tuesdays respectively.",
+     "status": "ok",
+     "review_notes": []
+    }
+   ]
+  },
+  {
+   "unit": 2,
+   "title": "Group V2: consequence and contrast",
+   "scenario": "Explaining a decision in the morning meeting or a short email: connector first, verb right after.",
+   "items": [
+    {
+     "kind": "word",
+     "de": "deshalb",
+     "en": "therefore, that's why (most common, verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "bahn",
+      "work"
+     ],
+     "cefr": "B1",
+     "example_de": "Der Zug fällt aus, deshalb komme ich zehn Minuten später.",
+     "example_en": "The train is cancelled, that's why I'll be ten minutes late.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "deswegen",
+     "en": "because of that (colloquial, built on 'wegen', verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "work",
+      "oncall"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich habe diese Woche Rufbereitschaft, deswegen kann ich abends nicht lernen.",
+     "example_en": "I'm on call this week, because of that I can't study in the evenings.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "darum",
+     "en": "that's why (colloquial, short 'dar-' word, verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "kantine"
+     ],
+     "cefr": "B1",
+     "example_de": "Die Kantine ist mittags sehr voll, darum gehe ich schon um halb zwölf.",
+     "example_en": "The Kantine is very full at lunchtime, that's why I go at half past eleven.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "daher",
+     "en": "hence, for this reason (formal or written, verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "cfa",
+      "bahn"
+     ],
+     "cefr": "B1",
+     "example_de": "Die Prüfung ist im Februar, daher lerne ich jeden Morgen im Zug.",
+     "example_en": "The exam is in February, hence I study on the train every morning.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "folglich",
+     "en": "consequently (formal, logical result, verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "markets"
+     ],
+     "cefr": "B2",
+     "example_de": "Die Zinsen sind gestiegen, folglich sind die Anleihekurse gefallen.",
+     "example_en": "Interest rates have risen, consequently bond prices have fallen.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "also",
+     "en": "so, therefore (drawing a conclusion, not English 'also', verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "bahn",
+      "work"
+     ],
+     "cefr": "B1",
+     "example_de": "Mein Zug kommt um 8:50 Uhr an, also bin ich um neun im Büro.",
+     "example_en": "My train arrives at 8:50, so I'll be in the office at nine.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "trotzdem",
+     "en": "nevertheless, anyway (most common, verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "uni"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich bin müde, trotzdem gehe ich heute zur Vorlesung.",
+     "example_en": "I'm tired, nevertheless I'm going to the lecture today.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "dennoch",
+     "en": "nonetheless (formal or written, verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "work",
+      "markets"
+     ],
+     "cefr": "B2",
+     "example_de": "Die Märkte waren ruhig, dennoch hatten wir viele Aufträge.",
+     "example_en": "The markets were quiet, nonetheless we had a lot of orders.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "allerdings",
+     "en": "however, admittedly (limits what was just said, verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "flat"
+     ],
+     "cefr": "B1",
+     "example_de": "Die Wohnung ist schön, allerdings ist sie weit vom Bahnhof entfernt.",
+     "example_en": "The flat is nice, however it is far from the station.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "jedoch",
+     "en": "however (formal, written contrast, verb second; can also stand after the verb)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "doctor"
+     ],
+     "cefr": "B2",
+     "example_de": "Ich habe beim Arzt angerufen, jedoch war die Praxis geschlossen.",
+     "example_en": "I called the doctor's, however the practice was closed.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "sonst",
+     "en": "otherwise, or else (verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "bahn"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich muss mich beeilen, sonst verpasse ich die S-Bahn.",
+     "example_en": "I have to hurry, otherwise I'll miss the S-Bahn.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "nämlich",
+     "en": "you see, namely (gives the reason; never in position 1, it comes after the verb)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "kantine",
+      "uni"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich kann heute nicht in die Kantine kommen, ich habe nämlich um zwölf eine Vorlesung.",
+     "example_en": "I can't come to the Kantine today, you see, I have a lecture at twelve.",
+     "status": "ok",
+     "review_notes": []
+    }
+   ]
+  },
+  {
+   "unit": 3,
+   "title": "Group V2: sequence, additions and alternatives",
+   "scenario": "Describing your day or a work process step by step.",
+   "items": [
+    {
+     "kind": "word",
+     "de": "zuerst",
+     "en": "first, first of all (verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "work"
+     ],
+     "cefr": "A2",
+     "example_de": "Zuerst lese ich meine E-Mails, dann gehe ich zur Frühbesprechung.",
+     "example_en": "First I read my emails, then I go to the morning meeting.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "dann",
+     "en": "then, next (verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "bahn"
+     ],
+     "cefr": "A2",
+     "example_de": "Ich steige am Frankfurter Hauptbahnhof aus, dann nehme ich die U-Bahn.",
+     "example_en": "I get off at Frankfurt Hauptbahnhof, then I take the U-Bahn.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "danach",
+     "en": "after that (verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "kantine"
+     ],
+     "cefr": "A2",
+     "example_de": "Ich esse in der Kantine, danach trinke ich einen Kaffee mit meinen Kollegen.",
+     "example_en": "I eat in the Kantine, after that I have a coffee with my colleagues.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "anschließend",
+     "en": "afterwards, subsequently (more formal than danach, verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "work",
+      "email"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich schreibe den Bericht, anschließend schicke ich ihn an meine Teamleiterin.",
+     "example_en": "I write the report, afterwards I send it to my team lead.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "vorher",
+     "en": "before that, beforehand (adverb, verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "doctor",
+      "work"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich habe um zehn einen Termin beim Arzt, vorher muss ich noch kurz ins Büro.",
+     "example_en": "I have a doctor's appointment at ten, before that I still have to go to the office briefly.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "inzwischen",
+     "en": "meanwhile, by now (verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "work"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich habe im März angefangen, inzwischen kenne ich das ganze Team.",
+     "example_en": "I started in March, by now I know the whole team.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "schließlich",
+     "en": "finally, in the end (verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "work",
+      "meeting"
+     ],
+     "cefr": "B1",
+     "example_de": "Wir haben lange diskutiert, schließlich hat die Chefin entschieden.",
+     "example_en": "We discussed for a long time, in the end the boss decided.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "außerdem",
+     "en": "besides, in addition (verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "flat"
+     ],
+     "cefr": "B1",
+     "example_de": "Die Wohnung ist günstig, außerdem ist sie nah am Bahnhof.",
+     "example_en": "The flat is cheap, besides it is close to the station.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "stattdessen",
+     "en": "instead (of that) (verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "bahn"
+     ],
+     "cefr": "B1",
+     "example_de": "Der Zug ist ausgefallen, stattdessen bin ich mit dem Bus gefahren.",
+     "example_en": "The train was cancelled, instead I took the bus.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "dafür",
+     "en": "but on the plus side, in return (balances a downside, verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "flat"
+     ],
+     "cefr": "B1",
+     "example_de": "Die Wohnung ist klein, dafür ist die Miete niedrig.",
+     "example_en": "The flat is small, but on the plus side the rent is low.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "dagegen",
+     "en": "by contrast, on the other hand (verb second)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "adv",
+     "tags": [
+      "connector",
+      "verb:v2",
+      "uni"
+     ],
+     "cefr": "B2",
+     "example_de": "Die Vorlesung am Montag ist immer voll, dagegen ist das Seminar am Freitag fast leer.",
+     "example_en": "The Monday lecture is always full, by contrast the Friday seminar is almost empty.",
+     "status": "ok",
+     "review_notes": []
+    }
+   ]
+  },
+  {
+   "unit": 4,
+   "title": "Group VE: cause, purpose and contrast",
+   "scenario": "Giving reasons and goals in one sentence: the verb goes to the very end.",
+   "items": [
+    {
+     "kind": "word",
+     "de": "weil",
+     "en": "because (most common, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "bahn",
+      "cfa"
+     ],
+     "cefr": "A2",
+     "example_de": "Ich lerne im Zug, weil ich abends keine Zeit habe.",
+     "example_en": "I study on the train because I have no time in the evenings.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "da",
+     "en": "because, since (more formal, often at the start of the sentence, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "bahn",
+      "work"
+     ],
+     "cefr": "B1",
+     "example_de": "Da die S-Bahn ausgefallen ist, komme ich heute später.",
+     "example_en": "Since the S-Bahn was cancelled, I'm coming in later today.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "obwohl",
+     "en": "although (verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "work",
+      "doctor"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich gehe heute ins Büro, obwohl ich ein bisschen erkältet bin.",
+     "example_en": "I'm going to the office today although I have a bit of a cold.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "damit",
+     "en": "so that (purpose, often with a new subject, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "work",
+      "meeting"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich schicke dir die Folien, damit du dich vorbereiten kannst.",
+     "example_en": "I'll send you the slides so that you can prepare.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "sodass",
+     "en": "so that, with the result that (consequence, verb to the end)",
+     "alt": [
+      "so dass"
+     ],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "bahn",
+      "meeting"
+     ],
+     "cefr": "B1",
+     "example_de": "Der Zug hatte Verspätung, sodass ich das Meeting verpasst habe.",
+     "example_en": "The train was late, so that I missed the meeting.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "indem",
+     "en": "by (doing something), says how (verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "study"
+     ],
+     "cefr": "B2",
+     "example_de": "Ich verbessere mein Deutsch, indem ich jeden Tag zwanzig Minuten übe.",
+     "example_en": "I improve my German by practising twenty minutes every day.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "ohne dass",
+     "en": "without (something happening), with its own subject (verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "markets"
+     ],
+     "cefr": "B2",
+     "example_de": "Der Kurs ist gestiegen, ohne dass es neue Nachrichten gab.",
+     "example_en": "The price rose without there being any news.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "anstatt dass",
+     "en": "instead of (someone doing), with its own subject (verb to the end)",
+     "alt": [
+      "statt dass"
+     ],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "work",
+      "meeting"
+     ],
+     "cefr": "B2",
+     "example_de": "Anstatt dass jeder einzeln fragt, erklärt die Teamleiterin es einmal für alle.",
+     "example_en": "Instead of everyone asking individually, the team lead explains it once for everyone.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "je ... desto",
+     "en": "the more ... the more (je part: verb to the end; desto part: desto + adjective, then verb, then subject)",
+     "alt": [
+      "je ... umso"
+     ],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "bahn",
+      "study"
+     ],
+     "cefr": "B2",
+     "example_de": "Je mehr ich im Zug lese, desto besser verstehe ich meine Kollegen.",
+     "example_en": "The more I read on the train, the better I understand my colleagues.",
+     "status": "ok",
+     "review_notes": []
+    }
+   ]
+  },
+  {
+   "unit": 5,
+   "title": "Group VE: time",
+   "scenario": "Saying when things happen: commute, exams, on-call week.",
+   "items": [
+    {
+     "kind": "word",
+     "de": "als",
+     "en": "when (one event or period in the past, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "life"
+     ],
+     "cefr": "B1",
+     "example_de": "Als ich nach Deutschland kam, konnte ich kaum Deutsch.",
+     "example_en": "When I came to Germany, I could hardly speak German.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "bevor",
+     "en": "before (conjunction that starts a clause, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "work"
+     ],
+     "cefr": "B1",
+     "example_de": "Bevor ich ins Büro gehe, kaufe ich mir einen Kaffee.",
+     "example_en": "Before I go to the office, I buy myself a coffee.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "nachdem",
+     "en": "after (conjunction, the first action is finished, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "uni",
+      "cfa"
+     ],
+     "cefr": "B1",
+     "example_de": "Nachdem ich die Prüfung geschrieben habe, mache ich eine Woche Pause.",
+     "example_en": "After I have sat the exam, I'll take a week off.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "während",
+     "en": "while (at the same time, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "bahn",
+      "study"
+     ],
+     "cefr": "B1",
+     "example_de": "Während ich im Zug sitze, wiederhole ich meine Vokabeln.",
+     "example_en": "While I sit on the train, I go over my vocabulary.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "seit",
+     "en": "since, ever since (short form, verb to the end)",
+     "alt": [
+      "seitdem"
+     ],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "bahn",
+      "flat"
+     ],
+     "cefr": "B1",
+     "example_de": "Seit ich in Rüsselsheim wohne, fahre ich jeden Tag mit der S-Bahn.",
+     "example_en": "Since I've lived in Rüsselsheim, I take the S-Bahn every day.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "seitdem",
+     "en": "since, ever since (long form conjunction, verb to the end)",
+     "alt": [
+      "seit"
+     ],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "cfa"
+     ],
+     "cefr": "B1",
+     "example_de": "Seitdem ich für den CFA lerne, habe ich kaum Freizeit.",
+     "example_en": "Since I started studying for the CFA, I've had hardly any free time.",
+     "status": "needs_review",
+     "review_notes": [
+      {
+       "text": "Seitdem ich für den CFA lerne, habe ich kaum Freizeit.",
+       "rule": "GERMAN_SPELLER_RULE",
+       "message": "Möglicher Tippfehler gefunden.",
+       "context": "Seitdem ich für den CFA lerne, habe ich kaum Freizeit.",
+       "suggestions": [
+        "CIA",
+        "CV",
+        "NVA"
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "word",
+     "de": "bis",
+     "en": "until (verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "work",
+      "markets"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich bleibe im Büro, bis der Markt schließt.",
+     "example_en": "I stay in the office until the market closes.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "sobald",
+     "en": "as soon as (verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "home"
+     ],
+     "cefr": "B1",
+     "example_de": "Sobald ich zu Hause bin, rufe ich dich an.",
+     "example_en": "As soon as I'm home, I'll call you.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "solange",
+     "en": "as long as (verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "oncall"
+     ],
+     "cefr": "B1",
+     "example_de": "Solange ich Rufbereitschaft habe, bleibt mein Handy die ganze Nacht an.",
+     "example_en": "As long as I'm on call, my phone stays on all night.",
+     "status": "ok",
+     "review_notes": []
+    }
+   ]
+  },
+  {
+   "unit": 6,
+   "title": "Group VE: conditions, 'that' and indirect questions",
+   "scenario": "Setting conditions, reporting what someone said and asking politely.",
+   "items": [
+    {
+     "kind": "word",
+     "de": "wenn",
+     "en": "if, whenever (most common, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "bahn",
+      "work"
+     ],
+     "cefr": "A2",
+     "example_de": "Wenn der Zug pünktlich ist, bin ich um neun im Büro.",
+     "example_en": "If the train is on time, I'm in the office at nine.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "falls",
+     "en": "in case, if it happens (verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "bahn",
+      "chat"
+     ],
+     "cefr": "B1",
+     "example_de": "Falls ich mich verspäte, schreibe ich dir eine Nachricht.",
+     "example_en": "In case I'm late, I'll send you a message.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "sofern",
+     "en": "provided that (formal, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "doctor"
+     ],
+     "cefr": "B2",
+     "example_de": "Sofern es noch freie Termine gibt, gehe ich morgen zum Arzt.",
+     "example_en": "Provided there are still free appointments, I'll go to the doctor tomorrow.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "dass",
+     "en": "that (verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "work"
+     ],
+     "cefr": "A2",
+     "example_de": "Mein Chef hat gesagt, dass ich morgen früher kommen soll.",
+     "example_en": "My boss said that I should come in earlier tomorrow.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "ob",
+     "en": "whether, if (yes/no question inside a sentence, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "kantine"
+     ],
+     "cefr": "B1",
+     "example_de": "Kannst du mir sagen, ob die Kantine heute geöffnet hat?",
+     "example_en": "Can you tell me whether the Kantine is open today?",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "wie",
+     "en": "how (question inside a sentence, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "uni"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich weiß nicht, wie ich am besten zur Goethe-Universität komme.",
+     "example_en": "I don't know how best to get to Goethe University.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "wo",
+     "en": "where (question inside a sentence, verb to the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "uni"
+     ],
+     "cefr": "B1",
+     "example_de": "Weißt du, wo die Vorlesung heute stattfindet?",
+     "example_en": "Do you know where the lecture is taking place today?",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "warum",
+     "en": "why (question inside a sentence, verb to the end)",
+     "alt": [
+      "wieso",
+      "weshalb"
+     ],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:end",
+      "markets"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich verstehe nicht, warum der Kurs heute so stark gefallen ist.",
+     "example_en": "I don't understand why the price fell so sharply today.",
+     "status": "ok",
+     "review_notes": []
+    }
+   ]
+  },
+  {
+   "unit": 7,
+   "title": "Two-part connectors and zu-infinitives",
+   "scenario": "Linking two options or stating a goal in one sentence.",
+   "items": [
+    {
+     "kind": "word",
+     "de": "entweder ... oder",
+     "en": "either ... or (no word-order change in the usual mid-sentence position)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "bahn"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich nehme entweder die S-Bahn um 7:40 Uhr oder den Zug um 8:10 Uhr.",
+     "example_en": "I'll take either the 7:40 S-Bahn or the 8:10 train.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "weder ... noch",
+     "en": "neither ... nor (no word-order change in the usual mid-sentence position)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "life"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich habe diese Woche weder Zeit noch Lust auf Sport.",
+     "example_en": "This week I have neither the time nor the energy for sport.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "sowohl ... als auch",
+     "en": "both ... and (no word-order change)",
+     "alt": [
+      "sowohl ... wie auch"
+     ],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "uni",
+      "cfa"
+     ],
+     "cefr": "B2",
+     "example_de": "Ich lerne sowohl für die Uni als auch für den CFA.",
+     "example_en": "I'm studying both for university and for the CFA.",
+     "status": "needs_review",
+     "review_notes": [
+      {
+       "text": "Ich lerne sowohl für die Uni als auch für den CFA.",
+       "rule": "GERMAN_SPELLER_RULE",
+       "message": "Möglicher Tippfehler gefunden.",
+       "context": "...rne sowohl für die Uni als auch für den CFA.",
+       "suggestions": [
+        "CIA",
+        "CV",
+        "NVA"
+       ]
+      }
+     ]
+    },
+    {
+     "kind": "word",
+     "de": "nicht nur ... sondern auch",
+     "en": "not only ... but also (no word-order change)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "cfa"
+     ],
+     "cefr": "B1",
+     "example_de": "Die Prüfung ist nicht nur lang, sondern auch sehr schwer.",
+     "example_en": "The exam is not only long but also very hard.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "zwar ... aber",
+     "en": "admittedly ... but (zwar sits after the verb, the aber clause keeps normal order)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:none",
+      "flat"
+     ],
+     "cefr": "B1",
+     "example_de": "Die Wohnung ist zwar klein, aber sie ist günstig.",
+     "example_en": "The flat is admittedly small, but it is cheap.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "um ... zu",
+     "en": "in order to (zu + infinitive at the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:inf",
+      "study"
+     ],
+     "cefr": "B1",
+     "example_de": "Ich stehe um sechs auf, um vor der Arbeit zu lernen.",
+     "example_en": "I get up at six in order to study before work.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "ohne ... zu",
+     "en": "without doing (same subject, zu + infinitive at the end)",
+     "alt": [],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:inf",
+      "meeting"
+     ],
+     "cefr": "B1",
+     "example_de": "Er ist ins Meeting gegangen, ohne die Unterlagen zu lesen.",
+     "example_en": "He went into the meeting without reading the documents.",
+     "status": "ok",
+     "review_notes": []
+    },
+    {
+     "kind": "word",
+     "de": "anstatt ... zu",
+     "en": "instead of doing (same subject, zu + infinitive at the end)",
+     "alt": [
+      "statt ... zu"
+     ],
+     "gender": null,
+     "plural": null,
+     "pos": "conj",
+     "tags": [
+      "connector",
+      "verb:inf",
+      "bahn",
+      "study"
+     ],
+     "cefr": "B1",
+     "example_de": "Anstatt im Zug Videos zu schauen, lerne ich Vokabeln.",
+     "example_en": "Instead of watching videos on the train, I learn vocabulary.",
+     "status": "ok",
+     "review_notes": []
+    }
+   ]
+  }
+ ]
+}
