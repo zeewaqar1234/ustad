@@ -84,11 +84,26 @@ yet when Phase 2 starts, compute study days in the last 7 from `day_log` (built 
 | Streak + freezes + day_log | `test_streak_freezes`, `test_streak_breaks_after_third_miss_in_a_week`, `test_daily_loop` pass |
 | PWA | manifest + service worker served; Chromium: SW active, manifest errors none, only installability error `in-incognito` (Playwright's temp profile) |
 | Phone screenshot (375px) | `docs/evidence/phase1/review-prompt.png`, `review-feedback.png` (+ home, sabaq). No horizontal scroll. |
-| pytest | 38 passed |
+| pytest | 40 passed (after the review fixes below) |
 | vitest | 2 passed (vitest now only collects `src/**/*.test.*`; it was picking up the Playwright spec) |
 | Playwright | 2 passed at 375px |
 | make lint | clean (oxlint: 2 warnings in ReviewSession.tsx, `Date.now` in render and setState in effect; not errors) |
 | Deployed on HTTPS | **open**, see above |
+
+### End-of-phase diff review (subagent) and fixes
+
+- Fixed (blocker): `load_seed` never sent an edited item back to `needs_review` (the `not item.cards` guard
+  was always false after the first load), so edited German could reach Sabaq unchecked. Now: if
+  `alt`/`plural`/`example_de` changed and the new build says needs_review, the item goes back to review;
+  unchanged items keep their status, so check-queue approvals survive a reload. Test added.
+- Fixed: `/api/review/reveal` now refuses cards not yet taught (could leak `de` before a Sabaq attempt). Test added.
+- Fixed: Sabaq copy said cards return "from tomorrow"; the produce card can come back the same day.
+- Fixed: `e2e_setup` exits cleanly when the seed is not loaded.
+- Open (should-fix, Phase 2 or later): items match on (deck, de), so renaming `de` in the source creates a new
+  item and leaves the old one live as "ok". Rule for now: do not rename `de`; add a new item and retire the old
+  one by hand.
+- Open (nits): e2e tests depend on order and on the card not returning within 60 s; build_seed treats a typo
+  flag like `--skip_lt` as a deck name; login rate limit is in-memory per IP.
 
 ### How to rerun the e2e check
 

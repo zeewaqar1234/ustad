@@ -55,3 +55,35 @@ def test_skip_lt_keeps_old_results_and_flags_new_items(tmp_path, monkeypatch):
     build_seed.build("work", skip_lt=True)
     out = json.loads((tmp_path / "work.json").read_text())["units"][0]["items"][0]
     assert out["status"] == "needs_review"
+
+
+def test_load_seed_sends_edited_german_back_to_review(tmp_path, monkeypatch, session_factory):
+    from app.models import Item
+    from scripts import load_seed
+
+    monkeypatch.setattr(settings, "seed_dir", tmp_path)
+    monkeypatch.setattr(load_seed, "SessionLocal", session_factory)
+
+    def write_built(example_de, status):
+        it = {**_item("Bis morgen", example_de), "alt": [], "gender": None, "plural": None,
+              "tags": [], "status": status, "review_notes": []}  # fmt: skip
+        unit = {"unit": 1, "title": "T", "scenario": "", "items": [it]}
+        (tmp_path / "work.json").write_text(json.dumps({"deck": "work", "units": [unit]}))
+
+    def status():
+        with session_factory() as s:
+            return s.query(Item).filter_by(deck="work", de="Bis morgen").one().status
+
+    write_built("Bis morgen.", "needs_review")
+    load_seed.load()
+    assert status() == "needs_review"
+
+    with session_factory() as s:  # approved in the check queue
+        s.query(Item).filter_by(de="Bis morgen").one().status = "ok"
+        s.commit()
+    load_seed.load()  # unchanged German: approval sticks
+    assert status() == "ok"
+
+    write_built("Bis morgen, Frau Weber.", "needs_review")  # edited, flagged
+    load_seed.load()
+    assert status() == "needs_review"

@@ -15,6 +15,7 @@ from app.models import Card, Item, Profile
 from app.services.cards import card_types_for
 
 DECKS = ["connector", "work", "life"]
+GERMAN_FIELDS = ("alt", "plural", "example_de")  # "de" is the match key
 
 
 def load() -> dict[str, int]:
@@ -45,9 +46,12 @@ def load() -> dict[str, int]:
                     db.add(item)
                     counts["items_new"] += 1
                 else:
+                    # German text edited and the new build flagged it (or skipped LanguageTool): back to
+                    # review. An unchanged item keeps its status, so an approval in the check queue sticks.
+                    german_changed = any(getattr(item, k) != it[k] for k in GERMAN_FIELDS)
                     for k, v in fields.items():
                         setattr(item, k, v)
-                    if it["status"] == "needs_review" and item.status == "ok" and not item.cards:
+                    if german_changed and it["status"] == "needs_review":
                         item.status = "needs_review"
                     counts["items_updated"] += 1
                 db.flush()
