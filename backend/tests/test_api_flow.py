@@ -149,3 +149,17 @@ def test_gate_endpoint(client, session_factory):
     _login(client)
     r = client.get("/api/stats/gate").json()
     assert r == {"study_days_last_7": 0, "open": False, "override": False}
+
+
+def test_reveal_refuses_cards_not_yet_taught(client, session_factory):
+    s = session_factory()
+    item = Item(deck="work", de="Bis morgen", kind="chunk", en="See you tomorrow", pos="phrase",
+                cefr="A2", example_de="Bis morgen.", example_en="See you tomorrow.", unit=1,
+                unit_order=1, unit_title="T", status="ok")  # fmt: skip
+    s.add(item)
+    s.flush()
+    card = Card(item_id=item.id, card_type="recog")
+    s.add(card)
+    s.commit()
+    _login(client)
+    assert client.post("/api/review/reveal", json={"card_id": card.id}).status_code == 404

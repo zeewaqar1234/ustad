@@ -135,7 +135,7 @@ export function Sabaq() {
       ) : (
         <div className="flex flex-col gap-4">
           <p className="font-semibold">Sabaq done. {data.items.length} new items.</p>
-          <p className="text-sm text-neutral-700">They come back in Manzil and Sabqi from tomorrow.</p>
+          <p className="text-sm text-neutral-700">They come back in Manzil and Sabqi.</p>
           <Link to="/" className="rounded-lg bg-neutral-900 p-4 text-center text-lg text-white">
             Back to today
           </Link>

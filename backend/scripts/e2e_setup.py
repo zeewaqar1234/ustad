@@ -28,6 +28,9 @@ def main() -> int:
         .join(Item)
         .where(Item.deck == "connector", Item.de == "und", Card.card_type == "produce")
     )
+    if card is None:
+        print("No 'und' produce card. Run load_seed first.")
+        return 1
     now = utcnow()
     card.introduced_at, card.due, card.state = now, now, 1
     db.commit()

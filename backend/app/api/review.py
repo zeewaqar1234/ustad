@@ -58,7 +58,7 @@ class RevealIn(BaseModel):
 def reveal(body: RevealIn, db: DB):
     """Recognition cards: Zee answers in his head, then reveals and rates himself."""
     card = db.get(Card, body.card_id)
-    if card is None or card.card_type != "recog":
+    if card is None or card.card_type != "recog" or card.introduced_at is None:
         raise HTTPException(404, "No such recognition card")
     return {"item": cardsvc.item_reveal(card.item)}
 
