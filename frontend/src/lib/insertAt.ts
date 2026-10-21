@@ -1,5 +1,9 @@
 /** Insert `ch` at the cursor of `el` and return the new value. */
-export function insertAt(el: HTMLInputElement | null, value: string, ch: string): string {
+export function insertAt(
+  el: HTMLInputElement | HTMLTextAreaElement | null,
+  value: string,
+  ch: string,
+): string {
   if (!el) return value + ch
   const start = el.selectionStart ?? value.length
   const end = el.selectionEnd ?? value.length

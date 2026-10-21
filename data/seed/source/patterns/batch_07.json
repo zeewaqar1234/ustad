@@ -1,0 +1,213 @@
+{
+  "batch": 7,
+  "patterns": [
+    {
+      "code": "ADJ_ENDINGS",
+      "order": 31,
+      "group": "cases",
+      "title": "Adjective endings after der and ein",
+      "rule_en": "After der/die/das the nominative adjective ends in -e; after ein it shows the gender (-er, -es, -e); after dem, den, einem, einen it always ends in -en.",
+      "slot_diagram": {
+        "labels": ["Article", "Adjective + ending", "Noun", "Case"],
+        "rows": [
+          ["der", "neue", "Kollege", "Nominative, definite"],
+          ["ein", "neuer", "Kollege", "Nominative, indefinite"],
+          ["den / einen", "neuen", "Kollegen", "Accusative"],
+          ["dem / einem", "neuen", "Kollegen", "Dative"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Der neue Kollege sitzt heute neben mir.", "en": "The new colleague is sitting next to me today."},
+        {"context": "life", "de": "Ich habe eine kleine Wohnung in Rüsselsheim.", "en": "I have a small flat in Rüsselsheim."},
+        {"context": "finance_history", "de": "Der deutsche Aktienmarkt hatte eine schwache Woche.", "en": "The German stock market had a weak week."}
+      ],
+      "common_error": {"wrong": "Ich spreche mit dem neue Kollegen.", "right": "Ich spreche mit dem neuen Kollegen.", "tag": "ADJ_ENDING", "note_en": "After dem (dative) the adjective always ends in -en."},
+      "tags": ["ADJ_ENDING", "CASE_DAT", "CASE_AKK"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich trinke in der Kantine einen schwarzen Kaffee.", "en": "I drink a black coffee in the canteen."},
+          {"de": "Der neue Kollege kommt aus einer kleinen Stadt.", "en": "The new colleague comes from a small town."}
+        ],
+        "transform": [
+          {"instruction": "Add the adjective neu.", "given": "Ich habe einen Laptop.", "answer": "Ich habe einen neuen Laptop.", "alt": []},
+          {"instruction": "Add the adjective lang.", "given": "Nach dem Meeting gehe ich in die Kantine.", "answer": "Nach dem langen Meeting gehe ich in die Kantine.", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Das ist ein guter Buch.", "right": "Das ist ein gutes Buch.", "tag": "ADJ_ENDING", "note_en": "Buch is neuter, so after ein the adjective ends in -es."},
+          {"wrong": "Ich fahre mit einem voller Zug nach Frankfurt.", "right": "Ich fahre mit einem vollen Zug nach Frankfurt.", "tag": "ADJ_ENDING", "note_en": "After einem (dative) the adjective ends in -en."}
+        ],
+        "fill": [
+          {"text": "Ein neu___ Kollege fängt heute an.", "answers": ["er"], "full": "Ein neuer Kollege fängt heute an."},
+          {"text": "Ich habe ein___ neu___ Kollegen.", "answers": ["en", "en"], "full": "Ich habe einen neuen Kollegen."},
+          {"text": "Ich esse mit dem neu___ Kollegen in der Kantine.", "answers": ["en"], "full": "Ich esse mit dem neuen Kollegen in der Kantine."}
+        ],
+        "free": {"prompt_en": "Write one sentence about lunch with a colleague. Use mit + dem or einem + an adjective.", "must_include": ["mit"]}
+      },
+      "homework": "Write 4 sentences about your desk and your lunch in the Kantine. Use one adjective after der, one after ein and one after mit dem."
+    },
+    {
+      "code": "SEP_VERBS",
+      "order": 32,
+      "group": "verbs",
+      "title": "Separable verbs: prefix to the end",
+      "rule_en": "In a main clause the prefix (an, auf, ein) goes to the end; in a subordinate clause the verb goes to the end with the prefix joined to it.",
+      "slot_diagram": {
+        "labels": ["Position 1", "Verb (2)", "Middle", "End"],
+        "rows": [
+          ["Ich", "stehe", "um sechs Uhr", "auf"],
+          ["Der Zug", "kommt", "um acht Uhr in Frankfurt", "an"],
+          ["weil ich", "", "um sechs Uhr", "aufstehe"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Während der Rufbereitschaft rufe ich den Kollegen sofort an.", "en": "During on-call I call the colleague right away."},
+        {"context": "life", "de": "Am Samstag kaufe ich im Supermarkt ein.", "en": "On Saturday I go shopping at the supermarket."},
+        {"context": "finance_history", "de": "Der Handel auf Xetra fängt um neun Uhr an.", "en": "Trading on Xetra starts at nine o'clock."}
+      ],
+      "common_error": {"wrong": "Ich anrufe meine Mutter in Pakistan.", "right": "Ich rufe meine Mutter in Pakistan an.", "tag": "SEP_PREFIX", "note_en": "In a main clause the prefix an goes to the end."},
+      "tags": ["SEP_PREFIX", "VERB_FINAL"],
+      "drills": {
+        "surgery": [
+          {"de": "Mein Zug kommt heute um acht Uhr an.", "en": "My train arrives at eight o'clock today."},
+          {"de": "Ich weiß nicht, wann der Zug ankommt.", "en": "I don't know when the train arrives."}
+        ],
+        "transform": [
+          {"instruction": "Join with weil.", "given": ["Ich bin müde.", "Ich stehe jeden Tag um sechs Uhr auf."], "answer": "Ich bin müde, weil ich jeden Tag um sechs Uhr aufstehe.", "alt": ["Weil ich jeden Tag um sechs Uhr aufstehe, bin ich müde."]},
+          {"instruction": "Start with Heute.", "given": "Ich kaufe nach der Arbeit ein.", "answer": "Heute kaufe ich nach der Arbeit ein.", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Der Zug kommt an um acht Uhr.", "right": "Der Zug kommt um acht Uhr an.", "tag": "SEP_PREFIX", "note_en": "The prefix an goes to the very end, after the time."},
+          {"wrong": "Ich weiß, dass der Zug um acht Uhr kommt an.", "right": "Ich weiß, dass der Zug um acht Uhr ankommt.", "tag": "SEP_PREFIX", "note_en": "After dass the verb goes to the end and the prefix joins it: ankommt."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about your morning using aufstehen.", "must_include": ["auf"]}
+      },
+      "homework": "Write 4 sentences about your morning, from getting up to arriving in Frankfurt. Use aufstehen, ankommen and one separable verb in a weil clause."
+    },
+    {
+      "code": "REFLEXIVE_VERBS",
+      "order": 33,
+      "group": "verbs",
+      "title": "Reflexive verbs and pronoun position",
+      "rule_en": "The reflexive pronoun matches the subject (mich, dich, sich, uns, euch) and sits right after the verb, or right after the subject pronoun when that follows the verb.",
+      "slot_diagram": {
+        "labels": ["Position 1", "Verb", "Subject", "Pronoun", "Rest"],
+        "rows": [
+          ["Ich", "freue", "", "mich", "auf das Wochenende"],
+          ["Morgen", "melde", "ich", "mich", "beim Arzt"],
+          ["Wir", "beeilen", "", "uns", ""]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Während der Rufbereitschaft kümmere ich mich um die Störungen.", "en": "During on-call I take care of the incidents."},
+        {"context": "life", "de": "Ich freue mich auf das Wochenende.", "en": "I am looking forward to the weekend."},
+        {"context": "finance_history", "de": "Viele junge Anleger interessieren sich für Bitcoin.", "en": "Many young investors are interested in Bitcoin."}
+      ],
+      "common_error": {"wrong": "Ich kümmere sich um die Störung.", "right": "Ich kümmere mich um die Störung.", "tag": "OTHER", "note_en": "The pronoun must match the subject: ich goes with mich."},
+      "tags": ["MIDDLE_FIELD_ORDER", "PREP_CASE", "OTHER"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich freue mich auf das Ende der Prüfungen.", "en": "I am looking forward to the end of the exams."},
+          {"de": "Morgen melde ich mich beim Arzt in Rüsselsheim.", "en": "Tomorrow I will contact the doctor in Rüsselsheim."}
+        ],
+        "transform": [
+          {"instruction": "Start with Heute.", "given": "Ich kümmere mich um die Wohnung.", "answer": "Heute kümmere ich mich um die Wohnung.", "alt": []},
+          {"instruction": "Join with weil.", "given": ["Ich muss mich beeilen.", "Mein Zug fährt in fünf Minuten."], "answer": "Ich muss mich beeilen, weil mein Zug in fünf Minuten fährt.", "alt": ["Weil mein Zug in fünf Minuten fährt, muss ich mich beeilen."]}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Morgen melde mich ich beim Team.", "right": "Morgen melde ich mich beim Team.", "tag": "MIDDLE_FIELD_ORDER", "note_en": "When the subject pronoun follows the verb, the reflexive pronoun comes after it."},
+          {"wrong": "Ich freue mich auf dem Wochenende.", "right": "Ich freue mich auf das Wochenende.", "tag": "PREP_CASE", "note_en": "sich freuen auf takes the accusative: auf das Wochenende."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about what you are looking forward to after your exams.", "must_include": ["freue mich auf"]}
+      },
+      "homework": "Write 4 sentences about your on-call week. Use sich kümmern um, sich melden and sich freuen auf, and start one sentence with Morgen."
+    },
+    {
+      "code": "RELATIVE_CLAUSE",
+      "order": 34,
+      "group": "clauses",
+      "title": "Relative clauses: der, die, das",
+      "rule_en": "A relative clause starts after a comma with der/die/das (or den, dem), and its verb goes to the end; gender comes from the noun, case from its role in the clause.",
+      "slot_diagram": {
+        "labels": ["Noun", ",", "Relative pronoun", "Middle", "Verb (end)"],
+        "rows": [
+          ["Der Kollege", ",", "der", "neben mir", "sitzt"],
+          ["Der Zug", ",", "den", "ich jeden Morgen", "nehme"],
+          ["Die Kollegin", ",", "der", "ich oft", "helfe"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Der Kollege, der neben mir sitzt, kommt aus Stuttgart.", "en": "The colleague who sits next to me comes from Stuttgart."},
+        {"context": "life", "de": "Das ist der Zug, den ich jeden Morgen nehme.", "en": "That is the train that I take every morning."},
+        {"context": "finance_history", "de": "Ein Stablecoin ist ein Coin, der meistens an den US-Dollar gekoppelt ist.", "en": "A stablecoin is a coin that is usually pegged to the US dollar."}
+      ],
+      "common_error": {"wrong": "Das ist der Zug, der ich jeden Morgen nehme.", "right": "Das ist der Zug, den ich jeden Morgen nehme.", "tag": "CASE_AKK", "note_en": "The train is the object of nehme, so the pronoun is accusative: den."},
+      "tags": ["VERB_FINAL", "CASE_AKK", "CASE_DAT"],
+      "drills": {
+        "surgery": [
+          {"de": "Das ist die Kollegin, die mir oft hilft.", "en": "That is the colleague who often helps me."},
+          {"de": "Ich lese einen Artikel, den mein Professor empfohlen hat.", "en": "I am reading an article that my professor recommended."}
+        ],
+        "transform": [
+          {"instruction": "Join with a relative clause.", "given": ["Der Zug ist zu spät.", "Ich nehme den Zug jeden Morgen."], "answer": "Der Zug, den ich jeden Morgen nehme, ist zu spät.", "alt": ["Der Zug ist zu spät, den ich jeden Morgen nehme."]},
+          {"instruction": "Join with a relative clause.", "given": ["Ich habe eine Kollegin.", "Sie hilft mir bei Excel."], "answer": "Ich habe eine Kollegin, die mir bei Excel hilft.", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Das ist die Kollegin, die hilft mir oft.", "right": "Das ist die Kollegin, die mir oft hilft.", "tag": "VERB_FINAL", "note_en": "In a relative clause the verb goes to the end."},
+          {"wrong": "Die Kollegin, die ich helfe, ist neu.", "right": "Die Kollegin, der ich helfe, ist neu.", "tag": "CASE_DAT", "note_en": "helfen takes the dative, so the feminine pronoun is der."}
+        ],
+        "fill": [
+          {"text": "Das ist der Professor, d___ meine Masterarbeit betreut.", "answers": ["er"], "full": "Das ist der Professor, der meine Masterarbeit betreut."},
+          {"text": "Das ist der Kollege, d___ ich gestern geholfen habe.", "answers": ["em"], "full": "Das ist der Kollege, dem ich gestern geholfen habe."}
+        ],
+        "free": {"prompt_en": "Describe the train you take every morning. Start with: Der Zug, den ich", "must_include": ["den ich"]}
+      },
+      "homework": "Write 4 sentences about people at work and at university. Use a relative clause in each: one with der, one with die, one with den and one with dem."
+    },
+    {
+      "code": "INDIRECT_QUESTION",
+      "order": 35,
+      "group": "clauses",
+      "title": "Indirect questions: verb to the end",
+      "rule_en": "After Können Sie mir sagen, Wissen Sie or Ich weiß nicht, the W-word starts the clause and the conjugated verb goes to the end.",
+      "slot_diagram": {
+        "labels": ["Intro", ",", "W-word", "Middle", "Verb (end)"],
+        "rows": [
+          ["Können Sie mir sagen", ",", "wann", "der Zug", "fährt"],
+          ["Ich weiß nicht", ",", "wo", "das Bürgeramt", "ist"],
+          ["Wissen Sie", ",", "wie lange", "das", "dauert"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Kannst du mir sagen, wann das Meeting anfängt?", "en": "Can you tell me when the meeting starts?"},
+        {"context": "life", "de": "Können Sie mir sagen, wann der nächste Zug nach Rüsselsheim fährt?", "en": "Can you tell me when the next train to Rüsselsheim leaves?"},
+        {"context": "finance_history", "de": "Niemand weiß, wo der DAX Ende des Jahres steht.", "en": "Nobody knows where the DAX will be at the end of the year."}
+      ],
+      "common_error": {"wrong": "Können Sie mir sagen, wann fährt der Zug?", "right": "Können Sie mir sagen, wann der Zug fährt?", "tag": "VERB_FINAL", "note_en": "In an indirect question the verb goes to the end."},
+      "tags": ["VERB_FINAL", "SEP_PREFIX"],
+      "drills": {
+        "surgery": [
+          {"de": "Wissen Sie, wo das Bürgeramt ist?", "en": "Do you know where the citizens' office is?"},
+          {"de": "Ich weiß nicht, warum der Zug so spät ist.", "en": "I don't know why the train is so late."}
+        ],
+        "transform": [
+          {"instruction": "Make it an indirect question. Start with: Können Sie mir sagen", "given": "Wann fährt der nächste Zug nach Frankfurt?", "answer": "Können Sie mir sagen, wann der nächste Zug nach Frankfurt fährt?", "alt": []},
+          {"instruction": "Make it an indirect question. Start with: Ich weiß nicht", "given": "Wie lange dauert die Prüfung?", "answer": "Ich weiß nicht, wie lange die Prüfung dauert.", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Wissen Sie, wo ist das Bürgeramt?", "right": "Wissen Sie, wo das Bürgeramt ist?", "tag": "VERB_FINAL", "note_en": "After wo in an indirect question the verb goes to the end."},
+          {"wrong": "Ich weiß nicht, wann der Zug kommt an.", "right": "Ich weiß nicht, wann der Zug ankommt.", "tag": "SEP_PREFIX", "note_en": "At the end of the clause the prefix joins the verb: ankommt."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Ask a colleague when the morning meeting starts, as an indirect question.", "must_include": ["wann"]}
+      },
+      "homework": "Write 4 indirect questions you could ask at the Bürgeramt, at the station and at work. Use Können Sie mir sagen, Wissen Sie and Ich weiß nicht."
+    }
+  ]
+}

@@ -8,12 +8,35 @@ Read this first every session. Then read only the docs/ file for the current pha
 |---|---|---|
 | 0. Scaffold | Done | 2026-10-20 |
 | 1. MVP: SRS + daily loop | Done except deploy (open item below) | 2026-10-20 |
-| 2–7 | Not started | |
+| 2. Grammar (§5.2) + writing (§5.6) + Ghalti (§5.7) | Done (acceptance evidence below); real local-model run open | 2026-10-21 |
+| 3. Voice tutor | Not started | |
+| 4. Reading (§5.3) + listening (§5.5) | Not started; Reading stays scheduled here | |
+| 5–7 | Not started (work-writing templates of §5.6 scheduled in Phase 5) | |
 
-**Next session:** deploy Phase 1 over HTTPS (needs a server + domain from Zee), then Phase 2.
+**Next session:** run `make test-ollama` on Zee's machine (open Phase 2 item), approve the 7 flagged
+patterns in the check queue, then Phase 3. Deploy over HTTPS is still open from Phase 1.
 Acceptance list: docs/phases.md.
-Builder gate applies from Phase 2. SPEC lists the `/api/stats/gate` endpoint under Phase 6, so if it does not exist
-yet when Phase 2 starts, compute study days in the last 7 from `day_log` (built in Phase 1) instead.
+
+## Builder gate log
+
+| Date | study_days_last_7 | Result |
+|---|---|---|
+| 2026-10-21 | 1 (Zee's count; the cloud-container DB had 0 because it is a fresh copy) | Closed by the rule. Zee overrode it: `profile.gate_override = true` in the container DB, `GET /api/stats/gate` → `{"study_days_last_7":0,"open":true,"override":true}`. Zee first asked for 4 mock `day_log` rows; Claude proposed the existing override instead so streak/attendance data stays real, and Zee chose the override. Phase 2 built as a gate exception. |
+
+## Decision 2026-10-21: 100 % free resources
+
+Claude (Anthropic) and Azure Speech are replaced by a local **Ollama** server (Tutor/Grader/Author) and the
+browser **Web Speech API** (STT + TTS). Written up in docs/architecture.md §8 "Free-resources decision" and
+docs/llm.md; SPEC.md §8, §9, §10, §12, §16 synced; §5.4 marked superseded in part; phases 3, 4, 7 rows adjusted.
+Known costs of the switch, not hidden:
+- Web Speech STT: the browser can end recognition by itself (Chrome Android ignores `continuous`). The app
+  must restart on every `end` and only Zee's tap ends a turn. Words can be lost in the restart gap: Phase 3
+  must test with Zee's speech; fallback = self-hosted Whisper (free). SPEC §5.4 had rejected Web Speech for
+  this reason; the decision accepts the risk with that fallback.
+- Web Speech STT is server-based by default (audio goes to Google/Apple). Not private like Ollama.
+- No pronunciation scores (Azure gone): Shadowing uses word match.
+- `speechSynthesis` cannot write mp3: Phase 4 Commute Podcast needs Piper TTS on the server.
+- A local 8B model grades German less reliably than hosted models. Not measured yet (see open item).
 
 ## Phase 0: what exists
 

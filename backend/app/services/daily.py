@@ -100,7 +100,7 @@ def next_unit_order(db: Session) -> int | None:
     return db.scalar(
         select(func.min(Item.unit_order))
         .join(Card)
-        .where(Item.status == "ok", Card.introduced_at.is_(None))
+        .where(Item.status == "ok", Item.deck != "ghalti", Card.introduced_at.is_(None))
     )
 
 
@@ -129,7 +129,9 @@ def start_or_get_lesson(db: Session, now: datetime) -> Lesson | None:
         return None
     items = list(
         db.scalars(
-            select(Item).where(Item.unit_order == order, Item.status == "ok").order_by(Item.id)
+            select(Item)
+            .where(Item.unit_order == order, Item.status == "ok", ~Item.known_from_placement)
+            .order_by(Item.id)
         )
     )
     first = items[0]

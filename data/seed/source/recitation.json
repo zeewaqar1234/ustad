@@ -1,0 +1,522 @@
+{
+  "tables": [
+    {
+      "code": "SEIN_PRAESENS",
+      "title": "sein, Präsens",
+      "group": "verbs",
+      "columns": [
+        "Person",
+        "sein"
+      ],
+      "rows": [
+        [
+          "ich",
+          "bin"
+        ],
+        [
+          "du",
+          "bist"
+        ],
+        [
+          "er/sie/es",
+          "ist"
+        ],
+        [
+          "wir",
+          "sind"
+        ],
+        [
+          "ihr",
+          "seid"
+        ],
+        [
+          "sie/Sie",
+          "sind"
+        ]
+      ]
+    },
+    {
+      "code": "SEIN_PRAETERITUM",
+      "title": "sein, Präteritum",
+      "group": "verbs",
+      "columns": [
+        "Person",
+        "sein"
+      ],
+      "rows": [
+        [
+          "ich",
+          "war"
+        ],
+        [
+          "du",
+          "warst"
+        ],
+        [
+          "er/sie/es",
+          "war"
+        ],
+        [
+          "wir",
+          "waren"
+        ],
+        [
+          "ihr",
+          "wart"
+        ],
+        [
+          "sie/Sie",
+          "waren"
+        ]
+      ]
+    },
+    {
+      "code": "HABEN_PRAESENS",
+      "title": "haben, Präsens",
+      "group": "verbs",
+      "columns": [
+        "Person",
+        "haben"
+      ],
+      "rows": [
+        [
+          "ich",
+          "habe"
+        ],
+        [
+          "du",
+          "hast"
+        ],
+        [
+          "er/sie/es",
+          "hat"
+        ],
+        [
+          "wir",
+          "haben"
+        ],
+        [
+          "ihr",
+          "habt"
+        ],
+        [
+          "sie/Sie",
+          "haben"
+        ]
+      ]
+    },
+    {
+      "code": "HABEN_PRAETERITUM",
+      "title": "haben, Präteritum",
+      "group": "verbs",
+      "columns": [
+        "Person",
+        "haben"
+      ],
+      "rows": [
+        [
+          "ich",
+          "hatte"
+        ],
+        [
+          "du",
+          "hattest"
+        ],
+        [
+          "er/sie/es",
+          "hatte"
+        ],
+        [
+          "wir",
+          "hatten"
+        ],
+        [
+          "ihr",
+          "hattet"
+        ],
+        [
+          "sie/Sie",
+          "hatten"
+        ]
+      ]
+    },
+    {
+      "code": "WERDEN_PRAESENS",
+      "title": "werden, Präsens",
+      "group": "verbs",
+      "columns": [
+        "Person",
+        "werden"
+      ],
+      "rows": [
+        [
+          "ich",
+          "werde"
+        ],
+        [
+          "du",
+          "wirst"
+        ],
+        [
+          "er/sie/es",
+          "wird"
+        ],
+        [
+          "wir",
+          "werden"
+        ],
+        [
+          "ihr",
+          "werdet"
+        ],
+        [
+          "sie/Sie",
+          "werden"
+        ]
+      ]
+    },
+    {
+      "code": "WERDEN_PRAETERITUM",
+      "title": "werden, Präteritum",
+      "group": "verbs",
+      "columns": [
+        "Person",
+        "werden"
+      ],
+      "rows": [
+        [
+          "ich",
+          "wurde"
+        ],
+        [
+          "du",
+          "wurdest"
+        ],
+        [
+          "er/sie/es",
+          "wurde"
+        ],
+        [
+          "wir",
+          "wurden"
+        ],
+        [
+          "ihr",
+          "wurdet"
+        ],
+        [
+          "sie/Sie",
+          "wurden"
+        ]
+      ]
+    },
+    {
+      "code": "MODALS_PRAESENS",
+      "title": "Modal verbs, Präsens",
+      "group": "verbs",
+      "columns": [
+        "Person",
+        "können",
+        "müssen",
+        "wollen",
+        "dürfen",
+        "sollen",
+        "mögen"
+      ],
+      "rows": [
+        [
+          "ich",
+          "kann",
+          "muss",
+          "will",
+          "darf",
+          "soll",
+          "mag"
+        ],
+        [
+          "du",
+          "kannst",
+          "musst",
+          "willst",
+          "darfst",
+          "sollst",
+          "magst"
+        ],
+        [
+          "er/sie/es",
+          "kann",
+          "muss",
+          "will",
+          "darf",
+          "soll",
+          "mag"
+        ],
+        [
+          "wir",
+          "können",
+          "müssen",
+          "wollen",
+          "dürfen",
+          "sollen",
+          "mögen"
+        ],
+        [
+          "ihr",
+          "könnt",
+          "müsst",
+          "wollt",
+          "dürft",
+          "sollt",
+          "mögt"
+        ],
+        [
+          "sie/Sie",
+          "können",
+          "müssen",
+          "wollen",
+          "dürfen",
+          "sollen",
+          "mögen"
+        ]
+      ]
+    },
+    {
+      "code": "MODALS_PRAETERITUM",
+      "title": "Modal verbs, Präteritum",
+      "group": "verbs",
+      "columns": [
+        "Person",
+        "können",
+        "müssen",
+        "wollen",
+        "dürfen",
+        "sollen",
+        "mögen"
+      ],
+      "rows": [
+        [
+          "ich",
+          "konnte",
+          "musste",
+          "wollte",
+          "durfte",
+          "sollte",
+          "mochte"
+        ],
+        [
+          "du",
+          "konntest",
+          "musstest",
+          "wolltest",
+          "durftest",
+          "solltest",
+          "mochtest"
+        ],
+        [
+          "er/sie/es",
+          "konnte",
+          "musste",
+          "wollte",
+          "durfte",
+          "sollte",
+          "mochte"
+        ],
+        [
+          "wir",
+          "konnten",
+          "mussten",
+          "wollten",
+          "durften",
+          "sollten",
+          "mochten"
+        ],
+        [
+          "ihr",
+          "konntet",
+          "musstet",
+          "wolltet",
+          "durftet",
+          "solltet",
+          "mochtet"
+        ],
+        [
+          "sie/Sie",
+          "konnten",
+          "mussten",
+          "wollten",
+          "durften",
+          "sollten",
+          "mochten"
+        ]
+      ]
+    },
+    {
+      "code": "ARTICLE_DEFINITE",
+      "title": "Definite article: der, die, das",
+      "group": "articles",
+      "columns": [
+        "Case",
+        "maskulin",
+        "feminin",
+        "neutrum",
+        "Plural"
+      ],
+      "rows": [
+        [
+          "Nominativ",
+          "der",
+          "die",
+          "das",
+          "die"
+        ],
+        [
+          "Akkusativ",
+          "den",
+          "die",
+          "das",
+          "die"
+        ],
+        [
+          "Dativ",
+          "dem",
+          "der",
+          "dem",
+          "den"
+        ],
+        [
+          "Genitiv",
+          "des",
+          "der",
+          "des",
+          "der"
+        ]
+      ]
+    },
+    {
+      "code": "ARTICLE_INDEFINITE",
+      "title": "Indefinite article: ein, eine, kein",
+      "group": "articles",
+      "columns": [
+        "Case",
+        "maskulin",
+        "feminin",
+        "neutrum",
+        "Plural (kein)"
+      ],
+      "rows": [
+        [
+          "Nominativ",
+          "ein",
+          "eine",
+          "ein",
+          "keine"
+        ],
+        [
+          "Akkusativ",
+          "einen",
+          "eine",
+          "ein",
+          "keine"
+        ],
+        [
+          "Dativ",
+          "einem",
+          "einer",
+          "einem",
+          "keinen"
+        ],
+        [
+          "Genitiv",
+          "eines",
+          "einer",
+          "eines",
+          "keiner"
+        ]
+      ]
+    },
+    {
+      "code": "PRONOUNS_CASE",
+      "title": "Personal pronouns by case",
+      "group": "pronouns",
+      "columns": [
+        "Nominativ",
+        "Akkusativ",
+        "Dativ"
+      ],
+      "rows": [
+        [
+          "ich",
+          "mich",
+          "mir"
+        ],
+        [
+          "du",
+          "dich",
+          "dir"
+        ],
+        [
+          "er",
+          "ihn",
+          "ihm"
+        ],
+        [
+          "sie",
+          "sie",
+          "ihr"
+        ],
+        [
+          "es",
+          "es",
+          "ihm"
+        ],
+        [
+          "wir",
+          "uns",
+          "uns"
+        ],
+        [
+          "ihr",
+          "euch",
+          "euch"
+        ],
+        [
+          "sie",
+          "sie",
+          "ihnen"
+        ],
+        [
+          "Sie",
+          "Sie",
+          "Ihnen"
+        ]
+      ]
+    },
+    {
+      "code": "CONNECTOR_GROUPS",
+      "title": "Connector groups",
+      "group": "connectors",
+      "columns": [
+        "Group",
+        "Connectors",
+        "Verb"
+      ],
+      "rows": [
+        [
+          "Group 0",
+          "und, aber, oder, denn, sondern",
+          "no change"
+        ],
+        [
+          "Group V2",
+          "deshalb, trotzdem, dann, außerdem",
+          "verb next"
+        ],
+        [
+          "Group VE",
+          "weil, dass, obwohl, wenn, als, ob, damit",
+          "verb to the end"
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "batch": 8,
+  "patterns": [
+    {
+      "code": "KONJ2_POLITE",
+      "order": 36,
+      "group": "konjunktiv",
+      "title": "Konjunktiv II: polite requests",
+      "rule_en": "For polite requests use hätte gern, könnten Sie, würden Sie or würde gern instead of will or können.",
+      "slot_diagram": {
+        "labels": ["Position 1", "Position 2", "Middle", "End"],
+        "rows": [
+          ["Ich", "hätte", "gern einen Termin", ""],
+          ["Könnten", "Sie", "mir das bitte", "schicken"],
+          ["Ich", "würde", "gern früher", "gehen"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Könnten Sie mir die Unterlagen bis morgen schicken?", "en": "Could you send me the documents by tomorrow?"},
+        {"context": "life", "de": "Ich hätte gern einen Termin für nächste Woche.", "en": "I would like an appointment for next week."},
+        {"context": "finance_history", "de": "Ich würde gern mehr über die Revolution von 1848 lesen.", "en": "I would like to read more about the revolution of 1848."}
+      ],
+      "common_error": {"wrong": "Ich hatte gern einen Termin.", "right": "Ich hätte gern einen Termin.", "tag": "UMLAUT", "note_en": "hatte is the past tense; the polite form is hätte, with an umlaut."},
+      "tags": ["REGISTER_DU_SIE", "UMLAUT", "WORD_CHOICE"],
+      "drills": {
+        "surgery": [
+          {"de": "Könnten Sie mir bitte die Rechnung schicken?", "en": "Could you please send me the invoice?"},
+          {"de": "Ich würde gern am Freitag früher gehen.", "en": "I would like to leave earlier on Friday."}
+        ],
+        "transform": [
+          {"instruction": "Make it polite with Konjunktiv II.", "given": "Können Sie mir helfen?", "answer": "Könnten Sie mir helfen?", "alt": ["Würden Sie mir helfen?"]},
+          {"instruction": "Make it polite with hätte gern.", "given": "Ich will einen Termin beim Bürgeramt.", "answer": "Ich hätte gern einen Termin beim Bürgeramt.", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Ich hatte gern einen Platz am Fenster.", "right": "Ich hätte gern einen Platz am Fenster.", "tag": "UMLAUT", "note_en": "For a polite wish use hätte, not the past tense hatte."},
+          {"wrong": "Ich würde gern früher gehe.", "right": "Ich würde gern früher gehen.", "tag": "OTHER", "note_en": "After würde the main verb is an infinitive at the end: gehen."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write a polite message asking someone from another team to send you a file today. Use Könnten Sie.", "must_include": ["Könnten Sie"]}
+      },
+      "homework": "Write 4 polite sentences: one in the Kantine, one at the doctor's, one to your professor and one to a colleague. Use hätte gern, könnten Sie, würden Sie and würde gern once each."
+    },
+    {
+      "code": "KONJ2_WISH",
+      "order": 37,
+      "group": "konjunktiv",
+      "title": "Konjunktiv II: unreal conditions and wishes",
+      "rule_en": "For something unreal use wenn + hätte/wäre at the end of the clause, then würde + infinitive in the main clause, which starts with the verb.",
+      "slot_diagram": {
+        "labels": ["wenn", "Middle", "Verb (end)", ",", "Verb (Konj. II)", "Rest"],
+        "rows": [
+          ["Wenn", "ich mehr Zeit", "hätte", ",", "würde", "ich mehr Deutsch lernen"],
+          ["Wenn", "der Zug pünktlich", "wäre", ",", "wäre", "ich schon im Büro"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Wenn ich keine Rufbereitschaft hätte, würde ich am Wochenende nach Berlin fahren.", "en": "If I were not on call, I would go to Berlin at the weekend."},
+        {"context": "life", "de": "Wenn ich mehr Zeit hätte, würde ich jeden Tag kochen.", "en": "If I had more time, I would cook every day."},
+        {"context": "finance_history", "de": "Wenn die Zinsen niedriger wären, würden mehr Leute Aktien kaufen.", "en": "If interest rates were lower, more people would buy shares."}
+      ],
+      "common_error": {"wrong": "Wenn ich mehr Zeit habe, würde ich mehr lesen.", "right": "Wenn ich mehr Zeit hätte, würde ich mehr lesen.", "tag": "TENSE_CHOICE", "note_en": "An unreal condition needs Konjunktiv II in both parts: hätte, not habe."},
+      "tags": ["TENSE_CHOICE", "VERB_FINAL", "V2_POSITION"],
+      "drills": {
+        "surgery": [
+          {"de": "Wenn ich mehr Zeit hätte, würde ich mehr schlafen.", "en": "If I had more time, I would sleep more."},
+          {"de": "Ich wäre jetzt gern bei meiner Familie in Lahore.", "en": "I would like to be with my family in Lahore now."}
+        ],
+        "transform": [
+          {"instruction": "Make it unreal with wenn + Konjunktiv II.", "given": "Ich habe keine Zeit, deshalb gehe ich nicht ins Fitnessstudio.", "answer": "Wenn ich Zeit hätte, würde ich ins Fitnessstudio gehen.", "alt": ["Ich würde ins Fitnessstudio gehen, wenn ich Zeit hätte.", "Wenn ich Zeit hätte, ginge ich ins Fitnessstudio."]},
+          {"instruction": "Make it unreal with wenn + Konjunktiv II.", "given": "Der Zug ist nicht pünktlich, deshalb komme ich zu spät.", "answer": "Wenn der Zug pünktlich wäre, würde ich nicht zu spät kommen.", "alt": ["Ich würde nicht zu spät kommen, wenn der Zug pünktlich wäre.", "Wenn der Zug pünktlich wäre, käme ich nicht zu spät."]}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Wenn ich mehr Geld hätte, ich würde eine größere Wohnung mieten.", "right": "Wenn ich mehr Geld hätte, würde ich eine größere Wohnung mieten.", "tag": "V2_POSITION", "note_en": "The wenn clause takes position 1, so würde comes right after the comma."},
+          {"wrong": "Wenn ich in Pakistan war, würde ich meine Familie öfter sehen.", "right": "Wenn ich in Pakistan wäre, würde ich meine Familie öfter sehen.", "tag": "UMLAUT", "note_en": "For an unreal condition use wäre, not the past tense war."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence: what would you do if you had no exams this month?", "must_include": ["würde"]}
+      },
+      "homework": "Write 4 sentences about your life if things were different: no exams, no on-call week, a shorter commute, more money. Use wenn + hätte or wäre and würde in each."
+    },
+    {
+      "code": "PASSIVE_PRAESENS",
+      "order": 38,
+      "group": "passive",
+      "title": "Passive in Präsens: wird + Partizip II",
+      "rule_en": "werden goes in position 2 and the Partizip II goes to the end; use it when the action matters more than who does it.",
+      "slot_diagram": {
+        "labels": ["Position 1", "werden", "Middle", "Partizip II (end)"],
+        "rows": [
+          ["Die Order", "wird", "sofort", "geprüft"],
+          ["Die Trades", "werden", "am Abend", "gebucht"],
+          ["Am Wochenende", "wird", "auf Xetra nicht", "gehandelt"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Jede Order wird vor der Ausführung geprüft.", "en": "Every order is checked before execution."},
+        {"context": "life", "de": "Im Haus wird morgen das Wasser abgestellt.", "en": "The water in the building is being turned off tomorrow."},
+        {"context": "finance_history", "de": "Bitcoin wird rund um die Uhr gehandelt.", "en": "Bitcoin is traded around the clock."}
+      ],
+      "common_error": {"wrong": "Die Order wird sofort prüft.", "right": "Die Order wird sofort geprüft.", "tag": "PARTIZIP", "note_en": "The passive needs the Partizip II: geprüft."},
+      "tags": ["PARTIZIP", "VERB_FINAL"],
+      "drills": {
+        "surgery": [
+          {"de": "Die Order wird vor der Ausführung geprüft.", "en": "The order is checked before execution."},
+          {"de": "Am Wochenende wird an der Börse nicht gehandelt.", "en": "There is no trading on the exchange at the weekend."}
+        ],
+        "transform": [
+          {"instruction": "Make it passive with von.", "given": "Der Kollege prüft die Order.", "answer": "Die Order wird vom Kollegen geprüft.", "alt": ["Die Order wird von dem Kollegen geprüft."]},
+          {"instruction": "Make it passive. Leave out man.", "given": "Man handelt Aktien auf Xetra.", "answer": "Aktien werden auf Xetra gehandelt.", "alt": ["Auf Xetra werden Aktien gehandelt."]}
+        ],
+        "tense_shift": [
+          {"instruction": "Make it passive. Leave out man.", "given": "Man bucht die Trades am Abend.", "answer": "Die Trades werden am Abend gebucht.", "alt": ["Am Abend werden die Trades gebucht."]},
+          {"instruction": "Make it passive. Leave out man.", "given": "Man prüft die Zahlen jeden Morgen.", "answer": "Die Zahlen werden jeden Morgen geprüft.", "alt": ["Jeden Morgen werden die Zahlen geprüft."]}
+        ],
+        "error_spot": [
+          {"wrong": "Die Trades wird am Abend gebucht.", "right": "Die Trades werden am Abend gebucht.", "tag": "OTHER", "note_en": "Die Trades is plural, so the verb is werden."},
+          {"wrong": "Die Order wird geprüft sofort.", "right": "Die Order wird sofort geprüft.", "tag": "VERB_FINAL", "note_en": "The Partizip II goes to the very end."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Describe one step of your work process in the passive. Use wird.", "must_include": ["wird"]}
+      },
+      "homework": "Write 4 sentences about how a normal day on the desk runs. Use the passive (wird or werden + Partizip II) in each sentence and leave out who does it."
+    },
+    {
+      "code": "PASSIVE_PRAETERITUM",
+      "order": 39,
+      "group": "passive",
+      "title": "Passive in the past: wurde and ist ... worden",
+      "rule_en": "Past passive is wurde + Partizip II; in Perfekt it is ist/sind + Partizip II + worden (never geworden).",
+      "slot_diagram": {
+        "labels": ["Position 1", "Aux", "Middle", "Partizip II", "End"],
+        "rows": [
+          ["Die Order", "wurde", "um zehn Uhr", "ausgeführt", ""],
+          ["Die Order", "ist", "um zehn Uhr", "ausgeführt", "worden"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Der Fehler wurde in der Nacht behoben.", "en": "The error was fixed during the night."},
+        {"context": "life", "de": "Mein Fahrrad ist am Bahnhof gestohlen worden.", "en": "My bike was stolen at the station."},
+        {"context": "finance_history", "de": "Das Deutsche Reich wurde 1871 gegründet.", "en": "The German Empire was founded in 1871."}
+      ],
+      "common_error": {"wrong": "Die Order ist ausgeführt geworden.", "right": "Die Order ist ausgeführt worden.", "tag": "PARTIZIP", "note_en": "In the passive Perfekt use worden, not geworden."},
+      "tags": ["PARTIZIP", "AUX_HABEN_SEIN", "TENSE_CHOICE"],
+      "drills": {
+        "surgery": [
+          {"de": "Die Order wurde um zehn Uhr ausgeführt.", "en": "The order was executed at ten o'clock."},
+          {"de": "Der Fehler ist in der Nacht behoben worden.", "en": "The error was fixed during the night."}
+        ],
+        "transform": [
+          {"instruction": "Make it passive in Perfekt. Leave out the person.", "given": "Ein Kollege hat den Fehler gestern behoben.", "answer": "Der Fehler ist gestern behoben worden.", "alt": ["Gestern ist der Fehler behoben worden."]},
+          {"instruction": "Make it passive in Präteritum. Leave out man.", "given": "Man gründete die Europäische Zentralbank 1998.", "answer": "Die Europäische Zentralbank wurde 1998 gegründet.", "alt": ["1998 wurde die Europäische Zentralbank gegründet."]}
+        ],
+        "tense_shift": [
+          {"instruction": "Put it in Präteritum.", "given": "Die Order wird um zehn Uhr ausgeführt.", "answer": "Die Order wurde um zehn Uhr ausgeführt.", "alt": []},
+          {"instruction": "Put it in Perfekt.", "given": "Die Zahlen werden am Morgen geprüft.", "answer": "Die Zahlen sind am Morgen geprüft worden.", "alt": []}
+        ],
+        "error_spot": [
+          {"wrong": "Der Fehler hat in der Nacht behoben worden.", "right": "Der Fehler ist in der Nacht behoben worden.", "tag": "AUX_HABEN_SEIN", "note_en": "The passive Perfekt always uses sein: ist ... worden."},
+          {"wrong": "Die Order wurde gestern ausführt.", "right": "Die Order wurde gestern ausgeführt.", "tag": "PARTIZIP", "note_en": "The Partizip II of ausführen is ausgeführt, with ge after the prefix."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence in the passive about something that was fixed during your last on-call week. Use wurde.", "must_include": ["wurde"]}
+      },
+      "homework": "Write 4 sentences about what was done at work or at home this week. Use wurde twice and ist or sind ... worden twice."
+    },
+    {
+      "code": "FUTURE",
+      "order": 40,
+      "group": "future",
+      "title": "Future: Präsens + time word or werden",
+      "rule_en": "For plans German usually uses Präsens with a time word; use werden + infinitive at the end for predictions and promises.",
+      "slot_diagram": {
+        "labels": ["Position 1", "Verb (2)", "Middle", "Infinitive (end)"],
+        "rows": [
+          ["Morgen", "fahre", "ich nach Frankfurt", ""],
+          ["Ich", "werde", "die Prüfung", "bestehen"],
+          ["Der DAX", "wird", "wahrscheinlich", "steigen"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Nächste Woche habe ich wieder Rufbereitschaft.", "en": "Next week I am on call again."},
+        {"context": "life", "de": "Am Samstag besuche ich Freunde in Mainz.", "en": "On Saturday I am visiting friends in Mainz."},
+        {"context": "finance_history", "de": "Viele Experten glauben, dass die Zinsen sinken werden.", "en": "Many experts believe that interest rates will fall."}
+      ],
+      "common_error": {"wrong": "Morgen ich fahre nach Frankfurt.", "right": "Morgen fahre ich nach Frankfurt.", "tag": "V2_POSITION", "note_en": "The time word takes position 1, so the verb comes second, before ich."},
+      "tags": ["TENSE_CHOICE", "V2_POSITION", "VERB_FINAL"],
+      "drills": {
+        "surgery": [
+          {"de": "Nächste Woche schreibe ich meine Prüfung in Statistik.", "en": "Next week I am writing my statistics exam."},
+          {"de": "Ich glaube, dass der Bitcoin-Kurs steigen wird.", "en": "I think that the Bitcoin price will rise."}
+        ],
+        "transform": [
+          {"instruction": "Start with: Ich glaube, dass", "given": "Der Zug wird heute pünktlich sein.", "answer": "Ich glaube, dass der Zug heute pünktlich sein wird.", "alt": []},
+          {"instruction": "Start with Morgen.", "given": "Ich fahre zum Bürgeramt.", "answer": "Morgen fahre ich zum Bürgeramt.", "alt": []}
+        ],
+        "tense_shift": [
+          {"instruction": "Put it in Futur I.", "given": "Ich bestehe die Prüfung.", "answer": "Ich werde die Prüfung bestehen.", "alt": []},
+          {"instruction": "Put it in Präsens with the time word morgen.", "given": "Ich werde meine Eltern in Lahore anrufen.", "answer": "Morgen rufe ich meine Eltern in Lahore an.", "alt": ["Ich rufe morgen meine Eltern in Lahore an.", "Ich rufe meine Eltern in Lahore morgen an.", "Ich rufe meine Eltern morgen in Lahore an."]}
+        ],
+        "error_spot": [
+          {"wrong": "Ich werde bestehen die CFA-Prüfung im Februar.", "right": "Ich werde die CFA-Prüfung im Februar bestehen.", "tag": "VERB_FINAL", "note_en": "With werden the infinitive goes to the very end."},
+          {"wrong": "Ich glaube, dass der DAX morgen wird steigen.", "right": "Ich glaube, dass der DAX morgen steigen wird.", "tag": "VERB_FINAL", "note_en": "After dass the conjugated verb wird goes to the very end."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about your plan for next weekend, in Präsens with a time word.", "must_include": ["Wochenende"]}
+      },
+      "homework": "Write 4 sentences about next week: two plans in Präsens with a time word and two predictions with werden, for example about the markets or your exams."
+    }
+  ]
+}

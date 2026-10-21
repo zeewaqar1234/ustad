@@ -27,6 +27,19 @@ DETERMINERS = {
     "wir", "uns", "ihnen", "euch",
 }  # fmt: skip
 
+# Umlaut pairs that are different grammatical forms (Präteritum vs Konjunktiv II, singular vs
+# plural), not spelling variants: a missing or extra umlaut here is a grammar error, never Hard.
+_UMLAUT_FORMS = {
+    "hatte", "hätte", "hatten", "hätten", "hattest", "hättest", "hattet", "hättet",
+    "war", "wäre", "waren", "wären", "warst", "wärst", "wart", "wärt",
+    "wurde", "würde", "wurden", "würden", "wurdest", "würdest", "wurdet", "würdet",
+    "konnte", "könnte", "konnten", "könnten", "musste", "müsste", "mussten", "müssten",
+    "durfte", "dürfte", "durften", "dürften", "mochte", "möchte", "mochten", "möchten",
+    "kam", "käme", "gab", "gäbe", "wusste", "wüsste",
+    "mutter", "mütter", "vater", "väter", "bruder", "brüder", "tochter", "töchter",
+    "garten", "gärten", "laden", "läden", "apfel", "äpfel",
+}  # fmt: skip
+
 _UMLAUT_DIGRAPHS = (("ae", "ä"), ("oe", "ö"), ("ue", "ü"))
 
 
@@ -96,7 +109,15 @@ def _token_verdict(given: str, exp: str) -> tuple[int, str | None]:
         if given.lower() == exp.lower():
             return HARD, f"Capital letter: {exp}"
         return AGAIN, f"Wrong word form: '{given}' should be '{exp}'"
+    lg, le = given.lower(), exp.lower()
     fg, fe = _fold(given), _fold(exp)
+    # 'haette' folds to 'hätte' (spelling, fine); 'hatte' for 'hätte' is a different form
+    if (
+        fg != fe
+        and (fg in _UMLAUT_FORMS or fe in _UMLAUT_FORMS)
+        and _strip_umlauts(fg) == _strip_umlauts(fe)
+    ):
+        return AGAIN, f"Wrong form: '{given}' is not '{exp}'"
     if fg == fe:
         if given.lower() == exp.lower():
             return HARD, f"Capital letter: {exp}"
@@ -105,7 +126,6 @@ def _token_verdict(given: str, exp: str) -> tuple[int, str | None]:
         return HARD, f"Umlaut: {exp}"
     if _strip_umlauts(fg) == _strip_umlauts(fe):
         return HARD, f"Missing umlaut: {exp}"
-    lg, le = given.lower(), exp.lower()
     if len(le) >= 4 and _osa_distance(lg, le) == 1 and not _is_ending_change(lg, le):
         return HARD, f"Typo: {exp}"
     if _is_ending_change(lg, le):

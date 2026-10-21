@@ -11,7 +11,7 @@ from sqlalchemy import select
 
 from app.core.config import settings
 from app.db import SessionLocal
-from app.models import Card, Item, Profile
+from app.models import Card, Item, Pattern, Profile
 from app.services.cards import card_types_for
 
 DECKS = ["connector", "work", "life"]
@@ -60,8 +60,38 @@ def load() -> dict[str, int]:
                     if ct not in have:
                         db.add(Card(item_id=item.id, card_type=ct))
                         counts["cards_new"] += 1
+    counts.update(load_patterns(db))
     db.commit()
     db.close()
+    return counts
+
+
+PATTERN_FIELDS = ("order", "group", "title", "rule_en", "slot_diagram", "common_error", "tags",
+                  "homework", "review_notes")  # fmt: skip
+
+
+def load_patterns(db) -> dict[str, int]:
+    """data/seed/patterns.json -> pattern table, matched on code. Edited German goes back to review."""
+    path = settings.seed_dir / "patterns.json"
+    if not path.exists():
+        print(f"skip patterns: {path} missing (run make grammar-build)")
+        return {}
+    counts = {"patterns_new": 0, "patterns_updated": 0}
+    for p in json.loads(path.read_text())["patterns"]:
+        row = db.scalar(select(Pattern).where(Pattern.code == p["code"]))
+        fields = {k: p[k] for k in PATTERN_FIELDS}
+        fields.update(examples_json=p["examples"], drills_json=p["drills"])
+        if row is None:
+            db.add(Pattern(code=p["code"], status=p["status"], **fields))
+            counts["patterns_new"] += 1
+            continue
+        changed = row.examples_json != p["examples"] or row.drills_json != p["drills"]
+        for k, v in fields.items():
+            setattr(row, k, v)
+        if changed and p["status"] == "needs_review":
+            row.status = "needs_review"
+        counts["patterns_updated"] += 1
+    db.flush()
     return counts
 
 

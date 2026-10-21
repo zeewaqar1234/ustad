@@ -1,0 +1,5482 @@
+{
+ "patterns": [
+  {
+   "code": "V2_STATEMENT",
+   "order": 1,
+   "group": "word_order",
+   "title": "Verb second: subject first",
+   "rule_en": "In a main clause the conjugated verb is always element number 2. Here the subject is element 1.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1 (subject)",
+     "Verb (2)",
+     "Rest"
+    ],
+    "rows": [
+     [
+      "Ich",
+      "arbeite",
+      "heute im Büro"
+     ],
+     [
+      "Mein Zug",
+      "fährt",
+      "um 7:40 Uhr"
+     ],
+     [
+      "Der DAX",
+      "steigt",
+      "seit Montag"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich prüfe jeden Morgen die Orders der Sparkassen.",
+     "en": "Every morning I check the orders from the Sparkassen."
+    },
+    {
+     "context": "life",
+     "de": "Mein Zug nach Frankfurt fährt um 7:40 Uhr.",
+     "en": "My train to Frankfurt leaves at 7:40."
+    },
+    {
+     "context": "finance_history",
+     "de": "Napoleon verlor 1815 die Schlacht bei Waterloo.",
+     "en": "Napoleon lost the Battle of Waterloo in 1815."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich heute arbeite im Büro.",
+    "right": "Ich arbeite heute im Büro.",
+    "tag": "V2_POSITION",
+    "note_en": "The verb comes straight after the subject, before time words like heute."
+   },
+   "tags": [
+    "V2_POSITION"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich schreibe eine kurze E-Mail an mein Team.",
+      "en": "I am writing a short email to my team.",
+      "alt": []
+     },
+     {
+      "de": "Mein Kollege isst mittags in der Kantine.",
+      "en": "My colleague eats in the Kantine at lunchtime.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Put the subject first.",
+      "given": "Heute arbeite ich im Homeoffice.",
+      "answer": "Ich arbeite heute im Homeoffice.",
+      "alt": []
+     },
+     {
+      "instruction": "Put the subject first.",
+      "given": "Am Freitag schreibe ich eine Klausur.",
+      "answer": "Ich schreibe am Freitag eine Klausur.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Der Markt heute ist sehr ruhig.",
+      "right": "Der Markt ist heute sehr ruhig.",
+      "tag": "V2_POSITION",
+      "note_en": "ist must be in position 2, right after Der Markt."
+     },
+     {
+      "wrong": "Ich oft lerne in der Bibliothek.",
+      "right": "Ich lerne oft in der Bibliothek.",
+      "tag": "V2_POSITION",
+      "note_en": "oft goes after the verb, not between subject and verb."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your train to Frankfurt. Start with the subject.",
+     "must_include": [
+      "Zug"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your morning: when you get up, your train, your first task at work, your lunch. Start every sentence with the subject and put the verb second.",
+   "batch": 1,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "V2_INVERSION",
+   "order": 2,
+   "group": "word_order",
+   "title": "Verb second: something else first",
+   "rule_en": "If a time, place or object comes first, the verb stays in position 2 and the subject moves right after the verb.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "Verb (2)",
+     "Subject",
+     "Rest"
+    ],
+    "rows": [
+     [
+      "Heute",
+      "arbeite",
+      "ich",
+      "im Büro"
+     ],
+     [
+      "Am Montag",
+      "beginnt",
+      "meine Rufbereitschaft",
+      ""
+     ],
+     [
+      "Den Bericht",
+      "schicke",
+      "ich",
+      "morgen"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Morgen habe ich Rufbereitschaft.",
+     "en": "Tomorrow I am on call."
+    },
+    {
+     "context": "life",
+     "de": "In Rüsselsheim wohne ich seit zwei Jahren.",
+     "en": "I have lived in Rüsselsheim for two years."
+    },
+    {
+     "context": "finance_history",
+     "de": "Seit Ende 2024 gilt die MiCA-Verordnung in der ganzen EU.",
+     "en": "Since the end of 2024 the MiCA regulation has applied across the whole EU."
+    }
+   ],
+   "common_error": {
+    "wrong": "Morgen ich habe Rufbereitschaft.",
+    "right": "Morgen habe ich Rufbereitschaft.",
+    "tag": "V2_POSITION",
+    "note_en": "After a time word in position 1, the verb comes next and the subject follows it."
+   },
+   "tags": [
+    "V2_POSITION"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Nach der Arbeit gehe ich ins Fitnessstudio.",
+      "en": "After work I go to the gym.",
+      "alt": []
+     },
+     {
+      "de": "In der Kantine gibt es heute Linsensuppe.",
+      "en": "There is lentil soup in the Kantine today.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Start with the time expression.",
+      "given": "Ich habe am Donnerstag eine Prüfung.",
+      "answer": "Am Donnerstag habe ich eine Prüfung.",
+      "alt": []
+     },
+     {
+      "instruction": "Start with the place.",
+      "given": "Ich lerne in der Bibliothek besser.",
+      "answer": "In der Bibliothek lerne ich besser.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Heute der Zug hat Verspätung.",
+      "right": "Heute hat der Zug Verspätung.",
+      "tag": "V2_POSITION",
+      "note_en": "Heute is position 1, so hat comes next and der Zug follows."
+     },
+     {
+      "wrong": "Im Büro wir sprechen meistens Deutsch.",
+      "right": "Im Büro sprechen wir meistens Deutsch.",
+      "tag": "V2_POSITION",
+      "note_en": "Im Büro is position 1, so the verb sprechen comes before wir."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your on-call week. Start with a time word, for example Am Montag.",
+     "must_include": [
+      "Rufbereitschaft"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your week. Start each one with a time or place: Am Montag, Im Büro, Nach der Uni, Am Wochenende. Check that the verb is in position 2.",
+   "batch": 1,
+   "status": "needs_review",
+   "review_notes": [
+    {
+     "text": "Seit Ende 2024 gilt die MiCA-Verordnung in der ganzen EU.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Seit Ende 2024 gilt die MiCA-Verordnung in der ganzen EU.",
+     "suggestions": [
+      "Miet-Verordnung",
+      "Mini-Verordnung",
+      "Mit-Verordnung"
+     ]
+    }
+   ]
+  },
+  {
+   "code": "W_QUESTION",
+   "order": 3,
+   "group": "word_order",
+   "title": "W-questions: W-word, verb, subject",
+   "rule_en": "The W-word is position 1, the conjugated verb is position 2, then the subject.",
+   "slot_diagram": {
+    "labels": [
+     "W-word (1)",
+     "Verb (2)",
+     "Subject",
+     "Rest"
+    ],
+    "rows": [
+     [
+      "Wann",
+      "fährt",
+      "die nächste S-Bahn",
+      "nach Frankfurt"
+     ],
+     [
+      "Wo",
+      "ist",
+      "das Bürgeramt",
+      ""
+     ],
+     [
+      "Warum",
+      "fällt",
+      "der Bitcoin-Kurs",
+      "heute"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Wer übernimmt nächste Woche die Rufbereitschaft?",
+     "en": "Who is taking the on-call shift next week?"
+    },
+    {
+     "context": "life",
+     "de": "Wann fährt die nächste S-Bahn nach Frankfurt?",
+     "en": "When does the next S-Bahn to Frankfurt leave?"
+    },
+    {
+     "context": "finance_history",
+     "de": "Warum hat Napoleon den Krieg gegen Russland verloren?",
+     "en": "Why did Napoleon lose the war against Russia?"
+    }
+   ],
+   "common_error": {
+    "wrong": "Wann der Zug fährt nach Frankfurt?",
+    "right": "Wann fährt der Zug nach Frankfurt?",
+    "tag": "V2_POSITION",
+    "note_en": "In a W-question the verb comes right after the W-word."
+   },
+   "tags": [
+    "V2_POSITION"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Wo kann ich meinen Ausweis abholen?",
+      "en": "Where can I pick up my ID card?",
+      "alt": []
+     },
+     {
+      "de": "Wie lange dauert die Fahrt nach Frankfurt?",
+      "en": "How long does the trip to Frankfurt take?",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Ask about the time with wann.",
+      "given": "Die Besprechung beginnt um neun Uhr.",
+      "answer": "Wann beginnt die Besprechung?",
+      "alt": []
+     },
+     {
+      "instruction": "Ask about the place with wo.",
+      "given": "Herr Wagner wohnt in Mainz.",
+      "answer": "Wo wohnt Herr Wagner?",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Was du machst am Wochenende?",
+      "right": "Was machst du am Wochenende?",
+      "tag": "V2_POSITION",
+      "note_en": "The verb machst goes right after Was, before du."
+     },
+     {
+      "wrong": "Warum der Kurs ist so stark gefallen?",
+      "right": "Warum ist der Kurs so stark gefallen?",
+      "tag": "V2_POSITION",
+      "note_en": "ist goes in position 2, right after Warum."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one question you could ask a colleague in the Kantine. Start with Wie.",
+     "must_include": [
+      "Wie"
+     ]
+    }
+   },
+   "homework": "Write 4 W-questions you could really ask this week: one at work, one at the station, one at the Bürgeramt or Arzt, one to a classmate at Goethe University. Use a different W-word each time.",
+   "batch": 1,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "YESNO_QUESTION",
+   "order": 4,
+   "group": "word_order",
+   "title": "Yes/no questions: verb first",
+   "rule_en": "In a yes/no question the conjugated verb is position 1 and the subject follows it.",
+   "slot_diagram": {
+    "labels": [
+     "Verb (1)",
+     "Subject",
+     "Middle",
+     "Verb part (end)"
+    ],
+    "rows": [
+     [
+      "Kommst",
+      "du",
+      "morgen ins Büro",
+      ""
+     ],
+     [
+      "Hast",
+      "du",
+      "die E-Mail schon",
+      "gelesen"
+     ],
+     [
+      "Fährt",
+      "dieser Zug",
+      "nach Frankfurt",
+      ""
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Kannst du mir die Zahlen von gestern schicken?",
+     "en": "Can you send me yesterday's numbers?"
+    },
+    {
+     "context": "life",
+     "de": "Fährt diese S-Bahn zum Frankfurter Hauptbahnhof?",
+     "en": "Does this S-Bahn go to Frankfurt main station?"
+    },
+    {
+     "context": "finance_history",
+     "de": "Ist der Bitcoin-Kurs heute wieder gestiegen?",
+     "en": "Has the Bitcoin price gone up again today?"
+    }
+   ],
+   "common_error": {
+    "wrong": "Du hast heute Rufbereitschaft?",
+    "right": "Hast du heute Rufbereitschaft?",
+    "tag": "V2_POSITION",
+    "note_en": "A real yes/no question starts with the verb. Statement order with a question mark only works as a surprised echo in speech."
+   },
+   "tags": [
+    "V2_POSITION",
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Hast du heute Abend Zeit für einen Kaffee?",
+      "en": "Do you have time for a coffee this evening?",
+      "alt": []
+     },
+     {
+      "de": "Ist das der Zug nach Frankfurt?",
+      "en": "Is this the train to Frankfurt?",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Make a yes/no question.",
+      "given": "Du hast morgen Rufbereitschaft.",
+      "answer": "Hast du morgen Rufbereitschaft?",
+      "alt": []
+     },
+     {
+      "instruction": "Make a yes/no question.",
+      "given": "Sie können den Termin verschieben.",
+      "answer": "Können Sie den Termin verschieben?",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Heute du hast Rufbereitschaft?",
+      "right": "Hast du heute Rufbereitschaft?",
+      "tag": "V2_POSITION",
+      "note_en": "A yes/no question starts with the verb hast."
+     },
+     {
+      "wrong": "Kannst du schicken mir die Datei?",
+      "right": "Kannst du mir die Datei schicken?",
+      "tag": "VERB_FINAL",
+      "note_en": "With a modal verb the infinitive schicken still goes to the end."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one yes/no question to a colleague about the morning Besprechung.",
+     "must_include": [
+      "Besprechung"
+     ]
+    }
+   },
+   "homework": "Write 4 yes/no questions you could send in the team chat or ask in the Kantine tomorrow. Start each one with the verb. Use a modal verb in at least one.",
+   "batch": 1,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "SATZKLAMMER",
+   "order": 5,
+   "group": "word_order",
+   "title": "Sentence bracket: second verb part at the end",
+   "rule_en": "The conjugated verb stays in position 2. The second verb part (participle, infinitive after a modal, separable prefix) goes to the very end.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "Verb (2)",
+     "Middle",
+     "Verb part (end)"
+    ],
+    "rows": [
+     [
+      "Ich",
+      "habe",
+      "den Bericht schon",
+      "geschickt"
+     ],
+     [
+      "Ich",
+      "muss",
+      "heute bis acht",
+      "arbeiten"
+     ],
+     [
+      "Der Zug",
+      "kommt",
+      "um 8:05 Uhr in Frankfurt",
+      "an"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich habe heute Morgen alle Orders geprüft.",
+     "en": "I checked all the orders this morning."
+    },
+    {
+     "context": "life",
+     "de": "Ich muss morgen zum Bürgeramt gehen.",
+     "en": "I have to go to the Bürgeramt tomorrow."
+    },
+    {
+     "context": "finance_history",
+     "de": "Die Berliner Mauer ist 1989 gefallen.",
+     "en": "The Berlin Wall fell in 1989."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich habe geschickt den Bericht.",
+    "right": "Ich habe den Bericht geschickt.",
+    "tag": "VERB_FINAL",
+    "note_en": "The participle geschickt closes the bracket at the end."
+   },
+   "tags": [
+    "VERB_FINAL",
+    "SEP_PREFIX"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich habe gestern bis zehn Uhr gearbeitet.",
+      "en": "Yesterday I worked until ten.",
+      "alt": []
+     },
+     {
+      "de": "Mein Zug kommt heute zehn Minuten später an.",
+      "en": "My train arrives ten minutes later today.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Add the modal verb müssen.",
+      "given": "Ich arbeite heute länger.",
+      "answer": "Ich muss heute länger arbeiten.",
+      "alt": []
+     },
+     {
+      "instruction": "Add the modal verb wollen.",
+      "given": "Ich lese den Artikel heute Abend.",
+      "answer": "Ich will den Artikel heute Abend lesen.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [
+     {
+      "instruction": "Put it in Perfekt.",
+      "given": "Ich rufe den Kunden an.",
+      "answer": "Ich habe den Kunden angerufen.",
+      "alt": []
+     },
+     {
+      "instruction": "Put it in Perfekt.",
+      "given": "Der Zug fährt pünktlich ab.",
+      "answer": "Der Zug ist pünktlich abgefahren.",
+      "alt": []
+     }
+    ],
+    "error_spot": [
+     {
+      "wrong": "Ich muss arbeiten heute bis acht Uhr.",
+      "right": "Ich muss heute bis acht Uhr arbeiten.",
+      "tag": "VERB_FINAL",
+      "note_en": "After muss the infinitive arbeiten goes to the end."
+     },
+     {
+      "wrong": "Der Zug kommt an um 8:05 Uhr.",
+      "right": "Der Zug kommt um 8:05 Uhr an.",
+      "tag": "SEP_PREFIX",
+      "note_en": "The prefix an of ankommen goes to the end."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence in Perfekt about what you did after work yesterday.",
+     "must_include": [
+      "gestern"
+     ]
+    }
+   },
+   "homework": "Write 5 sentences about yesterday in Perfekt: your train, your work, your lunch, your study, your evening. Use one separable verb (ankommen, anrufen, aufstehen). Mark the two verb parts in each sentence.",
+   "batch": 1,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "MIDDLE_FIELD_ORDER",
+   "order": 6,
+   "group": "word_order",
+   "title": "Middle field: TeKaMoLo, pronouns first",
+   "rule_en": "In the middle field the usual order is time, cause, manner, place (TeKaMoLo). Pronouns come before noun objects; with two pronouns, accusative comes before dative.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "Verb (2)",
+     "Time (Te)",
+     "Cause (Ka)",
+     "Manner (Mo)",
+     "Place (Lo)",
+     "Verb part (end)"
+    ],
+    "rows": [
+     [
+      "Ich",
+      "fahre",
+      "morgen",
+      "wegen des Streiks",
+      "mit dem Auto",
+      "nach Frankfurt",
+      ""
+     ],
+     [
+      "Ich",
+      "bin",
+      "heute",
+      "",
+      "mit dem Fahrrad",
+      "zur Uni",
+      "gefahren"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich schicke ihn dir heute Nachmittag.",
+     "en": "I will send it (the report) to you this afternoon."
+    },
+    {
+     "context": "life",
+     "de": "Ich fahre morgen wegen des Streiks mit dem Auto nach Frankfurt.",
+     "en": "Tomorrow I am driving to Frankfurt because of the strike."
+    },
+    {
+     "context": "finance_history",
+     "de": "Napoleon zog 1812 mit einer großen Armee nach Russland.",
+     "en": "In 1812 Napoleon marched into Russia with a large army."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich fahre nach Frankfurt morgen.",
+    "right": "Ich fahre morgen nach Frankfurt.",
+    "tag": "MIDDLE_FIELD_ORDER",
+    "note_en": "Time comes before place."
+   },
+   "tags": [
+    "MIDDLE_FIELD_ORDER"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich fahre heute mit dem Zug nach Frankfurt.",
+      "en": "Today I am taking the train to Frankfurt.",
+      "alt": []
+     },
+     {
+      "de": "Ich erkläre es dir morgen in der Kantine.",
+      "en": "I will explain it to you tomorrow in the Kantine.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Replace both noun objects with pronouns.",
+      "given": "Ich gebe meiner Kollegin den Schlüssel.",
+      "answer": "Ich gebe ihn ihr.",
+      "alt": []
+     },
+     {
+      "instruction": "Add morgen and in der Bibliothek.",
+      "given": "Ich lerne für die Klausur.",
+      "answer": "Ich lerne morgen in der Bibliothek für die Klausur.",
+      "alt": [
+       "Ich lerne morgen für die Klausur in der Bibliothek."
+      ]
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich bin mit dem Zug gestern nach Frankfurt gefahren.",
+      "right": "Ich bin gestern mit dem Zug nach Frankfurt gefahren.",
+      "tag": "MIDDLE_FIELD_ORDER",
+      "note_en": "Time (gestern) comes before manner (mit dem Zug)."
+     },
+     {
+      "wrong": "Ich schicke dir ihn morgen.",
+      "right": "Ich schicke ihn dir morgen.",
+      "tag": "MIDDLE_FIELD_ORDER",
+      "note_en": "Two pronouns: accusative ihn before dative dir."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your commute with a time, a manner and a place.",
+     "must_include": [
+      "mit"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about this week. Each one needs a time and a place, and two of them a manner (mit dem Zug, schnell, allein). In one sentence use two pronouns, like Ich gebe es dir.",
+   "batch": 2,
+   "status": "needs_review",
+   "review_notes": [
+    {
+     "text": "Ich gebe ihn ihr.",
+     "rule": "SCHENKEN_DATIV",
+     "message": "Bitte prüfen, ob das Personalpronomen nach ‚gebe‘ im Dativ stehen muss (z. B. ‚ihm‘).",
+     "context": "Ich gebe ihn ihr.",
+     "suggestions": [
+      "ihm"
+     ]
+    }
+   ]
+  },
+  {
+   "code": "NICHT_POSITION",
+   "order": 7,
+   "group": "word_order",
+   "title": "Where nicht goes",
+   "rule_en": "To negate the whole sentence, nicht goes late: after objects and time words, but before place, manner and the second verb part. To negate one part, put nicht right before that part.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "Verb (2)",
+     "Middle",
+     "nicht",
+     "End"
+    ],
+    "rows": [
+     [
+      "Ich",
+      "arbeite",
+      "heute",
+      "nicht",
+      ""
+     ],
+     [
+      "Ich",
+      "kann",
+      "morgen",
+      "nicht",
+      "kommen"
+     ],
+     [
+      "Ich",
+      "habe",
+      "die E-Mail",
+      "nicht",
+      "gelesen"
+     ],
+     [
+      "Mein Kollege",
+      "kommt",
+      "heute",
+      "nicht",
+      "ins Büro"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich habe die Datei noch nicht bekommen.",
+     "en": "I have not received the file yet."
+    },
+    {
+     "context": "life",
+     "de": "Die Praxis hat heute nicht geöffnet.",
+     "en": "The doctor's practice is not open today."
+    },
+    {
+     "context": "finance_history",
+     "de": "Der DAX ist gestern nicht gestiegen, sondern gefallen.",
+     "en": "The DAX did not rise yesterday, it fell."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich habe die E-Mail gelesen nicht.",
+    "right": "Ich habe die E-Mail nicht gelesen.",
+    "tag": "MIDDLE_FIELD_ORDER",
+    "note_en": "nicht goes before the participle, never after it."
+   },
+   "tags": [
+    "MIDDLE_FIELD_ORDER"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich habe die E-Mail noch nicht gelesen.",
+      "en": "I have not read the email yet.",
+      "alt": []
+     },
+     {
+      "de": "Mein Kollege kommt heute nicht ins Büro.",
+      "en": "My colleague is not coming into the office today.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Negate the whole sentence with nicht.",
+      "given": "Ich verstehe die Frage.",
+      "answer": "Ich verstehe die Frage nicht.",
+      "alt": []
+     },
+     {
+      "instruction": "Negate the whole sentence with nicht.",
+      "given": "Ich kann heute zum Sport gehen.",
+      "answer": "Ich kann heute nicht zum Sport gehen.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich verstehe nicht ihn.",
+      "right": "Ich verstehe ihn nicht.",
+      "tag": "MIDDLE_FIELD_ORDER",
+      "note_en": "A pronoun object comes before nicht."
+     },
+     {
+      "wrong": "Ich gehe heute zum Arzt nicht.",
+      "right": "Ich gehe heute nicht zum Arzt.",
+      "tag": "MIDDLE_FIELD_ORDER",
+      "note_en": "nicht goes before a place like zum Arzt."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about something you did not do yesterday.",
+     "must_include": [
+      "nicht"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about things that did not happen this week: at work, on the train, at the Uni, at home. Use nicht in each one, and use Perfekt or a modal verb in two of them.",
+   "batch": 2,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "CONN_GROUP0",
+   "order": 8,
+   "group": "connectors",
+   "title": "und, aber, oder, denn, sondern: no change",
+   "rule_en": "und, aber, oder, denn and sondern sit in position 0. After them the clause keeps normal main clause order, verb in position 2.",
+   "slot_diagram": {
+    "labels": [
+     "Clause 1",
+     ",",
+     "Connector (0)",
+     "Position 1",
+     "Verb (2)",
+     "Rest"
+    ],
+    "rows": [
+     [
+      "Ich bin müde",
+      ",",
+      "aber",
+      "ich",
+      "lerne",
+      "noch eine Stunde"
+     ],
+     [
+      "Ich nehme den Zug",
+      ",",
+      "denn",
+      "die Autobahn",
+      "ist",
+      "voll"
+     ],
+     [
+      "Ich arbeite bis drei",
+      "",
+      "und",
+      "danach",
+      "gehe",
+      "ich zur Uni"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Der Markt war ruhig, aber wir hatten viele Anrufe.",
+     "en": "The market was quiet, but we had a lot of calls."
+    },
+    {
+     "context": "life",
+     "de": "Ich nehme heute den Zug, denn die Autobahn ist voll.",
+     "en": "I am taking the train today, because the motorway is jammed."
+    },
+    {
+     "context": "finance_history",
+     "de": "1848 wollten viele Deutsche einen gemeinsamen Staat, aber die Revolution scheiterte.",
+     "en": "In 1848 many Germans wanted a united state, but the revolution failed."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich bleibe zu Hause, denn ich krank bin.",
+    "right": "Ich bleibe zu Hause, denn ich bin krank.",
+    "tag": "V2_POSITION",
+    "note_en": "denn is not weil: after denn the verb stays in position 2."
+   },
+   "tags": [
+    "V2_POSITION",
+    "CONNECTOR_CHOICE"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich bin müde, aber ich muss noch lernen.",
+      "en": "I am tired, but I still have to study.",
+      "alt": []
+     },
+     {
+      "de": "Ich nehme den Zug, denn die Autobahn ist voll.",
+      "en": "I am taking the train, because the motorway is jammed.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with denn.",
+      "given": [
+       "Ich esse in der Kantine.",
+       "Das ist billig."
+      ],
+      "answer": "Ich esse in der Kantine, denn das ist billig.",
+      "alt": []
+     },
+     {
+      "instruction": "Join with sondern.",
+      "given": [
+       "Ich fahre heute nicht nach Frankfurt.",
+       "Ich arbeite im Homeoffice."
+      ],
+      "answer": "Ich fahre heute nicht nach Frankfurt, sondern arbeite im Homeoffice.",
+      "alt": [
+       "Ich fahre heute nicht nach Frankfurt, sondern ich arbeite im Homeoffice."
+      ]
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich bin müde, aber ich noch lerne.",
+      "right": "Ich bin müde, aber ich lerne noch.",
+      "tag": "V2_POSITION",
+      "note_en": "After aber the verb lerne stays in position 2."
+     },
+     {
+      "wrong": "Ich nehme den Zug, denn die Autobahn voll ist.",
+      "right": "Ich nehme den Zug, denn die Autobahn ist voll.",
+      "tag": "V2_POSITION",
+      "note_en": "After denn the verb ist stays in position 2."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your day at work or at the Uni with aber.",
+     "must_include": [
+      "aber"
+     ]
+    }
+   },
+   "homework": "Write 5 sentences about today. Use und, aber, oder, denn and sondern once each. After each connector, check that the verb is in position 2.",
+   "batch": 2,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "CONN_V2_ADVERBS",
+   "order": 9,
+   "group": "connectors",
+   "title": "deshalb, trotzdem, dann, außerdem: verb next",
+   "rule_en": "deshalb, trotzdem, dann and außerdem are adverbs. They take position 1, so the verb comes right after them and the subject follows.",
+   "slot_diagram": {
+    "labels": [
+     "Clause 1",
+     "Separator",
+     "Adverb (1)",
+     "Verb (2)",
+     "Subject",
+     "Rest"
+    ],
+    "rows": [
+     [
+      "Der Zug hat Verspätung",
+      ",",
+      "deshalb",
+      "komme",
+      "ich",
+      "später"
+     ],
+     [
+      "Ich bin müde",
+      ",",
+      "trotzdem",
+      "lerne",
+      "ich",
+      "noch eine Stunde"
+     ],
+     [
+      "Ich esse in der Kantine",
+      ".",
+      "Dann",
+      "gehe",
+      "ich",
+      "zurück ins Büro"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich habe diese Woche Rufbereitschaft, deshalb habe ich mein Handy immer dabei.",
+     "en": "I am on call this week, so I always have my phone with me."
+    },
+    {
+     "context": "life",
+     "de": "Die S-Bahn war voll, trotzdem habe ich einen Sitzplatz gefunden.",
+     "en": "The S-Bahn was full, but I still found a seat."
+    },
+    {
+     "context": "finance_history",
+     "de": "Der Bitcoin-Kurs war sehr volatil, deshalb haben viele Anleger verkauft.",
+     "en": "The Bitcoin price was very volatile, so many investors sold."
+    }
+   ],
+   "common_error": {
+    "wrong": "Der Zug hat Verspätung, deshalb ich komme später.",
+    "right": "Der Zug hat Verspätung, deshalb komme ich später.",
+    "tag": "V2_POSITION",
+    "note_en": "deshalb is position 1, so the verb komme comes before ich."
+   },
+   "tags": [
+    "V2_POSITION",
+    "CONNECTOR_CHOICE"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich war krank, deshalb bin ich zu Hause geblieben.",
+      "en": "I was ill, so I stayed at home.",
+      "alt": []
+     },
+     {
+      "de": "Es regnet, trotzdem fahre ich mit dem Fahrrad.",
+      "en": "It is raining, but I am still going by bike.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with deshalb.",
+      "given": [
+       "Ich habe morgen eine Prüfung.",
+       "Ich lerne heute Abend."
+      ],
+      "answer": "Ich habe morgen eine Prüfung, deshalb lerne ich heute Abend.",
+      "alt": [
+       "Ich habe morgen eine Prüfung. Deshalb lerne ich heute Abend."
+      ]
+     },
+     {
+      "instruction": "Join with trotzdem.",
+      "given": [
+       "Ich bin müde.",
+       "Ich gehe zum Deutschkurs."
+      ],
+      "answer": "Ich bin müde, trotzdem gehe ich zum Deutschkurs.",
+      "alt": [
+       "Ich bin müde. Trotzdem gehe ich zum Deutschkurs."
+      ]
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich habe Rufbereitschaft, deshalb ich kann nicht kommen.",
+      "right": "Ich habe Rufbereitschaft, deshalb kann ich nicht kommen.",
+      "tag": "V2_POSITION",
+      "note_en": "After deshalb the verb kann comes before the subject ich."
+     },
+     {
+      "wrong": "Zuerst lese ich die Nachrichten, dann ich trinke Kaffee.",
+      "right": "Zuerst lese ich die Nachrichten, dann trinke ich Kaffee.",
+      "tag": "V2_POSITION",
+      "note_en": "dann takes position 1, so trinke comes before ich."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your on-call week with deshalb.",
+     "must_include": [
+      "deshalb"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your last on-call week or exam week. Use deshalb, trotzdem, dann and außerdem once each. After each one, put the verb next.",
+   "batch": 2,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "VE_WEIL",
+   "order": 10,
+   "group": "connectors",
+   "title": "weil: verb to the end",
+   "rule_en": "weil starts a subordinate clause: the conjugated verb goes to the very end, and a comma separates the two clauses.",
+   "slot_diagram": {
+    "labels": [
+     "Main clause",
+     ",",
+     "weil",
+     "Middle",
+     "Verb (end)"
+    ],
+    "rows": [
+     [
+      "Ich bleibe zu Hause",
+      ",",
+      "weil",
+      "ich krank",
+      "bin"
+     ],
+     [
+      "Ich komme später",
+      ",",
+      "weil",
+      "mein Zug Verspätung",
+      "hat"
+     ],
+     [
+      "Ich lerne viel",
+      ",",
+      "weil",
+      "ich die Prüfung bestehen",
+      "will"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich bleibe heute länger, weil ich Rufbereitschaft habe.",
+     "en": "I am staying longer today because I am on call."
+    },
+    {
+     "context": "life",
+     "de": "Ich gehe zum Bürgeramt, weil ich meine Adresse ändern muss.",
+     "en": "I am going to the Bürgeramt because I have to change my address."
+    },
+    {
+     "context": "finance_history",
+     "de": "Viele Leute kaufen Gold, weil sie Angst vor Inflation haben.",
+     "en": "Many people buy gold because they are afraid of inflation."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich komme später, weil mein Zug hat Verspätung.",
+    "right": "Ich komme später, weil mein Zug Verspätung hat.",
+    "tag": "VERB_FINAL",
+    "note_en": "After weil the verb hat goes to the end. You hear weil plus verb second in speech, but not in writing."
+   },
+   "tags": [
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich lerne heute Abend, weil ich morgen eine Prüfung habe.",
+      "en": "I am studying this evening because I have an exam tomorrow.",
+      "alt": []
+     },
+     {
+      "de": "Ich nehme die S-Bahn, weil das Auto kaputt ist.",
+      "en": "I am taking the S-Bahn because the car is broken.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with weil.",
+      "given": [
+       "Ich bin müde.",
+       "Ich habe Rufbereitschaft."
+      ],
+      "answer": "Ich bin müde, weil ich Rufbereitschaft habe.",
+      "alt": [
+       "Weil ich Rufbereitschaft habe, bin ich müde."
+      ]
+     },
+     {
+      "instruction": "Join with weil.",
+      "given": [
+       "Ich esse in der Kantine.",
+       "Das Essen ist günstig."
+      ],
+      "answer": "Ich esse in der Kantine, weil das Essen günstig ist.",
+      "alt": [
+       "Weil das Essen günstig ist, esse ich in der Kantine."
+      ]
+     }
+    ],
+    "tense_shift": [
+     {
+      "instruction": "Put the weil clause in Perfekt.",
+      "given": "Ich bin müde, weil ich lange arbeite.",
+      "answer": "Ich bin müde, weil ich lange gearbeitet habe.",
+      "alt": []
+     }
+    ],
+    "error_spot": [
+     {
+      "wrong": "Ich komme nicht, weil ich bin krank.",
+      "right": "Ich komme nicht, weil ich krank bin.",
+      "tag": "VERB_FINAL",
+      "note_en": "After weil the verb bin goes to the end."
+     },
+     {
+      "wrong": "Ich komme zu spät, weil der Zug ist ausgefallen.",
+      "right": "Ich komme zu spät, weil der Zug ausgefallen ist.",
+      "tag": "VERB_FINAL",
+      "note_en": "In a weil clause the auxiliary ist goes after the participle, at the very end."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about why you take the train to Frankfurt. Use weil.",
+     "must_include": [
+      "weil"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about yesterday using weil at least twice: why you were late or early, why you ate where you ate, why you studied or did not. Check that the verb is at the end of every weil clause.",
+   "batch": 2,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "VE_DASS",
+   "order": 11,
+   "group": "connectors",
+   "title": "dass: verb to the end",
+   "rule_en": "After dass the conjugated verb goes to the end of the clause. Put a comma before dass.",
+   "slot_diagram": {
+    "labels": [
+     "Main clause",
+     ",",
+     "dass",
+     "Middle",
+     "Verb (end)"
+    ],
+    "rows": [
+     [
+      "Ich glaube",
+      ",",
+      "dass",
+      "der Markt heute",
+      "fällt"
+     ],
+     [
+      "Es ist wichtig",
+      ",",
+      "dass",
+      "du pünktlich",
+      "kommst"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich weiß, dass ich nächste Woche Rufbereitschaft habe.",
+     "en": "I know that I am on call next week."
+    },
+    {
+     "context": "life",
+     "de": "Es ist wichtig, dass ich den Termin beim Bürgeramt nicht verpasse.",
+     "en": "It is important that I don't miss the appointment at the Bürgeramt."
+    },
+    {
+     "context": "finance_history",
+     "de": "Ich habe gelesen, dass Pakistan 1947 unabhängig geworden ist.",
+     "en": "I read that Pakistan became independent in 1947."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich glaube, dass der Zug hat Verspätung.",
+    "right": "Ich glaube, dass der Zug Verspätung hat.",
+    "tag": "VERB_FINAL",
+    "note_en": "After dass the verb hat moves to the end."
+   },
+   "tags": [
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich hoffe, dass die Prüfung nicht so schwer ist.",
+      "en": "I hope that the exam is not that hard.",
+      "alt": []
+     },
+     {
+      "de": "Mein Kollege sagt, dass der Markt heute ruhig ist.",
+      "en": "My colleague says that the market is quiet today.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Start with 'Ich glaube, dass'.",
+      "given": "Die S-Bahn kommt heute später.",
+      "answer": "Ich glaube, dass die S-Bahn heute später kommt.",
+      "alt": []
+     },
+     {
+      "instruction": "Start with 'Es ist wichtig, dass'.",
+      "given": "Ich lerne jeden Tag Deutsch.",
+      "answer": "Es ist wichtig, dass ich jeden Tag Deutsch lerne.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich weiß, dass du kommst morgen.",
+      "right": "Ich weiß, dass du morgen kommst.",
+      "tag": "VERB_FINAL",
+      "note_en": "In a dass clause the verb kommst goes to the end."
+     },
+     {
+      "wrong": "Es ist wichtig, dass ich muss die E-Mail heute schreiben.",
+      "right": "Es ist wichtig, dass ich die E-Mail heute schreiben muss.",
+      "tag": "VERB_FINAL",
+      "note_en": "The modal muss goes to the very end, after the infinitive."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your MSc exams that starts with 'Ich hoffe, dass'.",
+     "must_include": [
+      "dass"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your work day. Start two with 'Ich glaube, dass' and two with 'Es ist wichtig, dass'. Check that the verb is at the end.",
+   "batch": 3,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "VE_OBWOHL",
+   "order": 12,
+   "group": "connectors",
+   "title": "obwohl: verb to the end",
+   "rule_en": "After obwohl the verb goes to the end. trotzdem says the same idea in a main clause: it takes position 1 and the verb comes right after it.",
+   "slot_diagram": {
+    "labels": [
+     "Clause 1",
+     ", or .",
+     "Connector",
+     "Verb (pos. 2)",
+     "Middle",
+     "Verb (end)"
+    ],
+    "rows": [
+     [
+      "Ich gehe zur Arbeit",
+      ",",
+      "obwohl",
+      "",
+      "ich müde",
+      "bin"
+     ],
+     [
+      "Ich bin müde",
+      ".",
+      "Trotzdem",
+      "gehe",
+      "ich zur Arbeit",
+      ""
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich arbeite heute im Büro, obwohl ich diese Woche Rufbereitschaft habe.",
+     "en": "I am working in the office today although I am on call this week."
+    },
+    {
+     "context": "life",
+     "de": "Ich nehme den Zug, obwohl er oft Verspätung hat.",
+     "en": "I take the train although it is often late."
+    },
+    {
+     "context": "finance_history",
+     "de": "Viele Leute kaufen Bitcoin, obwohl der Kurs stark schwankt.",
+     "en": "Many people buy Bitcoin although the price swings a lot."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich lerne weiter, obwohl ich bin müde.",
+    "right": "Ich lerne weiter, obwohl ich müde bin.",
+    "tag": "VERB_FINAL",
+    "note_en": "After obwohl the verb bin goes to the end."
+   },
+   "tags": [
+    "VERB_FINAL",
+    "V2_POSITION",
+    "CONNECTOR_CHOICE"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich gehe zur Uni, obwohl ich krank bin.",
+      "en": "I am going to uni although I am ill.",
+      "alt": []
+     },
+     {
+      "de": "Es regnet stark, trotzdem fahre ich mit dem Fahrrad.",
+      "en": "It is raining hard, but I still ride my bike.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with obwohl.",
+      "given": [
+       "Ich bin müde.",
+       "Ich lerne für die Prüfung."
+      ],
+      "answer": "Ich lerne für die Prüfung, obwohl ich müde bin.",
+      "alt": [
+       "Obwohl ich müde bin, lerne ich für die Prüfung."
+      ]
+     },
+     {
+      "instruction": "Rewrite with trotzdem.",
+      "given": "Ich trinke Kaffee, obwohl es schon spät ist.",
+      "answer": "Es ist schon spät. Trotzdem trinke ich Kaffee.",
+      "alt": [
+       "Es ist schon spät, trotzdem trinke ich Kaffee.",
+       "Es ist schon spät. Ich trinke trotzdem Kaffee.",
+       "Es ist schon spät, aber ich trinke trotzdem Kaffee."
+      ]
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich bin krank. Trotzdem ich gehe ins Büro.",
+      "right": "Ich bin krank. Trotzdem gehe ich ins Büro.",
+      "tag": "V2_POSITION",
+      "note_en": "trotzdem is position 1, so the verb gehe comes right after it."
+     },
+     {
+      "wrong": "Ich kaufe die Aktie, obwohl sie ist teuer.",
+      "right": "Ich kaufe die Aktie, obwohl sie teuer ist.",
+      "tag": "VERB_FINAL",
+      "note_en": "After obwohl the verb ist goes to the end."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your on-call week using obwohl.",
+     "must_include": [
+      "obwohl"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about this week: two with obwohl and two with trotzdem. Use your commute, your work or your exams.",
+   "batch": 3,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "VE_WENN",
+   "order": 13,
+   "group": "connectors",
+   "title": "wenn: verb to the end",
+   "rule_en": "wenn means if or whenever. After wenn the conjugated verb goes to the end.",
+   "slot_diagram": {
+    "labels": [
+     "Main clause",
+     ",",
+     "wenn",
+     "Middle",
+     "Verb (end)"
+    ],
+    "rows": [
+     [
+      "Ich rufe dich an",
+      ",",
+      "wenn",
+      "der Zug Verspätung",
+      "hat"
+     ],
+     [
+      "Ich lese Nachrichten",
+      ",",
+      "wenn",
+      "ich im Zug",
+      "sitze"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich muss sofort reagieren, wenn in der Nacht ein Alarm kommt.",
+     "en": "I have to react immediately if an alert comes in at night."
+    },
+    {
+     "context": "life",
+     "de": "Ich lese auf Deutsch, wenn ich im Zug nach Frankfurt sitze.",
+     "en": "I read in German when I sit on the train to Frankfurt."
+    },
+    {
+     "context": "finance_history",
+     "de": "Wenn die Zinsen steigen, fallen oft die Aktienkurse.",
+     "en": "When interest rates rise, share prices often fall."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich gehe in die Kantine, wenn ich habe Hunger.",
+    "right": "Ich gehe in die Kantine, wenn ich Hunger habe.",
+    "tag": "VERB_FINAL",
+    "note_en": "After wenn the verb habe goes to the end."
+   },
+   "tags": [
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich esse in der Kantine, wenn ich Zeit habe.",
+      "en": "I eat in the Kantine when I have time.",
+      "alt": []
+     },
+     {
+      "de": "Wir sprechen Deutsch, wenn der Chef dabei ist.",
+      "en": "We speak German when the boss is there.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with wenn.",
+      "given": [
+       "Ich habe frei.",
+       "Ich besuche meine Freunde in Mainz."
+      ],
+      "answer": "Ich besuche meine Freunde in Mainz, wenn ich frei habe.",
+      "alt": [
+       "Wenn ich frei habe, besuche ich meine Freunde in Mainz."
+      ]
+     },
+     {
+      "instruction": "Join with wenn.",
+      "given": [
+       "Der Kurs fällt unter 50 Euro.",
+       "Ich kaufe die Aktie."
+      ],
+      "answer": "Ich kaufe die Aktie, wenn der Kurs unter 50 Euro fällt.",
+      "alt": [
+       "Wenn der Kurs unter 50 Euro fällt, kaufe ich die Aktie."
+      ]
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich schreibe dir, wenn ich bin zu Hause.",
+      "right": "Ich schreibe dir, wenn ich zu Hause bin.",
+      "tag": "VERB_FINAL",
+      "note_en": "After wenn the verb bin goes to the end."
+     },
+     {
+      "wrong": "Wenn ich Zeit habe, ich lerne Vokabeln.",
+      "right": "Wenn ich Zeit habe, lerne ich Vokabeln.",
+      "tag": "V2_POSITION",
+      "note_en": "The wenn clause is position 1, so the main verb lerne comes next."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about what you do when the train is late. Use wenn.",
+     "must_include": [
+      "wenn"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences with wenn about your normal week: the train, the Kantine, on-call nights, studying. Put the wenn clause first in at least one.",
+   "batch": 3,
+   "status": "needs_review",
+   "review_notes": [
+    {
+     "text": "Ich besuche meine Freunde in Mainz, wenn ich frei habe.",
+     "rule": "EMPFOHLENE_ZUSAMMENSCHREIBUNG",
+     "message": "Empfehlung: Möchten Sie die Schreibweise „freihabe“ verwenden?",
+     "context": "...esuche meine Freunde in Mainz, wenn ich frei habe.",
+     "suggestions": [
+      "freihabe"
+     ]
+    },
+    {
+     "text": "Wenn ich frei habe, besuche ich meine Freunde in Mainz.",
+     "rule": "EMPFOHLENE_ZUSAMMENSCHREIBUNG",
+     "message": "Empfehlung: Möchten Sie die Schreibweise „freihabe“ verwenden?",
+     "context": "Wenn ich frei habe, besuche ich meine Freunde in Mainz.",
+     "suggestions": [
+      "freihabe"
+     ]
+    }
+   ]
+  },
+  {
+   "code": "VE_ALS",
+   "order": 14,
+   "group": "connectors",
+   "title": "als: one event in the past",
+   "rule_en": "Use als for one event or one period in the past, wenn for repeated events. Both send the verb to the end.",
+   "slot_diagram": {
+    "labels": [
+     "Connector",
+     "Middle",
+     "Verb (end)",
+     ",",
+     "Main clause"
+    ],
+    "rows": [
+     [
+      "Als",
+      "ich nach Deutschland",
+      "kam",
+      ",",
+      "konnte ich kaum Deutsch"
+     ],
+     [
+      "Immer wenn",
+      "der Zug Verspätung",
+      "hatte",
+      ",",
+      "kam ich zu spät"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Als ich meinen ersten Arbeitstag in der Bank hatte, war ich sehr nervös.",
+     "en": "When I had my first day of work at the bank, I was very nervous."
+    },
+    {
+     "context": "life",
+     "de": "Als ich nach Rüsselsheim kam, kannte ich niemanden.",
+     "en": "When I came to Rüsselsheim, I didn't know anyone."
+    },
+    {
+     "context": "finance_history",
+     "de": "Als die Mauer 1989 fiel, feierten viele Menschen in Berlin.",
+     "en": "When the Wall fell in 1989, many people celebrated in Berlin."
+    }
+   ],
+   "common_error": {
+    "wrong": "Wenn ich letztes Jahr in Lahore war, war es sehr heiß.",
+    "right": "Als ich letztes Jahr in Lahore war, war es sehr heiß.",
+    "tag": "CONNECTOR_CHOICE",
+    "note_en": "One visit in the past: als, not wenn."
+   },
+   "tags": [
+    "CONNECTOR_CHOICE",
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Als ich das Ergebnis gesehen habe, war ich froh.",
+      "en": "When I saw the result, I was happy.",
+      "alt": []
+     },
+     {
+      "de": "Als ich ein Kind war, spielte ich viel Cricket.",
+      "en": "When I was a child, I played a lot of cricket.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with als.",
+      "given": [
+       "Ich war in Lahore.",
+       "Es war sehr heiß."
+      ],
+      "answer": "Als ich in Lahore war, war es sehr heiß.",
+      "alt": [
+       "Es war sehr heiß, als ich in Lahore war."
+      ]
+     },
+     {
+      "instruction": "Join with als or wenn. It happened many times.",
+      "given": [
+       "Ich hatte eine Prüfung.",
+       "Ich war immer nervös."
+      ],
+      "answer": "Wenn ich eine Prüfung hatte, war ich immer nervös.",
+      "alt": [
+       "Ich war immer nervös, wenn ich eine Prüfung hatte.",
+       "Immer wenn ich eine Prüfung hatte, war ich nervös."
+      ]
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Wenn ich gestern nach Hause kam, war ich sehr müde.",
+      "right": "Als ich gestern nach Hause kam, war ich sehr müde.",
+      "tag": "CONNECTOR_CHOICE",
+      "note_en": "Yesterday is one event in the past: als."
+     },
+     {
+      "wrong": "Als ich in Frankfurt ankam, ich habe einen Kaffee getrunken.",
+      "right": "Als ich in Frankfurt ankam, habe ich einen Kaffee getrunken.",
+      "tag": "V2_POSITION",
+      "note_en": "The als clause is position 1, so habe comes right after the comma."
+     }
+    ],
+    "fill": [
+     {
+      "text": "___ ich gestern im Büro war, hat das Telefon oft geklingelt.",
+      "answers": [
+       "Als"
+      ],
+      "full": "Als ich gestern im Büro war, hat das Telefon oft geklingelt."
+     },
+     {
+      "text": "Immer ___ ich Zeit habe, lese ich Nachrichten auf Deutsch.",
+      "answers": [
+       "wenn"
+      ],
+      "full": "Immer wenn ich Zeit habe, lese ich Nachrichten auf Deutsch."
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about your first day in Germany. Use als.",
+     "must_include": [
+      "als"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your past: two with als (one event, for example your first day at the bank) and two with wenn (things that happened again and again in Pakistan).",
+   "batch": 3,
+   "status": "needs_review",
+   "review_notes": [
+    {
+     "text": "Als ich letztes Jahr in Lahore war, war es sehr heiß.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Als ich letztes Jahr in Lahore war, war es sehr heiß.",
+     "suggestions": [
+      "Labore",
+      "Jahre",
+      "Lahare"
+     ]
+    },
+    {
+     "text": "Ich war in Lahore.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Ich war in Lahore.",
+     "suggestions": [
+      "Labore",
+      "Laboren",
+      "Jahre"
+     ]
+    },
+    {
+     "text": "Als ich in Lahore war, war es sehr heiß.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Als ich in Lahore war, war es sehr heiß.",
+     "suggestions": [
+      "Labore",
+      "Jahre",
+      "Lahare"
+     ]
+    },
+    {
+     "text": "Es war sehr heiß, als ich in Lahore war.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Es war sehr heiß, als ich in Lahore war.",
+     "suggestions": [
+      "Labore",
+      "Jahre",
+      "Lahare"
+     ]
+    }
+   ]
+  },
+  {
+   "code": "VE_OB",
+   "order": 15,
+   "group": "connectors",
+   "title": "ob: whether, verb to the end",
+   "rule_en": "Use ob (whether) for an indirect yes/no question. The verb goes to the end. Do not use wenn here.",
+   "slot_diagram": {
+    "labels": [
+     "Main clause",
+     ",",
+     "ob",
+     "Middle",
+     "Verb (end)"
+    ],
+    "rows": [
+     [
+      "Ich weiß nicht",
+      ",",
+      "ob",
+      "der Zug heute",
+      "fährt"
+     ],
+     [
+      "Kannst du mir sagen",
+      ",",
+      "ob",
+      "die Kantine noch offen",
+      "ist"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Mein Kollege fragt, ob ich nächste Woche Rufbereitschaft habe.",
+     "en": "My colleague is asking whether I am on call next week."
+    },
+    {
+     "context": "life",
+     "de": "Können Sie mir sagen, ob das Bürgeramt am Freitag geöffnet ist?",
+     "en": "Can you tell me whether the Bürgeramt is open on Friday?"
+    },
+    {
+     "context": "finance_history",
+     "de": "Niemand weiß, ob Bitcoin nächstes Jahr steigt oder fällt.",
+     "en": "Nobody knows whether Bitcoin will rise or fall next year."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich weiß nicht, ob kommt der Zug pünktlich.",
+    "right": "Ich weiß nicht, ob der Zug pünktlich kommt.",
+    "tag": "VERB_FINAL",
+    "note_en": "After ob the verb kommt goes to the end."
+   },
+   "tags": [
+    "VERB_FINAL",
+    "CONNECTOR_CHOICE"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich frage meinen Chef, ob ich morgen frei habe.",
+      "en": "I am asking my boss whether I have tomorrow off.",
+      "alt": []
+     },
+     {
+      "de": "Weißt du, ob die Prüfung schwer ist?",
+      "en": "Do you know whether the exam is hard?",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Make it indirect. Start with 'Ich weiß nicht, ob'.",
+      "given": "Ist die Kantine heute offen?",
+      "answer": "Ich weiß nicht, ob die Kantine heute offen ist.",
+      "alt": []
+     },
+     {
+      "instruction": "Make it polite. Start with 'Können Sie mir sagen, ob'.",
+      "given": "Brauche ich einen Termin?",
+      "answer": "Können Sie mir sagen, ob ich einen Termin brauche?",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich weiß nicht, wenn der Markt morgen offen ist.",
+      "right": "Ich weiß nicht, ob der Markt morgen offen ist.",
+      "tag": "CONNECTOR_CHOICE",
+      "note_en": "Whether is ob. wenn is if as a condition or when."
+     },
+     {
+      "wrong": "Kannst du mir sagen, ob du hast heute Zeit?",
+      "right": "Kannst du mir sagen, ob du heute Zeit hast?",
+      "tag": "VERB_FINAL",
+      "note_en": "After ob the verb hast goes to the end."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one polite sentence asking a colleague whether they can help you. Use ob.",
+     "must_include": [
+      "ob"
+     ]
+    }
+   },
+   "homework": "Write 4 indirect questions with ob you could really use: one for a colleague, one for the Bürgeramt, one for your professor, one for the Arzt.",
+   "batch": 3,
+   "status": "needs_review",
+   "review_notes": [
+    {
+     "text": "Ich frage meinen Chef, ob ich morgen frei habe.",
+     "rule": "EMPFOHLENE_ZUSAMMENSCHREIBUNG",
+     "message": "Empfehlung: Möchten Sie die Schreibweise „freihabe“ verwenden?",
+     "context": "Ich frage meinen Chef, ob ich morgen frei habe.",
+     "suggestions": [
+      "freihabe"
+     ]
+    }
+   ]
+  },
+  {
+   "code": "VE_DAMIT_UM_ZU",
+   "order": 16,
+   "group": "connectors",
+   "title": "damit vs um ... zu",
+   "rule_en": "Same subject in both parts: um ... zu + infinitive at the end. Different subjects: damit, verb to the end.",
+   "slot_diagram": {
+    "labels": [
+     "Main clause",
+     ",",
+     "Connector",
+     "Middle",
+     "End"
+    ],
+    "rows": [
+     [
+      "Ich lerne Deutsch",
+      ",",
+      "um",
+      "mit Kollegen",
+      "zu sprechen"
+     ],
+     [
+      "Ich erkläre es langsam",
+      ",",
+      "damit",
+      "mein Kollege es",
+      "versteht"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich schreibe meine E-Mails auf Deutsch, um mein Deutsch zu verbessern.",
+     "en": "I write my emails in German to improve my German."
+    },
+    {
+     "context": "life",
+     "de": "Ich spreche langsam, damit die Ärztin mich versteht.",
+     "en": "I speak slowly so that the doctor understands me."
+    },
+    {
+     "context": "finance_history",
+     "de": "Die EZB erhöht die Zinsen, um die Inflation zu senken.",
+     "en": "The ECB raises interest rates to bring inflation down."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich spreche langsam, um die Ärztin mich versteht.",
+    "right": "Ich spreche langsam, damit die Ärztin mich versteht.",
+    "tag": "CONNECTOR_CHOICE",
+    "note_en": "Two different subjects (ich, die Ärztin): use damit, not um."
+   },
+   "tags": [
+    "CONNECTOR_CHOICE",
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich nehme den frühen Zug, um pünktlich zu sein.",
+      "en": "I take the early train to be on time.",
+      "alt": []
+     },
+     {
+      "de": "Ich erkläre es langsam, damit du es verstehst.",
+      "en": "I explain it slowly so that you understand it.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with um ... zu.",
+      "given": [
+       "Ich fahre nach Frankfurt.",
+       "Ich arbeite in der Bank."
+      ],
+      "answer": "Ich fahre nach Frankfurt, um in der Bank zu arbeiten.",
+      "alt": [
+       "Um in der Bank zu arbeiten, fahre ich nach Frankfurt."
+      ]
+     },
+     {
+      "instruction": "Join with damit.",
+      "given": [
+       "Ich schicke dir die Folien.",
+       "Du kannst dich vorbereiten."
+      ],
+      "answer": "Ich schicke dir die Folien, damit du dich vorbereiten kannst.",
+      "alt": [
+       "Damit du dich vorbereiten kannst, schicke ich dir die Folien."
+      ]
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich spare Geld, um eine Reise nach Pakistan machen.",
+      "right": "Ich spare Geld, um eine Reise nach Pakistan zu machen.",
+      "tag": "OTHER",
+      "note_en": "um needs zu before the infinitive at the end."
+     },
+     {
+      "wrong": "Ich schreibe es auf, damit ich vergesse es nicht.",
+      "right": "Ich schreibe es auf, damit ich es nicht vergesse.",
+      "tag": "VERB_FINAL",
+      "note_en": "After damit the verb vergesse goes to the end."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Ich lerne jeden Abend, ___ die Prüfung ___ bestehen.",
+      "answers": [
+       "um",
+       "zu"
+      ],
+      "full": "Ich lerne jeden Abend, um die Prüfung zu bestehen."
+     },
+     {
+      "text": "Ich spreche langsam, ___ mein Kollege mich versteht.",
+      "answers": [
+       "damit"
+      ],
+      "full": "Ich spreche langsam, damit mein Kollege mich versteht."
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about why you are studying for the CFA. Use um ... zu.",
+     "must_include": [
+      "um",
+      "zu"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your goals: two with um ... zu (your own goals) and two with damit (something you do for another person).",
+   "batch": 4,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "NEBENSATZ_FIRST",
+   "order": 17,
+   "group": "word_order",
+   "title": "Subordinate clause first",
+   "rule_en": "If a sentence starts with a subordinate clause, that clause is position 1. The main clause then starts with its verb: verb, comma, verb.",
+   "slot_diagram": {
+    "labels": [
+     "Subordinate clause (pos. 1)",
+     ",",
+     "Verb (pos. 2)",
+     "Subject",
+     "Rest"
+    ],
+    "rows": [
+     [
+      "Weil ich krank bin",
+      ",",
+      "bleibe",
+      "ich",
+      "zu Hause"
+     ],
+     [
+      "Wenn der Zug Verspätung hat",
+      ",",
+      "schreibe",
+      "ich",
+      "meinem Chef"
+     ],
+     [
+      "Obwohl es regnet",
+      ",",
+      "fahre",
+      "ich",
+      "mit dem Fahrrad"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Wenn der Markt öffnet, bin ich schon am Schreibtisch.",
+     "en": "When the market opens, I am already at my desk."
+    },
+    {
+     "context": "life",
+     "de": "Weil die S-Bahn ausgefallen ist, komme ich heute später.",
+     "en": "Because the S-Bahn was cancelled, I am coming later today."
+    },
+    {
+     "context": "finance_history",
+     "de": "Als Pakistan 1947 unabhängig wurde, war Karachi die erste Hauptstadt.",
+     "en": "When Pakistan became independent in 1947, Karachi was the first capital."
+    }
+   ],
+   "common_error": {
+    "wrong": "Weil ich krank bin, ich bleibe zu Hause.",
+    "right": "Weil ich krank bin, bleibe ich zu Hause.",
+    "tag": "V2_POSITION",
+    "note_en": "The weil clause is position 1, so the verb bleibe comes right after the comma."
+   },
+   "tags": [
+    "V2_POSITION",
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Weil ich Rufbereitschaft habe, bleibe ich heute zu Hause.",
+      "en": "Because I am on call, I am staying at home today.",
+      "alt": []
+     },
+     {
+      "de": "Wenn ich in Frankfurt ankomme, kaufe ich einen Kaffee.",
+      "en": "When I arrive in Frankfurt, I buy a coffee.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Start with the weil clause.",
+      "given": "Ich gehe früh schlafen, weil ich morgen eine Prüfung habe.",
+      "answer": "Weil ich morgen eine Prüfung habe, gehe ich früh schlafen.",
+      "alt": []
+     },
+     {
+      "instruction": "Start with the obwohl clause.",
+      "given": "Ich esse in der Kantine, obwohl das Essen nicht so gut ist.",
+      "answer": "Obwohl das Essen nicht so gut ist, esse ich in der Kantine.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Wenn ich Zeit habe, ich lese die Nachrichten auf Deutsch.",
+      "right": "Wenn ich Zeit habe, lese ich die Nachrichten auf Deutsch.",
+      "tag": "V2_POSITION",
+      "note_en": "After the wenn clause the verb lese comes first, then ich."
+     },
+     {
+      "wrong": "Obwohl der Kurs fällt, der Händler bleibt ruhig.",
+      "right": "Obwohl der Kurs fällt, bleibt der Händler ruhig.",
+      "tag": "V2_POSITION",
+      "note_en": "After the obwohl clause the verb bleibt comes right after the comma."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your commute that starts with Weil.",
+     "must_include": [
+      "Weil"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about today, each starting with a subordinate clause: Weil, Wenn, Obwohl and Als. Check the pattern verb, comma, verb in each one.",
+   "batch": 4,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "TWO_PART_CONNECTORS",
+   "order": 18,
+   "group": "connectors",
+   "title": "Two-part connectors",
+   "rule_en": "Learn these as fixed pairs: sowohl ... als auch (both ... and), entweder ... oder (either ... or), weder ... noch (neither ... nor), nicht nur ... sondern auch (not only ... but also).",
+   "slot_diagram": {
+    "labels": [
+     "Start",
+     "Part 1",
+     "Item A",
+     "Part 2",
+     "Item B"
+    ],
+    "rows": [
+     [
+      "Ich spreche",
+      "sowohl",
+      "Urdu",
+      "als auch",
+      "Englisch"
+     ],
+     [
+      "Ich nehme",
+      "entweder",
+      "den Zug",
+      "oder",
+      "den Bus"
+     ],
+     [
+      "Ich habe",
+      "weder",
+      "Zeit",
+      "noch",
+      "Lust"
+     ],
+     [
+      "Das Studium ist",
+      "nicht nur",
+      "interessant",
+      ", sondern auch",
+      "anstrengend"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Im Team sprechen wir sowohl Deutsch als auch Englisch.",
+     "en": "In the team we speak both German and English."
+    },
+    {
+     "context": "life",
+     "de": "Ich fahre entweder mit der S-Bahn oder mit dem Regionalzug nach Frankfurt.",
+     "en": "I go to Frankfurt either by S-Bahn or by regional train."
+    },
+    {
+     "context": "finance_history",
+     "de": "Napoleon war nicht nur General, sondern auch Kaiser.",
+     "en": "Napoleon was not only a general but also an emperor."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich spreche sowohl Urdu als Englisch.",
+    "right": "Ich spreche sowohl Urdu als auch Englisch.",
+    "tag": "CONNECTOR_CHOICE",
+    "note_en": "sowohl always pairs with als auch."
+   },
+   "tags": [
+    "CONNECTOR_CHOICE"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich habe heute weder Zeit noch Lust.",
+      "en": "Today I have neither the time nor the energy.",
+      "alt": []
+     },
+     {
+      "de": "Die Prüfung war nicht nur lang, sondern auch schwer.",
+      "en": "The exam was not only long but also hard.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with sowohl ... als auch.",
+      "given": [
+       "Ich lese die FAZ.",
+       "Ich lese das Handelsblatt."
+      ],
+      "answer": "Ich lese sowohl die FAZ als auch das Handelsblatt.",
+      "alt": []
+     },
+     {
+      "instruction": "Join with weder ... noch.",
+      "given": [
+       "Ich habe kein Auto.",
+       "Ich habe kein Fahrrad."
+      ],
+      "answer": "Ich habe weder ein Auto noch ein Fahrrad.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich habe weder Zeit oder Geld.",
+      "right": "Ich habe weder Zeit noch Geld.",
+      "tag": "CONNECTOR_CHOICE",
+      "note_en": "weder pairs with noch, not oder."
+     },
+     {
+      "wrong": "Bitcoin ist nicht nur riskant, aber auch spannend.",
+      "right": "Bitcoin ist nicht nur riskant, sondern auch spannend.",
+      "tag": "CONNECTOR_CHOICE",
+      "note_en": "nicht nur pairs with sondern auch, not aber auch."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Ich nehme ___ den Zug ___ den Bus.",
+      "answers": [
+       "entweder",
+       "oder"
+      ],
+      "full": "Ich nehme entweder den Zug oder den Bus."
+     },
+     {
+      "text": "Er spricht sowohl Urdu ___ Englisch.",
+      "answers": [
+       "als auch"
+      ],
+      "full": "Er spricht sowohl Urdu als auch Englisch."
+     },
+     {
+      "text": "Die Prüfung war nicht nur lang, ___ auch schwer.",
+      "answers": [
+       "sondern"
+      ],
+      "full": "Die Prüfung war nicht nur lang, sondern auch schwer."
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about the languages you speak using sowohl ... als auch.",
+     "must_include": [
+      "sowohl",
+      "als auch"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences, one with each pair: sowohl ... als auch, entweder ... oder, weder ... noch, nicht nur ... sondern auch. Use your work, your studies and your weekend.",
+   "batch": 4,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "PERFEKT_HABEN",
+   "order": 19,
+   "group": "tenses",
+   "title": "Perfekt with haben",
+   "rule_en": "Perfekt = haben in position 2 + participle at the very end. Most verbs use haben.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "haben (pos. 2)",
+     "Middle",
+     "Participle (end)"
+    ],
+    "rows": [
+     [
+      "Ich",
+      "habe",
+      "gestern bis acht",
+      "gearbeitet"
+     ],
+     [
+      "Gestern",
+      "hat",
+      "der Chef die Zahlen",
+      "geprüft"
+     ],
+     [
+      "Im Zug",
+      "habe",
+      "ich eine E-Mail",
+      "geschrieben"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Heute Morgen habe ich die Zahlen für das Meeting vorbereitet.",
+     "en": "This morning I prepared the numbers for the meeting."
+    },
+    {
+     "context": "life",
+     "de": "Am Wochenende habe ich meine Wohnung geputzt.",
+     "en": "At the weekend I cleaned my flat."
+    },
+    {
+     "context": "finance_history",
+     "de": "Im Jahr 2002 hat Deutschland den Euro als Bargeld eingeführt.",
+     "en": "In 2002 Germany introduced the euro as cash."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich habe die E-Mail geschreibt.",
+    "right": "Ich habe die E-Mail geschrieben.",
+    "tag": "PARTIZIP",
+    "note_en": "schreiben is irregular: the participle is geschrieben."
+   },
+   "tags": [
+    "PARTIZIP",
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich habe im Zug eine E-Mail geschrieben.",
+      "en": "I wrote an email on the train.",
+      "alt": []
+     },
+     {
+      "de": "Mein Kollege hat mir gestern viel erklärt.",
+      "en": "My colleague explained a lot to me yesterday.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Start with Gestern.",
+      "given": "Ich habe bis spät gearbeitet.",
+      "answer": "Gestern habe ich bis spät gearbeitet.",
+      "alt": []
+     },
+     {
+      "instruction": "Make it a yes/no question.",
+      "given": "Du hast die Zahlen geprüft.",
+      "answer": "Hast du die Zahlen geprüft?",
+      "alt": []
+     }
+    ],
+    "tense_shift": [
+     {
+      "instruction": "Put it in Perfekt.",
+      "given": "Ich kaufe eine Fahrkarte nach Frankfurt.",
+      "answer": "Ich habe eine Fahrkarte nach Frankfurt gekauft.",
+      "alt": []
+     },
+     {
+      "instruction": "Put it in Perfekt.",
+      "given": "Wir besprechen die Zahlen im Meeting.",
+      "answer": "Wir haben die Zahlen im Meeting besprochen.",
+      "alt": []
+     }
+    ],
+    "error_spot": [
+     {
+      "wrong": "Ich habe den Bericht gelest.",
+      "right": "Ich habe den Bericht gelesen.",
+      "tag": "PARTIZIP",
+      "note_en": "lesen is irregular: the participle is gelesen."
+     },
+     {
+      "wrong": "Ich habe gestern gekocht Reis.",
+      "right": "Ich habe gestern Reis gekocht.",
+      "tag": "VERB_FINAL",
+      "note_en": "The participle gekocht goes to the very end."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Ich ___ gestern lange gelernt.",
+      "answers": [
+       "habe"
+      ],
+      "full": "Ich habe gestern lange gelernt."
+     },
+     {
+      "text": "Wir ___ in der Kantine Pizza gegessen.",
+      "answers": [
+       "haben"
+      ],
+      "full": "Wir haben in der Kantine Pizza gegessen."
+     },
+     {
+      "text": "Mein Chef ___ mich heute angerufen.",
+      "answers": [
+       "hat"
+      ],
+      "full": "Mein Chef hat mich heute angerufen."
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about what you did on the train this morning. Use Perfekt with haben.",
+     "must_include": [
+      "habe"
+     ]
+    }
+   },
+   "homework": "Write 5 sentences in Perfekt with haben about yesterday: work, lunch, studying, the evening. Put the participle at the end every time.",
+   "batch": 4,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "PERFEKT_SEIN",
+   "order": 20,
+   "group": "tenses",
+   "title": "Perfekt with sein",
+   "rule_en": "Movement from A to B and change of state take sein in Perfekt. So do sein, bleiben and passieren.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "sein (pos. 2)",
+     "Middle",
+     "Participle (end)"
+    ],
+    "rows": [
+     [
+      "Ich",
+      "bin",
+      "mit dem Zug nach Frankfurt",
+      "gefahren"
+     ],
+     [
+      "Was",
+      "ist",
+      "",
+      "passiert"
+     ],
+     [
+      "Gestern",
+      "bin",
+      "ich zu Hause",
+      "geblieben"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "In der Rufbereitschaft bin ich nachts zweimal aufgewacht.",
+     "en": "During my on-call week I woke up twice at night."
+    },
+    {
+     "context": "life",
+     "de": "Am Samstag bin ich mit Freunden nach Heidelberg gefahren.",
+     "en": "On Saturday I went to Heidelberg with friends."
+    },
+    {
+     "context": "finance_history",
+     "de": "Im März 2020 sind die Aktienkurse stark gefallen.",
+     "en": "In March 2020 share prices fell sharply."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich habe mit dem Zug nach Frankfurt gefahren.",
+    "right": "Ich bin mit dem Zug nach Frankfurt gefahren.",
+    "tag": "AUX_HABEN_SEIN",
+    "note_en": "Going from A to B takes sein: ich bin gefahren."
+   },
+   "tags": [
+    "AUX_HABEN_SEIN",
+    "PARTIZIP"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich bin heute zu spät aufgestanden.",
+      "en": "I got up too late today.",
+      "alt": []
+     },
+     {
+      "de": "Der Zug ist in Rüsselsheim pünktlich abgefahren.",
+      "en": "The train left Rüsselsheim on time.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Make it a question with Wann.",
+      "given": "Du bist in Frankfurt angekommen.",
+      "answer": "Wann bist du in Frankfurt angekommen?",
+      "alt": []
+     },
+     {
+      "instruction": "Start with Letztes Jahr.",
+      "given": "Ich bin nach Pakistan geflogen.",
+      "answer": "Letztes Jahr bin ich nach Pakistan geflogen.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [
+     {
+      "instruction": "Put it in Perfekt.",
+      "given": "Ich fahre mit der S-Bahn nach Frankfurt.",
+      "answer": "Ich bin mit der S-Bahn nach Frankfurt gefahren.",
+      "alt": []
+     },
+     {
+      "instruction": "Put it in Perfekt.",
+      "given": "Am Sonntag bleibe ich zu Hause.",
+      "answer": "Am Sonntag bin ich zu Hause geblieben.",
+      "alt": []
+     }
+    ],
+    "error_spot": [
+     {
+      "wrong": "Was hat passiert?",
+      "right": "Was ist passiert?",
+      "tag": "AUX_HABEN_SEIN",
+      "note_en": "passieren takes sein: Was ist passiert?"
+     },
+     {
+      "wrong": "Ich bin gestern zu Hause gebleibt.",
+      "right": "Ich bin gestern zu Hause geblieben.",
+      "tag": "PARTIZIP",
+      "note_en": "bleiben is irregular: the participle is geblieben."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Ich ___ gestern spät nach Hause gekommen.",
+      "answers": [
+       "bin"
+      ],
+      "full": "Ich bin gestern spät nach Hause gekommen."
+     },
+     {
+      "text": "Der Kurs ___ heute stark gestiegen.",
+      "answers": [
+       "ist"
+      ],
+      "full": "Der Kurs ist heute stark gestiegen."
+     },
+     {
+      "text": "Wir ___ am Abend lange gearbeitet.",
+      "answers": [
+       "haben"
+      ],
+      "full": "Wir haben am Abend lange gearbeitet."
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about your trip to work today. Use Perfekt with sein.",
+     "must_include": [
+      "bin"
+     ]
+    }
+   },
+   "homework": "Write 5 sentences in Perfekt about your last weekend. Use sein at least three times (fahren, gehen, kommen, bleiben, aufstehen) and haben at least once.",
+   "batch": 4,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "PARTIZIP_FORMS",
+   "order": 21,
+   "group": "tenses",
+   "title": "Partizip II forms",
+   "rule_en": "Regular verbs: ge-...-t. Irregular verbs: ge-...-en. No ge- for -ieren verbs and inseparable prefixes (be-, ver-, er-). Separable verbs put ge- after the prefix.",
+   "slot_diagram": {
+    "labels": [
+     "Infinitive",
+     "Prefix",
+     "ge-",
+     "Stem",
+     "Ending",
+     "Partizip II"
+    ],
+    "rows": [
+     [
+      "arbeiten",
+      "",
+      "ge",
+      "arbeit",
+      "et",
+      "gearbeitet"
+     ],
+     [
+      "schreiben",
+      "",
+      "ge",
+      "schrieb",
+      "en",
+      "geschrieben"
+     ],
+     [
+      "telefonieren",
+      "",
+      "",
+      "telefonier",
+      "t",
+      "telefoniert"
+     ],
+     [
+      "verkaufen",
+      "ver",
+      "",
+      "kauf",
+      "t",
+      "verkauft"
+     ],
+     [
+      "anrufen",
+      "an",
+      "ge",
+      "ruf",
+      "en",
+      "angerufen"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich habe die Orders im System kontrolliert und den Händler angerufen.",
+     "en": "I checked the orders in the system and called the trader."
+    },
+    {
+     "context": "life",
+     "de": "Gestern habe ich beim Bürgeramt endlich einen Termin bekommen.",
+     "en": "Yesterday I finally got an appointment at the Bürgeramt."
+    },
+    {
+     "context": "finance_history",
+     "de": "1848 haben viele Menschen in Frankfurt für eine Verfassung demonstriert.",
+     "en": "In 1848 many people in Frankfurt demonstrated for a constitution."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich habe die Ergebnisse gestern gepräsentiert.",
+    "right": "Ich habe die Ergebnisse gestern präsentiert.",
+    "tag": "PARTIZIP",
+    "note_en": "Verbs ending in -ieren never take ge-."
+   },
+   "tags": [
+    "PARTIZIP",
+    "SEP_PREFIX"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich habe meine Kollegin heute Morgen angerufen.",
+      "en": "I called my colleague this morning.",
+      "alt": []
+     },
+     {
+      "de": "Wir haben die Aufgabe für die Uni nicht verstanden.",
+      "en": "We did not understand the task for uni.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Replace the verb with anrufen.",
+      "given": "Ich habe den Kollegen gestern gefragt.",
+      "answer": "Ich habe den Kollegen gestern angerufen.",
+      "alt": []
+     },
+     {
+      "instruction": "Replace the verb with bezahlen.",
+      "given": "Ich habe die Miete gestern überwiesen.",
+      "answer": "Ich habe die Miete gestern bezahlt.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [
+     {
+      "instruction": "Put it in Perfekt.",
+      "given": "Der Zug kommt um acht in Frankfurt an.",
+      "answer": "Der Zug ist um acht in Frankfurt angekommen.",
+      "alt": []
+     },
+     {
+      "instruction": "Put it in Perfekt.",
+      "given": "Ich studiere Wirtschaft an der Goethe-Universität.",
+      "answer": "Ich habe Wirtschaft an der Goethe-Universität studiert.",
+      "alt": []
+     }
+    ],
+    "error_spot": [
+     {
+      "wrong": "Ich habe die E-Mail schon geschreibt.",
+      "right": "Ich habe die E-Mail schon geschrieben.",
+      "tag": "PARTIZIP",
+      "note_en": "schreiben is irregular: geschrieben."
+     },
+     {
+      "wrong": "Der Kurs hat sich heute stark geverändert.",
+      "right": "Der Kurs hat sich heute stark verändert.",
+      "tag": "PARTIZIP",
+      "note_en": "ver- is an inseparable prefix: no ge-."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your last on-call week with anrufen in Perfekt.",
+     "must_include": [
+      "angerufen"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your last workday in Perfekt. Use one -ieren verb, one verb with be- or ver-, and one separable verb.",
+   "batch": 5,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "PRAETERITUM_SPOKEN",
+   "order": 22,
+   "group": "tenses",
+   "title": "Präteritum in speech",
+   "rule_en": "In speech most verbs use Perfekt, but sein, haben, modal verbs, wissen and es gibt usually use Präteritum.",
+   "slot_diagram": {
+    "labels": [
+     "Verb",
+     "Spoken past",
+     "Less common in speech"
+    ],
+    "rows": [
+     [
+      "sein",
+      "ich war",
+      "ich bin gewesen"
+     ],
+     [
+      "haben",
+      "ich hatte",
+      "ich habe gehabt"
+     ],
+     [
+      "müssen",
+      "ich musste",
+      "ich habe arbeiten müssen"
+     ],
+     [
+      "können",
+      "ich konnte",
+      "ich habe kommen können"
+     ],
+     [
+      "wissen",
+      "ich wusste",
+      "ich habe gewusst"
+     ],
+     [
+      "es gibt",
+      "es gab",
+      "es hat gegeben"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Letzte Woche hatte ich Rufbereitschaft und musste zweimal nachts arbeiten.",
+     "en": "Last week I was on call and had to work twice at night."
+    },
+    {
+     "context": "life",
+     "de": "Der Zug war voll und es gab keinen Sitzplatz mehr.",
+     "en": "The train was full and there were no seats left."
+    },
+    {
+     "context": "finance_history",
+     "de": "1923 war das Geld in Deutschland fast nichts mehr wert.",
+     "en": "In 1923 money in Germany was worth almost nothing."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich habe gestern länger bleiben gemusst.",
+    "right": "Ich musste gestern länger bleiben.",
+    "tag": "TENSE_CHOICE",
+    "note_en": "Modal verbs in the past: say musste, not a Perfekt form."
+   },
+   "tags": [
+    "TENSE_CHOICE"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Gestern hatte ich keine Zeit für die Uni.",
+      "en": "Yesterday I had no time for uni.",
+      "alt": []
+     },
+     {
+      "de": "Im Büro gab es heute keinen Kaffee mehr.",
+      "en": "There was no coffee left in the office today.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with weil.",
+      "given": [
+       "Ich war müde.",
+       "Ich bin früh nach Hause gegangen."
+      ],
+      "answer": "Ich bin früh nach Hause gegangen, weil ich müde war.",
+      "alt": [
+       "Weil ich müde war, bin ich früh nach Hause gegangen."
+      ]
+     },
+     {
+      "instruction": "Join with aber.",
+      "given": [
+       "Ich wollte mitkommen.",
+       "Ich hatte Rufbereitschaft."
+      ],
+      "answer": "Ich wollte mitkommen, aber ich hatte Rufbereitschaft.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [
+     {
+      "instruction": "Put it in the past. Use Präteritum.",
+      "given": "Ich habe keine Zeit.",
+      "answer": "Ich hatte keine Zeit.",
+      "alt": []
+     },
+     {
+      "instruction": "Put it in the past. Use Präteritum.",
+      "given": "Wir müssen am Wochenende arbeiten.",
+      "answer": "Wir mussten am Wochenende arbeiten.",
+      "alt": []
+     }
+    ],
+    "error_spot": [
+     {
+      "wrong": "Gestern gibt es ein Problem mit dem Server.",
+      "right": "Gestern gab es ein Problem mit dem Server.",
+      "tag": "TENSE_CHOICE",
+      "note_en": "Gestern means past: es gab."
+     },
+     {
+      "wrong": "Ich konnte gestern nicht kommen, weil ich krank bin.",
+      "right": "Ich konnte gestern nicht kommen, weil ich krank war.",
+      "tag": "TENSE_CHOICE",
+      "note_en": "The whole story is in the past: war, not bin."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about yesterday's commute using es gab.",
+     "must_include": [
+      "es gab"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your last on-call week. Use war, hatte, musste and es gab once each.",
+   "batch": 5,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "MODAL_INFINITIVE",
+   "order": 23,
+   "group": "modals",
+   "title": "Modal verb + infinitive at the end",
+   "rule_en": "The modal verb is conjugated in position 2. The second verb stays in the infinitive at the end.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "Modal (pos. 2)",
+     "Middle",
+     "Infinitive (end)"
+    ],
+    "rows": [
+     [
+      "Ich",
+      "muss",
+      "heute bis sieben",
+      "arbeiten"
+     ],
+     [
+      "Morgen",
+      "kann",
+      "ich nicht in die Uni",
+      "kommen"
+     ],
+     [
+      "Wann",
+      "sollen",
+      "wir den Bericht",
+      "schicken"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich muss heute alle Orders bis 18 Uhr prüfen.",
+     "en": "I have to check all orders by 6 pm today."
+    },
+    {
+     "context": "life",
+     "de": "Am Samstag will ich endlich meine Wohnung putzen.",
+     "en": "On Saturday I finally want to clean my flat."
+    },
+    {
+     "context": "finance_history",
+     "de": "Mit MiCA müssen Anbieter von Kryptowerten eine Lizenz haben.",
+     "en": "Under MiCA, crypto-asset providers must have a licence."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich muss arbeiten heute bis acht.",
+    "right": "Ich muss heute bis acht arbeiten.",
+    "tag": "VERB_FINAL",
+    "note_en": "The infinitive goes to the very end."
+   },
+   "tags": [
+    "V2_POSITION",
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich möchte nach der Arbeit Deutsch lernen.",
+      "en": "I would like to study German after work.",
+      "alt": []
+     },
+     {
+      "de": "Ich muss mich heute für die Prüfung anmelden.",
+      "en": "I have to register for the exam today.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Add müssen.",
+      "given": "Ich arbeite am Samstag.",
+      "answer": "Ich muss am Samstag arbeiten.",
+      "alt": []
+     },
+     {
+      "instruction": "Add können.",
+      "given": "Wir treffen uns morgen in der Kantine.",
+      "answer": "Wir können uns morgen in der Kantine treffen.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [
+     {
+      "instruction": "Put it in Präteritum.",
+      "given": "Ich muss bis zehn arbeiten.",
+      "answer": "Ich musste bis zehn arbeiten.",
+      "alt": []
+     },
+     {
+      "instruction": "Add sollen.",
+      "given": "Du rufst die Kollegin an.",
+      "answer": "Du sollst die Kollegin anrufen.",
+      "alt": []
+     }
+    ],
+    "error_spot": [
+     {
+      "wrong": "Kannst du mir die Datei schicken morgen?",
+      "right": "Kannst du mir die Datei morgen schicken?",
+      "tag": "VERB_FINAL",
+      "note_en": "The infinitive comes last, after morgen."
+     },
+     {
+      "wrong": "Morgen ich muss früh aufstehen.",
+      "right": "Morgen muss ich früh aufstehen.",
+      "tag": "V2_POSITION",
+      "note_en": "The modal verb must be in position 2."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about what you have to do at work tomorrow using muss.",
+     "must_include": [
+      "muss"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your plans for this week. Use muss, kann, will and möchte once each.",
+   "batch": 5,
+   "status": "needs_review",
+   "review_notes": [
+    {
+     "text": "Mit MiCA müssen Anbieter von Kryptowerten eine Lizenz haben.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Mit MiCA müssen Anbieter von Kryptowerten eine L...",
+     "suggestions": [
+      "Mike",
+      "Mich",
+      "MBA"
+     ]
+    }
+   ]
+  },
+  {
+   "code": "MODAL_NEBENSATZ",
+   "order": 24,
+   "group": "modals",
+   "title": "Modal verb at the end of a subordinate clause",
+   "rule_en": "In a subordinate clause the modal verb goes to the very end, after the infinitive.",
+   "slot_diagram": {
+    "labels": [
+     "Main clause",
+     ",",
+     "Connector",
+     "Middle",
+     "Infinitive",
+     "Modal (end)"
+    ],
+    "rows": [
+     [
+      "Ich komme später",
+      ",",
+      "weil",
+      "ich heute",
+      "arbeiten",
+      "muss"
+     ],
+     [
+      "Ich weiß nicht",
+      ",",
+      "ob",
+      "ich morgen",
+      "kommen",
+      "kann"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich schreibe meinem Chef, dass ich heute früher gehen muss.",
+     "en": "I am writing to my boss that I have to leave earlier today."
+    },
+    {
+     "context": "life",
+     "de": "Ich gehe zum Bürgeramt, weil ich mich ummelden muss.",
+     "en": "I am going to the Bürgeramt because I have to register my new address."
+    },
+    {
+     "context": "finance_history",
+     "de": "Viele Anleger wissen nicht, ob sie ihre Aktien verkaufen sollen.",
+     "en": "Many investors do not know whether they should sell their shares."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich komme später, weil ich muss heute arbeiten.",
+    "right": "Ich komme später, weil ich heute arbeiten muss.",
+    "tag": "VERB_FINAL",
+    "note_en": "After weil the modal goes last, after the infinitive."
+   },
+   "tags": [
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich lerne heute, weil ich morgen eine Prüfung schreiben muss.",
+      "en": "I am studying today because I have to write an exam tomorrow.",
+      "alt": []
+     },
+     {
+      "de": "Sag mir, wann ich dich anrufen kann.",
+      "en": "Tell me when I can call you.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with weil.",
+      "given": [
+       "Ich komme nicht mit.",
+       "Ich muss lernen."
+      ],
+      "answer": "Ich komme nicht mit, weil ich lernen muss.",
+      "alt": [
+       "Weil ich lernen muss, komme ich nicht mit."
+      ]
+     },
+     {
+      "instruction": "Start with: Ich weiß nicht, ob",
+      "given": "Kann ich am Freitag kommen?",
+      "answer": "Ich weiß nicht, ob ich am Freitag kommen kann.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [
+     {
+      "instruction": "Add müssen.",
+      "given": "Ich bleibe zu Hause, weil ich arbeite.",
+      "answer": "Ich bleibe zu Hause, weil ich arbeiten muss.",
+      "alt": []
+     },
+     {
+      "instruction": "Put both clauses in Präteritum.",
+      "given": "Ich bin müde, weil ich lange arbeiten muss.",
+      "answer": "Ich war müde, weil ich lange arbeiten musste.",
+      "alt": []
+     }
+    ],
+    "error_spot": [
+     {
+      "wrong": "Ich weiß nicht, ob ich morgen muss arbeiten.",
+      "right": "Ich weiß nicht, ob ich morgen arbeiten muss.",
+      "tag": "VERB_FINAL",
+      "note_en": "After ob: infinitive first, modal last."
+     },
+     {
+      "wrong": "Ich nehme den frühen Zug, weil ich um acht im Büro muss sein.",
+      "right": "Ich nehme den frühen Zug, weil ich um acht im Büro sein muss.",
+      "tag": "VERB_FINAL",
+      "note_en": "The modal goes after the infinitive: sein muss."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your MSc using weil and a modal verb at the end.",
+     "must_include": [
+      "weil"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about this week. Use weil or dass with a modal verb at the end at least three times.",
+   "batch": 5,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "CASE_NOM_AKK",
+   "order": 25,
+   "group": "cases",
+   "title": "Nominative vs accusative",
+   "rule_en": "The subject is nominative, the direct object is accusative. Only masculine changes: der to den, ein to einen, kein to keinen.",
+   "slot_diagram": {
+    "labels": [
+     "Gender",
+     "Nominative",
+     "Accusative"
+    ],
+    "rows": [
+     [
+      "masculine",
+      "der / ein Zug",
+      "den / einen Zug"
+     ],
+     [
+      "feminine",
+      "die / eine Bahn",
+      "die / eine Bahn"
+     ],
+     [
+      "neuter",
+      "das / ein Ticket",
+      "das / ein Ticket"
+     ],
+     [
+      "plural",
+      "die Züge",
+      "die Züge"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich brauche einen Laptop für die Rufbereitschaft.",
+     "en": "I need a laptop for on-call."
+    },
+    {
+     "context": "life",
+     "de": "Ich nehme den Zug um 7:42 nach Frankfurt.",
+     "en": "I take the 7:42 train to Frankfurt."
+    },
+    {
+     "context": "finance_history",
+     "de": "Viele Anleger halten den Bitcoin für digitales Gold.",
+     "en": "Many investors consider Bitcoin digital gold."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich habe ein Termin beim Arzt.",
+    "right": "Ich habe einen Termin beim Arzt.",
+    "tag": "CASE_AKK",
+    "note_en": "Termin is masculine: the object is einen Termin."
+   },
+   "tags": [
+    "CASE_AKK",
+    "GENDER"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich habe morgen einen Termin beim Bürgeramt.",
+      "en": "I have an appointment at the Bürgeramt tomorrow.",
+      "alt": []
+     },
+     {
+      "de": "Die Kollegin fragt den Chef nach dem Bericht.",
+      "en": "The colleague asks the boss about the report.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Replace the object with der Laptop.",
+      "given": "Ich brauche die Tasche.",
+      "answer": "Ich brauche den Laptop.",
+      "alt": []
+     },
+     {
+      "instruction": "Make it the object. Start with Ich sehe.",
+      "given": "Der Zug kommt.",
+      "answer": "Ich sehe den Zug.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Siehst du der Zug da hinten?",
+      "right": "Siehst du den Zug da hinten?",
+      "tag": "CASE_AKK",
+      "note_en": "Zug is the object here: den Zug."
+     },
+     {
+      "wrong": "Ich suche einen Wohnung in Frankfurt.",
+      "right": "Ich suche eine Wohnung in Frankfurt.",
+      "tag": "GENDER",
+      "note_en": "Wohnung is feminine: eine stays eine."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Ich trinke ein___ Kaffee in der Kantine.",
+      "answers": [
+       "en"
+      ],
+      "full": "Ich trinke einen Kaffee in der Kantine."
+     },
+     {
+      "text": "D___ Chef sucht d___ Bericht.",
+      "answers": [
+       "er",
+       "en"
+      ],
+      "full": "Der Chef sucht den Bericht."
+     },
+     {
+      "text": "Hast du kein___ Fahrschein?",
+      "answers": [
+       "en"
+      ],
+      "full": "Hast du keinen Fahrschein?"
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about your commute using den Zug.",
+     "must_include": [
+      "den Zug"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your morning. Use at least three masculine nouns as objects with den, einen or keinen.",
+   "batch": 5,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "CASE_DAT",
+   "order": 26,
+   "group": "cases",
+   "title": "Dative: receiver and dative verbs",
+   "rule_en": "The person who receives something is dative. Some verbs always take the dative: helfen, danken, gefallen, gehören, antworten.",
+   "slot_diagram": {
+    "labels": [
+     "Subject",
+     "Verb",
+     "Dative (person)",
+     "Accusative (thing)"
+    ],
+    "rows": [
+     [
+      "Ich",
+      "gebe",
+      "dem Kollegen",
+      "den Bericht"
+     ],
+     [
+      "Die Kollegin",
+      "hilft",
+      "mir",
+      ""
+     ],
+     [
+      "Das Buch",
+      "gehört",
+      "der Bibliothek",
+      ""
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich schicke dem Händler die Zahlen per E-Mail.",
+     "en": "I send the trader the numbers by email."
+    },
+    {
+     "context": "life",
+     "de": "Die Wohnung gefällt mir, aber die Miete ist zu hoch.",
+     "en": "I like the flat, but the rent is too high."
+    },
+    {
+     "context": "finance_history",
+     "de": "Nach 1871 gehörte das Elsass dem Deutschen Reich.",
+     "en": "After 1871 Alsace belonged to the German Empire."
+    }
+   ],
+   "common_error": {
+    "wrong": "Kannst du mich helfen?",
+    "right": "Kannst du mir helfen?",
+    "tag": "CASE_DAT",
+    "note_en": "helfen always takes the dative: mir, not mich."
+   },
+   "tags": [
+    "CASE_DAT"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich danke dem Kollegen für seine Hilfe.",
+      "en": "I thank the colleague for his help.",
+      "alt": []
+     },
+     {
+      "de": "Die neue Wohnung gefällt meiner Mutter sehr.",
+      "en": "My mother really likes the new flat.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Use helfen instead of unterstützen.",
+      "given": "Ich unterstütze den Kollegen.",
+      "answer": "Ich helfe dem Kollegen.",
+      "alt": []
+     },
+     {
+      "instruction": "Use gefallen. Start with Die Stadt.",
+      "given": "Ich mag die Stadt.",
+      "answer": "Die Stadt gefällt mir.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich danke dich für die Hilfe.",
+      "right": "Ich danke dir für die Hilfe.",
+      "tag": "CASE_DAT",
+      "note_en": "danken takes the dative: dir."
+     },
+     {
+      "wrong": "Ich antworte den Professor morgen.",
+      "right": "Ich antworte dem Professor morgen.",
+      "tag": "CASE_DAT",
+      "note_en": "antworten takes the dative: dem Professor."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Ich helfe d___ Kollegin mit der Präsentation.",
+      "answers": [
+       "er"
+      ],
+      "full": "Ich helfe der Kollegin mit der Präsentation."
+     },
+     {
+      "text": "Das Ticket gehört d___ Mann da drüben.",
+      "answers": [
+       "em"
+      ],
+      "full": "Das Ticket gehört dem Mann da drüben."
+     },
+     {
+      "text": "Ich gebe mein___ Bruder das Geld zurück.",
+      "answers": [
+       "em"
+      ],
+      "full": "Ich gebe meinem Bruder das Geld zurück."
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about who helps you at work. Use hilft.",
+     "must_include": [
+      "hilft"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your week. Use helfen, danken, gefallen and gehören once each.",
+   "batch": 6,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "PREP_AKK",
+   "order": 27,
+   "group": "cases",
+   "title": "Accusative prepositions",
+   "rule_en": "After für, durch, gegen, ohne and um always use the accusative.",
+   "slot_diagram": {
+    "labels": [
+     "Preposition",
+     "Masculine",
+     "Feminine",
+     "Neuter",
+     "Plural"
+    ],
+    "rows": [
+     [
+      "für",
+      "den Chef",
+      "die Kollegin",
+      "das Team",
+      "die Kunden"
+     ],
+     [
+      "ohne",
+      "einen Plan",
+      "eine Pause",
+      "ein Ticket",
+      "Pausen"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich bereite die Zahlen für den Chef vor.",
+     "en": "I am preparing the numbers for the boss."
+    },
+    {
+     "context": "life",
+     "de": "Am Wochenende gehe ich durch den Park zum Supermarkt.",
+     "en": "At the weekend I walk through the park to the supermarket."
+    },
+    {
+     "context": "finance_history",
+     "de": "Viele Anleger wetten gegen den Euro.",
+     "en": "Many investors are betting against the euro."
+    }
+   ],
+   "common_error": {
+    "wrong": "Das Geschenk ist für mein Bruder.",
+    "right": "Das Geschenk ist für meinen Bruder.",
+    "tag": "PREP_CASE",
+    "note_en": "für takes the accusative: meinen Bruder."
+   },
+   "tags": [
+    "PREP_CASE",
+    "CASE_AKK"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich brauche eine Stunde für den Bericht.",
+      "en": "I need an hour for the report.",
+      "alt": []
+     },
+     {
+      "de": "Wir gehen nach der Arbeit durch den Park.",
+      "en": "We walk through the park after work.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Use ohne instead of mit.",
+      "given": "Ich komme mit meinem Bruder.",
+      "answer": "Ich komme ohne meinen Bruder.",
+      "alt": []
+     },
+     {
+      "instruction": "Replace mit with gegen.",
+      "given": "Ich spiele mit den Kollegen Fußball.",
+      "answer": "Ich spiele gegen die Kollegen Fußball.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich habe keine Zeit für dem Kurs.",
+      "right": "Ich habe keine Zeit für den Kurs.",
+      "tag": "PREP_CASE",
+      "note_en": "für takes the accusative: den Kurs."
+     },
+     {
+      "wrong": "Wir sind gegen der Plan.",
+      "right": "Wir sind gegen den Plan.",
+      "tag": "PREP_CASE",
+      "note_en": "gegen takes the accusative: den Plan."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Ich habe ein Geschenk für mein___ Schwester.",
+      "answers": [
+       "e"
+      ],
+      "full": "Ich habe ein Geschenk für meine Schwester."
+     },
+     {
+      "text": "Der Zug fährt durch d___ Tunnel.",
+      "answers": [
+       "en"
+      ],
+      "full": "Der Zug fährt durch den Tunnel."
+     },
+     {
+      "text": "Ich gehe heute ohne mein___ Laptop ins Büro.",
+      "answers": [
+       "en"
+      ],
+      "full": "Ich gehe heute ohne meinen Laptop ins Büro."
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about your MSc using für.",
+     "must_include": [
+      "für"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your day. Use für, durch, gegen and ohne once each.",
+   "batch": 6,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "PREP_DAT",
+   "order": 28,
+   "group": "cases",
+   "title": "Dative prepositions",
+   "rule_en": "After aus, bei, mit, nach, seit, von and zu always use the dative. Short forms: zum, zur, beim, vom.",
+   "slot_diagram": {
+    "labels": [
+     "Preposition",
+     "+ dem",
+     "+ der",
+     "Short form"
+    ],
+    "rows": [
+     [
+      "zu",
+      "zum Arzt",
+      "zur Arbeit",
+      "zum / zur"
+     ],
+     [
+      "bei",
+      "beim Chef",
+      "bei der Bank",
+      "beim"
+     ],
+     [
+      "von",
+      "vom Bahnhof",
+      "von der Uni",
+      "vom"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Seit einem Jahr arbeite ich bei einer Bank in Frankfurt.",
+     "en": "I have been working at a bank in Frankfurt for a year."
+    },
+    {
+     "context": "life",
+     "de": "Nach der Arbeit fahre ich mit der S-Bahn nach Rüsselsheim.",
+     "en": "After work I take the S-Bahn to Rüsselsheim."
+    },
+    {
+     "context": "finance_history",
+     "de": "Seit 2002 bezahlen die Deutschen mit dem Euro.",
+     "en": "Since 2002 Germans have paid with the euro."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich fahre mit den Zug zur Uni.",
+    "right": "Ich fahre mit dem Zug zur Uni.",
+    "tag": "PREP_CASE",
+    "note_en": "mit takes the dative: dem Zug."
+   },
+   "tags": [
+    "PREP_CASE",
+    "CASE_DAT"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Nach der Vorlesung gehe ich zum Bahnhof.",
+      "en": "After the lecture I go to the station.",
+      "alt": []
+     },
+     {
+      "de": "Ich wohne seit zwei Jahren in Deutschland.",
+      "en": "I have been living in Germany for two years.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Use the short form.",
+      "given": "Ich gehe zu dem Arzt.",
+      "answer": "Ich gehe zum Arzt.",
+      "alt": []
+     },
+     {
+      "instruction": "Answer with seit and the given time.",
+      "given": [
+       "Seit wann lernst du Deutsch?",
+       "ein Jahr"
+      ],
+      "answer": "Ich lerne seit einem Jahr Deutsch.",
+      "alt": [
+       "Seit einem Jahr lerne ich Deutsch."
+      ]
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich gehe morgen zur Arzt.",
+      "right": "Ich gehe morgen zum Arzt.",
+      "tag": "PREP_CASE",
+      "note_en": "Arzt is masculine: zu dem becomes zum."
+     },
+     {
+      "wrong": "Ich wohne seit ein Jahr in Rüsselsheim.",
+      "right": "Ich wohne seit einem Jahr in Rüsselsheim.",
+      "tag": "PREP_CASE",
+      "note_en": "seit takes the dative: einem Jahr."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Ich komme gerade vo___ Bahnhof.",
+      "answers": [
+       "m"
+      ],
+      "full": "Ich komme gerade vom Bahnhof."
+     },
+     {
+      "text": "Nach d___ Meeting gehe ich in die Kantine.",
+      "answers": [
+       "em"
+      ],
+      "full": "Nach dem Meeting gehe ich in die Kantine."
+     },
+     {
+      "text": "Ich fahre heute mit mein___ Kollegin zu___ Arbeit.",
+      "answers": [
+       "er",
+       "r"
+      ],
+      "full": "Ich fahre heute mit meiner Kollegin zur Arbeit."
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about your commute using mit and nach.",
+     "must_include": [
+      "mit",
+      "nach"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your trip to work or uni. Use mit, nach, zum or zur, and seit.",
+   "batch": 6,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "WECHSELPRAEP",
+   "order": 29,
+   "group": "cases",
+   "title": "Two-way prepositions: wo? or wohin?",
+   "rule_en": "in, an, auf, neben, hinter, über, unter, vor, zwischen: wo? (location) takes the dative, wohin? (movement to a place) takes the accusative.",
+   "slot_diagram": {
+    "labels": [
+     "Question",
+     "Verbs",
+     "Case",
+     "Example"
+    ],
+    "rows": [
+     [
+      "Wo?",
+      "liegen, stehen, sein",
+      "dative",
+      "Der Laptop liegt auf dem Tisch."
+     ],
+     [
+      "Wohin?",
+      "legen, stellen, gehen",
+      "accusative",
+      "Ich lege den Laptop auf den Tisch."
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Ich lege die Unterlagen auf den Tisch im Besprechungsraum.",
+     "en": "I put the documents on the table in the meeting room."
+    },
+    {
+     "context": "life",
+     "de": "Mein Fahrrad steht hinter dem Haus.",
+     "en": "My bike is behind the house."
+    },
+    {
+     "context": "finance_history",
+     "de": "1848 tagte in der Paulskirche in Frankfurt das erste deutsche Parlament.",
+     "en": "In 1848 the first German parliament met in the Paulskirche in Frankfurt."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich gehe in der Kantine.",
+    "right": "Ich gehe in die Kantine.",
+    "tag": "PREP_CASE",
+    "note_en": "Movement (wohin?) takes the accusative: in die."
+   },
+   "tags": [
+    "PREP_CASE"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich lege das Handy auf den Tisch.",
+      "en": "I put the phone on the table.",
+      "alt": []
+     },
+     {
+      "de": "Am Abend sitze ich lange in der Bibliothek.",
+      "en": "In the evening I sit in the library for a long time.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Change wo? to wohin? Use gehen.",
+      "given": "Ich bin in der Kantine.",
+      "answer": "Ich gehe in die Kantine.",
+      "alt": []
+     },
+     {
+      "instruction": "Change wohin? to wo? Use liegen.",
+      "given": "Ich lege den Schlüssel auf den Tisch.",
+      "answer": "Der Schlüssel liegt auf dem Tisch.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich bin heute in die Uni.",
+      "right": "Ich bin heute in der Uni.",
+      "tag": "PREP_CASE",
+      "note_en": "Location (wo?) takes the dative: in der."
+     },
+     {
+      "wrong": "Ich stelle die Tasche neben dem Stuhl.",
+      "right": "Ich stelle die Tasche neben den Stuhl.",
+      "tag": "PREP_CASE",
+      "note_en": "stellen is movement (wohin?): accusative."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Der Kaffee steht auf d___ Tisch.",
+      "answers": [
+       "em"
+      ],
+      "full": "Der Kaffee steht auf dem Tisch."
+     },
+     {
+      "text": "Ich hänge das Bild an d___ Wand.",
+      "answers": [
+       "ie"
+      ],
+      "full": "Ich hänge das Bild an die Wand."
+     },
+     {
+      "text": "Wir warten vor d___ Bahnhof.",
+      "answers": [
+       "em"
+      ],
+      "full": "Wir warten vor dem Bahnhof."
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about where you put your laptop after work. Use auf.",
+     "must_include": [
+      "auf"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your flat or the office. Write two wo? sentences and two wohin? sentences.",
+   "batch": 6,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "PRONOUNS_CASE",
+   "order": 30,
+   "group": "cases",
+   "title": "Personal pronouns by case",
+   "rule_en": "Pronouns change with case: ich, mich, mir; er, ihn, ihm; sie, sie, ihr; wir, uns, uns; Sie, Sie, Ihnen.",
+   "slot_diagram": {
+    "labels": [
+     "Nominative",
+     "Accusative",
+     "Dative"
+    ],
+    "rows": [
+     [
+      "ich",
+      "mich",
+      "mir"
+     ],
+     [
+      "du",
+      "dich",
+      "dir"
+     ],
+     [
+      "er",
+      "ihn",
+      "ihm"
+     ],
+     [
+      "sie",
+      "sie",
+      "ihr"
+     ],
+     [
+      "es",
+      "es",
+      "ihm"
+     ],
+     [
+      "wir",
+      "uns",
+      "uns"
+     ],
+     [
+      "ihr",
+      "euch",
+      "euch"
+     ],
+     [
+      "sie (plural)",
+      "sie",
+      "ihnen"
+     ],
+     [
+      "Sie",
+      "Sie",
+      "Ihnen"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Können Sie mir die Datei bis morgen schicken?",
+     "en": "Can you send me the file by tomorrow?"
+    },
+    {
+     "context": "life",
+     "de": "Mein Bruder ruft mich jeden Sonntag aus Pakistan an.",
+     "en": "My brother calls me from Pakistan every Sunday."
+    },
+    {
+     "context": "finance_history",
+     "de": "Bismarck hat den König beraten und der König hat ihm vertraut.",
+     "en": "Bismarck advised the king and the king trusted him."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich rufe dir morgen an.",
+    "right": "Ich rufe dich morgen an.",
+    "tag": "CASE_AKK",
+    "note_en": "anrufen takes the accusative: dich."
+   },
+   "tags": [
+    "CASE_AKK",
+    "CASE_DAT"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Kannst du mir morgen bei der Präsentation helfen?",
+      "en": "Can you help me with the presentation tomorrow?",
+      "alt": []
+     },
+     {
+      "de": "Ich habe ihn gestern in der Kantine gesehen.",
+      "en": "I saw him in the Kantine yesterday.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Replace den Kollegen with a pronoun.",
+      "given": "Ich rufe den Kollegen morgen an.",
+      "answer": "Ich rufe ihn morgen an.",
+      "alt": []
+     },
+     {
+      "instruction": "Replace der Kollegin with a pronoun.",
+      "given": "Ich helfe der Kollegin mit dem Bericht.",
+      "answer": "Ich helfe ihr mit dem Bericht.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Kannst du ihn helfen?",
+      "right": "Kannst du ihm helfen?",
+      "tag": "CASE_DAT",
+      "note_en": "helfen takes the dative: ihm."
+     },
+     {
+      "wrong": "Ich sehe er jeden Morgen im Zug.",
+      "right": "Ich sehe ihn jeden Morgen im Zug.",
+      "tag": "CASE_AKK",
+      "note_en": "He is the object here: ihn."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Der Chef hat m___ eine E-Mail geschickt.",
+      "answers": [
+       "ir"
+      ],
+      "full": "Der Chef hat mir eine E-Mail geschickt."
+     },
+     {
+      "text": "Ich kenne ih___ nicht gut, er ist neu im Team.",
+      "answers": [
+       "n"
+      ],
+      "full": "Ich kenne ihn nicht gut, er ist neu im Team."
+     },
+     {
+      "text": "Ich danke ___ für Ihre Hilfe.",
+      "answers": [
+       "Ihnen"
+      ],
+      "full": "Ich danke Ihnen für Ihre Hilfe."
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about someone who helped you this week. Use mir.",
+     "must_include": [
+      "mir"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your colleagues or classmates. Replace their names with pronouns: ihn, ihm, sie, ihr.",
+   "batch": 6,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "ADJ_ENDINGS",
+   "order": 31,
+   "group": "cases",
+   "title": "Adjective endings after der and ein",
+   "rule_en": "After der/die/das the nominative adjective ends in -e; after ein it shows the gender (-er, -es, -e); after dem, den, einem, einen it always ends in -en.",
+   "slot_diagram": {
+    "labels": [
+     "Article",
+     "Adjective + ending",
+     "Noun",
+     "Case"
+    ],
+    "rows": [
+     [
+      "der",
+      "neue",
+      "Kollege",
+      "Nominative, definite"
+     ],
+     [
+      "ein",
+      "neuer",
+      "Kollege",
+      "Nominative, indefinite"
+     ],
+     [
+      "den / einen",
+      "neuen",
+      "Kollegen",
+      "Accusative"
+     ],
+     [
+      "dem / einem",
+      "neuen",
+      "Kollegen",
+      "Dative"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Der neue Kollege sitzt heute neben mir.",
+     "en": "The new colleague is sitting next to me today."
+    },
+    {
+     "context": "life",
+     "de": "Ich habe eine kleine Wohnung in Rüsselsheim.",
+     "en": "I have a small flat in Rüsselsheim."
+    },
+    {
+     "context": "finance_history",
+     "de": "Der deutsche Aktienmarkt hatte eine schwache Woche.",
+     "en": "The German stock market had a weak week."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich spreche mit dem neue Kollegen.",
+    "right": "Ich spreche mit dem neuen Kollegen.",
+    "tag": "ADJ_ENDING",
+    "note_en": "After dem (dative) the adjective always ends in -en."
+   },
+   "tags": [
+    "ADJ_ENDING",
+    "CASE_DAT",
+    "CASE_AKK"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich trinke in der Kantine einen schwarzen Kaffee.",
+      "en": "I drink a black coffee in the canteen.",
+      "alt": []
+     },
+     {
+      "de": "Der neue Kollege kommt aus einer kleinen Stadt.",
+      "en": "The new colleague comes from a small town.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Add the adjective neu.",
+      "given": "Ich habe einen Laptop.",
+      "answer": "Ich habe einen neuen Laptop.",
+      "alt": []
+     },
+     {
+      "instruction": "Add the adjective lang.",
+      "given": "Nach dem Meeting gehe ich in die Kantine.",
+      "answer": "Nach dem langen Meeting gehe ich in die Kantine.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Das ist ein guter Buch.",
+      "right": "Das ist ein gutes Buch.",
+      "tag": "ADJ_ENDING",
+      "note_en": "Buch is neuter, so after ein the adjective ends in -es."
+     },
+     {
+      "wrong": "Ich fahre mit einem voller Zug nach Frankfurt.",
+      "right": "Ich fahre mit einem vollen Zug nach Frankfurt.",
+      "tag": "ADJ_ENDING",
+      "note_en": "After einem (dative) the adjective ends in -en."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Ein neu___ Kollege fängt heute an.",
+      "answers": [
+       "er"
+      ],
+      "full": "Ein neuer Kollege fängt heute an."
+     },
+     {
+      "text": "Ich habe ein___ neu___ Kollegen.",
+      "answers": [
+       "en",
+       "en"
+      ],
+      "full": "Ich habe einen neuen Kollegen."
+     },
+     {
+      "text": "Ich esse mit dem neu___ Kollegen in der Kantine.",
+      "answers": [
+       "en"
+      ],
+      "full": "Ich esse mit dem neuen Kollegen in der Kantine."
+     }
+    ],
+    "free": {
+     "prompt_en": "Write one sentence about lunch with a colleague. Use mit + dem or einem + an adjective.",
+     "must_include": [
+      "mit"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your desk and your lunch in the Kantine. Use one adjective after der, one after ein and one after mit dem.",
+   "batch": 7,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "SEP_VERBS",
+   "order": 32,
+   "group": "verbs",
+   "title": "Separable verbs: prefix to the end",
+   "rule_en": "In a main clause the prefix (an, auf, ein) goes to the end; in a subordinate clause the verb goes to the end with the prefix joined to it.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "Verb (2)",
+     "Middle",
+     "End"
+    ],
+    "rows": [
+     [
+      "Ich",
+      "stehe",
+      "um sechs Uhr",
+      "auf"
+     ],
+     [
+      "Der Zug",
+      "kommt",
+      "um acht Uhr in Frankfurt",
+      "an"
+     ],
+     [
+      "weil ich",
+      "",
+      "um sechs Uhr",
+      "aufstehe"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Während der Rufbereitschaft rufe ich den Kollegen sofort an.",
+     "en": "During on-call I call the colleague right away."
+    },
+    {
+     "context": "life",
+     "de": "Am Samstag kaufe ich im Supermarkt ein.",
+     "en": "On Saturday I go shopping at the supermarket."
+    },
+    {
+     "context": "finance_history",
+     "de": "Der Handel auf Xetra fängt um neun Uhr an.",
+     "en": "Trading on Xetra starts at nine o'clock."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich anrufe meine Mutter in Pakistan.",
+    "right": "Ich rufe meine Mutter in Pakistan an.",
+    "tag": "SEP_PREFIX",
+    "note_en": "In a main clause the prefix an goes to the end."
+   },
+   "tags": [
+    "SEP_PREFIX",
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Mein Zug kommt heute um acht Uhr an.",
+      "en": "My train arrives at eight o'clock today.",
+      "alt": []
+     },
+     {
+      "de": "Ich weiß nicht, wann der Zug ankommt.",
+      "en": "I don't know when the train arrives.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with weil.",
+      "given": [
+       "Ich bin müde.",
+       "Ich stehe jeden Tag um sechs Uhr auf."
+      ],
+      "answer": "Ich bin müde, weil ich jeden Tag um sechs Uhr aufstehe.",
+      "alt": [
+       "Weil ich jeden Tag um sechs Uhr aufstehe, bin ich müde."
+      ]
+     },
+     {
+      "instruction": "Start with Heute.",
+      "given": "Ich kaufe nach der Arbeit ein.",
+      "answer": "Heute kaufe ich nach der Arbeit ein.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Der Zug kommt an um acht Uhr.",
+      "right": "Der Zug kommt um acht Uhr an.",
+      "tag": "SEP_PREFIX",
+      "note_en": "The prefix an goes to the very end, after the time."
+     },
+     {
+      "wrong": "Ich weiß, dass der Zug um acht Uhr kommt an.",
+      "right": "Ich weiß, dass der Zug um acht Uhr ankommt.",
+      "tag": "SEP_PREFIX",
+      "note_en": "After dass the verb goes to the end and the prefix joins it: ankommt."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your morning using aufstehen.",
+     "must_include": [
+      "auf"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your morning, from getting up to arriving in Frankfurt. Use aufstehen, ankommen and one separable verb in a weil clause.",
+   "batch": 7,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "REFLEXIVE_VERBS",
+   "order": 33,
+   "group": "verbs",
+   "title": "Reflexive verbs and pronoun position",
+   "rule_en": "The reflexive pronoun matches the subject (mich, dich, sich, uns, euch) and sits right after the verb, or right after the subject pronoun when that follows the verb.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "Verb",
+     "Subject",
+     "Pronoun",
+     "Rest"
+    ],
+    "rows": [
+     [
+      "Ich",
+      "freue",
+      "",
+      "mich",
+      "auf das Wochenende"
+     ],
+     [
+      "Morgen",
+      "melde",
+      "ich",
+      "mich",
+      "beim Arzt"
+     ],
+     [
+      "Wir",
+      "beeilen",
+      "",
+      "uns",
+      ""
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Während der Rufbereitschaft kümmere ich mich um die Störungen.",
+     "en": "During on-call I take care of the incidents."
+    },
+    {
+     "context": "life",
+     "de": "Ich freue mich auf das Wochenende.",
+     "en": "I am looking forward to the weekend."
+    },
+    {
+     "context": "finance_history",
+     "de": "Viele junge Anleger interessieren sich für Bitcoin.",
+     "en": "Many young investors are interested in Bitcoin."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich kümmere sich um die Störung.",
+    "right": "Ich kümmere mich um die Störung.",
+    "tag": "OTHER",
+    "note_en": "The pronoun must match the subject: ich goes with mich."
+   },
+   "tags": [
+    "MIDDLE_FIELD_ORDER",
+    "PREP_CASE",
+    "OTHER"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Ich freue mich auf das Ende der Prüfungen.",
+      "en": "I am looking forward to the end of the exams.",
+      "alt": []
+     },
+     {
+      "de": "Morgen melde ich mich beim Arzt in Rüsselsheim.",
+      "en": "Tomorrow I will contact the doctor in Rüsselsheim.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Start with Heute.",
+      "given": "Ich kümmere mich um die Wohnung.",
+      "answer": "Heute kümmere ich mich um die Wohnung.",
+      "alt": []
+     },
+     {
+      "instruction": "Join with weil.",
+      "given": [
+       "Ich muss mich beeilen.",
+       "Mein Zug fährt in fünf Minuten."
+      ],
+      "answer": "Ich muss mich beeilen, weil mein Zug in fünf Minuten fährt.",
+      "alt": [
+       "Weil mein Zug in fünf Minuten fährt, muss ich mich beeilen."
+      ]
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Morgen melde mich ich beim Team.",
+      "right": "Morgen melde ich mich beim Team.",
+      "tag": "MIDDLE_FIELD_ORDER",
+      "note_en": "When the subject pronoun follows the verb, the reflexive pronoun comes after it."
+     },
+     {
+      "wrong": "Ich freue mich auf dem Wochenende.",
+      "right": "Ich freue mich auf das Wochenende.",
+      "tag": "PREP_CASE",
+      "note_en": "sich freuen auf takes the accusative: auf das Wochenende."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about what you are looking forward to after your exams.",
+     "must_include": [
+      "freue mich auf"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your on-call week. Use sich kümmern um, sich melden and sich freuen auf, and start one sentence with Morgen.",
+   "batch": 7,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "RELATIVE_CLAUSE",
+   "order": 34,
+   "group": "clauses",
+   "title": "Relative clauses: der, die, das",
+   "rule_en": "A relative clause starts after a comma with der/die/das (or den, dem), and its verb goes to the end; gender comes from the noun, case from its role in the clause.",
+   "slot_diagram": {
+    "labels": [
+     "Noun",
+     ",",
+     "Relative pronoun",
+     "Middle",
+     "Verb (end)"
+    ],
+    "rows": [
+     [
+      "Der Kollege",
+      ",",
+      "der",
+      "neben mir",
+      "sitzt"
+     ],
+     [
+      "Der Zug",
+      ",",
+      "den",
+      "ich jeden Morgen",
+      "nehme"
+     ],
+     [
+      "Die Kollegin",
+      ",",
+      "der",
+      "ich oft",
+      "helfe"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Der Kollege, der neben mir sitzt, kommt aus Stuttgart.",
+     "en": "The colleague who sits next to me comes from Stuttgart."
+    },
+    {
+     "context": "life",
+     "de": "Das ist der Zug, den ich jeden Morgen nehme.",
+     "en": "That is the train that I take every morning."
+    },
+    {
+     "context": "finance_history",
+     "de": "Ein Stablecoin ist ein Coin, der meistens an den US-Dollar gekoppelt ist.",
+     "en": "A stablecoin is a coin that is usually pegged to the US dollar."
+    }
+   ],
+   "common_error": {
+    "wrong": "Das ist der Zug, der ich jeden Morgen nehme.",
+    "right": "Das ist der Zug, den ich jeden Morgen nehme.",
+    "tag": "CASE_AKK",
+    "note_en": "The train is the object of nehme, so the pronoun is accusative: den."
+   },
+   "tags": [
+    "VERB_FINAL",
+    "CASE_AKK",
+    "CASE_DAT"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Das ist die Kollegin, die mir oft hilft.",
+      "en": "That is the colleague who often helps me.",
+      "alt": []
+     },
+     {
+      "de": "Ich lese einen Artikel, den mein Professor empfohlen hat.",
+      "en": "I am reading an article that my professor recommended.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Join with a relative clause.",
+      "given": [
+       "Der Zug ist zu spät.",
+       "Ich nehme den Zug jeden Morgen."
+      ],
+      "answer": "Der Zug, den ich jeden Morgen nehme, ist zu spät.",
+      "alt": [
+       "Der Zug ist zu spät, den ich jeden Morgen nehme."
+      ]
+     },
+     {
+      "instruction": "Join with a relative clause.",
+      "given": [
+       "Ich habe eine Kollegin.",
+       "Sie hilft mir bei Excel."
+      ],
+      "answer": "Ich habe eine Kollegin, die mir bei Excel hilft.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Das ist die Kollegin, die hilft mir oft.",
+      "right": "Das ist die Kollegin, die mir oft hilft.",
+      "tag": "VERB_FINAL",
+      "note_en": "In a relative clause the verb goes to the end."
+     },
+     {
+      "wrong": "Die Kollegin, die ich helfe, ist neu.",
+      "right": "Die Kollegin, der ich helfe, ist neu.",
+      "tag": "CASE_DAT",
+      "note_en": "helfen takes the dative, so the feminine pronoun is der."
+     }
+    ],
+    "fill": [
+     {
+      "text": "Das ist der Professor, d___ meine Masterarbeit betreut.",
+      "answers": [
+       "er"
+      ],
+      "full": "Das ist der Professor, der meine Masterarbeit betreut."
+     },
+     {
+      "text": "Das ist der Kollege, d___ ich gestern geholfen habe.",
+      "answers": [
+       "em"
+      ],
+      "full": "Das ist der Kollege, dem ich gestern geholfen habe."
+     }
+    ],
+    "free": {
+     "prompt_en": "Describe the train you take every morning. Start with: Der Zug, den ich",
+     "must_include": [
+      "den ich"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about people at work and at university. Use a relative clause in each: one with der, one with die, one with den and one with dem.",
+   "batch": 7,
+   "status": "needs_review",
+   "review_notes": [
+    {
+     "text": "Ein Stablecoin ist ein Coin, der meistens an den US-Dollar gekoppelt ist.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Ein Stablecoin ist ein Coin, der meistens an den US-Dollar gekoppel...",
+     "suggestions": [
+      "Co in",
+      "Neun",
+      "Kein"
+     ]
+    }
+   ]
+  },
+  {
+   "code": "INDIRECT_QUESTION",
+   "order": 35,
+   "group": "clauses",
+   "title": "Indirect questions: verb to the end",
+   "rule_en": "After Können Sie mir sagen, Wissen Sie or Ich weiß nicht, the W-word starts the clause and the conjugated verb goes to the end.",
+   "slot_diagram": {
+    "labels": [
+     "Intro",
+     ",",
+     "W-word",
+     "Middle",
+     "Verb (end)"
+    ],
+    "rows": [
+     [
+      "Können Sie mir sagen",
+      ",",
+      "wann",
+      "der Zug",
+      "fährt"
+     ],
+     [
+      "Ich weiß nicht",
+      ",",
+      "wo",
+      "das Bürgeramt",
+      "ist"
+     ],
+     [
+      "Wissen Sie",
+      ",",
+      "wie lange",
+      "das",
+      "dauert"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Kannst du mir sagen, wann das Meeting anfängt?",
+     "en": "Can you tell me when the meeting starts?"
+    },
+    {
+     "context": "life",
+     "de": "Können Sie mir sagen, wann der nächste Zug nach Rüsselsheim fährt?",
+     "en": "Can you tell me when the next train to Rüsselsheim leaves?"
+    },
+    {
+     "context": "finance_history",
+     "de": "Niemand weiß, wo der DAX Ende des Jahres steht.",
+     "en": "Nobody knows where the DAX will be at the end of the year."
+    }
+   ],
+   "common_error": {
+    "wrong": "Können Sie mir sagen, wann fährt der Zug?",
+    "right": "Können Sie mir sagen, wann der Zug fährt?",
+    "tag": "VERB_FINAL",
+    "note_en": "In an indirect question the verb goes to the end."
+   },
+   "tags": [
+    "VERB_FINAL",
+    "SEP_PREFIX"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Wissen Sie, wo das Bürgeramt ist?",
+      "en": "Do you know where the citizens' office is?",
+      "alt": []
+     },
+     {
+      "de": "Ich weiß nicht, warum der Zug so spät ist.",
+      "en": "I don't know why the train is so late.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Make it an indirect question. Start with: Können Sie mir sagen",
+      "given": "Wann fährt der nächste Zug nach Frankfurt?",
+      "answer": "Können Sie mir sagen, wann der nächste Zug nach Frankfurt fährt?",
+      "alt": []
+     },
+     {
+      "instruction": "Make it an indirect question. Start with: Ich weiß nicht",
+      "given": "Wie lange dauert die Prüfung?",
+      "answer": "Ich weiß nicht, wie lange die Prüfung dauert.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Wissen Sie, wo ist das Bürgeramt?",
+      "right": "Wissen Sie, wo das Bürgeramt ist?",
+      "tag": "VERB_FINAL",
+      "note_en": "After wo in an indirect question the verb goes to the end."
+     },
+     {
+      "wrong": "Ich weiß nicht, wann der Zug kommt an.",
+      "right": "Ich weiß nicht, wann der Zug ankommt.",
+      "tag": "SEP_PREFIX",
+      "note_en": "At the end of the clause the prefix joins the verb: ankommt."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Ask a colleague when the morning meeting starts, as an indirect question.",
+     "must_include": [
+      "wann"
+     ]
+    }
+   },
+   "homework": "Write 4 indirect questions you could ask at the Bürgeramt, at the station and at work. Use Können Sie mir sagen, Wissen Sie and Ich weiß nicht.",
+   "batch": 7,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "KONJ2_POLITE",
+   "order": 36,
+   "group": "konjunktiv",
+   "title": "Konjunktiv II: polite requests",
+   "rule_en": "For polite requests use hätte gern, könnten Sie, würden Sie or würde gern instead of will or können.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "Position 2",
+     "Middle",
+     "End"
+    ],
+    "rows": [
+     [
+      "Ich",
+      "hätte",
+      "gern einen Termin",
+      ""
+     ],
+     [
+      "Könnten",
+      "Sie",
+      "mir das bitte",
+      "schicken"
+     ],
+     [
+      "Ich",
+      "würde",
+      "gern früher",
+      "gehen"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Könnten Sie mir die Unterlagen bis morgen schicken?",
+     "en": "Could you send me the documents by tomorrow?"
+    },
+    {
+     "context": "life",
+     "de": "Ich hätte gern einen Termin für nächste Woche.",
+     "en": "I would like an appointment for next week."
+    },
+    {
+     "context": "finance_history",
+     "de": "Ich würde gern mehr über die Revolution von 1848 lesen.",
+     "en": "I would like to read more about the revolution of 1848."
+    }
+   ],
+   "common_error": {
+    "wrong": "Ich hatte gern einen Termin.",
+    "right": "Ich hätte gern einen Termin.",
+    "tag": "UMLAUT",
+    "note_en": "hatte is the past tense; the polite form is hätte, with an umlaut."
+   },
+   "tags": [
+    "REGISTER_DU_SIE",
+    "UMLAUT",
+    "WORD_CHOICE"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Könnten Sie mir bitte die Rechnung schicken?",
+      "en": "Could you please send me the invoice?",
+      "alt": []
+     },
+     {
+      "de": "Ich würde gern am Freitag früher gehen.",
+      "en": "I would like to leave earlier on Friday.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Make it polite with Konjunktiv II.",
+      "given": "Können Sie mir helfen?",
+      "answer": "Könnten Sie mir helfen?",
+      "alt": [
+       "Würden Sie mir helfen?"
+      ]
+     },
+     {
+      "instruction": "Make it polite with hätte gern.",
+      "given": "Ich will einen Termin beim Bürgeramt.",
+      "answer": "Ich hätte gern einen Termin beim Bürgeramt.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Ich hatte gern einen Platz am Fenster.",
+      "right": "Ich hätte gern einen Platz am Fenster.",
+      "tag": "UMLAUT",
+      "note_en": "For a polite wish use hätte, not the past tense hatte."
+     },
+     {
+      "wrong": "Ich würde gern früher gehe.",
+      "right": "Ich würde gern früher gehen.",
+      "tag": "OTHER",
+      "note_en": "After würde the main verb is an infinitive at the end: gehen."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write a polite message asking someone from another team to send you a file today. Use Könnten Sie.",
+     "must_include": [
+      "Könnten Sie"
+     ]
+    }
+   },
+   "homework": "Write 4 polite sentences: one in the Kantine, one at the doctor's, one to your professor and one to a colleague. Use hätte gern, könnten Sie, würden Sie and würde gern once each.",
+   "batch": 8,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "KONJ2_WISH",
+   "order": 37,
+   "group": "konjunktiv",
+   "title": "Konjunktiv II: unreal conditions and wishes",
+   "rule_en": "For something unreal use wenn + hätte/wäre at the end of the clause, then würde + infinitive in the main clause, which starts with the verb.",
+   "slot_diagram": {
+    "labels": [
+     "wenn",
+     "Middle",
+     "Verb (end)",
+     ",",
+     "Verb (Konj. II)",
+     "Rest"
+    ],
+    "rows": [
+     [
+      "Wenn",
+      "ich mehr Zeit",
+      "hätte",
+      ",",
+      "würde",
+      "ich mehr Deutsch lernen"
+     ],
+     [
+      "Wenn",
+      "der Zug pünktlich",
+      "wäre",
+      ",",
+      "wäre",
+      "ich schon im Büro"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Wenn ich keine Rufbereitschaft hätte, würde ich am Wochenende nach Berlin fahren.",
+     "en": "If I were not on call, I would go to Berlin at the weekend."
+    },
+    {
+     "context": "life",
+     "de": "Wenn ich mehr Zeit hätte, würde ich jeden Tag kochen.",
+     "en": "If I had more time, I would cook every day."
+    },
+    {
+     "context": "finance_history",
+     "de": "Wenn die Zinsen niedriger wären, würden mehr Leute Aktien kaufen.",
+     "en": "If interest rates were lower, more people would buy shares."
+    }
+   ],
+   "common_error": {
+    "wrong": "Wenn ich mehr Zeit habe, würde ich mehr lesen.",
+    "right": "Wenn ich mehr Zeit hätte, würde ich mehr lesen.",
+    "tag": "TENSE_CHOICE",
+    "note_en": "An unreal condition needs Konjunktiv II in both parts: hätte, not habe."
+   },
+   "tags": [
+    "TENSE_CHOICE",
+    "VERB_FINAL",
+    "V2_POSITION"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Wenn ich mehr Zeit hätte, würde ich mehr schlafen.",
+      "en": "If I had more time, I would sleep more.",
+      "alt": []
+     },
+     {
+      "de": "Ich wäre jetzt gern bei meiner Familie in Lahore.",
+      "en": "I would like to be with my family in Lahore now.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Make it unreal with wenn + Konjunktiv II.",
+      "given": "Ich habe keine Zeit, deshalb gehe ich nicht ins Fitnessstudio.",
+      "answer": "Wenn ich Zeit hätte, würde ich ins Fitnessstudio gehen.",
+      "alt": [
+       "Ich würde ins Fitnessstudio gehen, wenn ich Zeit hätte.",
+       "Wenn ich Zeit hätte, ginge ich ins Fitnessstudio."
+      ]
+     },
+     {
+      "instruction": "Make it unreal with wenn + Konjunktiv II.",
+      "given": "Der Zug ist nicht pünktlich, deshalb komme ich zu spät.",
+      "answer": "Wenn der Zug pünktlich wäre, würde ich nicht zu spät kommen.",
+      "alt": [
+       "Ich würde nicht zu spät kommen, wenn der Zug pünktlich wäre.",
+       "Wenn der Zug pünktlich wäre, käme ich nicht zu spät."
+      ]
+     }
+    ],
+    "tense_shift": [],
+    "error_spot": [
+     {
+      "wrong": "Wenn ich mehr Geld hätte, ich würde eine größere Wohnung mieten.",
+      "right": "Wenn ich mehr Geld hätte, würde ich eine größere Wohnung mieten.",
+      "tag": "V2_POSITION",
+      "note_en": "The wenn clause takes position 1, so würde comes right after the comma."
+     },
+     {
+      "wrong": "Wenn ich in Pakistan war, würde ich meine Familie öfter sehen.",
+      "right": "Wenn ich in Pakistan wäre, würde ich meine Familie öfter sehen.",
+      "tag": "UMLAUT",
+      "note_en": "For an unreal condition use wäre, not the past tense war."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence: what would you do if you had no exams this month?",
+     "must_include": [
+      "würde"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about your life if things were different: no exams, no on-call week, a shorter commute, more money. Use wenn + hätte or wäre and würde in each.",
+   "batch": 8,
+   "status": "needs_review",
+   "review_notes": [
+    {
+     "text": "Ich wäre jetzt gern bei meiner Familie in Lahore.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "...h wäre jetzt gern bei meiner Familie in Lahore.",
+     "suggestions": [
+      "Labore",
+      "Laboren",
+      "Jahre"
+     ]
+    }
+   ]
+  },
+  {
+   "code": "PASSIVE_PRAESENS",
+   "order": 38,
+   "group": "passive",
+   "title": "Passive in Präsens: wird + Partizip II",
+   "rule_en": "werden goes in position 2 and the Partizip II goes to the end; use it when the action matters more than who does it.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "werden",
+     "Middle",
+     "Partizip II (end)"
+    ],
+    "rows": [
+     [
+      "Die Order",
+      "wird",
+      "sofort",
+      "geprüft"
+     ],
+     [
+      "Die Trades",
+      "werden",
+      "am Abend",
+      "gebucht"
+     ],
+     [
+      "Am Wochenende",
+      "wird",
+      "auf Xetra nicht",
+      "gehandelt"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Jede Order wird vor der Ausführung geprüft.",
+     "en": "Every order is checked before execution."
+    },
+    {
+     "context": "life",
+     "de": "Im Haus wird morgen das Wasser abgestellt.",
+     "en": "The water in the building is being turned off tomorrow."
+    },
+    {
+     "context": "finance_history",
+     "de": "Bitcoin wird rund um die Uhr gehandelt.",
+     "en": "Bitcoin is traded around the clock."
+    }
+   ],
+   "common_error": {
+    "wrong": "Die Order wird sofort prüft.",
+    "right": "Die Order wird sofort geprüft.",
+    "tag": "PARTIZIP",
+    "note_en": "The passive needs the Partizip II: geprüft."
+   },
+   "tags": [
+    "PARTIZIP",
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Die Order wird vor der Ausführung geprüft.",
+      "en": "The order is checked before execution.",
+      "alt": []
+     },
+     {
+      "de": "Am Wochenende wird an der Börse nicht gehandelt.",
+      "en": "There is no trading on the exchange at the weekend.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Make it passive with von.",
+      "given": "Der Kollege prüft die Order.",
+      "answer": "Die Order wird vom Kollegen geprüft.",
+      "alt": [
+       "Die Order wird von dem Kollegen geprüft."
+      ]
+     },
+     {
+      "instruction": "Make it passive. Leave out man.",
+      "given": "Man handelt Aktien auf Xetra.",
+      "answer": "Aktien werden auf Xetra gehandelt.",
+      "alt": [
+       "Auf Xetra werden Aktien gehandelt."
+      ]
+     }
+    ],
+    "tense_shift": [
+     {
+      "instruction": "Make it passive. Leave out man.",
+      "given": "Man bucht die Trades am Abend.",
+      "answer": "Die Trades werden am Abend gebucht.",
+      "alt": [
+       "Am Abend werden die Trades gebucht."
+      ]
+     },
+     {
+      "instruction": "Make it passive. Leave out man.",
+      "given": "Man prüft die Zahlen jeden Morgen.",
+      "answer": "Die Zahlen werden jeden Morgen geprüft.",
+      "alt": [
+       "Jeden Morgen werden die Zahlen geprüft."
+      ]
+     }
+    ],
+    "error_spot": [
+     {
+      "wrong": "Die Trades wird am Abend gebucht.",
+      "right": "Die Trades werden am Abend gebucht.",
+      "tag": "OTHER",
+      "note_en": "Die Trades is plural, so the verb is werden."
+     },
+     {
+      "wrong": "Die Order wird geprüft sofort.",
+      "right": "Die Order wird sofort geprüft.",
+      "tag": "VERB_FINAL",
+      "note_en": "The Partizip II goes to the very end."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Describe one step of your work process in the passive. Use wird.",
+     "must_include": [
+      "wird"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about how a normal day on the desk runs. Use the passive (wird or werden + Partizip II) in each sentence and leave out who does it.",
+   "batch": 8,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "PASSIVE_PRAETERITUM",
+   "order": 39,
+   "group": "passive",
+   "title": "Passive in the past: wurde and ist ... worden",
+   "rule_en": "Past passive is wurde + Partizip II; in Perfekt it is ist/sind + Partizip II + worden (never geworden).",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "Aux",
+     "Middle",
+     "Partizip II",
+     "End"
+    ],
+    "rows": [
+     [
+      "Die Order",
+      "wurde",
+      "um zehn Uhr",
+      "ausgeführt",
+      ""
+     ],
+     [
+      "Die Order",
+      "ist",
+      "um zehn Uhr",
+      "ausgeführt",
+      "worden"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Der Fehler wurde in der Nacht behoben.",
+     "en": "The error was fixed during the night."
+    },
+    {
+     "context": "life",
+     "de": "Mein Fahrrad ist am Bahnhof gestohlen worden.",
+     "en": "My bike was stolen at the station."
+    },
+    {
+     "context": "finance_history",
+     "de": "Das Deutsche Reich wurde 1871 gegründet.",
+     "en": "The German Empire was founded in 1871."
+    }
+   ],
+   "common_error": {
+    "wrong": "Die Order ist ausgeführt geworden.",
+    "right": "Die Order ist ausgeführt worden.",
+    "tag": "PARTIZIP",
+    "note_en": "In the passive Perfekt use worden, not geworden."
+   },
+   "tags": [
+    "PARTIZIP",
+    "AUX_HABEN_SEIN",
+    "TENSE_CHOICE"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Die Order wurde um zehn Uhr ausgeführt.",
+      "en": "The order was executed at ten o'clock.",
+      "alt": []
+     },
+     {
+      "de": "Der Fehler ist in der Nacht behoben worden.",
+      "en": "The error was fixed during the night.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Make it passive in Perfekt. Leave out the person.",
+      "given": "Ein Kollege hat den Fehler gestern behoben.",
+      "answer": "Der Fehler ist gestern behoben worden.",
+      "alt": [
+       "Gestern ist der Fehler behoben worden."
+      ]
+     },
+     {
+      "instruction": "Make it passive in Präteritum. Leave out man.",
+      "given": "Man gründete die Europäische Zentralbank 1998.",
+      "answer": "Die Europäische Zentralbank wurde 1998 gegründet.",
+      "alt": [
+       "1998 wurde die Europäische Zentralbank gegründet."
+      ]
+     }
+    ],
+    "tense_shift": [
+     {
+      "instruction": "Put it in Präteritum.",
+      "given": "Die Order wird um zehn Uhr ausgeführt.",
+      "answer": "Die Order wurde um zehn Uhr ausgeführt.",
+      "alt": []
+     },
+     {
+      "instruction": "Put it in Perfekt.",
+      "given": "Die Zahlen werden am Morgen geprüft.",
+      "answer": "Die Zahlen sind am Morgen geprüft worden.",
+      "alt": []
+     }
+    ],
+    "error_spot": [
+     {
+      "wrong": "Der Fehler hat in der Nacht behoben worden.",
+      "right": "Der Fehler ist in der Nacht behoben worden.",
+      "tag": "AUX_HABEN_SEIN",
+      "note_en": "The passive Perfekt always uses sein: ist ... worden."
+     },
+     {
+      "wrong": "Die Order wurde gestern ausführt.",
+      "right": "Die Order wurde gestern ausgeführt.",
+      "tag": "PARTIZIP",
+      "note_en": "The Partizip II of ausführen is ausgeführt, with ge after the prefix."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence in the passive about something that was fixed during your last on-call week. Use wurde.",
+     "must_include": [
+      "wurde"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about what was done at work or at home this week. Use wurde twice and ist or sind ... worden twice.",
+   "batch": 8,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "code": "FUTURE",
+   "order": 40,
+   "group": "future",
+   "title": "Future: Präsens + time word or werden",
+   "rule_en": "For plans German usually uses Präsens with a time word; use werden + infinitive at the end for predictions and promises.",
+   "slot_diagram": {
+    "labels": [
+     "Position 1",
+     "Verb (2)",
+     "Middle",
+     "Infinitive (end)"
+    ],
+    "rows": [
+     [
+      "Morgen",
+      "fahre",
+      "ich nach Frankfurt",
+      ""
+     ],
+     [
+      "Ich",
+      "werde",
+      "die Prüfung",
+      "bestehen"
+     ],
+     [
+      "Der DAX",
+      "wird",
+      "wahrscheinlich",
+      "steigen"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "context": "work",
+     "de": "Nächste Woche habe ich wieder Rufbereitschaft.",
+     "en": "Next week I am on call again."
+    },
+    {
+     "context": "life",
+     "de": "Am Samstag besuche ich Freunde in Mainz.",
+     "en": "On Saturday I am visiting friends in Mainz."
+    },
+    {
+     "context": "finance_history",
+     "de": "Viele Experten glauben, dass die Zinsen sinken werden.",
+     "en": "Many experts believe that interest rates will fall."
+    }
+   ],
+   "common_error": {
+    "wrong": "Morgen ich fahre nach Frankfurt.",
+    "right": "Morgen fahre ich nach Frankfurt.",
+    "tag": "V2_POSITION",
+    "note_en": "The time word takes position 1, so the verb comes second, before ich."
+   },
+   "tags": [
+    "TENSE_CHOICE",
+    "V2_POSITION",
+    "VERB_FINAL"
+   ],
+   "drills": {
+    "surgery": [
+     {
+      "de": "Nächste Woche schreibe ich meine Prüfung in Statistik.",
+      "en": "Next week I am writing my statistics exam.",
+      "alt": []
+     },
+     {
+      "de": "Ich glaube, dass der Bitcoin-Kurs steigen wird.",
+      "en": "I think that the Bitcoin price will rise.",
+      "alt": []
+     }
+    ],
+    "transform": [
+     {
+      "instruction": "Start with: Ich glaube, dass",
+      "given": "Der Zug wird heute pünktlich sein.",
+      "answer": "Ich glaube, dass der Zug heute pünktlich sein wird.",
+      "alt": []
+     },
+     {
+      "instruction": "Start with Morgen.",
+      "given": "Ich fahre zum Bürgeramt.",
+      "answer": "Morgen fahre ich zum Bürgeramt.",
+      "alt": []
+     }
+    ],
+    "tense_shift": [
+     {
+      "instruction": "Put it in Futur I.",
+      "given": "Ich bestehe die Prüfung.",
+      "answer": "Ich werde die Prüfung bestehen.",
+      "alt": []
+     },
+     {
+      "instruction": "Put it in Präsens with the time word morgen.",
+      "given": "Ich werde meine Eltern in Lahore anrufen.",
+      "answer": "Morgen rufe ich meine Eltern in Lahore an.",
+      "alt": [
+       "Ich rufe morgen meine Eltern in Lahore an.",
+       "Ich rufe meine Eltern in Lahore morgen an.",
+       "Ich rufe meine Eltern morgen in Lahore an."
+      ]
+     }
+    ],
+    "error_spot": [
+     {
+      "wrong": "Ich werde bestehen die CFA-Prüfung im Februar.",
+      "right": "Ich werde die CFA-Prüfung im Februar bestehen.",
+      "tag": "VERB_FINAL",
+      "note_en": "With werden the infinitive goes to the very end."
+     },
+     {
+      "wrong": "Ich glaube, dass der DAX morgen wird steigen.",
+      "right": "Ich glaube, dass der DAX morgen steigen wird.",
+      "tag": "VERB_FINAL",
+      "note_en": "After dass the conjugated verb wird goes to the very end."
+     }
+    ],
+    "fill": [],
+    "free": {
+     "prompt_en": "Write one sentence about your plan for next weekend, in Präsens with a time word.",
+     "must_include": [
+      "Wochenende"
+     ]
+    }
+   },
+   "homework": "Write 4 sentences about next week: two plans in Präsens with a time word and two predictions with werden, for example about the markets or your exams.",
+   "batch": 8,
+   "status": "needs_review",
+   "review_notes": [
+    {
+     "text": "Ich werde meine Eltern in Lahore anrufen.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Ich werde meine Eltern in Lahore anrufen.",
+     "suggestions": [
+      "Labore",
+      "Jahre",
+      "Lahare"
+     ]
+    },
+    {
+     "text": "Morgen rufe ich meine Eltern in Lahore an.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Morgen rufe ich meine Eltern in Lahore an.",
+     "suggestions": [
+      "Labore",
+      "Jahre",
+      "Lahare"
+     ]
+    },
+    {
+     "text": "Ich rufe morgen meine Eltern in Lahore an.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Ich rufe morgen meine Eltern in Lahore an.",
+     "suggestions": [
+      "Labore",
+      "Jahre",
+      "Lahare"
+     ]
+    },
+    {
+     "text": "Ich rufe meine Eltern in Lahore morgen an.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Ich rufe meine Eltern in Lahore morgen an.",
+     "suggestions": [
+      "Labore",
+      "Jahre",
+      "Lahare"
+     ]
+    },
+    {
+     "text": "Ich rufe meine Eltern morgen in Lahore an.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Ich rufe meine Eltern morgen in Lahore an.",
+     "suggestions": [
+      "Labore",
+      "Jahre",
+      "Lahare"
+     ]
+    },
+    {
+     "text": "Ich werde die CFA-Prüfung im Februar bestehen.",
+     "rule": "GERMAN_SPELLER_RULE",
+     "message": "Möglicher Tippfehler gefunden.",
+     "context": "Ich werde die CFA-Prüfung im Februar bestehen.",
+     "suggestions": [
+      "CIA-Prüfung",
+      "CV-Prüfung",
+      "NVA-Prüfung"
+     ]
+    }
+   ]
+  }
+ ]
+}
