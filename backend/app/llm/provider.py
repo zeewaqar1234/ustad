@@ -76,9 +76,12 @@ class OllamaProvider:
             resp.raise_for_status()
         except httpx.HTTPError as e:
             raise LLMUnavailable(str(e)) from e
-        data = resp.json()
-        usage = Usage(data.get("prompt_eval_count", 0), data.get("eval_count", 0))
-        return data["message"]["content"], usage
+        try:
+            data = resp.json()
+            content = data["message"]["content"]
+        except (ValueError, KeyError, TypeError) as e:
+            raise LLMUnavailable(f"malformed Ollama reply: {e}") from e
+        return content, Usage(data.get("prompt_eval_count", 0), data.get("eval_count", 0))
 
 
 def get_provider() -> Provider:

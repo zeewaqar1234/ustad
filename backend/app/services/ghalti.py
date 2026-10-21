@@ -96,7 +96,13 @@ def from_grade(db: Session, now: datetime, grade: dict, source: str) -> list[Mis
         card = None
         if right != wrong:
             card = fix_card(db, now, wrong, right, errs[0]["tag"], errs[0]["reason_en"])
+        seen: set[str] = set()
         for x in errs:
+            if (
+                x["tag"] in seen
+            ):  # two errors of one kind in one sentence: one mistake, not a repeat
+                continue
+            seen.add(x["tag"])
             out.append(
                 record(db, now, source, wrong, right, x["tag"], x["reason_en"],
                        card.id if card else None)

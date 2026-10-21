@@ -83,7 +83,9 @@ def test_surgery_same_words_other_order_gets_a_note():
     p = next(p for p in PATTERNS if p.code == "VE_WEIL")
     s = p.drills_json["surgery"][0]["de"].split()
     res = drills.check(p, f"{p.code}:surgery:0", " ".join(reversed(s)))
-    assert not res["correct"] and len(res["notes"]) == 1 and res["notes"][0].startswith("Same words")
+    assert (
+        not res["correct"] and len(res["notes"]) == 1 and res["notes"][0].startswith("Same words")
+    )
 
 
 def test_free_must_include_is_case_insensitive():
@@ -98,3 +100,16 @@ def test_placement_and_recitation_sources_validate():
     assert {"SEIN_PRAESENS", "ARTICLE_DEFINITE", "PRONOUNS_CASE", "CONNECTOR_GROUPS"} <= {
         t.code for t in rec.tables
     }
+
+
+@pytest.mark.parametrize("p", PATTERNS, ids=[p.code for p in PATTERNS])
+def test_fill_answer_not_shown_on_card_or_before_it_in_the_round(p):
+    shown = {e["de"] for e in p.examples_json} | {p.common_error["right"]}
+    items = drills.generate(p)
+    for i, d in enumerate(items):
+        if d.type != "fill":
+            continue
+        full = drills.expected(p, d.id).answer
+        assert full not in shown
+        earlier = {drills.expected(p, x.id).answer for x in items[:i]}
+        assert full not in earlier

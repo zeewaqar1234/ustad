@@ -218,3 +218,42 @@ def test_drills_refuse_unapproved_pattern(api, session_factory):
 
 def test_source_files_exist():
     assert Path(__file__).resolve().parents[2].joinpath("data/seed/source/placement.json").exists()
+
+
+def test_i_dont_know_is_not_a_mistake(api):
+    api.post("/api/drills/answer", json={"drill_id": "V2_STATEMENT:error_spot:0", "answer": ""})
+    api.post("/api/drills/answer", json={"drill_id": "V2_STATEMENT:transform:0", "answer": " "})
+    assert api.get("/api/mistakes").json()["total"] == 0
+
+
+def test_two_same_tag_errors_in_one_sentence_count_once(api, llm):
+    text = "Ich bleibe zu Hause, weil ich bin krank und ich habe Fieber."
+    reply = {"score_10": 7, "corrected_text": "x", "teaching_points": [], "model_sentence_for_srs": [],
+             "errors": [{"span": "ich bin krank", "fix": "ich krank bin", "tag": "VERB_FINAL",
+                         "reason_en": "r", "severity": 2},
+                        {"span": "ich habe Fieber", "fix": "ich Fieber habe", "tag": "VERB_FINAL",
+                         "reason_en": "r", "severity": 2}]}  # fmt: skip
+    llm.queue.append(reply)
+    api.post("/api/homework/tagebuch", json={"text": text})
+    reg = api.get("/api/mistakes").json()
+    assert reg["by_tag"] == [{"tag": "VERB_FINAL", "count": 1}]
+
+
+def test_choice_hit_does_not_mark_pattern_known(db):
+    from app.db import utcnow
+    from app.services.placement import mark_known
+
+    db.add(Pattern(code="VE_WEIL", order=10, group="connectors", title="t", rule_en="r"))
+    db.flush()
+    item = {"pattern": "VE_WEIL", "mode": "choice", "marks": []}
+    mark_known(db, utcnow(), [{"ok": True, "item": item}])
+    assert not db.scalar(select(Pattern)).known_from_placement
+    mark_known(db, utcnow(), [{"ok": True, "item": {**item, "mode": "type"}}])
+    assert db.scalar(select(Pattern)).known_from_placement
+
+
+def test_untested_band_is_not_passed():
+    from app.services.placement import level
+
+    by = {b: {"correct": 10, "total": 10} for b in ("A2", "B1.1", "B1.2")}
+    assert level({**by, "B2": {"correct": 0, "total": 0}}, 9) == "B1 Board"

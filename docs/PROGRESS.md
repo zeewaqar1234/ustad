@@ -138,6 +138,87 @@ cd ../frontend && E2E_SHOTS=$SP/shots PW_CHROMIUM=/opt/pw-browsers/chromium npx 
 ```
 `e2e_setup` refuses to run unless DATABASE_URL contains "e2e". The two tests depend on order (review first).
 
+## Phase 2: what exists
+
+- **LLM layer** `backend/app/llm/`: `OllamaProvider` (`POST /api/chat`, JSON schema as `format`,
+  temperature 0), `complete_json` (Pydantic validation, one retry with the error, then `LLMInvalid`),
+  `LLMUnavailable` on network/HTTP/malformed replies, one `cost_ledger` row per call (vendor `ollama`,
+  tokens, eur 0). Schemas: `ErrorTag`, `GradeError`, `GradeResult`. Prompts: `prompts/grader.md`, `tutor.md`.
+- **Grader pipeline** `services/grading.py`: LanguageTool pre-check → Grader → span check (spans not in the
+  text are dropped and counted) → LanguageTool check of the corrected text (flags → `needs_review`).
+  Model down or invalid twice → LanguageTool-only result, shown as such, not written to Ghalti.
+- **Patterns**: 40 in `data/seed/source/patterns/batch_01..08.json` (5 each, schema in `SCHEMA.md`), built by
+  `make grammar-build` (`scripts/build_grammar.py`) into `data/seed/patterns.json`, loaded by `make seed-load`.
+  Pattern card (rule, slot diagram, 3 examples work/life/finance-history, common error) and drill round.
+- **6 drill types** `services/drills.py`: surgery (tap chips), transform, tense_shift, error_spot, fill
+  (authored for case patterns, else one auto-blanked article ending from a transform answer not shown
+  before), free (Grader + must_include). A round with ≥ 80 % first-try correct marks the pattern done;
+  the current pattern is the first approved, not done, not known one.
+- **Pahara** (typed): 12 tables (`data/seed/source/recitation.json`); full table → gaps (next day) → blank.
+- **Homework + Tagebuch** (`/api/homework`): today's homework from the current pattern; red-pen view.
+- **Ghalti Register** (`/api/mistakes`): every graded error and every wrong drill answer; by-tag heat map,
+  top 10, recurring (≥ 3). Each wrong sentence → one `fix_sentence` card (deck `ghalti`, prompt = Zee's
+  sentence), live at once if LanguageTool passes, else in the check queue. Ghalti items never become Sabaq.
+- **Placement test**: 35 items (10 A2, 12 B1.1, 9 B1.2, 4 B2) + 5-sentence writing sample (server checks 5).
+  Level = first band under 70 % → class (A2+, B1.1, B1.2, B1 Board, B2.1); writing < 5/10 → one class down.
+  Correct vocab answers mark seed items known (cards start in FSRS Review, first check in 14–27 days);
+  correct typed grammar answers mark the pattern known.
+- **Check queue** now also lists flagged patterns and placement items.
+- **SRS grader fix** (`srs/grader.py`): umlaut pairs that are different forms (hatte/hätte, war/wäre,
+  wurde/würde, konnte/könnte, Mutter/Mütter …) are Again, not Hard. `haette` for `hätte` stays Hard.
+  Found by the new drill test (error_spot "Ich hatte gern …" was accepted as correct).
+
+### Phase 2 acceptance evidence (run 2026-10-21)
+
+| Check | Result |
+|---|---|
+| Builder gate | `GET /api/stats/gate` → `{"study_days_last_7":0,"open":true,"override":true}` (override, see gate log) |
+| 40 patterns, batches of 5, LanguageTool-checked | `make grammar-build`: 8 × "batch_0N.json: 5 patterns checked", PATTERNS_RESULT; placement 35 items, 0 needs_review; recitation 12 tables |
+| Pattern card + 6 drill types | `test_all_six_drill_types_are_generated`; screenshots `docs/evidence/phase2/p2-pattern-card.png`, `p2-drill-surgery.png`, `p2-drill-feedback.png` |
+| Drill generators produce valid items | `tests/test_drills.py`: every drill of all 40 patterns: answer not in prompt, expected answer passes, empty fails, error_spot wrong sentence fails, fill answers not shown earlier |
+| Recitation typed, full → gaps → blank by day | `test_recitation_stages_open_one_per_day`; `p2-recitation.png` |
+| Homework + Tagebuch → red-pen | API tests (fake model) + Playwright against real LanguageTool (model offline → LanguageTool-only red pen): `p2-redpen.png` |
+| Ghalti table + heat map, fix_sentence cards | `test_errors_become_ghalti_rows_and_fix_sentence_cards`, `test_homework_red_pen_creates_fix_card_in_manzil` (card shows in Manzil, corrected answer = Good); `p2-ghalti.png` |
+| Placement test sets level_band, marks known | `test_placement_sets_level_and_marks_known` (A2 + B1.1 right → "B1.2", seed item known, card scheduled); `p2-placement.png` |
+| Grader schema, 5 fixture sentences, each expected tag | `tests/test_grader_schema.py` 5 fixtures pass (VERB_FINAL; V2_POSITION + VERB_FINAL; AUX_HABEN_SEIN; CASE_DAT; PARTIZIP) with a **mocked** model reply; plus bad-schema rejection, retry, fallback, span drop |
+| Same 5 fixtures on a real local model | **Not run.** `tests/test_grader_llm.py` skips without `RUN_OLLAMA=1`; this container cannot download models (registry.ollama.ai and huggingface.co denied by the network policy). Open item below. |
+| pytest | PYTEST_RESULT |
+| vitest | 6 passed (RedPen, surgery chips, drill hides answer until Check) |
+| Playwright 375px | 5 passed (3 new Phase 2 + 2 Phase 1); every new screen asserts no horizontal scroll |
+| make lint | ruff check + format clean; oxlint 0 errors (2 old warnings in ReviewSession.tsx); tsc clean |
+| New dependencies | none |
+
+### Open Phase 2 items
+
+- [ ] **Real local-model run.** On Zee's machine: install Ollama, `ollama pull llama3.1:8b`, `make lt-up`,
+  `make test-ollama`. All 5 fixtures must find their tags. If not, try another model (`OLLAMA_MODEL=...`)
+  and record the result here. Until then the grading quality of the free setup is unmeasured.
+- [ ] **Approve or fix flagged patterns** in the check queue (FLAGGED_LIST). They stay out of drills until then.
+- LanguageTool 6.8 misses some errors the model must catch, e.g. "Am Wochenende habe ich nach Frankfurt
+  gefahren." gives no match (it does flag "Ich habe gestern nach Hause gegangen."). The LanguageTool-only
+  fallback is a safety net, not a grader.
+
+### End-of-phase diff review (subagent) and fixes
+
+- Fixed: auto fill drills reused the card examples (answer visible just before the attempt); now built from
+  transform/tense answers not shown on the card or earlier in the round, and fill runs before those. One
+  authored fill (TWO_PART_CONNECTORS) duplicated a surgery sentence; replaced. Test added for all 40.
+- Fixed: "I don't know" in a drill was written to Ghalti as "(no answer)" and merged into one fake recurring row.
+- Fixed: two errors with the same tag in one sentence counted as a repeat (inflated "recurring").
+- Fixed: a multiple-choice hit (possible guess) marked a whole pattern known; now typed items only.
+- Fixed: malformed Ollama reply raised a 500; now `LLMUnavailable` → LanguageTool-only fallback.
+- Fixed (nits): a band with no testable items counts as not passed; drill round start clamped to 24 h.
+- Open (nits): a valid other word order in surgery still counts as wrong first-try (note shown); an error
+  span crossing a sentence split (e.g. after "z.B.") is not written to Ghalti; `_locate` can anchor a
+  repeated short span at an earlier occurrence.
+- Open (frontend agent notes): `GET /api/homework/today` creates today's row (GET with a write); Home
+  fetches the full placement payload only to read `last_result`.
+
+### How to rerun the Phase 2 e2e check
+
+Same as Phase 1 (below), plus `make grammar-build` before `load_seed` if `data/seed/patterns.json` is stale.
+`npx playwright test` runs both `phone.spec.ts` and `phase2.spec.ts`.
+
 ## Dependencies added (one-line reasons)
 
 Backend:
@@ -153,6 +234,8 @@ Frontend (from the Vite react-ts template: react, react-dom, vite, typescript, @
 Phase 1 (added when first used): sqlalchemy + alembic (tables, migrations), fsrs (scheduler), argon2-cffi (password hash);
 react-router + @tanstack/react-query (multi-page UI, server state), vite-plugin-pwa (installable PWA),
 @playwright/test (phone-width e2e + screenshots). No new dependencies for the Phase 1 finish.
+Phase 2: none (Ollama is called with the existing httpx; Ollama itself is a separate local program, not a
+Python/npm dependency).
 
 ## Known issues / notes
 
