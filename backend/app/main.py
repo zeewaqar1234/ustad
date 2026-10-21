@@ -4,11 +4,25 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.api import auth, daily, health, items, review, sabaq, stats
+from app.api import (
+    auth,
+    daily,
+    health,
+    homework,
+    items,
+    mistakes,
+    patterns,
+    placement,
+    recitation,
+    review,
+    sabaq,
+    stats,
+)  # fmt: skip
 from app.core.config import settings
 
 app = FastAPI(title="Ustad")
-for r in (health, auth, daily, review, sabaq, stats, items):
+for r in (health, auth, daily, review, sabaq, stats, items, patterns, homework, mistakes,
+          recitation, placement):  # fmt: skip
     app.include_router(r.router)
 
 

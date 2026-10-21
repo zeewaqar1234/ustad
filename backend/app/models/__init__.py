@@ -1,4 +1,4 @@
-"""Phase 1 tables (docs/architecture.md §10). Later phases add their own tables."""
+"""Tables (docs/architecture.md §10). Phase 1: SRS + daily loop. Phase 2: grammar, writing, Ghalti."""
 
 from datetime import date, datetime
 
@@ -61,6 +61,10 @@ class Item(Base):
     source: Mapped[str] = mapped_column(String(100), default="seed:llm-authored")
     status: Mapped[str] = mapped_column(String(15), default="ok")  # ok / needs_review
     review_notes: Mapped[list] = mapped_column(JSON, default=list)  # LanguageTool messages
+    wrong: Mapped[str | None] = mapped_column(
+        Text
+    )  # fix_sentence items: Zee's wrong sentence (prompt)
+    known_from_placement: Mapped[bool] = mapped_column(Boolean, default=False)
     cards: Mapped[list["Card"]] = relationship(back_populates="item")
 
 
@@ -154,3 +158,83 @@ class CostLedger(Base):
     units: Mapped[float] = mapped_column(Float)
     unit_type: Mapped[str] = mapped_column(String(30))
     eur: Mapped[float] = mapped_column(Float)
+
+
+class Pattern(Base):
+    """Grammar pattern (docs/modules.md §5.2). Content comes from data/seed/patterns.json."""
+
+    __tablename__ = "pattern"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    code: Mapped[str] = mapped_column(String(40), unique=True)
+    order: Mapped[int] = mapped_column(Integer, index=True)
+    group: Mapped[str] = mapped_column(String(20))
+    title: Mapped[str] = mapped_column(String(120))
+    rule_en: Mapped[str] = mapped_column(Text)
+    slot_diagram: Mapped[dict] = mapped_column(JSON, default=dict)
+    examples_json: Mapped[list] = mapped_column(JSON, default=list)
+    common_error: Mapped[dict] = mapped_column(JSON, default=dict)
+    tags: Mapped[list] = mapped_column(JSON, default=list)
+    drills_json: Mapped[dict] = mapped_column(JSON, default=dict)
+    homework: Mapped[str] = mapped_column(Text, default="")
+    status: Mapped[str] = mapped_column(String(15), default="ok")  # ok / needs_review
+    review_notes: Mapped[list] = mapped_column(JSON, default=list)
+    known_from_placement: Mapped[bool] = mapped_column(Boolean, default=False)
+    # drill rounds: a round of all drills with >= 80 % first-try correct marks the pattern done
+    rounds: Mapped[int] = mapped_column(Integer, default=0)
+    best_pct: Mapped[float] = mapped_column(Float, default=0)
+    done_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
+
+
+class Mistake(Base):
+    """Ghalti Register (docs/modules.md §5.7): every mistake from any module."""
+
+    __tablename__ = "mistake"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    ts: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow, index=True)
+    last_ts: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
+    source: Mapped[str] = mapped_column(String(30))  # homework / tagebuch / drill / placement
+    orig: Mapped[str] = mapped_column(Text)
+    fix: Mapped[str] = mapped_column(Text)
+    tag: Mapped[str] = mapped_column(String(30), index=True)
+    note: Mapped[str] = mapped_column(Text, default="")
+    count: Mapped[int] = mapped_column(Integer, default=1)
+    card_id: Mapped[int | None] = mapped_column(ForeignKey("card.id"))
+
+
+class Homework(Base):
+    """Homework and Tagebuch entries with the Grader's red-pen result (docs/modules.md §5.6)."""
+
+    __tablename__ = "homework"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    kind: Mapped[str] = mapped_column(
+        String(15), default="homework"
+    )  # homework / tagebuch / placement
+    assigned: Mapped[date] = mapped_column(Date, index=True)
+    due: Mapped[date] = mapped_column(Date)
+    pattern_id: Mapped[int | None] = mapped_column(ForeignKey("pattern.id"))
+    prompt: Mapped[str] = mapped_column(Text, default="")
+    submission: Mapped[str | None] = mapped_column(Text)
+    grade_json: Mapped[dict | None] = mapped_column(JSON)
+    status: Mapped[str] = mapped_column(String(15), default="open")  # open / graded / lt_only
+    submitted_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
+
+
+class RecitationProgress(Base):
+    """Pahara: stage 0 = full table, 1 = gaps, 2 = blank. `stage` = highest stage passed (-1 = none)."""
+
+    __tablename__ = "recitation_progress"
+    code: Mapped[str] = mapped_column(String(40), primary_key=True)
+    stage: Mapped[int] = mapped_column(Integer, default=-1)
+    last_passed: Mapped[date | None] = mapped_column(Date)
+    passes: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class PlacementResult(Base):
+    __tablename__ = "placement_result"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    ts: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
+    answers: Mapped[dict] = mapped_column(JSON, default=dict)  # item id -> answer
+    by_band: Mapped[dict] = mapped_column(JSON, default=dict)  # band -> {correct, total}
+    writing_homework_id: Mapped[int | None] = mapped_column(ForeignKey("homework.id"))
+    level_band: Mapped[str] = mapped_column(String(20))
+    items_marked: Mapped[int] = mapped_column(Integer, default=0)

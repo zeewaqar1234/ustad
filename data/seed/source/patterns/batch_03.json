@@ -1,0 +1,203 @@
+{
+  "batch": 3,
+  "patterns": [
+    {
+      "code": "VE_DASS",
+      "order": 11,
+      "group": "connectors",
+      "title": "dass: verb to the end",
+      "rule_en": "After dass the conjugated verb goes to the end of the clause. Put a comma before dass.",
+      "slot_diagram": {
+        "labels": ["Main clause", ",", "dass", "Middle", "Verb (end)"],
+        "rows": [
+          ["Ich glaube", ",", "dass", "der Markt heute", "fällt"],
+          ["Es ist wichtig", ",", "dass", "du pünktlich", "kommst"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Ich weiß, dass ich nächste Woche Rufbereitschaft habe.", "en": "I know that I am on call next week."},
+        {"context": "life", "de": "Es ist wichtig, dass ich den Termin beim Bürgeramt nicht verpasse.", "en": "It is important that I don't miss the appointment at the Bürgeramt."},
+        {"context": "finance_history", "de": "Ich habe gelesen, dass Pakistan 1947 unabhängig geworden ist.", "en": "I read that Pakistan became independent in 1947."}
+      ],
+      "common_error": {"wrong": "Ich glaube, dass der Zug hat Verspätung.", "right": "Ich glaube, dass der Zug Verspätung hat.", "tag": "VERB_FINAL", "note_en": "After dass the verb hat moves to the end."},
+      "tags": ["VERB_FINAL"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich hoffe, dass die Prüfung nicht so schwer ist.", "en": "I hope that the exam is not that hard."},
+          {"de": "Mein Kollege sagt, dass der Markt heute ruhig ist.", "en": "My colleague says that the market is quiet today."}
+        ],
+        "transform": [
+          {"instruction": "Start with 'Ich glaube, dass'.", "given": "Die S-Bahn kommt heute später.", "answer": "Ich glaube, dass die S-Bahn heute später kommt.", "alt": []},
+          {"instruction": "Start with 'Es ist wichtig, dass'.", "given": "Ich lerne jeden Tag Deutsch.", "answer": "Es ist wichtig, dass ich jeden Tag Deutsch lerne.", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Ich weiß, dass du kommst morgen.", "right": "Ich weiß, dass du morgen kommst.", "tag": "VERB_FINAL", "note_en": "In a dass clause the verb kommst goes to the end."},
+          {"wrong": "Es ist wichtig, dass ich muss die E-Mail heute schreiben.", "right": "Es ist wichtig, dass ich die E-Mail heute schreiben muss.", "tag": "VERB_FINAL", "note_en": "The modal muss goes to the very end, after the infinitive."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about your MSc exams that starts with 'Ich hoffe, dass'.", "must_include": ["dass"]}
+      },
+      "homework": "Write 4 sentences about your work day. Start two with 'Ich glaube, dass' and two with 'Es ist wichtig, dass'. Check that the verb is at the end."
+    },
+    {
+      "code": "VE_OBWOHL",
+      "order": 12,
+      "group": "connectors",
+      "title": "obwohl: verb to the end",
+      "rule_en": "After obwohl the verb goes to the end. trotzdem says the same idea in a main clause: it takes position 1 and the verb comes right after it.",
+      "slot_diagram": {
+        "labels": ["Clause 1", ", or .", "Connector", "Verb (pos. 2)", "Middle", "Verb (end)"],
+        "rows": [
+          ["Ich gehe zur Arbeit", ",", "obwohl", "", "ich müde", "bin"],
+          ["Ich bin müde", ".", "Trotzdem", "gehe", "ich zur Arbeit", ""]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Ich arbeite heute im Büro, obwohl ich diese Woche Rufbereitschaft habe.", "en": "I am working in the office today although I am on call this week."},
+        {"context": "life", "de": "Ich nehme den Zug, obwohl er oft Verspätung hat.", "en": "I take the train although it is often late."},
+        {"context": "finance_history", "de": "Viele Leute kaufen Bitcoin, obwohl der Kurs stark schwankt.", "en": "Many people buy Bitcoin although the price swings a lot."}
+      ],
+      "common_error": {"wrong": "Ich lerne weiter, obwohl ich bin müde.", "right": "Ich lerne weiter, obwohl ich müde bin.", "tag": "VERB_FINAL", "note_en": "After obwohl the verb bin goes to the end."},
+      "tags": ["VERB_FINAL", "V2_POSITION", "CONNECTOR_CHOICE"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich gehe zur Uni, obwohl ich krank bin.", "en": "I am going to uni although I am ill."},
+          {"de": "Es regnet stark, trotzdem fahre ich mit dem Fahrrad.", "en": "It is raining hard, but I still ride my bike."}
+        ],
+        "transform": [
+          {"instruction": "Join with obwohl.", "given": ["Ich bin müde.", "Ich lerne für die Prüfung."], "answer": "Ich lerne für die Prüfung, obwohl ich müde bin.", "alt": ["Obwohl ich müde bin, lerne ich für die Prüfung."]},
+          {"instruction": "Rewrite with trotzdem.", "given": "Ich trinke Kaffee, obwohl es schon spät ist.", "answer": "Es ist schon spät. Trotzdem trinke ich Kaffee.", "alt": ["Es ist schon spät, trotzdem trinke ich Kaffee.", "Es ist schon spät. Ich trinke trotzdem Kaffee.", "Es ist schon spät, aber ich trinke trotzdem Kaffee."]}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Ich bin krank. Trotzdem ich gehe ins Büro.", "right": "Ich bin krank. Trotzdem gehe ich ins Büro.", "tag": "V2_POSITION", "note_en": "trotzdem is position 1, so the verb gehe comes right after it."},
+          {"wrong": "Ich kaufe die Aktie, obwohl sie ist teuer.", "right": "Ich kaufe die Aktie, obwohl sie teuer ist.", "tag": "VERB_FINAL", "note_en": "After obwohl the verb ist goes to the end."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about your on-call week using obwohl.", "must_include": ["obwohl"]}
+      },
+      "homework": "Write 4 sentences about this week: two with obwohl and two with trotzdem. Use your commute, your work or your exams."
+    },
+    {
+      "code": "VE_WENN",
+      "order": 13,
+      "group": "connectors",
+      "title": "wenn: verb to the end",
+      "rule_en": "wenn means if or whenever. After wenn the conjugated verb goes to the end.",
+      "slot_diagram": {
+        "labels": ["Main clause", ",", "wenn", "Middle", "Verb (end)"],
+        "rows": [
+          ["Ich rufe dich an", ",", "wenn", "der Zug Verspätung", "hat"],
+          ["Ich lese Nachrichten", ",", "wenn", "ich im Zug", "sitze"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Ich muss sofort reagieren, wenn in der Nacht ein Alarm kommt.", "en": "I have to react immediately if an alert comes in at night."},
+        {"context": "life", "de": "Ich lese auf Deutsch, wenn ich im Zug nach Frankfurt sitze.", "en": "I read in German when I sit on the train to Frankfurt."},
+        {"context": "finance_history", "de": "Wenn die Zinsen steigen, fallen oft die Aktienkurse.", "en": "When interest rates rise, share prices often fall."}
+      ],
+      "common_error": {"wrong": "Ich gehe in die Kantine, wenn ich habe Hunger.", "right": "Ich gehe in die Kantine, wenn ich Hunger habe.", "tag": "VERB_FINAL", "note_en": "After wenn the verb habe goes to the end."},
+      "tags": ["VERB_FINAL"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich esse in der Kantine, wenn ich Zeit habe.", "en": "I eat in the Kantine when I have time."},
+          {"de": "Wir sprechen Deutsch, wenn der Chef dabei ist.", "en": "We speak German when the boss is there."}
+        ],
+        "transform": [
+          {"instruction": "Join with wenn.", "given": ["Ich habe frei.", "Ich besuche meine Freunde in Mainz."], "answer": "Ich besuche meine Freunde in Mainz, wenn ich freihabe.", "alt": ["Wenn ich freihabe, besuche ich meine Freunde in Mainz."]},
+          {"instruction": "Join with wenn.", "given": ["Der Kurs fällt unter 50 Euro.", "Ich kaufe die Aktie."], "answer": "Ich kaufe die Aktie, wenn der Kurs unter 50 Euro fällt.", "alt": ["Wenn der Kurs unter 50 Euro fällt, kaufe ich die Aktie."]}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Ich schreibe dir, wenn ich bin zu Hause.", "right": "Ich schreibe dir, wenn ich zu Hause bin.", "tag": "VERB_FINAL", "note_en": "After wenn the verb bin goes to the end."},
+          {"wrong": "Wenn ich Zeit habe, ich lerne Vokabeln.", "right": "Wenn ich Zeit habe, lerne ich Vokabeln.", "tag": "V2_POSITION", "note_en": "The wenn clause is position 1, so the main verb lerne comes next."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about what you do when the train is late. Use wenn.", "must_include": ["wenn"]}
+      },
+      "homework": "Write 4 sentences with wenn about your normal week: the train, the Kantine, on-call nights, studying. Put the wenn clause first in at least one."
+    },
+    {
+      "code": "VE_ALS",
+      "order": 14,
+      "group": "connectors",
+      "title": "als: one event in the past",
+      "rule_en": "Use als for one event or one period in the past, wenn for repeated events. Both send the verb to the end.",
+      "slot_diagram": {
+        "labels": ["Connector", "Middle", "Verb (end)", ",", "Main clause"],
+        "rows": [
+          ["Als", "ich nach Deutschland", "kam", ",", "konnte ich kaum Deutsch"],
+          ["Immer wenn", "der Zug Verspätung", "hatte", ",", "kam ich zu spät"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Als ich meinen ersten Arbeitstag in der Bank hatte, war ich sehr nervös.", "en": "When I had my first day of work at the bank, I was very nervous."},
+        {"context": "life", "de": "Als ich nach Rüsselsheim kam, kannte ich niemanden.", "en": "When I came to Rüsselsheim, I didn't know anyone."},
+        {"context": "finance_history", "de": "Als die Mauer 1989 fiel, feierten viele Menschen in Berlin.", "en": "When the Wall fell in 1989, many people celebrated in Berlin."}
+      ],
+      "common_error": {"wrong": "Wenn ich letztes Jahr in Lahore war, war es sehr heiß.", "right": "Als ich letztes Jahr in Lahore war, war es sehr heiß.", "tag": "CONNECTOR_CHOICE", "note_en": "One visit in the past: als, not wenn."},
+      "tags": ["CONNECTOR_CHOICE", "VERB_FINAL"],
+      "drills": {
+        "surgery": [
+          {"de": "Als ich das Ergebnis gesehen habe, war ich froh.", "en": "When I saw the result, I was happy."},
+          {"de": "Als ich ein Kind war, spielte ich viel Cricket.", "en": "When I was a child, I played a lot of cricket."}
+        ],
+        "transform": [
+          {"instruction": "Join with als.", "given": ["Ich war in Lahore.", "Es war sehr heiß."], "answer": "Als ich in Lahore war, war es sehr heiß.", "alt": ["Es war sehr heiß, als ich in Lahore war."]},
+          {"instruction": "Join with als or wenn. It happened many times.", "given": ["Ich hatte eine Prüfung.", "Ich war immer nervös."], "answer": "Wenn ich eine Prüfung hatte, war ich immer nervös.", "alt": ["Ich war immer nervös, wenn ich eine Prüfung hatte.", "Immer wenn ich eine Prüfung hatte, war ich nervös."]}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Wenn ich gestern nach Hause kam, war ich sehr müde.", "right": "Als ich gestern nach Hause kam, war ich sehr müde.", "tag": "CONNECTOR_CHOICE", "note_en": "Yesterday is one event in the past: als."},
+          {"wrong": "Als ich in Frankfurt ankam, ich habe einen Kaffee getrunken.", "right": "Als ich in Frankfurt ankam, habe ich einen Kaffee getrunken.", "tag": "V2_POSITION", "note_en": "The als clause is position 1, so habe comes right after the comma."}
+        ],
+        "fill": [
+          {"text": "___ ich gestern im Büro war, hat das Telefon oft geklingelt.", "answers": ["Als"], "full": "Als ich gestern im Büro war, hat das Telefon oft geklingelt."},
+          {"text": "Immer ___ ich Zeit habe, lese ich Nachrichten auf Deutsch.", "answers": ["wenn"], "full": "Immer wenn ich Zeit habe, lese ich Nachrichten auf Deutsch."}
+        ],
+        "free": {"prompt_en": "Write one sentence about your first day in Germany. Use als.", "must_include": ["als"]}
+      },
+      "homework": "Write 4 sentences about your past: two with als (one event, for example your first day at the bank) and two with wenn (things that happened again and again in Pakistan)."
+    },
+    {
+      "code": "VE_OB",
+      "order": 15,
+      "group": "connectors",
+      "title": "ob: whether, verb to the end",
+      "rule_en": "Use ob (whether) for an indirect yes/no question. The verb goes to the end. Do not use wenn here.",
+      "slot_diagram": {
+        "labels": ["Main clause", ",", "ob", "Middle", "Verb (end)"],
+        "rows": [
+          ["Ich weiß nicht", ",", "ob", "der Zug heute", "fährt"],
+          ["Kannst du mir sagen", ",", "ob", "die Kantine noch offen", "ist"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Mein Kollege fragt, ob ich nächste Woche Rufbereitschaft habe.", "en": "My colleague is asking whether I am on call next week."},
+        {"context": "life", "de": "Können Sie mir sagen, ob das Bürgeramt am Freitag geöffnet ist?", "en": "Can you tell me whether the Bürgeramt is open on Friday?"},
+        {"context": "finance_history", "de": "Niemand weiß, ob Bitcoin nächstes Jahr steigt oder fällt.", "en": "Nobody knows whether Bitcoin will rise or fall next year."}
+      ],
+      "common_error": {"wrong": "Ich weiß nicht, ob kommt der Zug pünktlich.", "right": "Ich weiß nicht, ob der Zug pünktlich kommt.", "tag": "VERB_FINAL", "note_en": "After ob the verb kommt goes to the end."},
+      "tags": ["VERB_FINAL", "CONNECTOR_CHOICE"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich frage meinen Chef, ob ich morgen freihabe.", "en": "I am asking my boss whether I have tomorrow off."},
+          {"de": "Weißt du, ob die Prüfung schwer ist?", "en": "Do you know whether the exam is hard?"}
+        ],
+        "transform": [
+          {"instruction": "Make it indirect. Start with 'Ich weiß nicht, ob'.", "given": "Ist die Kantine heute offen?", "answer": "Ich weiß nicht, ob die Kantine heute offen ist.", "alt": []},
+          {"instruction": "Make it polite. Start with 'Können Sie mir sagen, ob'.", "given": "Brauche ich einen Termin?", "answer": "Können Sie mir sagen, ob ich einen Termin brauche?", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Ich weiß nicht, wenn der Markt morgen offen ist.", "right": "Ich weiß nicht, ob der Markt morgen offen ist.", "tag": "CONNECTOR_CHOICE", "note_en": "Whether is ob. wenn is if as a condition or when."},
+          {"wrong": "Kannst du mir sagen, ob du hast heute Zeit?", "right": "Kannst du mir sagen, ob du heute Zeit hast?", "tag": "VERB_FINAL", "note_en": "After ob the verb hast goes to the end."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one polite sentence asking a colleague whether they can help you. Use ob.", "must_include": ["ob"]}
+      },
+      "homework": "Write 4 indirect questions with ob you could really use: one for a colleague, one for the Bürgeramt, one for your professor, one for the Arzt."
+    }
+  ]
+}

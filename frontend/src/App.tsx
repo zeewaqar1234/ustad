@@ -1,8 +1,16 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, Navigate, Route, Routes, useParams } from 'react-router'
 import { Home } from './features/daily/Home'
+import { Ghalti } from './features/ghalti/Ghalti'
+import { Drills } from './features/grammar/Drills'
+import { PatternCard } from './features/grammar/PatternCard'
+import { PatternList } from './features/grammar/PatternList'
+import { Placement } from './features/placement/Placement'
+import { Recitation } from './features/recitation/Recitation'
+import { RecitationList } from './features/recitation/RecitationList'
 import { ReviewSession } from './features/review/ReviewSession'
 import { Sabaq } from './features/sabaq/Sabaq'
+import { Homework } from './features/writing/Homework'
 import { api, AuthError } from './lib/api'
 import { CheckQueue } from './pages/CheckQueue'
 import { Login } from './pages/Login'
@@ -11,6 +19,17 @@ function ReviewRoute() {
   const { block } = useParams()
   if (block !== 'manzil' && block !== 'sabqi') return <Navigate to="/" />
   return <ReviewSession key={block} block={block} />
+}
+
+// keyed by code so moving between patterns or tables starts fresh state
+function DrillsRoute() {
+  const { code } = useParams()
+  return <Drills key={code} />
+}
+
+function RecitationRoute() {
+  const { code } = useParams()
+  return <Recitation key={code} />
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -22,6 +41,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           Ustad
         </Link>
         <div className="flex gap-4 text-sm">
+          <Link to="/ghalti">Ghalti</Link>
           <Link to="/check">Check queue</Link>
           <button
             onClick={async () => {
@@ -55,6 +75,14 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/review/:block" element={<ReviewRoute />} />
                 <Route path="/sabaq" element={<Sabaq />} />
+                <Route path="/grammar" element={<PatternList />} />
+                <Route path="/grammar/:code" element={<PatternCard />} />
+                <Route path="/grammar/:code/drills" element={<DrillsRoute />} />
+                <Route path="/homework" element={<Homework />} />
+                <Route path="/ghalti" element={<Ghalti />} />
+                <Route path="/recitation" element={<RecitationList />} />
+                <Route path="/recitation/:code" element={<RecitationRoute />} />
+                <Route path="/placement" element={<Placement />} />
                 <Route path="/check" element={<CheckQueue />} />
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>

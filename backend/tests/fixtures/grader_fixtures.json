@@ -1,0 +1,46 @@
+{
+ "_note": "5 sentences with known errors (docs/phases.md Phase 2). expected_tags must all appear in the grade. model_reply is a recorded-style Grader reply used by the mocked unit test; the real-model test (RUN_OLLAMA=1) ignores it.",
+ "fixtures": [
+  {
+   "id": "verb_final_weil",
+   "text": "Ich bleibe heute zu Hause, weil ich bin krank.",
+   "expected_tags": ["VERB_FINAL"],
+   "model_reply": {"score_10": 8, "corrected_text": "Ich bleibe heute zu Hause, weil ich krank bin.",
+    "errors": [{"span": "weil ich bin krank", "fix": "weil ich krank bin", "tag": "VERB_FINAL", "reason_en": "After weil the verb goes to the end.", "severity": 2}],
+    "teaching_points": ["weil, dass, obwohl: conjugated verb at the end."], "model_sentence_for_srs": ["Ich bleibe heute zu Hause, weil ich krank bin."]}
+  },
+  {
+   "id": "v2_and_verb_final",
+   "text": "Deshalb ich habe den Zug verpasst, weil der Wecker hat nicht geklingelt.",
+   "expected_tags": ["V2_POSITION", "VERB_FINAL"],
+   "model_reply": {"score_10": 7, "corrected_text": "Deshalb habe ich den Zug verpasst, weil der Wecker nicht geklingelt hat.",
+    "errors": [{"span": "Deshalb ich habe", "fix": "Deshalb habe ich", "tag": "V2_POSITION", "reason_en": "After deshalb the verb comes next, then the subject.", "severity": 2},
+               {"span": "der Wecker hat nicht geklingelt", "fix": "der Wecker nicht geklingelt hat", "tag": "VERB_FINAL", "reason_en": "After weil the conjugated verb hat goes to the end.", "severity": 2}],
+    "teaching_points": ["deshalb takes position 1: verb second.", "weil sends hat to the end."], "model_sentence_for_srs": []}
+  },
+  {
+   "id": "aux_sein",
+   "text": "Am Wochenende habe ich nach Frankfurt gefahren.",
+   "expected_tags": ["AUX_HABEN_SEIN"],
+   "model_reply": {"score_10": 8, "corrected_text": "Am Wochenende bin ich nach Frankfurt gefahren.",
+    "errors": [{"span": "habe ich", "fix": "bin ich", "tag": "AUX_HABEN_SEIN", "reason_en": "fahren (movement to a place) takes sein in the Perfekt.", "severity": 2}],
+    "teaching_points": ["Movement from A to B: Perfekt with sein."], "model_sentence_for_srs": ["Am Wochenende bin ich nach Frankfurt gefahren."]}
+  },
+  {
+   "id": "case_dat",
+   "text": "Ich danke dich für die Hilfe.",
+   "expected_tags": ["CASE_DAT"],
+   "model_reply": {"score_10": 8, "corrected_text": "Ich danke dir für die Hilfe.",
+    "errors": [{"span": "danke dich", "fix": "danke dir", "tag": "CASE_DAT", "reason_en": "danken takes the dative: dir.", "severity": 2}],
+    "teaching_points": ["helfen, danken, gefallen: dative."], "model_sentence_for_srs": ["Ich danke dir für die Hilfe."]}
+  },
+  {
+   "id": "partizip",
+   "text": "Mein Kollege hat die Order geprüft und ich habe den Bericht geschreibt.",
+   "expected_tags": ["PARTIZIP"],
+   "model_reply": {"score_10": 8, "corrected_text": "Mein Kollege hat die Order geprüft und ich habe den Bericht geschrieben.",
+    "errors": [{"span": "geschreibt", "fix": "geschrieben", "tag": "PARTIZIP", "reason_en": "schreiben is irregular: geschrieben.", "severity": 2}],
+    "teaching_points": ["Irregular verbs: Partizip II ends in -en."], "model_sentence_for_srs": []}
+  }
+ ]
+}

@@ -9,6 +9,8 @@ SYMBOL = {"m": "▲", "f": "●", "n": "■"}  # grayscale-safe gender marks (do
 
 
 def card_types_for(item: Item) -> list[str]:
+    if item.deck == "ghalti":
+        return ["fix_sentence"]
     if item.deck == "connector":
         types = ["produce", "recog"]
         if cloze_parts(item):
@@ -43,6 +45,8 @@ def expected(card: Card) -> tuple[str, list[str]]:
         parts = cloze_parts(item)
         assert parts
         return parts[1], [item.de]
+    if card.card_type == "fix_sentence":
+        return item.de, []
     return with_article(item, item.de), [with_article(item, a) for a in item.alt or []]
 
 
@@ -58,6 +62,7 @@ def item_reveal(item: Item) -> dict:
         "example_en": item.example_en,
         "tags": item.tags,
         "status": item.status,
+        "wrong": item.wrong,
     }
 
 
@@ -81,4 +86,8 @@ def prompt(card: Card) -> dict:
         parts = cloze_parts(item)
         assert parts
         return {**base, "mode": "type", "prompt": parts[0], "hint": item.example_en}
+    if card.card_type == "fix_sentence":
+        tag = (item.tags or ["OTHER"])[0].replace("_", " ").lower()
+        return {**base, "mode": "type", "prompt": item.wrong,
+                "hint": f"Fix this sentence (your mistake: {tag})"}  # fmt: skip
     raise ValueError(card.card_type)
