@@ -1,6 +1,6 @@
 """Grammar patterns + drills (docs/modules.md §5.2). Drills never send their answer before an attempt."""
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -112,7 +112,8 @@ def drill_answer(body: DrillAnswerIn, db: DB, llm: LLM):
         result = drills.check(p, body.drill_id, body.answer, body.answers)
         correct = result["correct"]
         same_words = any(n.startswith("Same words") for n in result.get("notes", []))
-        if not correct and not same_words:
+        skipped = not (body.answer.strip() or any(a.strip() for a in body.answers))
+        if not correct and not same_words and not skipped:  # "I don't know" is not a mistake
             given = " / ".join(body.answers) if kind == "fill" else body.answer
             ghalti.record(db, now, "drill", given or "(no answer)", result["expected"], exp.tag,
                           f"{p.title} ({kind})")  # fmt: skip
@@ -135,11 +136,12 @@ def finish_round(code: str, body: FinishIn, db: DB):
     """Score = first attempt per drill since the round started. >= 80 % marks the pattern done."""
     now = utcnow()
     p = _get(db, code)
+    started = max(body.started, now - timedelta(hours=24))  # a stale client start cannot reach back
     ids = [d.id for d in drills.generate(p)]
     first: dict[str, bool] = {}
     rows = db.scalars(
         select(Attempt)
-        .where(Attempt.task_ref.like(f"drill:{code}:%"), Attempt.ts >= body.started)
+        .where(Attempt.task_ref.like(f"drill:{code}:%"), Attempt.ts >= started)
         .order_by(Attempt.id)
     )
     for a in rows:

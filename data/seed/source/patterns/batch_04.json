@@ -122,7 +122,7 @@
         "fill": [
           {"text": "Ich nehme ___ den Zug ___ den Bus.", "answers": ["entweder", "oder"], "full": "Ich nehme entweder den Zug oder den Bus."},
           {"text": "Er spricht sowohl Urdu ___ Englisch.", "answers": ["als auch"], "full": "Er spricht sowohl Urdu als auch Englisch."},
-          {"text": "Die Prüfung war nicht nur lang, ___ auch schwer.", "answers": ["sondern"], "full": "Die Prüfung war nicht nur lang, sondern auch schwer."}
+          {"text": "Der Kurs war nicht nur teuer, ___ auch langweilig.", "answers": ["sondern"], "full": "Der Kurs war nicht nur teuer, sondern auch langweilig."}
         ],
         "free": {"prompt_en": "Write one sentence about the languages you speak using sowohl ... als auch.", "must_include": ["sowohl", "als auch"]}
       },

@@ -9,6 +9,7 @@ Needs `make lt-up`. Usage: uv run python -m scripts.build_grammar
 
 import json
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 from app.content.schemas import PatternBatch, Placement, Recitation
 from app.core.config import settings
@@ -32,13 +33,16 @@ def build_patterns() -> tuple[int, int]:
                 raise ValueError(f"duplicate code/order: {p.code} {p.order}")
             codes.add(p.code)
             orders.add(p.order)
-            notes = [issue for t in p.correct_german() for issue in lt_issues(t)]
+            with ThreadPoolExecutor(
+                4
+            ) as pool:  # the LanguageTool container serves requests in parallel
+                notes = [i for issues in pool.map(lt_issues, p.correct_german()) for i in issues]
             flagged += bool(notes)
             out.append(
                 {**p.model_dump(mode="json"), "batch": batch.batch,
                  "status": "needs_review" if notes else "ok", "review_notes": notes}
             )  # fmt: skip
-        print(f"{path.name}: {len(batch.patterns)} patterns checked")
+        print(f"{path.name}: {len(batch.patterns)} patterns checked", flush=True)
     out.sort(key=lambda p: p["order"])
     _write("patterns", {"patterns": out})
     return len(out), flagged

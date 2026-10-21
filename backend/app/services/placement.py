@@ -4,7 +4,8 @@ Sets profile.level_band and marks known items. Level rule: work through the band
 B1.2, B2); the first band under 70 % correct is the class Zee studies in. A writing score under 5/10
 moves the result one class down (writing is the skill this app checks hardest).
 Known items: a correct vocab answer marks its seed item known; its cards start in review with a first
-check in 14-27 days instead of being taught as new. A correct grammar answer marks its pattern known.
+check in 14-27 days instead of being taught as new. A correct TYPED grammar answer marks its pattern known
+(a multiple-choice hit can be a guess). A band with no testable items counts as not passed.
 Items whose answer LanguageTool flagged (needs_review) are left out of the test until approved.
 """
 
@@ -63,7 +64,7 @@ def level(by_band: dict, writing_score: int | None) -> str:
     first_fail = None
     for b in BANDS:
         c, t = by_band[b]["correct"], by_band[b]["total"]
-        if t and c / t < PASS:
+        if not t or c / t < PASS:
             first_fail = b
             break
     cls = CLASS_FOR[first_fail]
@@ -78,7 +79,7 @@ def mark_known(db: Session, now: datetime, results: list[dict]) -> int:
         if not r["ok"]:
             continue
         it = r["item"]
-        if it["pattern"]:
+        if it["pattern"] and it["mode"] == "type":
             p = db.scalar(select(Pattern).where(Pattern.code == it["pattern"]))
             if p is not None:
                 p.known_from_placement = True

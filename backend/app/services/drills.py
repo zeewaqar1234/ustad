@@ -73,6 +73,10 @@ def generate(p: Pattern) -> list[Drill]:
         words = s["de"].split()
         out.append(Drill(f"{code}:surgery:{i}", "surgery", "Build the sentence.", s["en"],
                          "tokens", tokens=_shuffle(words, f"{code}{i}")))  # fmt: skip
+    # fill comes before transform/tense_shift: an auto fill uses their answers, which are not shown yet
+    for i, f in enumerate(fills(p)):
+        out.append(Drill(f"{code}:fill:{i}", "fill", "Fill the gaps.", f["text"], "blanks",
+                         blanks=len(f["answers"])))  # fmt: skip
     for kind in ("transform", "tense_shift"):
         for i, t in enumerate(d.get(kind, [])):
             given = t["given"] if isinstance(t["given"], str) else " ".join(t["given"])
@@ -80,9 +84,6 @@ def generate(p: Pattern) -> list[Drill]:
     for i, e in enumerate(d["error_spot"]):
         out.append(Drill(f"{code}:error_spot:{i}", "error_spot",
                          "One error. Type the whole sentence correctly.", e["wrong"], "type"))  # fmt: skip
-    for i, f in enumerate(fills(p)):
-        out.append(Drill(f"{code}:fill:{i}", "fill", "Fill the gaps.", f["text"], "blanks",
-                         blanks=len(f["answers"])))  # fmt: skip
     fr = d["free"]
     hint = ("Use: " + ", ".join(fr["must_include"])) if fr.get("must_include") else None
     out.append(Drill(f"{code}:free:0", "free", fr["prompt_en"], "", "type", hint=hint))
@@ -94,8 +95,13 @@ def fills(p: Pattern) -> list[dict]:
     authored = p.drills_json.get("fill", [])
     if authored:
         return authored
-    for ex in p.examples_json:
-        f = auto_fill(ex["de"])
+    # Not the card examples: Zee just read those. Transform/tense answers are revealed only later.
+    shown = {e["de"] for e in p.examples_json} | {p.common_error.get("right", "")}
+    shown |= {s["de"] for s in p.drills_json.get("surgery", [])}  # revealed earlier in the round
+    for t in [*p.drills_json.get("transform", []), *p.drills_json.get("tense_shift", [])]:
+        if t["answer"] in shown:
+            continue
+        f = auto_fill(t["answer"])
         if f:
             return [f]
     return []

@@ -127,3 +127,14 @@ def test_flagged_correction_waits_for_review(db, monkeypatch):
     ghalti.from_grade(db, utcnow(), grade, "homework")
     item = db.scalar(select(Item).where(Item.deck == "ghalti"))
     assert item.status == "needs_review" and item.cards[0].introduced_at is None
+
+
+def test_malformed_ollama_reply_is_unavailable(monkeypatch):
+    import httpx
+
+    from app.llm.provider import OllamaProvider
+
+    monkeypatch.setattr(httpx, "post", lambda *a, **k: httpx.Response(
+        200, json={"oops": 1}, request=httpx.Request("POST", "http://x")))  # fmt: skip
+    with pytest.raises(LLMUnavailable):
+        OllamaProvider().chat([], {})
