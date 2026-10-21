@@ -1571,9 +1571,9 @@
        "Ich habe frei.",
        "Ich besuche meine Freunde in Mainz."
       ],
-      "answer": "Ich besuche meine Freunde in Mainz, wenn ich frei habe.",
+      "answer": "Ich besuche meine Freunde in Mainz, wenn ich freihabe.",
       "alt": [
-       "Wenn ich frei habe, besuche ich meine Freunde in Mainz."
+       "Wenn ich freihabe, besuche ich meine Freunde in Mainz."
       ]
      },
      {
@@ -1613,27 +1613,8 @@
    },
    "homework": "Write 4 sentences with wenn about your normal week: the train, the Kantine, on-call nights, studying. Put the wenn clause first in at least one.",
    "batch": 3,
-   "status": "needs_review",
-   "review_notes": [
-    {
-     "text": "Ich besuche meine Freunde in Mainz, wenn ich frei habe.",
-     "rule": "EMPFOHLENE_ZUSAMMENSCHREIBUNG",
-     "message": "Empfehlung: Möchten Sie die Schreibweise „freihabe“ verwenden?",
-     "context": "...esuche meine Freunde in Mainz, wenn ich frei habe.",
-     "suggestions": [
-      "freihabe"
-     ]
-    },
-    {
-     "text": "Wenn ich frei habe, besuche ich meine Freunde in Mainz.",
-     "rule": "EMPFOHLENE_ZUSAMMENSCHREIBUNG",
-     "message": "Empfehlung: Möchten Sie die Schreibweise „freihabe“ verwenden?",
-     "context": "Wenn ich frei habe, besuche ich meine Freunde in Mainz.",
-     "suggestions": [
-      "freihabe"
-     ]
-    }
-   ]
+   "status": "ok",
+   "review_notes": []
   },
   {
    "code": "VE_ALS",
@@ -1880,7 +1861,7 @@
    "drills": {
     "surgery": [
      {
-      "de": "Ich frage meinen Chef, ob ich morgen frei habe.",
+      "de": "Ich frage meinen Chef, ob ich morgen freihabe.",
       "en": "I am asking my boss whether I have tomorrow off.",
       "alt": []
      },
@@ -1929,18 +1910,8 @@
    },
    "homework": "Write 4 indirect questions with ob you could really use: one for a colleague, one for the Bürgeramt, one for your professor, one for the Arzt.",
    "batch": 3,
-   "status": "needs_review",
-   "review_notes": [
-    {
-     "text": "Ich frage meinen Chef, ob ich morgen frei habe.",
-     "rule": "EMPFOHLENE_ZUSAMMENSCHREIBUNG",
-     "message": "Empfehlung: Möchten Sie die Schreibweise „freihabe“ verwenden?",
-     "context": "Ich frage meinen Chef, ob ich morgen frei habe.",
-     "suggestions": [
-      "freihabe"
-     ]
-    }
-   ]
+   "status": "ok",
+   "review_notes": []
   },
   {
    "code": "VE_DAMIT_UM_ZU",
@@ -2338,11 +2309,11 @@
       "full": "Er spricht sowohl Urdu als auch Englisch."
      },
      {
-      "text": "Die Prüfung war nicht nur lang, ___ auch schwer.",
+      "text": "Der Kurs war nicht nur teuer, ___ auch langweilig.",
       "answers": [
        "sondern"
       ],
-      "full": "Die Prüfung war nicht nur lang, sondern auch schwer."
+      "full": "Der Kurs war nicht nur teuer, sondern auch langweilig."
      }
     ],
     "free": {
