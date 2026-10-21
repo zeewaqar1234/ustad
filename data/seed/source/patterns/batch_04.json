@@ -1,0 +1,226 @@
+{
+  "batch": 4,
+  "patterns": [
+    {
+      "code": "VE_DAMIT_UM_ZU",
+      "order": 16,
+      "group": "connectors",
+      "title": "damit vs um ... zu",
+      "rule_en": "Same subject in both parts: um ... zu + infinitive at the end. Different subjects: damit, verb to the end.",
+      "slot_diagram": {
+        "labels": ["Main clause", ",", "Connector", "Middle", "End"],
+        "rows": [
+          ["Ich lerne Deutsch", ",", "um", "mit Kollegen", "zu sprechen"],
+          ["Ich erkläre es langsam", ",", "damit", "mein Kollege es", "versteht"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Ich schreibe meine E-Mails auf Deutsch, um mein Deutsch zu verbessern.", "en": "I write my emails in German to improve my German."},
+        {"context": "life", "de": "Ich spreche langsam, damit die Ärztin mich versteht.", "en": "I speak slowly so that the doctor understands me."},
+        {"context": "finance_history", "de": "Die EZB erhöht die Zinsen, um die Inflation zu senken.", "en": "The ECB raises interest rates to bring inflation down."}
+      ],
+      "common_error": {"wrong": "Ich spreche langsam, um die Ärztin mich versteht.", "right": "Ich spreche langsam, damit die Ärztin mich versteht.", "tag": "CONNECTOR_CHOICE", "note_en": "Two different subjects (ich, die Ärztin): use damit, not um."},
+      "tags": ["CONNECTOR_CHOICE", "VERB_FINAL"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich nehme den frühen Zug, um pünktlich zu sein.", "en": "I take the early train to be on time."},
+          {"de": "Ich erkläre es langsam, damit du es verstehst.", "en": "I explain it slowly so that you understand it."}
+        ],
+        "transform": [
+          {"instruction": "Join with um ... zu.", "given": ["Ich fahre nach Frankfurt.", "Ich arbeite in der Bank."], "answer": "Ich fahre nach Frankfurt, um in der Bank zu arbeiten.", "alt": ["Um in der Bank zu arbeiten, fahre ich nach Frankfurt."]},
+          {"instruction": "Join with damit.", "given": ["Ich schicke dir die Folien.", "Du kannst dich vorbereiten."], "answer": "Ich schicke dir die Folien, damit du dich vorbereiten kannst.", "alt": ["Damit du dich vorbereiten kannst, schicke ich dir die Folien."]}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Ich spare Geld, um eine Reise nach Pakistan machen.", "right": "Ich spare Geld, um eine Reise nach Pakistan zu machen.", "tag": "OTHER", "note_en": "um needs zu before the infinitive at the end."},
+          {"wrong": "Ich schreibe es auf, damit ich vergesse es nicht.", "right": "Ich schreibe es auf, damit ich es nicht vergesse.", "tag": "VERB_FINAL", "note_en": "After damit the verb vergesse goes to the end."}
+        ],
+        "fill": [
+          {"text": "Ich lerne jeden Abend, ___ die Prüfung ___ bestehen.", "answers": ["um", "zu"], "full": "Ich lerne jeden Abend, um die Prüfung zu bestehen."},
+          {"text": "Ich spreche langsam, ___ mein Kollege mich versteht.", "answers": ["damit"], "full": "Ich spreche langsam, damit mein Kollege mich versteht."}
+        ],
+        "free": {"prompt_en": "Write one sentence about why you are studying for the CFA. Use um ... zu.", "must_include": ["um", "zu"]}
+      },
+      "homework": "Write 4 sentences about your goals: two with um ... zu (your own goals) and two with damit (something you do for another person)."
+    },
+    {
+      "code": "NEBENSATZ_FIRST",
+      "order": 17,
+      "group": "word_order",
+      "title": "Subordinate clause first",
+      "rule_en": "If a sentence starts with a subordinate clause, that clause is position 1. The main clause then starts with its verb: verb, comma, verb.",
+      "slot_diagram": {
+        "labels": ["Subordinate clause (pos. 1)", ",", "Verb (pos. 2)", "Subject", "Rest"],
+        "rows": [
+          ["Weil ich krank bin", ",", "bleibe", "ich", "zu Hause"],
+          ["Wenn der Zug Verspätung hat", ",", "schreibe", "ich", "meinem Chef"],
+          ["Obwohl es regnet", ",", "fahre", "ich", "mit dem Fahrrad"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Wenn der Markt öffnet, bin ich schon am Schreibtisch.", "en": "When the market opens, I am already at my desk."},
+        {"context": "life", "de": "Weil die S-Bahn ausgefallen ist, komme ich heute später.", "en": "Because the S-Bahn was cancelled, I am coming later today."},
+        {"context": "finance_history", "de": "Als Pakistan 1947 unabhängig wurde, war Karachi die erste Hauptstadt.", "en": "When Pakistan became independent in 1947, Karachi was the first capital."}
+      ],
+      "common_error": {"wrong": "Weil ich krank bin, ich bleibe zu Hause.", "right": "Weil ich krank bin, bleibe ich zu Hause.", "tag": "V2_POSITION", "note_en": "The weil clause is position 1, so the verb bleibe comes right after the comma."},
+      "tags": ["V2_POSITION", "VERB_FINAL"],
+      "drills": {
+        "surgery": [
+          {"de": "Weil ich Rufbereitschaft habe, bleibe ich heute zu Hause.", "en": "Because I am on call, I am staying at home today."},
+          {"de": "Wenn ich in Frankfurt ankomme, kaufe ich einen Kaffee.", "en": "When I arrive in Frankfurt, I buy a coffee."}
+        ],
+        "transform": [
+          {"instruction": "Start with the weil clause.", "given": "Ich gehe früh schlafen, weil ich morgen eine Prüfung habe.", "answer": "Weil ich morgen eine Prüfung habe, gehe ich früh schlafen.", "alt": []},
+          {"instruction": "Start with the obwohl clause.", "given": "Ich esse in der Kantine, obwohl das Essen nicht so gut ist.", "answer": "Obwohl das Essen nicht so gut ist, esse ich in der Kantine.", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Wenn ich Zeit habe, ich lese die Nachrichten auf Deutsch.", "right": "Wenn ich Zeit habe, lese ich die Nachrichten auf Deutsch.", "tag": "V2_POSITION", "note_en": "After the wenn clause the verb lese comes first, then ich."},
+          {"wrong": "Obwohl der Kurs fällt, der Händler bleibt ruhig.", "right": "Obwohl der Kurs fällt, bleibt der Händler ruhig.", "tag": "V2_POSITION", "note_en": "After the obwohl clause the verb bleibt comes right after the comma."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about your commute that starts with Weil.", "must_include": ["Weil"]}
+      },
+      "homework": "Write 4 sentences about today, each starting with a subordinate clause: Weil, Wenn, Obwohl and Als. Check the pattern verb, comma, verb in each one."
+    },
+    {
+      "code": "TWO_PART_CONNECTORS",
+      "order": 18,
+      "group": "connectors",
+      "title": "Two-part connectors",
+      "rule_en": "Learn these as fixed pairs: sowohl ... als auch (both ... and), entweder ... oder (either ... or), weder ... noch (neither ... nor), nicht nur ... sondern auch (not only ... but also).",
+      "slot_diagram": {
+        "labels": ["Start", "Part 1", "Item A", "Part 2", "Item B"],
+        "rows": [
+          ["Ich spreche", "sowohl", "Urdu", "als auch", "Englisch"],
+          ["Ich nehme", "entweder", "den Zug", "oder", "den Bus"],
+          ["Ich habe", "weder", "Zeit", "noch", "Lust"],
+          ["Das Studium ist", "nicht nur", "interessant", ", sondern auch", "anstrengend"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Im Team sprechen wir sowohl Deutsch als auch Englisch.", "en": "In the team we speak both German and English."},
+        {"context": "life", "de": "Ich fahre entweder mit der S-Bahn oder mit dem Regionalzug nach Frankfurt.", "en": "I go to Frankfurt either by S-Bahn or by regional train."},
+        {"context": "finance_history", "de": "Napoleon war nicht nur General, sondern auch Kaiser.", "en": "Napoleon was not only a general but also an emperor."}
+      ],
+      "common_error": {"wrong": "Ich spreche sowohl Urdu als Englisch.", "right": "Ich spreche sowohl Urdu als auch Englisch.", "tag": "CONNECTOR_CHOICE", "note_en": "sowohl always pairs with als auch."},
+      "tags": ["CONNECTOR_CHOICE"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich habe heute weder Zeit noch Lust.", "en": "Today I have neither the time nor the energy."},
+          {"de": "Die Prüfung war nicht nur lang, sondern auch schwer.", "en": "The exam was not only long but also hard."}
+        ],
+        "transform": [
+          {"instruction": "Join with sowohl ... als auch.", "given": ["Ich lese die FAZ.", "Ich lese das Handelsblatt."], "answer": "Ich lese sowohl die FAZ als auch das Handelsblatt.", "alt": []},
+          {"instruction": "Join with weder ... noch.", "given": ["Ich habe kein Auto.", "Ich habe kein Fahrrad."], "answer": "Ich habe weder ein Auto noch ein Fahrrad.", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Ich habe weder Zeit oder Geld.", "right": "Ich habe weder Zeit noch Geld.", "tag": "CONNECTOR_CHOICE", "note_en": "weder pairs with noch, not oder."},
+          {"wrong": "Bitcoin ist nicht nur riskant, aber auch spannend.", "right": "Bitcoin ist nicht nur riskant, sondern auch spannend.", "tag": "CONNECTOR_CHOICE", "note_en": "nicht nur pairs with sondern auch, not aber auch."}
+        ],
+        "fill": [
+          {"text": "Ich nehme ___ den Zug ___ den Bus.", "answers": ["entweder", "oder"], "full": "Ich nehme entweder den Zug oder den Bus."},
+          {"text": "Er spricht sowohl Urdu ___ Englisch.", "answers": ["als auch"], "full": "Er spricht sowohl Urdu als auch Englisch."},
+          {"text": "Der Kurs war nicht nur teuer, ___ auch langweilig.", "answers": ["sondern"], "full": "Der Kurs war nicht nur teuer, sondern auch langweilig."}
+        ],
+        "free": {"prompt_en": "Write one sentence about the languages you speak using sowohl ... als auch.", "must_include": ["sowohl", "als auch"]}
+      },
+      "homework": "Write 4 sentences, one with each pair: sowohl ... als auch, entweder ... oder, weder ... noch, nicht nur ... sondern auch. Use your work, your studies and your weekend."
+    },
+    {
+      "code": "PERFEKT_HABEN",
+      "order": 19,
+      "group": "tenses",
+      "title": "Perfekt with haben",
+      "rule_en": "Perfekt = haben in position 2 + participle at the very end. Most verbs use haben.",
+      "slot_diagram": {
+        "labels": ["Position 1", "haben (pos. 2)", "Middle", "Participle (end)"],
+        "rows": [
+          ["Ich", "habe", "gestern bis acht", "gearbeitet"],
+          ["Gestern", "hat", "der Chef die Zahlen", "geprüft"],
+          ["Im Zug", "habe", "ich eine E-Mail", "geschrieben"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Heute Morgen habe ich die Zahlen für das Meeting vorbereitet.", "en": "This morning I prepared the numbers for the meeting."},
+        {"context": "life", "de": "Am Wochenende habe ich meine Wohnung geputzt.", "en": "At the weekend I cleaned my flat."},
+        {"context": "finance_history", "de": "Im Jahr 2002 hat Deutschland den Euro als Bargeld eingeführt.", "en": "In 2002 Germany introduced the euro as cash."}
+      ],
+      "common_error": {"wrong": "Ich habe die E-Mail geschreibt.", "right": "Ich habe die E-Mail geschrieben.", "tag": "PARTIZIP", "note_en": "schreiben is irregular: the participle is geschrieben."},
+      "tags": ["PARTIZIP", "VERB_FINAL"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich habe im Zug eine E-Mail geschrieben.", "en": "I wrote an email on the train."},
+          {"de": "Mein Kollege hat mir gestern viel erklärt.", "en": "My colleague explained a lot to me yesterday."}
+        ],
+        "transform": [
+          {"instruction": "Start with Gestern.", "given": "Ich habe bis spät gearbeitet.", "answer": "Gestern habe ich bis spät gearbeitet.", "alt": []},
+          {"instruction": "Make it a yes/no question.", "given": "Du hast die Zahlen geprüft.", "answer": "Hast du die Zahlen geprüft?", "alt": []}
+        ],
+        "tense_shift": [
+          {"instruction": "Put it in Perfekt.", "given": "Ich kaufe eine Fahrkarte nach Frankfurt.", "answer": "Ich habe eine Fahrkarte nach Frankfurt gekauft.", "alt": []},
+          {"instruction": "Put it in Perfekt.", "given": "Wir besprechen die Zahlen im Meeting.", "answer": "Wir haben die Zahlen im Meeting besprochen.", "alt": []}
+        ],
+        "error_spot": [
+          {"wrong": "Ich habe den Bericht gelest.", "right": "Ich habe den Bericht gelesen.", "tag": "PARTIZIP", "note_en": "lesen is irregular: the participle is gelesen."},
+          {"wrong": "Ich habe gestern gekocht Reis.", "right": "Ich habe gestern Reis gekocht.", "tag": "VERB_FINAL", "note_en": "The participle gekocht goes to the very end."}
+        ],
+        "fill": [
+          {"text": "Ich ___ gestern lange gelernt.", "answers": ["habe"], "full": "Ich habe gestern lange gelernt."},
+          {"text": "Wir ___ in der Kantine Pizza gegessen.", "answers": ["haben"], "full": "Wir haben in der Kantine Pizza gegessen."},
+          {"text": "Mein Chef ___ mich heute angerufen.", "answers": ["hat"], "full": "Mein Chef hat mich heute angerufen."}
+        ],
+        "free": {"prompt_en": "Write one sentence about what you did on the train this morning. Use Perfekt with haben.", "must_include": ["habe"]}
+      },
+      "homework": "Write 5 sentences in Perfekt with haben about yesterday: work, lunch, studying, the evening. Put the participle at the end every time."
+    },
+    {
+      "code": "PERFEKT_SEIN",
+      "order": 20,
+      "group": "tenses",
+      "title": "Perfekt with sein",
+      "rule_en": "Movement from A to B and change of state take sein in Perfekt. So do sein, bleiben and passieren.",
+      "slot_diagram": {
+        "labels": ["Position 1", "sein (pos. 2)", "Middle", "Participle (end)"],
+        "rows": [
+          ["Ich", "bin", "mit dem Zug nach Frankfurt", "gefahren"],
+          ["Was", "ist", "", "passiert"],
+          ["Gestern", "bin", "ich zu Hause", "geblieben"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "In der Rufbereitschaft bin ich nachts zweimal aufgewacht.", "en": "During my on-call week I woke up twice at night."},
+        {"context": "life", "de": "Am Samstag bin ich mit Freunden nach Heidelberg gefahren.", "en": "On Saturday I went to Heidelberg with friends."},
+        {"context": "finance_history", "de": "Im März 2020 sind die Aktienkurse stark gefallen.", "en": "In March 2020 share prices fell sharply."}
+      ],
+      "common_error": {"wrong": "Ich habe mit dem Zug nach Frankfurt gefahren.", "right": "Ich bin mit dem Zug nach Frankfurt gefahren.", "tag": "AUX_HABEN_SEIN", "note_en": "Going from A to B takes sein: ich bin gefahren."},
+      "tags": ["AUX_HABEN_SEIN", "PARTIZIP"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich bin heute zu spät aufgestanden.", "en": "I got up too late today."},
+          {"de": "Der Zug ist in Rüsselsheim pünktlich abgefahren.", "en": "The train left Rüsselsheim on time."}
+        ],
+        "transform": [
+          {"instruction": "Make it a question with Wann.", "given": "Du bist in Frankfurt angekommen.", "answer": "Wann bist du in Frankfurt angekommen?", "alt": []},
+          {"instruction": "Start with Letztes Jahr.", "given": "Ich bin nach Pakistan geflogen.", "answer": "Letztes Jahr bin ich nach Pakistan geflogen.", "alt": []}
+        ],
+        "tense_shift": [
+          {"instruction": "Put it in Perfekt.", "given": "Ich fahre mit der S-Bahn nach Frankfurt.", "answer": "Ich bin mit der S-Bahn nach Frankfurt gefahren.", "alt": []},
+          {"instruction": "Put it in Perfekt.", "given": "Am Sonntag bleibe ich zu Hause.", "answer": "Am Sonntag bin ich zu Hause geblieben.", "alt": []}
+        ],
+        "error_spot": [
+          {"wrong": "Was hat passiert?", "right": "Was ist passiert?", "tag": "AUX_HABEN_SEIN", "note_en": "passieren takes sein: Was ist passiert?"},
+          {"wrong": "Ich bin gestern zu Hause gebleibt.", "right": "Ich bin gestern zu Hause geblieben.", "tag": "PARTIZIP", "note_en": "bleiben is irregular: the participle is geblieben."}
+        ],
+        "fill": [
+          {"text": "Ich ___ gestern spät nach Hause gekommen.", "answers": ["bin"], "full": "Ich bin gestern spät nach Hause gekommen."},
+          {"text": "Der Kurs ___ heute stark gestiegen.", "answers": ["ist"], "full": "Der Kurs ist heute stark gestiegen."},
+          {"text": "Wir ___ am Abend lange gearbeitet.", "answers": ["haben"], "full": "Wir haben am Abend lange gearbeitet."}
+        ],
+        "free": {"prompt_en": "Write one sentence about your trip to work today. Use Perfekt with sein.", "must_include": ["bin"]}
+      },
+      "homework": "Write 5 sentences in Perfekt about your last weekend. Use sein at least three times (fahren, gehen, kommen, bleiben, aufstehen) and haben at least once."
+    }
+  ]
+}

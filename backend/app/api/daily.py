@@ -27,7 +27,7 @@ def get_daily(db: DB):
         n = db.scalar(
             select(func.count())
             .select_from(Item)
-            .where(Item.unit_order == order, Item.status == "ok")
+            .where(Item.unit_order == order, Item.status == "ok", ~Item.known_from_placement)
         )
         unit = {
             "title": first.unit_title,

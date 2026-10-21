@@ -11,6 +11,10 @@ class Settings(BaseSettings):
     app_env: str = "dev"
     database_url: str = "sqlite:///./ustad.db"
     languagetool_url: str = "http://localhost:8010"
+    # Local Ollama server for the Tutor/Grader/Author roles (docs/llm.md). Free, nothing leaves the machine.
+    ollama_url: str = "http://localhost:11434"
+    ollama_model: str = "llama3.1:8b"
+    ollama_timeout: float = 120.0
     timezone: str = "Europe/Berlin"
     seed_dir: Path = REPO_ROOT / "data" / "seed"
     # Built frontend (served by FastAPI in production). Ignored if the folder does not exist.

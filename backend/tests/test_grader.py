@@ -74,3 +74,9 @@ def test_alternatives_accepted():
 def test_diff_marks_the_change():
     g = grade("die Strasse", "die Straße")
     assert ("insert", "ß") in g.diff
+
+
+def test_umlaut_that_changes_the_form_is_wrong():
+    assert grade("Ich hatte gern einen Kaffee", "Ich hätte gern einen Kaffee").rating == AGAIN
+    assert grade("Das war schön", "Das wäre schön").rating == AGAIN
+    assert grade("Ich haette gern einen Kaffee", "Ich hätte gern einen Kaffee").rating == HARD

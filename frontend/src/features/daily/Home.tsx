@@ -1,6 +1,58 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { api, type Daily } from '../../lib/api'
+import type { Homework, PatternList, PlacementTest, RecitationRow } from '../../lib/grammar'
+
+function LinkRow({ name, status, to }: { name: string; status: string; to: string }) {
+  return (
+    <Link
+      to={to}
+      className="flex items-center gap-3 rounded-lg border border-neutral-300 bg-white px-4 py-3 active:bg-neutral-100"
+    >
+      <div className="min-w-0 flex-1">
+        <p className="font-semibold">{name}</p>
+        <p className="truncate text-sm text-neutral-700">{status}</p>
+      </div>
+      <span aria-hidden>›</span>
+    </Link>
+  )
+}
+
+function GrammarWriting() {
+  const patterns = useQuery({ queryKey: ['patterns'], queryFn: () => api<PatternList>('/api/patterns') })
+  const hw = useQuery({ queryKey: ['homework', 'today'], queryFn: () => api<Homework>('/api/homework/today') })
+  const rec = useQuery({ queryKey: ['recitation'], queryFn: () => api<RecitationRow[]>('/api/recitation') })
+  const pl = useQuery({ queryKey: ['placement'], queryFn: () => api<PlacementTest>('/api/placement') })
+
+  const cur = patterns.data?.patterns.find((p) => p.code === patterns.data?.current)
+  const patternStatus = !patterns.data ? '…' : cur ? `${cur.order}. ${cur.title}` : 'All patterns done'
+  const hwStatus = !hw.data
+    ? '…'
+    : hw.data.status === 'open'
+      ? 'Open'
+      : hw.data.status === 'lt_only'
+        ? 'Checked by LanguageTool only'
+        : `Graded${hw.data.grade?.score_10 != null ? ` ${hw.data.grade.score_10}/10` : ''}`
+  const recStatus = !rec.data
+    ? '…'
+    : `${rec.data.filter((t) => t.passed_today).length} of ${rec.data.length} tables clean today`
+  const plStatus = !pl.data
+    ? '…'
+    : pl.data.last_result
+      ? `Class ${pl.data.last_result.level_band}`
+      : 'Take it once to set your class'
+
+  return (
+    <section className="flex flex-col gap-2">
+      <h2 className="text-xl font-bold">Grammar and writing</h2>
+      <LinkRow name="Pattern" status={patternStatus} to={cur ? `/grammar/${cur.code}` : '/grammar'} />
+      <LinkRow name="Homework" status={hwStatus} to="/homework" />
+      <LinkRow name="Pahara" status={recStatus} to="/recitation" />
+      <LinkRow name="Ghalti Register" status="Your mistakes by type" to="/ghalti" />
+      <LinkRow name="Placement test" status={plStatus} to="/placement" />
+    </section>
+  )
+}
 
 function Block(props: {
   n: number
@@ -109,6 +161,8 @@ export function Home() {
       {streak.current === 0 && streak.studied_week > 0 && (
         <p className="text-sm text-neutral-600">Missing a day does not undo the habit. Start again today.</p>
       )}
+
+      <GrammarWriting />
     </div>
   )
 }

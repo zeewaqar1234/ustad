@@ -1,0 +1,207 @@
+{
+  "batch": 2,
+  "patterns": [
+    {
+      "code": "MIDDLE_FIELD_ORDER",
+      "order": 6,
+      "group": "word_order",
+      "title": "Middle field: TeKaMoLo, pronouns first",
+      "rule_en": "In the middle field the usual order is time, cause, manner, place (TeKaMoLo). Pronouns come before noun objects; with two pronouns, accusative comes before dative.",
+      "slot_diagram": {
+        "labels": ["Position 1", "Verb (2)", "Time (Te)", "Cause (Ka)", "Manner (Mo)", "Place (Lo)", "Verb part (end)"],
+        "rows": [
+          ["Ich", "fahre", "morgen", "wegen des Streiks", "mit dem Auto", "nach Frankfurt", ""],
+          ["Ich", "bin", "heute", "", "mit dem Fahrrad", "zur Uni", "gefahren"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Ich schicke ihn dir heute Nachmittag.", "en": "I will send it (the report) to you this afternoon."},
+        {"context": "life", "de": "Ich fahre morgen wegen des Streiks mit dem Auto nach Frankfurt.", "en": "Tomorrow I am driving to Frankfurt because of the strike."},
+        {"context": "finance_history", "de": "Napoleon zog 1812 mit einer großen Armee nach Russland.", "en": "In 1812 Napoleon marched into Russia with a large army."}
+      ],
+      "common_error": {"wrong": "Ich fahre nach Frankfurt morgen.", "right": "Ich fahre morgen nach Frankfurt.", "tag": "MIDDLE_FIELD_ORDER", "note_en": "Time comes before place."},
+      "tags": ["MIDDLE_FIELD_ORDER"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich fahre heute mit dem Zug nach Frankfurt.", "en": "Today I am taking the train to Frankfurt."},
+          {"de": "Ich erkläre es dir morgen in der Kantine.", "en": "I will explain it to you tomorrow in the Kantine."}
+        ],
+        "transform": [
+          {"instruction": "Replace both noun objects with pronouns.", "given": "Ich gebe meiner Kollegin den Schlüssel.", "answer": "Ich gebe ihn ihr.", "alt": []},
+          {"instruction": "Add morgen and in der Bibliothek.", "given": "Ich lerne für die Klausur.", "answer": "Ich lerne morgen in der Bibliothek für die Klausur.", "alt": ["Ich lerne morgen für die Klausur in der Bibliothek."]}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Ich bin mit dem Zug gestern nach Frankfurt gefahren.", "right": "Ich bin gestern mit dem Zug nach Frankfurt gefahren.", "tag": "MIDDLE_FIELD_ORDER", "note_en": "Time (gestern) comes before manner (mit dem Zug)."},
+          {"wrong": "Ich schicke dir ihn morgen.", "right": "Ich schicke ihn dir morgen.", "tag": "MIDDLE_FIELD_ORDER", "note_en": "Two pronouns: accusative ihn before dative dir."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about your commute with a time, a manner and a place.", "must_include": ["mit"]}
+      },
+      "homework": "Write 4 sentences about this week. Each one needs a time and a place, and two of them a manner (mit dem Zug, schnell, allein). In one sentence use two pronouns, like Ich gebe es dir."
+    },
+    {
+      "code": "NICHT_POSITION",
+      "order": 7,
+      "group": "word_order",
+      "title": "Where nicht goes",
+      "rule_en": "To negate the whole sentence, nicht goes late: after objects and time words, but before place, manner and the second verb part. To negate one part, put nicht right before that part.",
+      "slot_diagram": {
+        "labels": ["Position 1", "Verb (2)", "Middle", "nicht", "End"],
+        "rows": [
+          ["Ich", "arbeite", "heute", "nicht", ""],
+          ["Ich", "kann", "morgen", "nicht", "kommen"],
+          ["Ich", "habe", "die E-Mail", "nicht", "gelesen"],
+          ["Mein Kollege", "kommt", "heute", "nicht", "ins Büro"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Ich habe die Datei noch nicht bekommen.", "en": "I have not received the file yet."},
+        {"context": "life", "de": "Die Praxis hat heute nicht geöffnet.", "en": "The doctor's practice is not open today."},
+        {"context": "finance_history", "de": "Der DAX ist gestern nicht gestiegen, sondern gefallen.", "en": "The DAX did not rise yesterday, it fell."}
+      ],
+      "common_error": {"wrong": "Ich habe die E-Mail gelesen nicht.", "right": "Ich habe die E-Mail nicht gelesen.", "tag": "MIDDLE_FIELD_ORDER", "note_en": "nicht goes before the participle, never after it."},
+      "tags": ["MIDDLE_FIELD_ORDER"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich habe die E-Mail noch nicht gelesen.", "en": "I have not read the email yet."},
+          {"de": "Mein Kollege kommt heute nicht ins Büro.", "en": "My colleague is not coming into the office today."}
+        ],
+        "transform": [
+          {"instruction": "Negate the whole sentence with nicht.", "given": "Ich verstehe die Frage.", "answer": "Ich verstehe die Frage nicht.", "alt": []},
+          {"instruction": "Negate the whole sentence with nicht.", "given": "Ich kann heute zum Sport gehen.", "answer": "Ich kann heute nicht zum Sport gehen.", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Ich verstehe nicht ihn.", "right": "Ich verstehe ihn nicht.", "tag": "MIDDLE_FIELD_ORDER", "note_en": "A pronoun object comes before nicht."},
+          {"wrong": "Ich gehe heute zum Arzt nicht.", "right": "Ich gehe heute nicht zum Arzt.", "tag": "MIDDLE_FIELD_ORDER", "note_en": "nicht goes before a place like zum Arzt."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about something you did not do yesterday.", "must_include": ["nicht"]}
+      },
+      "homework": "Write 4 sentences about things that did not happen this week: at work, on the train, at the Uni, at home. Use nicht in each one, and use Perfekt or a modal verb in two of them."
+    },
+    {
+      "code": "CONN_GROUP0",
+      "order": 8,
+      "group": "connectors",
+      "title": "und, aber, oder, denn, sondern: no change",
+      "rule_en": "und, aber, oder, denn and sondern sit in position 0. After them the clause keeps normal main clause order, verb in position 2.",
+      "slot_diagram": {
+        "labels": ["Clause 1", ",", "Connector (0)", "Position 1", "Verb (2)", "Rest"],
+        "rows": [
+          ["Ich bin müde", ",", "aber", "ich", "lerne", "noch eine Stunde"],
+          ["Ich nehme den Zug", ",", "denn", "die Autobahn", "ist", "voll"],
+          ["Ich arbeite bis drei", "", "und", "danach", "gehe", "ich zur Uni"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Der Markt war ruhig, aber wir hatten viele Anrufe.", "en": "The market was quiet, but we had a lot of calls."},
+        {"context": "life", "de": "Ich nehme heute den Zug, denn die Autobahn ist voll.", "en": "I am taking the train today, because the motorway is jammed."},
+        {"context": "finance_history", "de": "1848 wollten viele Deutsche einen gemeinsamen Staat, aber die Revolution scheiterte.", "en": "In 1848 many Germans wanted a united state, but the revolution failed."}
+      ],
+      "common_error": {"wrong": "Ich bleibe zu Hause, denn ich krank bin.", "right": "Ich bleibe zu Hause, denn ich bin krank.", "tag": "V2_POSITION", "note_en": "denn is not weil: after denn the verb stays in position 2."},
+      "tags": ["V2_POSITION", "CONNECTOR_CHOICE"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich bin müde, aber ich muss noch lernen.", "en": "I am tired, but I still have to study."},
+          {"de": "Ich nehme den Zug, denn die Autobahn ist voll.", "en": "I am taking the train, because the motorway is jammed."}
+        ],
+        "transform": [
+          {"instruction": "Join with denn.", "given": ["Ich esse in der Kantine.", "Das ist billig."], "answer": "Ich esse in der Kantine, denn das ist billig.", "alt": []},
+          {"instruction": "Join with sondern.", "given": ["Ich fahre heute nicht nach Frankfurt.", "Ich arbeite im Homeoffice."], "answer": "Ich fahre heute nicht nach Frankfurt, sondern arbeite im Homeoffice.", "alt": ["Ich fahre heute nicht nach Frankfurt, sondern ich arbeite im Homeoffice."]}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Ich bin müde, aber ich noch lerne.", "right": "Ich bin müde, aber ich lerne noch.", "tag": "V2_POSITION", "note_en": "After aber the verb lerne stays in position 2."},
+          {"wrong": "Ich nehme den Zug, denn die Autobahn voll ist.", "right": "Ich nehme den Zug, denn die Autobahn ist voll.", "tag": "V2_POSITION", "note_en": "After denn the verb ist stays in position 2."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about your day at work or at the Uni with aber.", "must_include": ["aber"]}
+      },
+      "homework": "Write 5 sentences about today. Use und, aber, oder, denn and sondern once each. After each connector, check that the verb is in position 2."
+    },
+    {
+      "code": "CONN_V2_ADVERBS",
+      "order": 9,
+      "group": "connectors",
+      "title": "deshalb, trotzdem, dann, außerdem: verb next",
+      "rule_en": "deshalb, trotzdem, dann and außerdem are adverbs. They take position 1, so the verb comes right after them and the subject follows.",
+      "slot_diagram": {
+        "labels": ["Clause 1", "Separator", "Adverb (1)", "Verb (2)", "Subject", "Rest"],
+        "rows": [
+          ["Der Zug hat Verspätung", ",", "deshalb", "komme", "ich", "später"],
+          ["Ich bin müde", ",", "trotzdem", "lerne", "ich", "noch eine Stunde"],
+          ["Ich esse in der Kantine", ".", "Dann", "gehe", "ich", "zurück ins Büro"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Ich habe diese Woche Rufbereitschaft, deshalb habe ich mein Handy immer dabei.", "en": "I am on call this week, so I always have my phone with me."},
+        {"context": "life", "de": "Die S-Bahn war voll, trotzdem habe ich einen Sitzplatz gefunden.", "en": "The S-Bahn was full, but I still found a seat."},
+        {"context": "finance_history", "de": "Der Bitcoin-Kurs war sehr volatil, deshalb haben viele Anleger verkauft.", "en": "The Bitcoin price was very volatile, so many investors sold."}
+      ],
+      "common_error": {"wrong": "Der Zug hat Verspätung, deshalb ich komme später.", "right": "Der Zug hat Verspätung, deshalb komme ich später.", "tag": "V2_POSITION", "note_en": "deshalb is position 1, so the verb komme comes before ich."},
+      "tags": ["V2_POSITION", "CONNECTOR_CHOICE"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich war krank, deshalb bin ich zu Hause geblieben.", "en": "I was ill, so I stayed at home."},
+          {"de": "Es regnet, trotzdem fahre ich mit dem Fahrrad.", "en": "It is raining, but I am still going by bike."}
+        ],
+        "transform": [
+          {"instruction": "Join with deshalb.", "given": ["Ich habe morgen eine Prüfung.", "Ich lerne heute Abend."], "answer": "Ich habe morgen eine Prüfung, deshalb lerne ich heute Abend.", "alt": ["Ich habe morgen eine Prüfung. Deshalb lerne ich heute Abend."]},
+          {"instruction": "Join with trotzdem.", "given": ["Ich bin müde.", "Ich gehe zum Deutschkurs."], "answer": "Ich bin müde, trotzdem gehe ich zum Deutschkurs.", "alt": ["Ich bin müde. Trotzdem gehe ich zum Deutschkurs."]}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Ich habe Rufbereitschaft, deshalb ich kann nicht kommen.", "right": "Ich habe Rufbereitschaft, deshalb kann ich nicht kommen.", "tag": "V2_POSITION", "note_en": "After deshalb the verb kann comes before the subject ich."},
+          {"wrong": "Zuerst lese ich die Nachrichten, dann ich trinke Kaffee.", "right": "Zuerst lese ich die Nachrichten, dann trinke ich Kaffee.", "tag": "V2_POSITION", "note_en": "dann takes position 1, so trinke comes before ich."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about your on-call week with deshalb.", "must_include": ["deshalb"]}
+      },
+      "homework": "Write 4 sentences about your last on-call week or exam week. Use deshalb, trotzdem, dann and außerdem once each. After each one, put the verb next."
+    },
+    {
+      "code": "VE_WEIL",
+      "order": 10,
+      "group": "connectors",
+      "title": "weil: verb to the end",
+      "rule_en": "weil starts a subordinate clause: the conjugated verb goes to the very end, and a comma separates the two clauses.",
+      "slot_diagram": {
+        "labels": ["Main clause", ",", "weil", "Middle", "Verb (end)"],
+        "rows": [
+          ["Ich bleibe zu Hause", ",", "weil", "ich krank", "bin"],
+          ["Ich komme später", ",", "weil", "mein Zug Verspätung", "hat"],
+          ["Ich lerne viel", ",", "weil", "ich die Prüfung bestehen", "will"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Ich bleibe heute länger, weil ich Rufbereitschaft habe.", "en": "I am staying longer today because I am on call."},
+        {"context": "life", "de": "Ich gehe zum Bürgeramt, weil ich meine Adresse ändern muss.", "en": "I am going to the Bürgeramt because I have to change my address."},
+        {"context": "finance_history", "de": "Viele Leute kaufen Gold, weil sie Angst vor Inflation haben.", "en": "Many people buy gold because they are afraid of inflation."}
+      ],
+      "common_error": {"wrong": "Ich komme später, weil mein Zug hat Verspätung.", "right": "Ich komme später, weil mein Zug Verspätung hat.", "tag": "VERB_FINAL", "note_en": "After weil the verb hat goes to the end. You hear weil plus verb second in speech, but not in writing."},
+      "tags": ["VERB_FINAL"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich lerne heute Abend, weil ich morgen eine Prüfung habe.", "en": "I am studying this evening because I have an exam tomorrow."},
+          {"de": "Ich nehme die S-Bahn, weil das Auto kaputt ist.", "en": "I am taking the S-Bahn because the car is broken."}
+        ],
+        "transform": [
+          {"instruction": "Join with weil.", "given": ["Ich bin müde.", "Ich habe Rufbereitschaft."], "answer": "Ich bin müde, weil ich Rufbereitschaft habe.", "alt": ["Weil ich Rufbereitschaft habe, bin ich müde."]},
+          {"instruction": "Join with weil.", "given": ["Ich esse in der Kantine.", "Das Essen ist günstig."], "answer": "Ich esse in der Kantine, weil das Essen günstig ist.", "alt": ["Weil das Essen günstig ist, esse ich in der Kantine."]}
+        ],
+        "tense_shift": [
+          {"instruction": "Put the weil clause in Perfekt.", "given": "Ich bin müde, weil ich lange arbeite.", "answer": "Ich bin müde, weil ich lange gearbeitet habe.", "alt": []}
+        ],
+        "error_spot": [
+          {"wrong": "Ich komme nicht, weil ich bin krank.", "right": "Ich komme nicht, weil ich krank bin.", "tag": "VERB_FINAL", "note_en": "After weil the verb bin goes to the end."},
+          {"wrong": "Ich komme zu spät, weil der Zug ist ausgefallen.", "right": "Ich komme zu spät, weil der Zug ausgefallen ist.", "tag": "VERB_FINAL", "note_en": "In a weil clause the auxiliary ist goes after the participle, at the very end."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about why you take the train to Frankfurt. Use weil.", "must_include": ["weil"]}
+      },
+      "homework": "Write 4 sentences about yesterday using weil at least twice: why you were late or early, why you ate where you ate, why you studied or did not. Check that the verb is at the end of every weil clause."
+    }
+  ]
+}

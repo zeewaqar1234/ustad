@@ -47,6 +47,8 @@ Grammar is taught as **~40 patterns**, each a 1-screen card: rule in one line, s
 
 ### 5.4 Speaking: the voice tutor ("Ustad voice")
 
+> **Superseded in part on 2026-10-21 (free-resources decision, docs/architecture.md §8):** STT = browser `SpeechRecognition`, TTS = browser `speechSynthesis`, Tutor = local Ollama. No Azure pronunciation assessment: Shadowing scores by word match. The vendor and cost tables below are kept as history only. The stammer rules are unchanged and still apply in full.
+
 **Architecture decision: turn-based pipeline, not a realtime speech-to-speech model.**
 
 Why: Zee needs zero time pressure, so ~1–2 s latency per turn is a feature, not a bug. A pipeline gives full control over turn-taking, transcripts, corrections and cost; realtime models re-send the whole conversation on each response and cost several times more.

@@ -197,6 +197,8 @@ function promptLabel(card: CardPrompt): string {
       return 'der, die or das?'
     case 'cloze':
       return 'Fill the gap'
+    case 'fix_sentence':
+      return 'Fix this sentence'
     default:
       return card.card_type
   }

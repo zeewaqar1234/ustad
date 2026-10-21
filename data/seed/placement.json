@@ -1,0 +1,715 @@
+{
+ "items": [
+  {
+   "id": "p01",
+   "band": "A2",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Choose the question word (When does the next train to Rüsselsheim leave?). ____ fährt der nächste Zug nach Rüsselsheim?",
+   "choices": [
+    "Wann",
+    "Wo",
+    "Wer",
+    "Wie"
+   ],
+   "answer": "Wann",
+   "alt": [],
+   "pattern": "W_QUESTION",
+   "marks": [
+    {
+     "deck": "life",
+     "de": "Wann fährt der nächste Zug nach Rüsselsheim?"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p02",
+   "band": "A2",
+   "skill": "grammar",
+   "mode": "type",
+   "prompt": "Start the sentence with Heute: Ich arbeite im Homeoffice.",
+   "choices": [],
+   "answer": "Heute arbeite ich im Homeoffice.",
+   "alt": [],
+   "pattern": "V2_INVERSION",
+   "marks": [],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p03",
+   "band": "A2",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "meeting",
+   "choices": [],
+   "answer": "die Besprechung",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Besprechung"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p04",
+   "band": "A2",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Fill the gap (Perfekt). Gestern ____ ich an der Auswertung gearbeitet.",
+   "choices": [
+    "habe",
+    "bin",
+    "hat",
+    "war"
+   ],
+   "answer": "habe",
+   "alt": [],
+   "pattern": "PERFEKT_HABEN",
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Gestern habe ich an der Auswertung gearbeitet"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p05",
+   "band": "A2",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Fill the gap (Perfekt). Am Samstag ____ ich mit dem Zug nach Köln gefahren.",
+   "choices": [
+    "bin",
+    "habe",
+    "hat",
+    "bist"
+   ],
+   "answer": "bin",
+   "alt": [],
+   "pattern": "PERFEKT_SEIN",
+   "marks": [],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p06",
+   "band": "A2",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "delay",
+   "choices": [],
+   "answer": "die Verspätung",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "life",
+     "de": "Verspätung"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p07",
+   "band": "A2",
+   "skill": "grammar",
+   "mode": "type",
+   "prompt": "Make a sentence in the present tense: ich / umsteigen / am Hauptbahnhof",
+   "choices": [],
+   "answer": "Ich steige am Hauptbahnhof um.",
+   "alt": [
+    "Am Hauptbahnhof steige ich um."
+   ],
+   "pattern": "SEP_VERBS",
+   "marks": [
+    {
+     "deck": "life",
+     "de": "Ich steige am Hauptbahnhof um"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p08",
+   "band": "A2",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "appointment",
+   "choices": [],
+   "answer": "der Termin",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Termin"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p09",
+   "band": "A2",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Fill the gap. Ich fahre mit ____ Zug nach Frankfurt.",
+   "choices": [
+    "dem",
+    "den",
+    "der",
+    "das"
+   ],
+   "answer": "dem",
+   "alt": [],
+   "pattern": "PREP_DAT",
+   "marks": [],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p10",
+   "band": "A2",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "I'm almost finished",
+   "choices": [],
+   "answer": "Ich bin fast fertig.",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Ich bin fast fertig"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p11",
+   "band": "B1.1",
+   "skill": "grammar",
+   "mode": "type",
+   "prompt": "Add müssen: Ich lerne heute für die Prüfung.",
+   "choices": [],
+   "answer": "Ich muss heute für die Prüfung lernen.",
+   "alt": [
+    "Heute muss ich für die Prüfung lernen."
+   ],
+   "pattern": "SATZKLAMMER",
+   "marks": [],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p12",
+   "band": "B1.1",
+   "skill": "grammar",
+   "mode": "type",
+   "prompt": "Join with deshalb: Mein Zug hat Verspätung. Ich komme später.",
+   "choices": [],
+   "answer": "Mein Zug hat Verspätung, deshalb komme ich später.",
+   "alt": [
+    "Mein Zug hat Verspätung. Deshalb komme ich später.",
+    "Mein Zug hat Verspätung, ich komme deshalb später."
+   ],
+   "pattern": "CONN_V2_ADVERBS",
+   "marks": [
+    {
+     "deck": "connector",
+     "de": "deshalb"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p13",
+   "band": "B1.1",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "deadline",
+   "choices": [],
+   "answer": "die Frist",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Frist"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p14",
+   "band": "B1.1",
+   "skill": "grammar",
+   "mode": "type",
+   "prompt": "Join with weil: Ich bleibe zu Hause. Ich bin krank.",
+   "choices": [],
+   "answer": "Ich bleibe zu Hause, weil ich krank bin.",
+   "alt": [
+    "Weil ich krank bin, bleibe ich zu Hause."
+   ],
+   "pattern": "VE_WEIL",
+   "marks": [
+    {
+     "deck": "connector",
+     "de": "weil"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p15",
+   "band": "B1.1",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Choose the correct ending. Ich glaube, dass ____",
+   "choices": [
+    "die Besprechung um zehn beginnt.",
+    "die Besprechung beginnt um zehn.",
+    "beginnt die Besprechung um zehn."
+   ],
+   "answer": "die Besprechung um zehn beginnt.",
+   "alt": [],
+   "pattern": "VE_DASS",
+   "marks": [
+    {
+     "deck": "connector",
+     "de": "dass"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p16",
+   "band": "B1.1",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "attachment (email)",
+   "choices": [],
+   "answer": "der Anhang",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Anhang"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p17",
+   "band": "B1.1",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Fill the gap (past). Gestern ____ ich nicht kommen, ich war krank.",
+   "choices": [
+    "konnte",
+    "kann",
+    "könnte",
+    "habe gekonnt"
+   ],
+   "answer": "konnte",
+   "alt": [],
+   "pattern": "PRAETERITUM_SPOKEN",
+   "marks": [],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p18",
+   "band": "B1.1",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Fill the gap. Kannst du ____ kurz helfen?",
+   "choices": [
+    "mir",
+    "mich",
+    "ich",
+    "mein"
+   ],
+   "answer": "mir",
+   "alt": [],
+   "pattern": "CASE_DAT",
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Kannst du mir kurz helfen?"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p19",
+   "band": "B1.1",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "landlord",
+   "choices": [],
+   "answer": "der Vermieter",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "life",
+     "de": "Vermieter"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p20",
+   "band": "B1.1",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Fill the gap. Das kommt in ____ gelbe Tonne.",
+   "choices": [
+    "die",
+    "der",
+    "den",
+    "dem"
+   ],
+   "answer": "die",
+   "alt": [],
+   "pattern": "WECHSELPRAEP",
+   "marks": [
+    {
+     "deck": "life",
+     "de": "Das kommt in die gelbe Tonne"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p21",
+   "band": "B1.1",
+   "skill": "grammar",
+   "mode": "type",
+   "prompt": "Rewrite with werden (Futur I): Ich schreibe morgen die E-Mail.",
+   "choices": [],
+   "answer": "Ich werde morgen die E-Mail schreiben.",
+   "alt": [
+    "Morgen werde ich die E-Mail schreiben.",
+    "Ich werde die E-Mail morgen schreiben."
+   ],
+   "pattern": "FUTURE",
+   "marks": [],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p22",
+   "band": "B1.1",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "I'm stuck here",
+   "choices": [],
+   "answer": "Ich komme hier nicht weiter.",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Ich komme hier nicht weiter"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p23",
+   "band": "B1.2",
+   "skill": "grammar",
+   "mode": "type",
+   "prompt": "Join with obwohl: Ich gehe ins Büro. Ich bin müde.",
+   "choices": [],
+   "answer": "Ich gehe ins Büro, obwohl ich müde bin.",
+   "alt": [
+    "Obwohl ich müde bin, gehe ich ins Büro."
+   ],
+   "pattern": "VE_OBWOHL",
+   "marks": [
+    {
+     "deck": "connector",
+     "de": "obwohl"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p24",
+   "band": "B1.2",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Fill the gap. ____ ich nach Deutschland gekommen bin, konnte ich kaum Deutsch.",
+   "choices": [
+    "Als",
+    "Wenn",
+    "Wann",
+    "Ob"
+   ],
+   "answer": "Als",
+   "alt": [],
+   "pattern": "VE_ALS",
+   "marks": [
+    {
+     "deck": "connector",
+     "de": "als"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p25",
+   "band": "B1.2",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "responsibility",
+   "choices": [],
+   "answer": "die Verantwortung",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Verantwortung"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p26",
+   "band": "B1.2",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Choose the correct sentence.",
+   "choices": [
+    "Wenn ich Zeit habe, rufe ich dich an.",
+    "Wenn ich Zeit habe, ich rufe dich an.",
+    "Wenn ich habe Zeit, rufe ich dich an.",
+    "Wenn ich Zeit habe, ich dich anrufe."
+   ],
+   "answer": "Wenn ich Zeit habe, rufe ich dich an.",
+   "alt": [],
+   "pattern": "NEBENSATZ_FIRST",
+   "marks": [
+    {
+     "deck": "connector",
+     "de": "wenn"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p27",
+   "band": "B1.2",
+   "skill": "grammar",
+   "mode": "type",
+   "prompt": "Join with weil: Ich kann heute nicht kommen. Ich muss für die Klausur lernen.",
+   "choices": [],
+   "answer": "Ich kann heute nicht kommen, weil ich für die Klausur lernen muss.",
+   "alt": [
+    "Weil ich für die Klausur lernen muss, kann ich heute nicht kommen."
+   ],
+   "pattern": "MODAL_NEBENSATZ",
+   "marks": [
+    {
+     "deck": "connector",
+     "de": "weil"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p28",
+   "band": "B1.2",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Fill the gap with the right form of vegetarisch. Ich nehme das ____ Gericht.",
+   "choices": [
+    "vegetarische",
+    "vegetarischen",
+    "vegetarisches",
+    "vegetarischer"
+   ],
+   "answer": "vegetarische",
+   "alt": [],
+   "pattern": "ADJ_ENDINGS",
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Ich nehme das vegetarische Gericht"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p29",
+   "band": "B1.2",
+   "skill": "grammar",
+   "mode": "type",
+   "prompt": "Make it an indirect question starting with Weißt du: Wann beginnt die Besprechung?",
+   "choices": [],
+   "answer": "Weißt du, wann die Besprechung beginnt?",
+   "alt": [],
+   "pattern": "INDIRECT_QUESTION",
+   "marks": [],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p30",
+   "band": "B1.2",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "outage, disruption, fault",
+   "choices": [],
+   "answer": "die Störung",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Störung"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p31",
+   "band": "B1.2",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Fill the gap (polite request). ____ Sie mir das bitte schicken?",
+   "choices": [
+    "Könnten",
+    "Konnten",
+    "Kannst",
+    "Könntest"
+   ],
+   "answer": "Könnten",
+   "alt": [],
+   "pattern": "KONJ2_POLITE",
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Könnten Sie mir das bitte schicken?"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p32",
+   "band": "B2",
+   "skill": "grammar",
+   "mode": "choice",
+   "prompt": "Fill the gap. Das ist der Kollege, ____ ich die Unterlagen geschickt habe.",
+   "choices": [
+    "dem",
+    "den",
+    "der",
+    "dessen"
+   ],
+   "answer": "dem",
+   "alt": [],
+   "pattern": "RELATIVE_CLAUSE",
+   "marks": [],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p33",
+   "band": "B2",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "money laundering",
+   "choices": [],
+   "answer": "die Geldwäsche",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Geldwäsche"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p34",
+   "band": "B2",
+   "skill": "grammar",
+   "mode": "type",
+   "prompt": "Rewrite in the passive (Präteritum): Der Händler führte die Order aus.",
+   "choices": [],
+   "answer": "Die Order wurde vom Händler ausgeführt.",
+   "alt": [
+    "Die Order wurde ausgeführt."
+   ],
+   "pattern": "PASSIVE_PRAETERITUM",
+   "marks": [
+    {
+     "deck": "work",
+     "de": "Die Order wurde ausgeführt"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "id": "p35",
+   "band": "B2",
+   "skill": "vocab",
+   "mode": "type",
+   "prompt": "residence permit",
+   "choices": [],
+   "answer": "der Aufenthaltstitel",
+   "alt": [],
+   "pattern": null,
+   "marks": [
+    {
+     "deck": "life",
+     "de": "Aufenthaltstitel"
+    }
+   ],
+   "status": "ok",
+   "review_notes": []
+  }
+ ],
+ "writing": {
+  "prompt_en": "Write 5 sentences in German about your last working day and your plans for the weekend. Use at least one of weil, dass or obwohl, and at least one verb in the Perfekt.",
+  "min_sentences": 5
+ }
+}

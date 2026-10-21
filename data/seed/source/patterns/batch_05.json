@@ -1,0 +1,682 @@
+{
+  "batch": 5,
+  "patterns": [
+    {
+      "code": "PARTIZIP_FORMS",
+      "order": 21,
+      "group": "tenses",
+      "title": "Partizip II forms",
+      "rule_en": "Regular verbs: ge-...-t. Irregular verbs: ge-...-en. No ge- for -ieren verbs and inseparable prefixes (be-, ver-, er-). Separable verbs put ge- after the prefix.",
+      "slot_diagram": {
+        "labels": [
+          "Infinitive",
+          "Prefix",
+          "ge-",
+          "Stem",
+          "Ending",
+          "Partizip II"
+        ],
+        "rows": [
+          [
+            "arbeiten",
+            "",
+            "ge",
+            "arbeit",
+            "et",
+            "gearbeitet"
+          ],
+          [
+            "schreiben",
+            "",
+            "ge",
+            "schrieb",
+            "en",
+            "geschrieben"
+          ],
+          [
+            "telefonieren",
+            "",
+            "",
+            "telefonier",
+            "t",
+            "telefoniert"
+          ],
+          [
+            "verkaufen",
+            "ver",
+            "",
+            "kauf",
+            "t",
+            "verkauft"
+          ],
+          [
+            "anrufen",
+            "an",
+            "ge",
+            "ruf",
+            "en",
+            "angerufen"
+          ]
+        ]
+      },
+      "examples": [
+        {
+          "context": "work",
+          "de": "Ich habe die Orders im System kontrolliert und den Händler angerufen.",
+          "en": "I checked the orders in the system and called the trader."
+        },
+        {
+          "context": "life",
+          "de": "Gestern habe ich beim Bürgeramt endlich einen Termin bekommen.",
+          "en": "Yesterday I finally got an appointment at the Bürgeramt."
+        },
+        {
+          "context": "finance_history",
+          "de": "1848 haben viele Menschen in Frankfurt für eine Verfassung demonstriert.",
+          "en": "In 1848 many people in Frankfurt demonstrated for a constitution."
+        }
+      ],
+      "common_error": {
+        "wrong": "Ich habe die Ergebnisse gestern gepräsentiert.",
+        "right": "Ich habe die Ergebnisse gestern präsentiert.",
+        "tag": "PARTIZIP",
+        "note_en": "Verbs ending in -ieren never take ge-."
+      },
+      "tags": [
+        "PARTIZIP",
+        "SEP_PREFIX"
+      ],
+      "drills": {
+        "surgery": [
+          {
+            "de": "Ich habe meine Kollegin heute Morgen angerufen.",
+            "en": "I called my colleague this morning."
+          },
+          {
+            "de": "Wir haben die Aufgabe für die Uni nicht verstanden.",
+            "en": "We did not understand the task for uni."
+          }
+        ],
+        "transform": [
+          {
+            "instruction": "Replace the verb with anrufen.",
+            "given": "Ich habe den Kollegen gestern gefragt.",
+            "answer": "Ich habe den Kollegen gestern angerufen.",
+            "alt": []
+          },
+          {
+            "instruction": "Replace the verb with bezahlen.",
+            "given": "Ich habe die Miete gestern überwiesen.",
+            "answer": "Ich habe die Miete gestern bezahlt.",
+            "alt": []
+          }
+        ],
+        "tense_shift": [
+          {
+            "instruction": "Put it in Perfekt.",
+            "given": "Der Zug kommt um acht in Frankfurt an.",
+            "answer": "Der Zug ist um acht in Frankfurt angekommen.",
+            "alt": []
+          },
+          {
+            "instruction": "Put it in Perfekt.",
+            "given": "Ich studiere Wirtschaft an der Goethe-Universität.",
+            "answer": "Ich habe Wirtschaft an der Goethe-Universität studiert.",
+            "alt": []
+          }
+        ],
+        "error_spot": [
+          {
+            "wrong": "Ich habe die E-Mail schon geschreibt.",
+            "right": "Ich habe die E-Mail schon geschrieben.",
+            "tag": "PARTIZIP",
+            "note_en": "schreiben is irregular: geschrieben."
+          },
+          {
+            "wrong": "Der Kurs hat sich heute stark geverändert.",
+            "right": "Der Kurs hat sich heute stark verändert.",
+            "tag": "PARTIZIP",
+            "note_en": "ver- is an inseparable prefix: no ge-."
+          }
+        ],
+        "fill": [],
+        "free": {
+          "prompt_en": "Write one sentence about your last on-call week with anrufen in Perfekt.",
+          "must_include": [
+            "angerufen"
+          ]
+        }
+      },
+      "homework": "Write 4 sentences about your last workday in Perfekt. Use one -ieren verb, one verb with be- or ver-, and one separable verb."
+    },
+    {
+      "code": "PRAETERITUM_SPOKEN",
+      "order": 22,
+      "group": "tenses",
+      "title": "Präteritum in speech",
+      "rule_en": "In speech most verbs use Perfekt, but sein, haben, modal verbs, wissen and es gibt usually use Präteritum.",
+      "slot_diagram": {
+        "labels": [
+          "Verb",
+          "Spoken past",
+          "Less common in speech"
+        ],
+        "rows": [
+          [
+            "sein",
+            "ich war",
+            "ich bin gewesen"
+          ],
+          [
+            "haben",
+            "ich hatte",
+            "ich habe gehabt"
+          ],
+          [
+            "müssen",
+            "ich musste",
+            "ich habe arbeiten müssen"
+          ],
+          [
+            "können",
+            "ich konnte",
+            "ich habe kommen können"
+          ],
+          [
+            "wissen",
+            "ich wusste",
+            "ich habe gewusst"
+          ],
+          [
+            "es gibt",
+            "es gab",
+            "es hat gegeben"
+          ]
+        ]
+      },
+      "examples": [
+        {
+          "context": "work",
+          "de": "Letzte Woche hatte ich Rufbereitschaft und musste zweimal nachts arbeiten.",
+          "en": "Last week I was on call and had to work twice at night."
+        },
+        {
+          "context": "life",
+          "de": "Der Zug war voll und es gab keinen Sitzplatz mehr.",
+          "en": "The train was full and there were no seats left."
+        },
+        {
+          "context": "finance_history",
+          "de": "1923 war das Geld in Deutschland fast nichts mehr wert.",
+          "en": "In 1923 money in Germany was worth almost nothing."
+        }
+      ],
+      "common_error": {
+        "wrong": "Ich habe gestern länger bleiben gemusst.",
+        "right": "Ich musste gestern länger bleiben.",
+        "tag": "TENSE_CHOICE",
+        "note_en": "Modal verbs in the past: say musste, not a Perfekt form."
+      },
+      "tags": [
+        "TENSE_CHOICE"
+      ],
+      "drills": {
+        "surgery": [
+          {
+            "de": "Gestern hatte ich keine Zeit für die Uni.",
+            "en": "Yesterday I had no time for uni."
+          },
+          {
+            "de": "Im Büro gab es heute keinen Kaffee mehr.",
+            "en": "There was no coffee left in the office today."
+          }
+        ],
+        "transform": [
+          {
+            "instruction": "Join with weil.",
+            "given": [
+              "Ich war müde.",
+              "Ich bin früh nach Hause gegangen."
+            ],
+            "answer": "Ich bin früh nach Hause gegangen, weil ich müde war.",
+            "alt": [
+              "Weil ich müde war, bin ich früh nach Hause gegangen."
+            ]
+          },
+          {
+            "instruction": "Join with aber.",
+            "given": [
+              "Ich wollte mitkommen.",
+              "Ich hatte Rufbereitschaft."
+            ],
+            "answer": "Ich wollte mitkommen, aber ich hatte Rufbereitschaft.",
+            "alt": []
+          }
+        ],
+        "tense_shift": [
+          {
+            "instruction": "Put it in the past. Use Präteritum.",
+            "given": "Ich habe keine Zeit.",
+            "answer": "Ich hatte keine Zeit.",
+            "alt": []
+          },
+          {
+            "instruction": "Put it in the past. Use Präteritum.",
+            "given": "Wir müssen am Wochenende arbeiten.",
+            "answer": "Wir mussten am Wochenende arbeiten.",
+            "alt": []
+          }
+        ],
+        "error_spot": [
+          {
+            "wrong": "Gestern gibt es ein Problem mit dem Server.",
+            "right": "Gestern gab es ein Problem mit dem Server.",
+            "tag": "TENSE_CHOICE",
+            "note_en": "Gestern means past: es gab."
+          },
+          {
+            "wrong": "Ich konnte gestern nicht kommen, weil ich krank bin.",
+            "right": "Ich konnte gestern nicht kommen, weil ich krank war.",
+            "tag": "TENSE_CHOICE",
+            "note_en": "The whole story is in the past: war, not bin."
+          }
+        ],
+        "fill": [],
+        "free": {
+          "prompt_en": "Write one sentence about yesterday's commute using es gab.",
+          "must_include": [
+            "es gab"
+          ]
+        }
+      },
+      "homework": "Write 4 sentences about your last on-call week. Use war, hatte, musste and es gab once each."
+    },
+    {
+      "code": "MODAL_INFINITIVE",
+      "order": 23,
+      "group": "modals",
+      "title": "Modal verb + infinitive at the end",
+      "rule_en": "The modal verb is conjugated in position 2. The second verb stays in the infinitive at the end.",
+      "slot_diagram": {
+        "labels": [
+          "Position 1",
+          "Modal (pos. 2)",
+          "Middle",
+          "Infinitive (end)"
+        ],
+        "rows": [
+          [
+            "Ich",
+            "muss",
+            "heute bis sieben",
+            "arbeiten"
+          ],
+          [
+            "Morgen",
+            "kann",
+            "ich nicht in die Uni",
+            "kommen"
+          ],
+          [
+            "Wann",
+            "sollen",
+            "wir den Bericht",
+            "schicken"
+          ]
+        ]
+      },
+      "examples": [
+        {
+          "context": "work",
+          "de": "Ich muss heute alle Orders bis 18 Uhr prüfen.",
+          "en": "I have to check all orders by 6 pm today."
+        },
+        {
+          "context": "life",
+          "de": "Am Samstag will ich endlich meine Wohnung putzen.",
+          "en": "On Saturday I finally want to clean my flat."
+        },
+        {
+          "context": "finance_history",
+          "de": "Mit MiCA müssen Anbieter von Kryptowerten eine Lizenz haben.",
+          "en": "Under MiCA, crypto-asset providers must have a licence."
+        }
+      ],
+      "common_error": {
+        "wrong": "Ich muss arbeiten heute bis acht.",
+        "right": "Ich muss heute bis acht arbeiten.",
+        "tag": "VERB_FINAL",
+        "note_en": "The infinitive goes to the very end."
+      },
+      "tags": [
+        "V2_POSITION",
+        "VERB_FINAL"
+      ],
+      "drills": {
+        "surgery": [
+          {
+            "de": "Ich möchte nach der Arbeit Deutsch lernen.",
+            "en": "I would like to study German after work."
+          },
+          {
+            "de": "Ich muss mich heute für die Prüfung anmelden.",
+            "en": "I have to register for the exam today."
+          }
+        ],
+        "transform": [
+          {
+            "instruction": "Add müssen.",
+            "given": "Ich arbeite am Samstag.",
+            "answer": "Ich muss am Samstag arbeiten.",
+            "alt": []
+          },
+          {
+            "instruction": "Add können.",
+            "given": "Wir treffen uns morgen in der Kantine.",
+            "answer": "Wir können uns morgen in der Kantine treffen.",
+            "alt": []
+          }
+        ],
+        "tense_shift": [
+          {
+            "instruction": "Put it in Präteritum.",
+            "given": "Ich muss bis zehn arbeiten.",
+            "answer": "Ich musste bis zehn arbeiten.",
+            "alt": []
+          },
+          {
+            "instruction": "Add sollen.",
+            "given": "Du rufst die Kollegin an.",
+            "answer": "Du sollst die Kollegin anrufen.",
+            "alt": []
+          }
+        ],
+        "error_spot": [
+          {
+            "wrong": "Kannst du mir die Datei schicken morgen?",
+            "right": "Kannst du mir die Datei morgen schicken?",
+            "tag": "VERB_FINAL",
+            "note_en": "The infinitive comes last, after morgen."
+          },
+          {
+            "wrong": "Morgen ich muss früh aufstehen.",
+            "right": "Morgen muss ich früh aufstehen.",
+            "tag": "V2_POSITION",
+            "note_en": "The modal verb must be in position 2."
+          }
+        ],
+        "fill": [],
+        "free": {
+          "prompt_en": "Write one sentence about what you have to do at work tomorrow using muss.",
+          "must_include": [
+            "muss"
+          ]
+        }
+      },
+      "homework": "Write 4 sentences about your plans for this week. Use muss, kann, will and möchte once each."
+    },
+    {
+      "code": "MODAL_NEBENSATZ",
+      "order": 24,
+      "group": "modals",
+      "title": "Modal verb at the end of a subordinate clause",
+      "rule_en": "In a subordinate clause the modal verb goes to the very end, after the infinitive.",
+      "slot_diagram": {
+        "labels": [
+          "Main clause",
+          ",",
+          "Connector",
+          "Middle",
+          "Infinitive",
+          "Modal (end)"
+        ],
+        "rows": [
+          [
+            "Ich komme später",
+            ",",
+            "weil",
+            "ich heute",
+            "arbeiten",
+            "muss"
+          ],
+          [
+            "Ich weiß nicht",
+            ",",
+            "ob",
+            "ich morgen",
+            "kommen",
+            "kann"
+          ]
+        ]
+      },
+      "examples": [
+        {
+          "context": "work",
+          "de": "Ich schreibe meinem Chef, dass ich heute früher gehen muss.",
+          "en": "I am writing to my boss that I have to leave earlier today."
+        },
+        {
+          "context": "life",
+          "de": "Ich gehe zum Bürgeramt, weil ich mich ummelden muss.",
+          "en": "I am going to the Bürgeramt because I have to register my new address."
+        },
+        {
+          "context": "finance_history",
+          "de": "Viele Anleger wissen nicht, ob sie ihre Aktien verkaufen sollen.",
+          "en": "Many investors do not know whether they should sell their shares."
+        }
+      ],
+      "common_error": {
+        "wrong": "Ich komme später, weil ich muss heute arbeiten.",
+        "right": "Ich komme später, weil ich heute arbeiten muss.",
+        "tag": "VERB_FINAL",
+        "note_en": "After weil the modal goes last, after the infinitive."
+      },
+      "tags": [
+        "VERB_FINAL"
+      ],
+      "drills": {
+        "surgery": [
+          {
+            "de": "Ich lerne heute, weil ich morgen eine Prüfung schreiben muss.",
+            "en": "I am studying today because I have to write an exam tomorrow."
+          },
+          {
+            "de": "Sag mir, wann ich dich anrufen kann.",
+            "en": "Tell me when I can call you."
+          }
+        ],
+        "transform": [
+          {
+            "instruction": "Join with weil.",
+            "given": [
+              "Ich komme nicht mit.",
+              "Ich muss lernen."
+            ],
+            "answer": "Ich komme nicht mit, weil ich lernen muss.",
+            "alt": [
+              "Weil ich lernen muss, komme ich nicht mit."
+            ]
+          },
+          {
+            "instruction": "Start with: Ich weiß nicht, ob",
+            "given": "Kann ich am Freitag kommen?",
+            "answer": "Ich weiß nicht, ob ich am Freitag kommen kann.",
+            "alt": []
+          }
+        ],
+        "tense_shift": [
+          {
+            "instruction": "Add müssen.",
+            "given": "Ich bleibe zu Hause, weil ich arbeite.",
+            "answer": "Ich bleibe zu Hause, weil ich arbeiten muss.",
+            "alt": []
+          },
+          {
+            "instruction": "Put both clauses in Präteritum.",
+            "given": "Ich bin müde, weil ich lange arbeiten muss.",
+            "answer": "Ich war müde, weil ich lange arbeiten musste.",
+            "alt": []
+          }
+        ],
+        "error_spot": [
+          {
+            "wrong": "Ich weiß nicht, ob ich morgen muss arbeiten.",
+            "right": "Ich weiß nicht, ob ich morgen arbeiten muss.",
+            "tag": "VERB_FINAL",
+            "note_en": "After ob: infinitive first, modal last."
+          },
+          {
+            "wrong": "Ich nehme den frühen Zug, weil ich um acht im Büro muss sein.",
+            "right": "Ich nehme den frühen Zug, weil ich um acht im Büro sein muss.",
+            "tag": "VERB_FINAL",
+            "note_en": "The modal goes after the infinitive: sein muss."
+          }
+        ],
+        "fill": [],
+        "free": {
+          "prompt_en": "Write one sentence about your MSc using weil and a modal verb at the end.",
+          "must_include": [
+            "weil"
+          ]
+        }
+      },
+      "homework": "Write 4 sentences about this week. Use weil or dass with a modal verb at the end at least three times."
+    },
+    {
+      "code": "CASE_NOM_AKK",
+      "order": 25,
+      "group": "cases",
+      "title": "Nominative vs accusative",
+      "rule_en": "The subject is nominative, the direct object is accusative. Only masculine changes: der to den, ein to einen, kein to keinen.",
+      "slot_diagram": {
+        "labels": [
+          "Gender",
+          "Nominative",
+          "Accusative"
+        ],
+        "rows": [
+          [
+            "masculine",
+            "der / ein Zug",
+            "den / einen Zug"
+          ],
+          [
+            "feminine",
+            "die / eine Bahn",
+            "die / eine Bahn"
+          ],
+          [
+            "neuter",
+            "das / ein Ticket",
+            "das / ein Ticket"
+          ],
+          [
+            "plural",
+            "die Züge",
+            "die Züge"
+          ]
+        ]
+      },
+      "examples": [
+        {
+          "context": "work",
+          "de": "Ich brauche einen Laptop für die Rufbereitschaft.",
+          "en": "I need a laptop for on-call."
+        },
+        {
+          "context": "life",
+          "de": "Ich nehme den Zug um 7:42 nach Frankfurt.",
+          "en": "I take the 7:42 train to Frankfurt."
+        },
+        {
+          "context": "finance_history",
+          "de": "Viele Anleger halten den Bitcoin für digitales Gold.",
+          "en": "Many investors consider Bitcoin digital gold."
+        }
+      ],
+      "common_error": {
+        "wrong": "Ich habe ein Termin beim Arzt.",
+        "right": "Ich habe einen Termin beim Arzt.",
+        "tag": "CASE_AKK",
+        "note_en": "Termin is masculine: the object is einen Termin."
+      },
+      "tags": [
+        "CASE_AKK",
+        "GENDER"
+      ],
+      "drills": {
+        "surgery": [
+          {
+            "de": "Ich habe morgen einen Termin beim Bürgeramt.",
+            "en": "I have an appointment at the Bürgeramt tomorrow."
+          },
+          {
+            "de": "Die Kollegin fragt den Chef nach dem Bericht.",
+            "en": "The colleague asks the boss about the report."
+          }
+        ],
+        "transform": [
+          {
+            "instruction": "Replace the object with der Laptop.",
+            "given": "Ich brauche die Tasche.",
+            "answer": "Ich brauche den Laptop.",
+            "alt": []
+          },
+          {
+            "instruction": "Make it the object. Start with Ich sehe.",
+            "given": "Der Zug kommt.",
+            "answer": "Ich sehe den Zug.",
+            "alt": []
+          }
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {
+            "wrong": "Siehst du der Zug da hinten?",
+            "right": "Siehst du den Zug da hinten?",
+            "tag": "CASE_AKK",
+            "note_en": "Zug is the object here: den Zug."
+          },
+          {
+            "wrong": "Ich suche einen Wohnung in Frankfurt.",
+            "right": "Ich suche eine Wohnung in Frankfurt.",
+            "tag": "GENDER",
+            "note_en": "Wohnung is feminine: eine stays eine."
+          }
+        ],
+        "fill": [
+          {
+            "text": "Ich trinke ein___ Kaffee in der Kantine.",
+            "answers": [
+              "en"
+            ],
+            "full": "Ich trinke einen Kaffee in der Kantine."
+          },
+          {
+            "text": "D___ Chef sucht d___ Bericht.",
+            "answers": [
+              "er",
+              "en"
+            ],
+            "full": "Der Chef sucht den Bericht."
+          },
+          {
+            "text": "Hast du kein___ Fahrschein?",
+            "answers": [
+              "en"
+            ],
+            "full": "Hast du keinen Fahrschein?"
+          }
+        ],
+        "free": {
+          "prompt_en": "Write one sentence about your commute using den Zug.",
+          "must_include": [
+            "den Zug"
+          ]
+        }
+      },
+      "homework": "Write 4 sentences about your morning. Use at least three masculine nouns as objects with den, einen or keinen."
+    }
+  ]
+}

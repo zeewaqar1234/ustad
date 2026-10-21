@@ -1,0 +1,692 @@
+{
+  "batch": 6,
+  "patterns": [
+    {
+      "code": "CASE_DAT",
+      "order": 26,
+      "group": "cases",
+      "title": "Dative: receiver and dative verbs",
+      "rule_en": "The person who receives something is dative. Some verbs always take the dative: helfen, danken, gefallen, gehören, antworten.",
+      "slot_diagram": {
+        "labels": [
+          "Subject",
+          "Verb",
+          "Dative (person)",
+          "Accusative (thing)"
+        ],
+        "rows": [
+          [
+            "Ich",
+            "gebe",
+            "dem Kollegen",
+            "den Bericht"
+          ],
+          [
+            "Die Kollegin",
+            "hilft",
+            "mir",
+            ""
+          ],
+          [
+            "Das Buch",
+            "gehört",
+            "der Bibliothek",
+            ""
+          ]
+        ]
+      },
+      "examples": [
+        {
+          "context": "work",
+          "de": "Ich schicke dem Händler die Zahlen per E-Mail.",
+          "en": "I send the trader the numbers by email."
+        },
+        {
+          "context": "life",
+          "de": "Die Wohnung gefällt mir, aber die Miete ist zu hoch.",
+          "en": "I like the flat, but the rent is too high."
+        },
+        {
+          "context": "finance_history",
+          "de": "Nach 1871 gehörte das Elsass dem Deutschen Reich.",
+          "en": "After 1871 Alsace belonged to the German Empire."
+        }
+      ],
+      "common_error": {
+        "wrong": "Kannst du mich helfen?",
+        "right": "Kannst du mir helfen?",
+        "tag": "CASE_DAT",
+        "note_en": "helfen always takes the dative: mir, not mich."
+      },
+      "tags": [
+        "CASE_DAT"
+      ],
+      "drills": {
+        "surgery": [
+          {
+            "de": "Ich danke dem Kollegen für seine Hilfe.",
+            "en": "I thank the colleague for his help."
+          },
+          {
+            "de": "Die neue Wohnung gefällt meiner Mutter sehr.",
+            "en": "My mother really likes the new flat."
+          }
+        ],
+        "transform": [
+          {
+            "instruction": "Use helfen instead of unterstützen.",
+            "given": "Ich unterstütze den Kollegen.",
+            "answer": "Ich helfe dem Kollegen.",
+            "alt": []
+          },
+          {
+            "instruction": "Use gefallen. Start with Die Stadt.",
+            "given": "Ich mag die Stadt.",
+            "answer": "Die Stadt gefällt mir.",
+            "alt": []
+          }
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {
+            "wrong": "Ich danke dich für die Hilfe.",
+            "right": "Ich danke dir für die Hilfe.",
+            "tag": "CASE_DAT",
+            "note_en": "danken takes the dative: dir."
+          },
+          {
+            "wrong": "Ich antworte den Professor morgen.",
+            "right": "Ich antworte dem Professor morgen.",
+            "tag": "CASE_DAT",
+            "note_en": "antworten takes the dative: dem Professor."
+          }
+        ],
+        "fill": [
+          {
+            "text": "Ich helfe d___ Kollegin mit der Präsentation.",
+            "answers": [
+              "er"
+            ],
+            "full": "Ich helfe der Kollegin mit der Präsentation."
+          },
+          {
+            "text": "Das Ticket gehört d___ Mann da drüben.",
+            "answers": [
+              "em"
+            ],
+            "full": "Das Ticket gehört dem Mann da drüben."
+          },
+          {
+            "text": "Ich gebe mein___ Bruder das Geld zurück.",
+            "answers": [
+              "em"
+            ],
+            "full": "Ich gebe meinem Bruder das Geld zurück."
+          }
+        ],
+        "free": {
+          "prompt_en": "Write one sentence about who helps you at work. Use hilft.",
+          "must_include": [
+            "hilft"
+          ]
+        }
+      },
+      "homework": "Write 4 sentences about your week. Use helfen, danken, gefallen and gehören once each."
+    },
+    {
+      "code": "PREP_AKK",
+      "order": 27,
+      "group": "cases",
+      "title": "Accusative prepositions",
+      "rule_en": "After für, durch, gegen, ohne and um always use the accusative.",
+      "slot_diagram": {
+        "labels": [
+          "Preposition",
+          "Masculine",
+          "Feminine",
+          "Neuter",
+          "Plural"
+        ],
+        "rows": [
+          [
+            "für",
+            "den Chef",
+            "die Kollegin",
+            "das Team",
+            "die Kunden"
+          ],
+          [
+            "ohne",
+            "einen Plan",
+            "eine Pause",
+            "ein Ticket",
+            "Pausen"
+          ]
+        ]
+      },
+      "examples": [
+        {
+          "context": "work",
+          "de": "Ich bereite die Zahlen für den Chef vor.",
+          "en": "I am preparing the numbers for the boss."
+        },
+        {
+          "context": "life",
+          "de": "Am Wochenende gehe ich durch den Park zum Supermarkt.",
+          "en": "At the weekend I walk through the park to the supermarket."
+        },
+        {
+          "context": "finance_history",
+          "de": "Viele Anleger wetten gegen den Euro.",
+          "en": "Many investors are betting against the euro."
+        }
+      ],
+      "common_error": {
+        "wrong": "Das Geschenk ist für mein Bruder.",
+        "right": "Das Geschenk ist für meinen Bruder.",
+        "tag": "PREP_CASE",
+        "note_en": "für takes the accusative: meinen Bruder."
+      },
+      "tags": [
+        "PREP_CASE",
+        "CASE_AKK"
+      ],
+      "drills": {
+        "surgery": [
+          {
+            "de": "Ich brauche eine Stunde für den Bericht.",
+            "en": "I need an hour for the report."
+          },
+          {
+            "de": "Wir gehen nach der Arbeit durch den Park.",
+            "en": "We walk through the park after work."
+          }
+        ],
+        "transform": [
+          {
+            "instruction": "Use ohne instead of mit.",
+            "given": "Ich komme mit meinem Bruder.",
+            "answer": "Ich komme ohne meinen Bruder.",
+            "alt": []
+          },
+          {
+            "instruction": "Replace mit with gegen.",
+            "given": "Ich spiele mit den Kollegen Fußball.",
+            "answer": "Ich spiele gegen die Kollegen Fußball.",
+            "alt": []
+          }
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {
+            "wrong": "Ich habe keine Zeit für dem Kurs.",
+            "right": "Ich habe keine Zeit für den Kurs.",
+            "tag": "PREP_CASE",
+            "note_en": "für takes the accusative: den Kurs."
+          },
+          {
+            "wrong": "Wir sind gegen der Plan.",
+            "right": "Wir sind gegen den Plan.",
+            "tag": "PREP_CASE",
+            "note_en": "gegen takes the accusative: den Plan."
+          }
+        ],
+        "fill": [
+          {
+            "text": "Ich habe ein Geschenk für mein___ Schwester.",
+            "answers": [
+              "e"
+            ],
+            "full": "Ich habe ein Geschenk für meine Schwester."
+          },
+          {
+            "text": "Der Zug fährt durch d___ Tunnel.",
+            "answers": [
+              "en"
+            ],
+            "full": "Der Zug fährt durch den Tunnel."
+          },
+          {
+            "text": "Ich gehe heute ohne mein___ Laptop ins Büro.",
+            "answers": [
+              "en"
+            ],
+            "full": "Ich gehe heute ohne meinen Laptop ins Büro."
+          }
+        ],
+        "free": {
+          "prompt_en": "Write one sentence about your MSc using für.",
+          "must_include": [
+            "für"
+          ]
+        }
+      },
+      "homework": "Write 4 sentences about your day. Use für, durch, gegen and ohne once each."
+    },
+    {
+      "code": "PREP_DAT",
+      "order": 28,
+      "group": "cases",
+      "title": "Dative prepositions",
+      "rule_en": "After aus, bei, mit, nach, seit, von and zu always use the dative. Short forms: zum, zur, beim, vom.",
+      "slot_diagram": {
+        "labels": [
+          "Preposition",
+          "+ dem",
+          "+ der",
+          "Short form"
+        ],
+        "rows": [
+          [
+            "zu",
+            "zum Arzt",
+            "zur Arbeit",
+            "zum / zur"
+          ],
+          [
+            "bei",
+            "beim Chef",
+            "bei der Bank",
+            "beim"
+          ],
+          [
+            "von",
+            "vom Bahnhof",
+            "von der Uni",
+            "vom"
+          ]
+        ]
+      },
+      "examples": [
+        {
+          "context": "work",
+          "de": "Seit einem Jahr arbeite ich bei einer Bank in Frankfurt.",
+          "en": "I have been working at a bank in Frankfurt for a year."
+        },
+        {
+          "context": "life",
+          "de": "Nach der Arbeit fahre ich mit der S-Bahn nach Rüsselsheim.",
+          "en": "After work I take the S-Bahn to Rüsselsheim."
+        },
+        {
+          "context": "finance_history",
+          "de": "Seit 2002 bezahlen die Deutschen mit dem Euro.",
+          "en": "Since 2002 Germans have paid with the euro."
+        }
+      ],
+      "common_error": {
+        "wrong": "Ich fahre mit den Zug zur Uni.",
+        "right": "Ich fahre mit dem Zug zur Uni.",
+        "tag": "PREP_CASE",
+        "note_en": "mit takes the dative: dem Zug."
+      },
+      "tags": [
+        "PREP_CASE",
+        "CASE_DAT"
+      ],
+      "drills": {
+        "surgery": [
+          {
+            "de": "Nach der Vorlesung gehe ich zum Bahnhof.",
+            "en": "After the lecture I go to the station."
+          },
+          {
+            "de": "Ich wohne seit zwei Jahren in Deutschland.",
+            "en": "I have been living in Germany for two years."
+          }
+        ],
+        "transform": [
+          {
+            "instruction": "Use the short form.",
+            "given": "Ich gehe zu dem Arzt.",
+            "answer": "Ich gehe zum Arzt.",
+            "alt": []
+          },
+          {
+            "instruction": "Answer with seit and the given time.",
+            "given": [
+              "Seit wann lernst du Deutsch?",
+              "ein Jahr"
+            ],
+            "answer": "Ich lerne seit einem Jahr Deutsch.",
+            "alt": [
+              "Seit einem Jahr lerne ich Deutsch."
+            ]
+          }
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {
+            "wrong": "Ich gehe morgen zur Arzt.",
+            "right": "Ich gehe morgen zum Arzt.",
+            "tag": "PREP_CASE",
+            "note_en": "Arzt is masculine: zu dem becomes zum."
+          },
+          {
+            "wrong": "Ich wohne seit ein Jahr in Rüsselsheim.",
+            "right": "Ich wohne seit einem Jahr in Rüsselsheim.",
+            "tag": "PREP_CASE",
+            "note_en": "seit takes the dative: einem Jahr."
+          }
+        ],
+        "fill": [
+          {
+            "text": "Ich komme gerade vo___ Bahnhof.",
+            "answers": [
+              "m"
+            ],
+            "full": "Ich komme gerade vom Bahnhof."
+          },
+          {
+            "text": "Nach d___ Meeting gehe ich in die Kantine.",
+            "answers": [
+              "em"
+            ],
+            "full": "Nach dem Meeting gehe ich in die Kantine."
+          },
+          {
+            "text": "Ich fahre heute mit mein___ Kollegin zu___ Arbeit.",
+            "answers": [
+              "er",
+              "r"
+            ],
+            "full": "Ich fahre heute mit meiner Kollegin zur Arbeit."
+          }
+        ],
+        "free": {
+          "prompt_en": "Write one sentence about your commute using mit and nach.",
+          "must_include": [
+            "mit",
+            "nach"
+          ]
+        }
+      },
+      "homework": "Write 4 sentences about your trip to work or uni. Use mit, nach, zum or zur, and seit."
+    },
+    {
+      "code": "WECHSELPRAEP",
+      "order": 29,
+      "group": "cases",
+      "title": "Two-way prepositions: wo? or wohin?",
+      "rule_en": "in, an, auf, neben, hinter, über, unter, vor, zwischen: wo? (location) takes the dative, wohin? (movement to a place) takes the accusative.",
+      "slot_diagram": {
+        "labels": [
+          "Question",
+          "Verbs",
+          "Case",
+          "Example"
+        ],
+        "rows": [
+          [
+            "Wo?",
+            "liegen, stehen, sein",
+            "dative",
+            "Der Laptop liegt auf dem Tisch."
+          ],
+          [
+            "Wohin?",
+            "legen, stellen, gehen",
+            "accusative",
+            "Ich lege den Laptop auf den Tisch."
+          ]
+        ]
+      },
+      "examples": [
+        {
+          "context": "work",
+          "de": "Ich lege die Unterlagen auf den Tisch im Besprechungsraum.",
+          "en": "I put the documents on the table in the meeting room."
+        },
+        {
+          "context": "life",
+          "de": "Mein Fahrrad steht hinter dem Haus.",
+          "en": "My bike is behind the house."
+        },
+        {
+          "context": "finance_history",
+          "de": "1848 tagte in der Paulskirche in Frankfurt das erste deutsche Parlament.",
+          "en": "In 1848 the first German parliament met in the Paulskirche in Frankfurt."
+        }
+      ],
+      "common_error": {
+        "wrong": "Ich gehe in der Kantine.",
+        "right": "Ich gehe in die Kantine.",
+        "tag": "PREP_CASE",
+        "note_en": "Movement (wohin?) takes the accusative: in die."
+      },
+      "tags": [
+        "PREP_CASE"
+      ],
+      "drills": {
+        "surgery": [
+          {
+            "de": "Ich lege das Handy auf den Tisch.",
+            "en": "I put the phone on the table."
+          },
+          {
+            "de": "Am Abend sitze ich lange in der Bibliothek.",
+            "en": "In the evening I sit in the library for a long time."
+          }
+        ],
+        "transform": [
+          {
+            "instruction": "Change wo? to wohin? Use gehen.",
+            "given": "Ich bin in der Kantine.",
+            "answer": "Ich gehe in die Kantine.",
+            "alt": []
+          },
+          {
+            "instruction": "Change wohin? to wo? Use liegen.",
+            "given": "Ich lege den Schlüssel auf den Tisch.",
+            "answer": "Der Schlüssel liegt auf dem Tisch.",
+            "alt": []
+          }
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {
+            "wrong": "Ich bin heute in die Uni.",
+            "right": "Ich bin heute in der Uni.",
+            "tag": "PREP_CASE",
+            "note_en": "Location (wo?) takes the dative: in der."
+          },
+          {
+            "wrong": "Ich stelle die Tasche neben dem Stuhl.",
+            "right": "Ich stelle die Tasche neben den Stuhl.",
+            "tag": "PREP_CASE",
+            "note_en": "stellen is movement (wohin?): accusative."
+          }
+        ],
+        "fill": [
+          {
+            "text": "Der Kaffee steht auf d___ Tisch.",
+            "answers": [
+              "em"
+            ],
+            "full": "Der Kaffee steht auf dem Tisch."
+          },
+          {
+            "text": "Ich hänge das Bild an d___ Wand.",
+            "answers": [
+              "ie"
+            ],
+            "full": "Ich hänge das Bild an die Wand."
+          },
+          {
+            "text": "Wir warten vor d___ Bahnhof.",
+            "answers": [
+              "em"
+            ],
+            "full": "Wir warten vor dem Bahnhof."
+          }
+        ],
+        "free": {
+          "prompt_en": "Write one sentence about where you put your laptop after work. Use auf.",
+          "must_include": [
+            "auf"
+          ]
+        }
+      },
+      "homework": "Write 4 sentences about your flat or the office. Write two wo? sentences and two wohin? sentences."
+    },
+    {
+      "code": "PRONOUNS_CASE",
+      "order": 30,
+      "group": "cases",
+      "title": "Personal pronouns by case",
+      "rule_en": "Pronouns change with case: ich, mich, mir; er, ihn, ihm; sie, sie, ihr; wir, uns, uns; Sie, Sie, Ihnen.",
+      "slot_diagram": {
+        "labels": [
+          "Nominative",
+          "Accusative",
+          "Dative"
+        ],
+        "rows": [
+          [
+            "ich",
+            "mich",
+            "mir"
+          ],
+          [
+            "du",
+            "dich",
+            "dir"
+          ],
+          [
+            "er",
+            "ihn",
+            "ihm"
+          ],
+          [
+            "sie",
+            "sie",
+            "ihr"
+          ],
+          [
+            "es",
+            "es",
+            "ihm"
+          ],
+          [
+            "wir",
+            "uns",
+            "uns"
+          ],
+          [
+            "ihr",
+            "euch",
+            "euch"
+          ],
+          [
+            "sie (plural)",
+            "sie",
+            "ihnen"
+          ],
+          [
+            "Sie",
+            "Sie",
+            "Ihnen"
+          ]
+        ]
+      },
+      "examples": [
+        {
+          "context": "work",
+          "de": "Können Sie mir die Datei bis morgen schicken?",
+          "en": "Can you send me the file by tomorrow?"
+        },
+        {
+          "context": "life",
+          "de": "Mein Bruder ruft mich jeden Sonntag aus Pakistan an.",
+          "en": "My brother calls me from Pakistan every Sunday."
+        },
+        {
+          "context": "finance_history",
+          "de": "Bismarck hat den König beraten und der König hat ihm vertraut.",
+          "en": "Bismarck advised the king and the king trusted him."
+        }
+      ],
+      "common_error": {
+        "wrong": "Ich rufe dir morgen an.",
+        "right": "Ich rufe dich morgen an.",
+        "tag": "CASE_AKK",
+        "note_en": "anrufen takes the accusative: dich."
+      },
+      "tags": [
+        "CASE_AKK",
+        "CASE_DAT"
+      ],
+      "drills": {
+        "surgery": [
+          {
+            "de": "Kannst du mir morgen bei der Präsentation helfen?",
+            "en": "Can you help me with the presentation tomorrow?"
+          },
+          {
+            "de": "Ich habe ihn gestern in der Kantine gesehen.",
+            "en": "I saw him in the Kantine yesterday."
+          }
+        ],
+        "transform": [
+          {
+            "instruction": "Replace den Kollegen with a pronoun.",
+            "given": "Ich rufe den Kollegen morgen an.",
+            "answer": "Ich rufe ihn morgen an.",
+            "alt": []
+          },
+          {
+            "instruction": "Replace der Kollegin with a pronoun.",
+            "given": "Ich helfe der Kollegin mit dem Bericht.",
+            "answer": "Ich helfe ihr mit dem Bericht.",
+            "alt": []
+          }
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {
+            "wrong": "Kannst du ihn helfen?",
+            "right": "Kannst du ihm helfen?",
+            "tag": "CASE_DAT",
+            "note_en": "helfen takes the dative: ihm."
+          },
+          {
+            "wrong": "Ich sehe er jeden Morgen im Zug.",
+            "right": "Ich sehe ihn jeden Morgen im Zug.",
+            "tag": "CASE_AKK",
+            "note_en": "He is the object here: ihn."
+          }
+        ],
+        "fill": [
+          {
+            "text": "Der Chef hat m___ eine E-Mail geschickt.",
+            "answers": [
+              "ir"
+            ],
+            "full": "Der Chef hat mir eine E-Mail geschickt."
+          },
+          {
+            "text": "Ich kenne ih___ nicht gut, er ist neu im Team.",
+            "answers": [
+              "n"
+            ],
+            "full": "Ich kenne ihn nicht gut, er ist neu im Team."
+          },
+          {
+            "text": "Ich danke ___ für Ihre Hilfe.",
+            "answers": [
+              "Ihnen"
+            ],
+            "full": "Ich danke Ihnen für Ihre Hilfe."
+          }
+        ],
+        "free": {
+          "prompt_en": "Write one sentence about someone who helped you this week. Use mir.",
+          "must_include": [
+            "mir"
+          ]
+        }
+      },
+      "homework": "Write 4 sentences about your colleagues or classmates. Replace their names with pronouns: ihn, ihm, sie, ihr."
+    }
+  ]
+}

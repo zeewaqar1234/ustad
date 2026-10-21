@@ -141,6 +141,8 @@ Grammar is taught as **~40 patterns**, each a 1-screen card: rule in one line, s
 
 ### 5.4 Speaking: the voice tutor ("Ustad voice")
 
+> **Superseded in part on 2026-10-21 (free-resources decision, docs/architecture.md §8):** STT = browser `SpeechRecognition`, TTS = browser `speechSynthesis`, Tutor = local Ollama. No Azure pronunciation assessment: Shadowing scores by word match. The vendor and cost tables below are kept as history only. The stammer rules are unchanged and still apply in full.
+
 **Architecture decision: turn-based pipeline, not a realtime speech-to-speech model.**
 
 Why: Zee needs zero time pressure, so ~1–2 s latency per turn is a feature, not a bug. A pipeline gives full control over turn-taking, transcripts, corrections and cost; realtime models re-send the whole conversation on each response and cost several times more.
@@ -321,8 +323,9 @@ Chosen to match what Zee already knows (FastAPI + React) and to keep one small d
 | Background jobs | APScheduler inside the app (nightly content, report card Sunday 20:00, backups) | no extra infra |
 | Frontend | React + TypeScript + Vite, Tailwind, React Router, TanStack Query | known stack |
 | PWA | `vite-plugin-pwa` (Workbox): installable, offline cache for SRS session + downloaded podcast | commute use |
-| Audio in | `MediaRecorder` (webm/opus), hold-to-talk + tap mode | §5.4 |
-| Audio out | server-generated mp3 (Azure TTS), cached by text hash | reuse = free |
+| LLM | local **Ollama** server (`llama3.1:8b` default) behind `app/llm/` provider interface | free; §9 (docs/llm.md) |
+| Audio in (STT) | browser **Web Speech API** `SpeechRecognition` (`lang="de-DE"`, `continuous`, `interimResults`), tap-start / tap-stop; free fallback: self-hosted Whisper on the server | free; see "Free-resources decision" below |
+| Audio out (TTS) | browser **Web Speech API** `speechSynthesis` with a de-DE voice from the device | free; no audio file is produced (see below) |
 | NLP helpers | spaCy `de_core_news_sm` for lemmatising known-word density; **self-hosted LanguageTool container** for checks (public API forbids automated use) | §9, §11 |
 | Open data | Kaikki German JSONL (conjugations, gender, plurals), Tatoeba sentences, imported by scripts in `backend/scripts/` | §11 |
 | Charts | Recharts | simple |
@@ -342,23 +345,80 @@ ustad/
 
 API surface (v1, REST JSON): `/auth/*`, `/api/daily` (today's loop), `/api/review/next|answer`, `/api/patterns/*`, `/api/drills/*`, `/api/homework/*`, `/api/mistakes`, `/api/texts/*`, `/api/dictation/*`, `/api/voice/session|turn|review`, `/api/feed`, `/api/tests/*`, `/api/stats/*` (incl. `/gate`), `/api/life/*`, `/api/report/*`, `/api/costs`, `/api/export`.
 
----
+### Free-resources decision (2026-10-21, Zee)
+
+Claude (Anthropic) and Azure Speech are replaced. Nothing in the app needs a paid API key.
+
+| Was | Now | What changes |
+|---|---|---|
+| Claude Haiku/Sonnet (Tutor, Grader, Author) | Ollama on Zee's machine or the server | quality of German feedback depends on the local model; LanguageTool pre-check and `needs_review` matter more |
+| OpenAI `gpt-4o-mini-transcribe` (STT) | `SpeechRecognition` in the browser | see risks below |
+| Azure neural TTS → cached mp3 | `speechSynthesis` in the browser | voice quality depends on the phone/OS; no mp3 |
+| Azure pronunciation assessment | none (Web Speech gives only `transcript` + `confidence`) | Shadowing scores by word match against the reference text (the fallback already planned in §16) |
+
+Risks and how the app handles them (facts from the W3C/WICG spec, MDN and mdn/browser-compat-data, checked 2026-10-21):
+- **Turn end (stammer rule).** The spec says `end` fires whenever the session ends, for any reason, and the
+  browser decides when recognition stops; Chrome Android ignores `continuous` ("can be set, but has no
+  effect"). Rule in code: the app restarts recognition on every `end` event and appends the text; only Zee's
+  tap on Stop ends a turn. No timer, no silence detection in app code. Risk left: words spoken in the short gap
+  between `end` and restart can be lost, and a long block can cut a recognition segment. Phase 3 must test
+  this with Zee's real speech; if it loses words, switch STT to self-hosted Whisper (free, record with
+  `MediaRecorder`, transcribe on the server) behind the same interface.
+- **Privacy.** MDN: by default recognition is server-based ("your audio is sent to a web service", e.g.
+  Chrome). Voice content leaves the device to the browser vendor. Chrome desktop 139+ has `processLocally`
+  for on-device recognition; Chrome Android and Safari do not. The diary and writing never go through this;
+  only spoken turns do. The self-hosted Whisper fallback avoids it.
+- **Support.** Chrome (desktop + Android) and Safari 14.1+ (webkit prefix; `continuous` correct from Safari 17).
+  Firefox: preview only. The app shows a text-input fallback when `SpeechRecognition` is missing.
+  Secure context (HTTPS) required, same as the microphone.
+- **TTS has no file output.** `speechSynthesis` only speaks (`speak/cancel/pause/resume/getVoices`); it cannot
+  produce an mp3. So the Phase 4 Commute Podcast (mp3 concatenation + offline cache) needs another free engine:
+  Piper TTS on the server (voices `thorsten`/`kerstin`, CC0, §11). In-app read-aloud uses `speechSynthesis`.
+- **Ollama hardware.** 8 GB RAM for 7B models (Ollama README v0.5.0); plus LanguageTool (1 GB heap). A small
+  VPS may not fit both; running the server on Zee's laptop and reaching it over HTTPS is the free option.
+
+Sources: https://webaudio.github.io/web-speech-api/ · https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition ·
+https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API ·
+https://github.com/mdn/browser-compat-data (api/SpeechRecognition.json) ·
+https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognitionAlternative/confidence ·
+https://github.com/ollama/ollama/blob/main/docs/api.md
 
 ## 9. LLM tutor design
 
+**Decision 2026-10-21 (Zee): 100 % free resources.** All three roles run on a local **Ollama** server
+(`http://localhost:11434`, `POST /api/chat`). No paid LLM API. Claude models are no longer used by the app.
+
 **Roles (one module `app/llm/` with a provider interface so models can be swapped):**
 
-| Role | Model (default) | Used for | Output |
+| Role | Model (default, `OLLAMA_MODEL`) | Used for | Output |
 |---|---|---|---|
-| Tutor | `claude-haiku-5-5` | voice turns, quick hints, feed card generation | JSON |
-| Grader | `claude-sonnet-5-5` | writing correction, test marking, end-of-session voice review, weekly remarks | JSON |
-| Author | `claude-sonnet-5-5` | graded texts, Sabaq content, scenario cards, seed decks | JSON, stored in DB |
+| Tutor | `llama3.1:8b` via Ollama | voice turns, quick hints, feed card generation | JSON |
+| Grader | `llama3.1:8b` via Ollama | writing correction, test marking, end-of-session voice review, weekly remarks | JSON |
+| Author | `llama3.1:8b` via Ollama (nightly batch, no latency limit) | graded texts, Sabaq content, scenario cards, seed decks | JSON, stored in DB |
+
+One model for all roles by default; each role can point at a different local model later (e.g. a bigger one
+for the nightly Author job). Model choice is not final: compare 2–3 local models on the 5 grader fixture
+sentences (`tests/fixtures/grader/`) with `RUN_OLLAMA=1` and keep the one that finds the expected tags.
 
 Rules:
-- **All LLM output is structured JSON validated with Pydantic.** On validation failure: one retry with the error message, then a graceful fallback. No free-text parsing.
-- **Generate ahead, don't generate live.** Author content (texts, Sabaq, scenarios, feed cards) is generated in a nightly batch job for the next 2 days and stored. Live calls only for Tutor and Grader. This cuts cost and latency and lets bad content be caught.
-- **Prompt caching** on the static parts (system prompt + learner profile + pattern list): put them first, mark with `cache_control`. Note the minimum cacheable prompt length (512 tokens on 5.x models per Anthropic docs).
-- **German quality guard:** every generated German text runs through LanguageTool (§11) before storing. Items with flagged issues are marked `needs_review`; Zee can approve/fix in an admin view. LLM German is good but not perfect, and wrong German drilled with SRS is worse than none.
+- **All LLM output is structured JSON validated with Pydantic.** The Pydantic schema is sent as Ollama's
+  `format` (JSON-schema structured outputs, Ollama ≥ 0.5.0), `stream: false`, `temperature: 0`.
+  On validation failure: one retry with the error message, then a graceful fallback. No free-text parsing.
+- **Graceful fallback when Ollama is down or the model fails twice:** writing is still checked by
+  LanguageTool and shown as a red-pen view marked "LanguageTool only"; Zee can re-grade later.
+  SRS, drills and recitation never need the LLM.
+- **Generate ahead, don't generate live.** Author content (texts, Sabaq, scenarios, feed cards) is generated
+  in a nightly batch job for the next 2 days and stored. Live calls only for Tutor and Grader. On a local model
+  this is about latency and catching bad content, not money.
+- **Static prompt parts first** (system prompt + learner profile + pattern list), so the request prefix is
+  identical between calls. Keep the model loaded with Ollama's `keep_alive` (default 5 min) so a turn does not
+  pay the model load time. (Anthropic `cache_control` no longer applies.)
+- **Cost ledger:** every Ollama call still writes a `cost_ledger` row (vendor `ollama`, tokens =
+  `prompt_eval_count + eval_count`, eur 0.00), so usage is visible and the CLAUDE.md rule holds.
+- **Hardware:** Ollama's README (v0.5.0) states at least 8 GB RAM for 7B models, 16 GB for 13B. `llama3.1:8b`
+  is a 4.7 GB download. It runs on Zee's laptop or on a server with enough RAM; a small VPS will be slow.
+  The phone talks only to the FastAPI server, never to Ollama directly.
+- **German quality guard:** every generated German text runs through LanguageTool (§11) before storing. Items with flagged issues are marked `needs_review`; Zee can approve/fix in an admin view. LLM German is good but not perfect (a local 8B model is weaker than the hosted models this spec first planned), and wrong German drilled with SRS is worse than none.
 - **Level control:** the Author gets the list of Zee's known lemmas (top N by frequency) and must keep new words ≤ 5 %; the app measures actual known-word density after generation and regenerates once if outside 93–99 %.
 - **Explanation language:** English by default; optional Roman Urdu for grammar explanations (Settings). German for everything else.
 
@@ -392,7 +452,13 @@ Conversation rules:
   "model_sentence_for_srs": [str] }
 ```
 
----
+Implementation (Phase 2): `app/llm/provider.py` (`OllamaProvider`, `complete_json`, `LLMUnavailable`,
+`LLMInvalid`), schemas in `app/llm/schemas.py`, prompts in `app/llm/prompts/`. Grader pipeline in
+`app/services/grading.py`: LanguageTool pre-check → Ollama Grader → span check → LanguageTool check of the
+corrected text (flags → `needs_review`).
+
+Sources: Ollama API https://github.com/ollama/ollama/blob/main/docs/api.md · structured outputs release
+https://github.com/ollama/ollama/releases/tag/v0.5.0 · RAM guidance https://github.com/ollama/ollama/blob/v0.5.0/README.md
 
 ## 10. Data model
 
@@ -402,15 +468,17 @@ SQLite (single user), SQLAlchemy 2.x + Alembic migrations. All timestamps UTC, d
 |---|---|
 | `profile` | id=1, name, level_band, explanation_lang, settings_json, gate_override |
 | `life_fact` | id, category (work/routine/event/person_role/interest), text, valid_from, valid_to |
-| `item` | id, kind (word/chunk/pattern/sentence), de, en, gender, plural, pos, lemma, tags[], cefr, freq_rank, source, status (ok/needs_review) |
+| `item` | id, kind (word/chunk/pattern/sentence), de, en, gender, plural, pos, lemma, tags[], cefr, freq_rank, source, status (ok/needs_review), wrong (fix_sentence prompt, deck `ghalti`), known_from_placement |
 | `card` | id, item_id, card_type (recog/produce/cloze/audio/gender/plural/verbforms/fix_sentence), FSRS state (due, stability, difficulty, state, reps, lapses, last_review) |
 | `review_log` | id, card_id, ts, rating, answer_given, auto_graded, elapsed_ms |
-| `pattern` | id, code (e.g. VE_WEIL), title, rule_en, slot_diagram, examples_json, order |
+| `pattern` | id, code (e.g. VE_WEIL), title, rule_en, slot_diagram, examples_json, order, group, common_error, tags[], drills_json, homework, status, known_from_placement, rounds, best_pct, done_at |
 | `lesson` (Sabaq) | id, date, type (pattern/chunks/reading), pattern_id?, scenario, items[], status |
 | `session` | id, kind (manzil/sabqi/sabaq/bolna/homework/feed/test/free), started, ended, active_s |
 | `attempt` | id, session_id, task_ref, input, correct, error_tags[], score |
-| `mistake` (Ghalti) | id, ts, source, orig, fix, tag, note, count, card_id? |
-| `homework` | id, assigned, due, prompt, submission, grade_json, status |
+| `mistake` (Ghalti) | id, ts, last_ts, source, orig, fix, tag, note, count, card_id? |
+| `homework` | id, kind (homework/tagebuch/placement), assigned, due, pattern_id?, prompt, submission, grade_json, status (open/graded/lt_only), submitted_at |
+| `recitation_progress` | code, stage (highest passed, -1 none), last_passed, passes |
+| `placement_result` | id, ts, answers, by_band, writing_homework_id, level_band, items_marked |
 | `text` | id, title, body_de, level, topic, known_density, source_url, licence, audio_asset_id? |
 | `audio_asset` | id, path, kind (tts/user/external), text_ref, voice, duration_s |
 | `voice_session` / `voice_turn` | session meta; turn: user_transcript, reply_de, prompt_correction, pron_json, audio refs |
@@ -421,8 +489,6 @@ SQLite (single user), SQLAlchemy 2.x + Alembic migrations. All timestamps UTC, d
 | `cost_ledger` | ts, vendor, model, units, unit_type, eur |
 
 **Error tags (enum `ErrorTag`):** `V2_POSITION`, `VERB_FINAL`, `SEP_PREFIX`, `AUX_HABEN_SEIN`, `PARTIZIP`, `TENSE_CHOICE`, `CASE_AKK`, `CASE_DAT`, `PREP_CASE`, `GENDER`, `ADJ_ENDING`, `PLURAL`, `CONNECTOR_CHOICE`, `MIDDLE_FIELD_ORDER`, `WORD_CHOICE`, `FALSE_FRIEND`, `REGISTER_DU_SIE`, `SPELLING`, `UMLAUT`, `CAPITALISATION`, `PRONUNCIATION`, `OTHER`.
-
----
 
 ## 11. Content sources and licensing
 
@@ -469,22 +535,20 @@ Checked 20 Oct 2026 against official pages. **Not legal advice.** Baseline assum
 
 **Security (the app is on the internet and has your voice + diary):**
 - Single user, password login (argon2 hash) + httpOnly secure session cookie; login rate limit; optional passkey later.
-- All API keys only on the server (`.env`, never in the frontend bundle, never committed). `.env.example` committed with blank values.
+- All API keys only on the server (`.env`, never in the frontend bundle, never committed). `.env.example` committed with blank values. Since the free-resources decision no paid keys are needed; the rule stays for any key added later.
 - HTTPS is mandatory: browsers only allow microphone access in a secure context (localhost is exempt for development).
 - Nightly SQLite backup (`sqlite3 .backup`) to a second location; `/api/export` gives a full JSON export.
 
 **Privacy:**
 - User audio is deleted after STT + scoring by default (keep transcripts). Setting to keep audio for 7 days for "listen to yourself" review.
 - Don't use any vendor free tier that trains on your data for voice or diary content (Gemini free tier states data is used to improve products).
-- Before going live, check each vendor's API data-retention policy (OpenAI, Azure, Anthropic) and note it in `docs/vendors.md`. Not verified in this spec.
+- Before going live, check the data handling of the browser speech service on Zee's phone (Google for Chrome, Apple for Safari) and note it in `docs/vendors.md`. Not verified in this spec. Ollama and LanguageTool run on Zee's own machine/server: no third party sees writing or diary text.
 - **Work confidentiality:** the app warns on the Life-facts page and in the journal: no client names, internal system names, order data or anything from the bank that is not public. The tutor prompt also enforces this. You work in a regulated environment; keep the app 100 % personal and off work devices/networks.
 
 **Cost control:**
 - Every external call writes to `cost_ledger` with computed € (prices in `config/prices.yaml`, editable).
-- Budgets in Settings: daily soft cap (warning) and monthly hard cap (default €10). At hard cap: voice and live grading switch to text-only mode with pre-generated content; SRS keeps working (no API needed).
-- Expected cost at normal use: ~€3–6/month total (voice ≈ $2–3 per §5.4 + Sonnet grading + nightly content). Verify against the ledger after week 1.
-
----
+- Budgets in Settings stay (daily soft cap, monthly hard cap, default €10) in case a paid service is added later; with Ollama + Web Speech every ledger row is €0.00.
+- Expected API cost: €0/month. Real costs left: electricity/hardware for Ollama and the server (hosting, domain). The ledger still counts tokens per role, which shows load.
 
 ## 13. Build phases (token-efficient)
 
@@ -494,12 +558,12 @@ Checked 20 Oct 2026 against official pages. **Not legal advice.** Baseline assum
 |---|---|---|
 | **0. Scaffold** (≈1 session) | Repo, tooling, docs split | `docs/` contains: `learner_profile.md`, `pedagogy.md` (§3–4), `modules.md` (§5), `engagement.md` (§6–7), `architecture.md` (§8, §10, §12), `llm.md` (§9), `content_sources.md` (§11), `PROGRESS.md`. `CLAUDE.md` created from §14 (< 80 lines). Backend + frontend start with one command (`make dev`); `/api/health` returns ok; `pytest` and `vitest` run with one passing test each; LanguageTool container starts in docker-compose and a test call on "Ich habe gestern nach Hause gegangen." returns a match; `.env.example` exists; `.gitignore` excludes `.env`, `*.db`, `audio/`. |
 | **1. MVP: SRS + daily loop** (≈1 weekend, must be on phone) | Usable daily from day 3 | Login works. Seed decks loaded: Connector Deck (all connectors with verb-effect tags), Work Deck (~150 chunks), Life Deck (~150 chunks), generated via a script into JSON, LanguageTool-checked, marked `needs_review` where flagged. FSRS reviews with typed answers + auto-grading (umlaut/typo tolerance with diff). Daily loop screen with Manzil + Sabqi + a simple Sabaq (next pattern in fixed order). Streak + freezes + `day_log`. PWA installable on Android/iOS home screen. Deployed on HTTPS. **Tests:** FSRS scheduling unit tests (intervals increase on Good, reset on Again); answer-grader tests (`Strasse`≈`Straße`, `ae`≈`ä` → Hard, wrong article → Again). Evidence: screenshot of the review screen on a phone-width viewport. |
-| **2. Grammar + writing** | The #1 gap: verb position, connectors, tenses | 40 patterns as JSON (generated in batches of 5, LanguageTool-checked). Pattern card screen + 6 drill types (§5.2). Recitation (Pahara) in typed mode. Homework + Tagebuch with Grader JSON → red-pen view. Ghalti Register (table + by-tag heat map) and auto-creation of `fix_sentence` cards. Placement test (≈35 items + one 5-sentence writing sample) setting `level_band` and marking known items. **Tests:** Grader schema validation with 5 fixture sentences containing known errors (each expected tag must appear); drill generators produce valid items. |
-| **3. Voice tutor** (use plan mode) | Speaking without time pressure | Hold-to-talk + tap-start/tap-stop recording; FastAPI pipeline STT → Tutor → TTS (§5.4). Modes: Shadowing (with Azure pronunciation accuracy, fluency hidden), Recitation by voice, 6 scenario roleplays, Free talk, end-of-session "Say it better" review. Stammer-safe rules enforced in code: no auto-stop, no timers; disfluency-stripping before grading. Cost ledger entries for every call. Text fallback. **Tests:** pipeline test with 3 recorded fixture clips (mock vendors in unit tests, one real call behind a flag); assert no code path ends a user turn automatically; assert fluency score is not displayed when setting is off. |
-| **4. Reading + listening** | Input volume, reading-first | Reader with tap-to-gloss/add, comprehension Qs; nightly Author job for 2 graded texts/day with known-word density check; TTS audio for every text; Diktat (5/day) with diff; Commute Podcast episode generator (mp3 concatenation) + offline cache in service worker; external sources page per §11 (links/embeds only where licence allows). **Tests:** density calculator unit test; Diktat diff test (umlauts, capitals, endings). |
-| **5. Life engine + curriculum + feed** | "Knows me", plans my day | Life-facts CRUD with confidentiality warning; morning check-in → 3 phrases for today; evening check-out; curriculum engine choosing next Sabaq from pattern mastery + Ghalti top tags + upcoming life events; if-then onboarding + web push (max 2/day, quiet hours, on-call mode); Scroll feed with 40-card soft stop. **Tests:** curriculum picks a pattern with highest error rate when mastery < 60 %; notification scheduler respects quiet hours. |
+| **2. Grammar (§5.2) + writing (§5.6) + Ghalti (§5.7)** | The #1 gap: verb position, connectors, tenses | 40 patterns as JSON (generated in batches of 5, LanguageTool-checked). Pattern card screen + 6 drill types (§5.2). Recitation (Pahara) in typed mode. Homework + Tagebuch with Grader JSON → red-pen view. Ghalti Register (table + by-tag heat map) and auto-creation of `fix_sentence` cards. Placement test (≈35 items + one 5-sentence writing sample) setting `level_band` and marking known items. **Tests:** Grader schema validation with 5 fixture sentences containing known errors (each expected tag must appear); drill generators produce valid items. |
+| **3. Voice tutor** (use plan mode) | Speaking without time pressure | Hold-to-talk + tap-start/tap-stop; pipeline browser STT (Web Speech `SpeechRecognition`, restarted on every `end`, only Zee's tap ends a turn) → FastAPI Tutor (Ollama) → browser TTS (`speechSynthesis`) (§5.4, free-resources decision in §8). Modes: Shadowing (word-match scoring against the reference text, no fluency score), Recitation by voice, 6 scenario roleplays, Free talk, end-of-session "Say it better" review. Stammer-safe rules enforced in code: no auto-stop, no timers; disfluency-stripping before grading. Cost ledger entries for every LLM call (€0, tokens counted). Text fallback when `SpeechRecognition` is missing. Self-hosted Whisper fallback if Web Speech loses words in Zee's tests. **Tests:** pipeline test with 3 recorded fixture transcripts (mock Ollama in unit tests, one real call behind `RUN_OLLAMA=1`); assert no code path ends a user turn automatically; assert fluency score is not displayed when setting is off. |
+| **4. Reading (§5.3) + listening (§5.5)** | Input volume, reading-first | Reader (§5.3) with tap-to-gloss/add, comprehension Qs; nightly Author job for 2 graded texts/day with known-word density check; read-aloud for every text via `speechSynthesis`; Diktat (5/day) with diff; Commute Podcast episode generator (mp3 concatenation, audio from self-hosted Piper TTS because `speechSynthesis` cannot write files) + offline cache in service worker; external sources page per §11 (links/embeds only where licence allows). **Tests:** density calculator unit test; Diktat diff test (umlauts, capitals, endings). |
+| **5. Life engine + curriculum + feed** | "Knows me", plans my day | Life-facts CRUD with confidentiality warning; morning check-in → 3 phrases for today; evening check-out; curriculum engine choosing next Sabaq from pattern mastery + Ghalti top tags + upcoming life events; if-then onboarding + web push (max 2/day, quiet hours, on-call mode); Scroll feed with 40-card soft stop; work writing templates (§5.6: meeting request, status update, absence note), graded by the Phase 2 Grader. **Tests:** curriculum picks a pattern with highest error rate when mastery < 60 %; notification scheduler respects quiet hours. |
 | **6. Tests, milestones, report card** | Pakistani-school accountability | Weekly test (Friday), monthly exam, B1 mock in 4 modules (Sprechen via voice tutor in examiner mode), milestones with evidence, report card (grayscale print CSS + PDF), forecast, Builder gate endpoint. **Tests:** report card renders with fixture data; forecast math unit test. |
-| **7. Later** | Only if gate ≥ 5/7 for 4 weeks | Realtime conversation mode (OpenAI `gpt-realtime-2.1-mini` with push-to-talk) behind `VoiceEngine`; photo-of-handwritten-homework grading; calendar import; Anki export. |
+| **7. Later** | Only if gate ≥ 5/7 for 4 weeks | Realtime conversation mode behind `VoiceEngine` (OpenAI `gpt-realtime-2.1-mini` is paid: only if Zee drops the free-only rule; otherwise a local option); photo-of-handwritten-homework grading; calendar import; Anki export. |
 
 **Token discipline:**
 - Never paste big generated content into the chat. Generators write to `data/seed/*.json`; Claude Code reads a sample of 5, not the whole file.
@@ -556,13 +620,13 @@ Native iOS/Android apps (PWA only) · multiple users, friends, leaderboards · p
 
 | Item | Status | What to do |
 |---|---|---|
-| Vendor prices and model names | Verified on official pages 20 Oct 2026; they change often (OpenAI already marks older realtime/TTS models deprecated) | Claude Code re-checks `config/prices.yaml` against vendor pages in Phase 3 |
-| Azure pronunciation assessment for de-DE | Listed as supported per the language-support tab (research check); I could not re-extract that tab myself. Prosody = en-US only and "fluency = silent breaks between words" both confirmed on the how-to page | Phase 3 first step: one real de-DE assessment call; if unsupported, ship Shadowing with STT word-match scoring instead |
+| Vendor prices and model names | No paid vendors after 2026-10-21 | Re-check only if a paid service is added back |
+| Pronunciation scoring | Azure dropped (free-resources decision); Web Speech has no pronunciation score | Shadowing scores by word match against the reference text; fluency score does not exist, so nothing to hide |
 | Tagesschau terms (private use, 60 req/h) | From the documented terms quoted in the bundesAPI docs; the official page blocked my direct check | Read https://www.tagesschau.de/infoservices/rssfeeds yourself before enabling the poller |
-| Azure free tier limits and rate limits | Free amounts confirmed (0.5M TTS chars, 5 STT hours/month); request-rate limits not confirmed | Check in Azure portal when creating the resource; choose an EU region |
-| STT quality for accented German | Not tested | Phase 3: record 10 test sentences, compare `gpt-4o-mini-transcribe` vs `gpt-transcribe` WER; pick the better one |
+| Local model quality for German grading | Not tested (model downloads blocked in the build container) | Phase 2 follow-up: run `RUN_OLLAMA=1 uv run pytest tests/test_grader_llm.py` on Zee's machine with 2–3 models; keep the one that finds all expected tags |
+| STT quality for accented German | Not tested | Phase 3: record 10 test sentences, compare Web Speech (Chrome, Safari) vs self-hosted Whisper word error rate; pick the better one |
 | Whether STT "cleans up" stammers or mis-transcribes blocks | Unknown | Phase 3 test with your real speech; if transcripts insert junk, add a cleanup step before grading |
-| Vendor API data-retention policies | Not verified here | Check before storing voice; document in `docs/vendors.md` |
+| Browser speech service data handling | Not verified here; MDN confirms audio goes to a server by default | Check before Phase 3 voice use; document in `docs/vendors.md`; prefer Whisper if unclear |
 | Hosting | Choice open (see §8) | Pick in Phase 1; must give HTTPS + persistent disk for SQLite |
 | LLM-generated German accuracy | Known risk | LanguageTool check + `needs_review` + your spot checks; for grammar pattern cards, cross-check against a grammar reference |
 | Evidence strength | Several design choices rest on MOD/WEAK evidence (shadowing, microlearning, streaks) | Treat as experiments; the progress data will show what works for you after 4 weeks |
