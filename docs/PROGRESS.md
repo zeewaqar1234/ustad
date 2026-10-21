@@ -173,7 +173,7 @@ cd ../frontend && E2E_SHOTS=$SP/shots PW_CHROMIUM=/opt/pw-browsers/chromium npx 
 | Check | Result |
 |---|---|
 | Builder gate | `GET /api/stats/gate` → `{"study_days_last_7":0,"open":true,"override":true}` (override, see gate log) |
-| 40 patterns, batches of 5, LanguageTool-checked | `make grammar-build`: 8 × "batch_0N.json: 5 patterns checked", PATTERNS_RESULT; placement 35 items, 0 needs_review; recitation 12 tables |
+| 40 patterns, batches of 5, LanguageTool-checked | `make grammar-build`: 8 × "batch_0N.json: 5 patterns checked", "patterns: 40, 7 needs_review" (5 min 24 s, 4 parallel LanguageTool calls); first run flagged 9, 2 were real errors ("wenn/ob ich frei habe" → "freihabe", fixed); placement 35 items, 0 needs_review; recitation 12 tables |
 | Pattern card + 6 drill types | `test_all_six_drill_types_are_generated`; screenshots `docs/evidence/phase2/p2-pattern-card.png`, `p2-drill-surgery.png`, `p2-drill-feedback.png` |
 | Drill generators produce valid items | `tests/test_drills.py`: every drill of all 40 patterns: answer not in prompt, expected answer passes, empty fails, error_spot wrong sentence fails, fill answers not shown earlier |
 | Recitation typed, full → gaps → blank by day | `test_recitation_stages_open_one_per_day`; `p2-recitation.png` |
@@ -182,7 +182,7 @@ cd ../frontend && E2E_SHOTS=$SP/shots PW_CHROMIUM=/opt/pw-browsers/chromium npx 
 | Placement test sets level_band, marks known | `test_placement_sets_level_and_marks_known` (A2 + B1.1 right → "B1.2", seed item known, card scheduled); `p2-placement.png` |
 | Grader schema, 5 fixture sentences, each expected tag | `tests/test_grader_schema.py` 5 fixtures pass (VERB_FINAL; V2_POSITION + VERB_FINAL; AUX_HABEN_SEIN; CASE_DAT; PARTIZIP) with a **mocked** model reply; plus bad-schema rejection, retry, fallback, span drop |
 | Same 5 fixtures on a real local model | **Not run.** `tests/test_grader_llm.py` skips without `RUN_OLLAMA=1`; this container cannot download models (registry.ollama.ai and huggingface.co denied by the network policy). Open item below. |
-| pytest | PYTEST_RESULT |
+| pytest | 163 passed, 5 skipped (the 5 real-model tests); `test_built_patterns_match_source` guards against a stale build |
 | vitest | 6 passed (RedPen, surgery chips, drill hides answer until Check) |
 | Playwright 375px | 5 passed (3 new Phase 2 + 2 Phase 1); every new screen asserts no horizontal scroll |
 | make lint | ruff check + format clean; oxlint 0 errors (2 old warnings in ReviewSession.tsx); tsc clean |
@@ -193,7 +193,7 @@ cd ../frontend && E2E_SHOTS=$SP/shots PW_CHROMIUM=/opt/pw-browsers/chromium npx 
 - [ ] **Real local-model run.** On Zee's machine: install Ollama, `ollama pull llama3.1:8b`, `make lt-up`,
   `make test-ollama`. All 5 fixtures must find their tags. If not, try another model (`OLLAMA_MODEL=...`)
   and record the result here. Until then the grading quality of the free setup is unmeasured.
-- [ ] **Approve or fix flagged patterns** in the check queue (FLAGGED_LIST). They stay out of drills until then.
+- [ ] **Approve or fix flagged patterns** in the check queue (7, all look like false positives: speller on Lahore, MiCA, Coin, CFA in V2_INVERSION, VE_ALS, MODAL_INFINITIVE, RELATIVE_CLAUSE, KONJ2_WISH, FUTURE; SCHENKEN_DATIV on the correct "Ich gebe ihn ihr." in MIDDLE_FIELD_ORDER). They stay out of drills until then.
 - LanguageTool 6.8 misses some errors the model must catch, e.g. "Am Wochenende habe ich nach Frankfurt
   gefahren." gives no match (it does flag "Ich habe gestern nach Hause gegangen."). The LanguageTool-only
   fallback is a safety net, not a grader.
