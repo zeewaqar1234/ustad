@@ -1,0 +1,208 @@
+{
+  "batch": 1,
+  "patterns": [
+    {
+      "code": "V2_STATEMENT",
+      "order": 1,
+      "group": "word_order",
+      "title": "Verb second: subject first",
+      "rule_en": "In a main clause the conjugated verb is always element number 2. Here the subject is element 1.",
+      "slot_diagram": {
+        "labels": ["Position 1 (subject)", "Verb (2)", "Rest"],
+        "rows": [
+          ["Ich", "arbeite", "heute im Büro"],
+          ["Mein Zug", "fährt", "um 7:40 Uhr"],
+          ["Der DAX", "steigt", "seit Montag"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Ich prüfe jeden Morgen die Orders der Sparkassen.", "en": "Every morning I check the orders from the Sparkassen."},
+        {"context": "life", "de": "Mein Zug nach Frankfurt fährt um 7:40 Uhr.", "en": "My train to Frankfurt leaves at 7:40."},
+        {"context": "finance_history", "de": "Napoleon verlor 1815 die Schlacht bei Waterloo.", "en": "Napoleon lost the Battle of Waterloo in 1815."}
+      ],
+      "common_error": {"wrong": "Ich heute arbeite im Büro.", "right": "Ich arbeite heute im Büro.", "tag": "V2_POSITION", "note_en": "The verb comes straight after the subject, before time words like heute."},
+      "tags": ["V2_POSITION"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich schreibe eine kurze E-Mail an mein Team.", "en": "I am writing a short email to my team."},
+          {"de": "Mein Kollege isst mittags in der Kantine.", "en": "My colleague eats in the Kantine at lunchtime."}
+        ],
+        "transform": [
+          {"instruction": "Put the subject first.", "given": "Heute arbeite ich im Homeoffice.", "answer": "Ich arbeite heute im Homeoffice.", "alt": []},
+          {"instruction": "Put the subject first.", "given": "Am Freitag schreibe ich eine Klausur.", "answer": "Ich schreibe am Freitag eine Klausur.", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Der Markt heute ist sehr ruhig.", "right": "Der Markt ist heute sehr ruhig.", "tag": "V2_POSITION", "note_en": "ist must be in position 2, right after Der Markt."},
+          {"wrong": "Ich oft lerne in der Bibliothek.", "right": "Ich lerne oft in der Bibliothek.", "tag": "V2_POSITION", "note_en": "oft goes after the verb, not between subject and verb."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about your train to Frankfurt. Start with the subject.", "must_include": ["Zug"]}
+      },
+      "homework": "Write 4 sentences about your morning: when you get up, your train, your first task at work, your lunch. Start every sentence with the subject and put the verb second."
+    },
+    {
+      "code": "V2_INVERSION",
+      "order": 2,
+      "group": "word_order",
+      "title": "Verb second: something else first",
+      "rule_en": "If a time, place or object comes first, the verb stays in position 2 and the subject moves right after the verb.",
+      "slot_diagram": {
+        "labels": ["Position 1", "Verb (2)", "Subject", "Rest"],
+        "rows": [
+          ["Heute", "arbeite", "ich", "im Büro"],
+          ["Am Montag", "beginnt", "meine Rufbereitschaft", ""],
+          ["Den Bericht", "schicke", "ich", "morgen"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Morgen habe ich Rufbereitschaft.", "en": "Tomorrow I am on call."},
+        {"context": "life", "de": "In Rüsselsheim wohne ich seit zwei Jahren.", "en": "I have lived in Rüsselsheim for two years."},
+        {"context": "finance_history", "de": "Seit Ende 2024 gilt die MiCA-Verordnung in der ganzen EU.", "en": "Since the end of 2024 the MiCA regulation has applied across the whole EU."}
+      ],
+      "common_error": {"wrong": "Morgen ich habe Rufbereitschaft.", "right": "Morgen habe ich Rufbereitschaft.", "tag": "V2_POSITION", "note_en": "After a time word in position 1, the verb comes next and the subject follows it."},
+      "tags": ["V2_POSITION"],
+      "drills": {
+        "surgery": [
+          {"de": "Nach der Arbeit gehe ich ins Fitnessstudio.", "en": "After work I go to the gym."},
+          {"de": "In der Kantine gibt es heute Linsensuppe.", "en": "There is lentil soup in the Kantine today."}
+        ],
+        "transform": [
+          {"instruction": "Start with the time expression.", "given": "Ich habe am Donnerstag eine Prüfung.", "answer": "Am Donnerstag habe ich eine Prüfung.", "alt": []},
+          {"instruction": "Start with the place.", "given": "Ich lerne in der Bibliothek besser.", "answer": "In der Bibliothek lerne ich besser.", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Heute der Zug hat Verspätung.", "right": "Heute hat der Zug Verspätung.", "tag": "V2_POSITION", "note_en": "Heute is position 1, so hat comes next and der Zug follows."},
+          {"wrong": "Im Büro wir sprechen meistens Deutsch.", "right": "Im Büro sprechen wir meistens Deutsch.", "tag": "V2_POSITION", "note_en": "Im Büro is position 1, so the verb sprechen comes before wir."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence about your on-call week. Start with a time word, for example Am Montag.", "must_include": ["Rufbereitschaft"]}
+      },
+      "homework": "Write 4 sentences about your week. Start each one with a time or place: Am Montag, Im Büro, Nach der Uni, Am Wochenende. Check that the verb is in position 2."
+    },
+    {
+      "code": "W_QUESTION",
+      "order": 3,
+      "group": "word_order",
+      "title": "W-questions: W-word, verb, subject",
+      "rule_en": "The W-word is position 1, the conjugated verb is position 2, then the subject.",
+      "slot_diagram": {
+        "labels": ["W-word (1)", "Verb (2)", "Subject", "Rest"],
+        "rows": [
+          ["Wann", "fährt", "die nächste S-Bahn", "nach Frankfurt"],
+          ["Wo", "ist", "das Bürgeramt", ""],
+          ["Warum", "fällt", "der Bitcoin-Kurs", "heute"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Wer übernimmt nächste Woche die Rufbereitschaft?", "en": "Who is taking the on-call shift next week?"},
+        {"context": "life", "de": "Wann fährt die nächste S-Bahn nach Frankfurt?", "en": "When does the next S-Bahn to Frankfurt leave?"},
+        {"context": "finance_history", "de": "Warum hat Napoleon den Krieg gegen Russland verloren?", "en": "Why did Napoleon lose the war against Russia?"}
+      ],
+      "common_error": {"wrong": "Wann der Zug fährt nach Frankfurt?", "right": "Wann fährt der Zug nach Frankfurt?", "tag": "V2_POSITION", "note_en": "In a W-question the verb comes right after the W-word."},
+      "tags": ["V2_POSITION"],
+      "drills": {
+        "surgery": [
+          {"de": "Wo kann ich meinen Ausweis abholen?", "en": "Where can I pick up my ID card?"},
+          {"de": "Wie lange dauert die Fahrt nach Frankfurt?", "en": "How long does the trip to Frankfurt take?"}
+        ],
+        "transform": [
+          {"instruction": "Ask about the time with wann.", "given": "Die Besprechung beginnt um neun Uhr.", "answer": "Wann beginnt die Besprechung?", "alt": []},
+          {"instruction": "Ask about the place with wo.", "given": "Herr Wagner wohnt in Mainz.", "answer": "Wo wohnt Herr Wagner?", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Was du machst am Wochenende?", "right": "Was machst du am Wochenende?", "tag": "V2_POSITION", "note_en": "The verb machst goes right after Was, before du."},
+          {"wrong": "Warum der Kurs ist so stark gefallen?", "right": "Warum ist der Kurs so stark gefallen?", "tag": "V2_POSITION", "note_en": "ist goes in position 2, right after Warum."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one question you could ask a colleague in the Kantine. Start with Wie.", "must_include": ["Wie"]}
+      },
+      "homework": "Write 4 W-questions you could really ask this week: one at work, one at the station, one at the Bürgeramt or Arzt, one to a classmate at Goethe University. Use a different W-word each time."
+    },
+    {
+      "code": "YESNO_QUESTION",
+      "order": 4,
+      "group": "word_order",
+      "title": "Yes/no questions: verb first",
+      "rule_en": "In a yes/no question the conjugated verb is position 1 and the subject follows it.",
+      "slot_diagram": {
+        "labels": ["Verb (1)", "Subject", "Middle", "Verb part (end)"],
+        "rows": [
+          ["Kommst", "du", "morgen ins Büro", ""],
+          ["Hast", "du", "die E-Mail schon", "gelesen"],
+          ["Fährt", "dieser Zug", "nach Frankfurt", ""]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Kannst du mir die Zahlen von gestern schicken?", "en": "Can you send me yesterday's numbers?"},
+        {"context": "life", "de": "Fährt diese S-Bahn zum Frankfurter Hauptbahnhof?", "en": "Does this S-Bahn go to Frankfurt main station?"},
+        {"context": "finance_history", "de": "Ist der Bitcoin-Kurs heute wieder gestiegen?", "en": "Has the Bitcoin price gone up again today?"}
+      ],
+      "common_error": {"wrong": "Du hast heute Rufbereitschaft?", "right": "Hast du heute Rufbereitschaft?", "tag": "V2_POSITION", "note_en": "A real yes/no question starts with the verb. Statement order with a question mark only works as a surprised echo in speech."},
+      "tags": ["V2_POSITION", "VERB_FINAL"],
+      "drills": {
+        "surgery": [
+          {"de": "Hast du heute Abend Zeit für einen Kaffee?", "en": "Do you have time for a coffee this evening?"},
+          {"de": "Ist das der Zug nach Frankfurt?", "en": "Is this the train to Frankfurt?"}
+        ],
+        "transform": [
+          {"instruction": "Make a yes/no question.", "given": "Du hast morgen Rufbereitschaft.", "answer": "Hast du morgen Rufbereitschaft?", "alt": []},
+          {"instruction": "Make a yes/no question.", "given": "Sie können den Termin verschieben.", "answer": "Können Sie den Termin verschieben?", "alt": []}
+        ],
+        "tense_shift": [],
+        "error_spot": [
+          {"wrong": "Heute du hast Rufbereitschaft?", "right": "Hast du heute Rufbereitschaft?", "tag": "V2_POSITION", "note_en": "A yes/no question starts with the verb hast."},
+          {"wrong": "Kannst du schicken mir die Datei?", "right": "Kannst du mir die Datei schicken?", "tag": "VERB_FINAL", "note_en": "With a modal verb the infinitive schicken still goes to the end."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one yes/no question to a colleague about the morning Besprechung.", "must_include": ["Besprechung"]}
+      },
+      "homework": "Write 4 yes/no questions you could send in the team chat or ask in the Kantine tomorrow. Start each one with the verb. Use a modal verb in at least one."
+    },
+    {
+      "code": "SATZKLAMMER",
+      "order": 5,
+      "group": "word_order",
+      "title": "Sentence bracket: second verb part at the end",
+      "rule_en": "The conjugated verb stays in position 2. The second verb part (participle, infinitive after a modal, separable prefix) goes to the very end.",
+      "slot_diagram": {
+        "labels": ["Position 1", "Verb (2)", "Middle", "Verb part (end)"],
+        "rows": [
+          ["Ich", "habe", "den Bericht schon", "geschickt"],
+          ["Ich", "muss", "heute bis acht", "arbeiten"],
+          ["Der Zug", "kommt", "um 8:05 Uhr in Frankfurt", "an"]
+        ]
+      },
+      "examples": [
+        {"context": "work", "de": "Ich habe heute Morgen alle Orders geprüft.", "en": "I checked all the orders this morning."},
+        {"context": "life", "de": "Ich muss morgen zum Bürgeramt gehen.", "en": "I have to go to the Bürgeramt tomorrow."},
+        {"context": "finance_history", "de": "Die Berliner Mauer ist 1989 gefallen.", "en": "The Berlin Wall fell in 1989."}
+      ],
+      "common_error": {"wrong": "Ich habe geschickt den Bericht.", "right": "Ich habe den Bericht geschickt.", "tag": "VERB_FINAL", "note_en": "The participle geschickt closes the bracket at the end."},
+      "tags": ["VERB_FINAL", "SEP_PREFIX"],
+      "drills": {
+        "surgery": [
+          {"de": "Ich habe gestern bis zehn Uhr gearbeitet.", "en": "Yesterday I worked until ten."},
+          {"de": "Mein Zug kommt heute zehn Minuten später an.", "en": "My train arrives ten minutes later today."}
+        ],
+        "transform": [
+          {"instruction": "Add the modal verb müssen.", "given": "Ich arbeite heute länger.", "answer": "Ich muss heute länger arbeiten.", "alt": []},
+          {"instruction": "Add the modal verb wollen.", "given": "Ich lese den Artikel heute Abend.", "answer": "Ich will den Artikel heute Abend lesen.", "alt": []}
+        ],
+        "tense_shift": [
+          {"instruction": "Put it in Perfekt.", "given": "Ich rufe den Kunden an.", "answer": "Ich habe den Kunden angerufen.", "alt": []},
+          {"instruction": "Put it in Perfekt.", "given": "Der Zug fährt pünktlich ab.", "answer": "Der Zug ist pünktlich abgefahren.", "alt": []}
+        ],
+        "error_spot": [
+          {"wrong": "Ich muss arbeiten heute bis acht Uhr.", "right": "Ich muss heute bis acht Uhr arbeiten.", "tag": "VERB_FINAL", "note_en": "After muss the infinitive arbeiten goes to the end."},
+          {"wrong": "Der Zug kommt an um 8:05 Uhr.", "right": "Der Zug kommt um 8:05 Uhr an.", "tag": "SEP_PREFIX", "note_en": "The prefix an of ankommen goes to the end."}
+        ],
+        "fill": [],
+        "free": {"prompt_en": "Write one sentence in Perfekt about what you did after work yesterday.", "must_include": ["gestern"]}
+      },
+      "homework": "Write 5 sentences about yesterday in Perfekt: your train, your work, your lunch, your study, your evening. Use one separable verb (ankommen, anrufen, aufstehen). Mark the two verb parts in each sentence."
+    }
+  ]
+}

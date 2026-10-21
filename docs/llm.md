@@ -4,19 +4,40 @@ _Split from SPEC.md sections §9. SPEC.md stays the source of truth; edit both i
 
 ## 9. LLM tutor design
 
+**Decision 2026-10-21 (Zee): 100 % free resources.** All three roles run on a local **Ollama** server
+(`http://localhost:11434`, `POST /api/chat`). No paid LLM API. Claude models are no longer used by the app.
+
 **Roles (one module `app/llm/` with a provider interface so models can be swapped):**
 
-| Role | Model (default) | Used for | Output |
+| Role | Model (default, `OLLAMA_MODEL`) | Used for | Output |
 |---|---|---|---|
-| Tutor | `claude-haiku-5-5` | voice turns, quick hints, feed card generation | JSON |
-| Grader | `claude-sonnet-5-5` | writing correction, test marking, end-of-session voice review, weekly remarks | JSON |
-| Author | `claude-sonnet-5-5` | graded texts, Sabaq content, scenario cards, seed decks | JSON, stored in DB |
+| Tutor | `llama3.1:8b` via Ollama | voice turns, quick hints, feed card generation | JSON |
+| Grader | `llama3.1:8b` via Ollama | writing correction, test marking, end-of-session voice review, weekly remarks | JSON |
+| Author | `llama3.1:8b` via Ollama (nightly batch, no latency limit) | graded texts, Sabaq content, scenario cards, seed decks | JSON, stored in DB |
+
+One model for all roles by default; each role can point at a different local model later (e.g. a bigger one
+for the nightly Author job). Model choice is not final: compare 2–3 local models on the 5 grader fixture
+sentences (`tests/fixtures/grader/`) with `RUN_OLLAMA=1` and keep the one that finds the expected tags.
 
 Rules:
-- **All LLM output is structured JSON validated with Pydantic.** On validation failure: one retry with the error message, then a graceful fallback. No free-text parsing.
-- **Generate ahead, don't generate live.** Author content (texts, Sabaq, scenarios, feed cards) is generated in a nightly batch job for the next 2 days and stored. Live calls only for Tutor and Grader. This cuts cost and latency and lets bad content be caught.
-- **Prompt caching** on the static parts (system prompt + learner profile + pattern list): put them first, mark with `cache_control`. Note the minimum cacheable prompt length (512 tokens on 5.x models per Anthropic docs).
-- **German quality guard:** every generated German text runs through LanguageTool (§11) before storing. Items with flagged issues are marked `needs_review`; Zee can approve/fix in an admin view. LLM German is good but not perfect, and wrong German drilled with SRS is worse than none.
+- **All LLM output is structured JSON validated with Pydantic.** The Pydantic schema is sent as Ollama's
+  `format` (JSON-schema structured outputs, Ollama ≥ 0.5.0), `stream: false`, `temperature: 0`.
+  On validation failure: one retry with the error message, then a graceful fallback. No free-text parsing.
+- **Graceful fallback when Ollama is down or the model fails twice:** writing is still checked by
+  LanguageTool and shown as a red-pen view marked "LanguageTool only"; Zee can re-grade later.
+  SRS, drills and recitation never need the LLM.
+- **Generate ahead, don't generate live.** Author content (texts, Sabaq, scenarios, feed cards) is generated
+  in a nightly batch job for the next 2 days and stored. Live calls only for Tutor and Grader. On a local model
+  this is about latency and catching bad content, not money.
+- **Static prompt parts first** (system prompt + learner profile + pattern list), so the request prefix is
+  identical between calls. Keep the model loaded with Ollama's `keep_alive` (default 5 min) so a turn does not
+  pay the model load time. (Anthropic `cache_control` no longer applies.)
+- **Cost ledger:** every Ollama call still writes a `cost_ledger` row (vendor `ollama`, tokens =
+  `prompt_eval_count + eval_count`, eur 0.00), so usage is visible and the CLAUDE.md rule holds.
+- **Hardware:** Ollama's README (v0.5.0) states at least 8 GB RAM for 7B models, 16 GB for 13B. `llama3.1:8b`
+  is a 4.7 GB download. It runs on Zee's laptop or on a server with enough RAM; a small VPS will be slow.
+  The phone talks only to the FastAPI server, never to Ollama directly.
+- **German quality guard:** every generated German text runs through LanguageTool (§11) before storing. Items with flagged issues are marked `needs_review`; Zee can approve/fix in an admin view. LLM German is good but not perfect (a local 8B model is weaker than the hosted models this spec first planned), and wrong German drilled with SRS is worse than none.
 - **Level control:** the Author gets the list of Zee's known lemmas (top N by frequency) and must keep new words ≤ 5 %; the app measures actual known-word density after generation and regenerates once if outside 93–99 %.
 - **Explanation language:** English by default; optional Roman Urdu for grammar explanations (Settings). German for everything else.
 
@@ -49,3 +70,11 @@ Conversation rules:
   "teaching_points": [str]  // max 3
   "model_sentence_for_srs": [str] }
 ```
+
+Implementation (Phase 2): `app/llm/provider.py` (`OllamaProvider`, `complete_json`, `LLMUnavailable`,
+`LLMInvalid`), schemas in `app/llm/schemas.py`, prompts in `app/llm/prompts/`. Grader pipeline in
+`app/services/grading.py`: LanguageTool pre-check → Ollama Grader → span check → LanguageTool check of the
+corrected text (flags → `needs_review`).
+
+Sources: Ollama API https://github.com/ollama/ollama/blob/main/docs/api.md · structured outputs release
+https://github.com/ollama/ollama/releases/tag/v0.5.0 · RAM guidance https://github.com/ollama/ollama/blob/v0.5.0/README.md
