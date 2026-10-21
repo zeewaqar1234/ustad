@@ -2309,11 +2309,11 @@
       "full": "Er spricht sowohl Urdu als auch Englisch."
      },
      {
-      "text": "Die Prüfung war nicht nur lang, ___ auch schwer.",
+      "text": "Der Kurs war nicht nur teuer, ___ auch langweilig.",
       "answers": [
        "sondern"
       ],
-      "full": "Die Prüfung war nicht nur lang, sondern auch schwer."
+      "full": "Der Kurs war nicht nur teuer, sondern auch langweilig."
      }
     ],
     "free": {
