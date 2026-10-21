@@ -182,7 +182,7 @@ cd ../frontend && E2E_SHOTS=$SP/shots PW_CHROMIUM=/opt/pw-browsers/chromium npx 
 | Placement test sets level_band, marks known | `test_placement_sets_level_and_marks_known` (A2 + B1.1 right → "B1.2", seed item known, card scheduled); `p2-placement.png` |
 | Grader schema, 5 fixture sentences, each expected tag | `tests/test_grader_schema.py` 5 fixtures pass (VERB_FINAL; V2_POSITION + VERB_FINAL; AUX_HABEN_SEIN; CASE_DAT; PARTIZIP) with a **mocked** model reply; plus bad-schema rejection, retry, fallback, span drop |
 | Same 5 fixtures on a real local model | **Not run.** `tests/test_grader_llm.py` skips without `RUN_OLLAMA=1`; this container cannot download models (registry.ollama.ai and huggingface.co denied by the network policy). Open item below. |
-| pytest | 162 passed, 5 skipped (the 5 real-model tests) |
+| pytest | 163 passed, 5 skipped (the 5 real-model tests); `test_built_patterns_match_source` guards against a stale build |
 | vitest | 6 passed (RedPen, surgery chips, drill hides answer until Check) |
 | Playwright 375px | 5 passed (3 new Phase 2 + 2 Phase 1); every new screen asserts no horizontal scroll |
 | make lint | ruff check + format clean; oxlint 0 errors (2 old warnings in ReviewSession.tsx); tsc clean |

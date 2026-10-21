@@ -47,3 +47,17 @@ def test_load_patterns_idempotent_and_keeps_approval(tmp_path, monkeypatch, db):
     assert load_seed.load_patterns(db) == {"patterns_new": 0, "patterns_updated": 40}
     # unchanged content does not touch the status (approvals stick, flags stick)
     assert db.scalar(select(Pattern).where(Pattern.order == 1)).status == "needs_review"
+
+
+def test_built_patterns_match_source():
+    """data/seed/patterns.json must be rebuilt after a source edit (make grammar-build)."""
+    from app.content.schemas import PatternBatch
+
+    built = {
+        p["code"]: p for p in json.loads((SRC.parent / "patterns.json").read_text())["patterns"]
+    }
+    for path in sorted((SRC / "patterns").glob("batch_*.json")):
+        for p in PatternBatch.model_validate_json(path.read_text()).patterns:
+            d = p.model_dump(mode="json")
+            assert built[p.code]["drills"] == d["drills"], f"{p.code}: run make grammar-build"
+            assert built[p.code]["examples"] == d["examples"], f"{p.code}: run make grammar-build"
