@@ -23,8 +23,9 @@ def get_day(db: Session, d: date) -> DayLog:
 
 
 def refresh_study_day(day: DayLog) -> None:
-    """Study day = Manzil done + at least one more block. Opening the app never counts."""
-    day.study_day = day.manzil_done and (day.sabqi_done or day.sabaq_done)
+    """Study day = Manzil done (or nothing due) + Sabqi, Sabaq, or one other block (Mazmoon submitted,
+    voice session reviewed, Diktat 5 of 5, text read with its questions). Opening the app never counts."""
+    day.study_day = day.manzil_done and (day.sabqi_done or day.sabaq_done or day.other_done)
 
 
 def _week_start(d: date) -> date:

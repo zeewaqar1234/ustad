@@ -18,7 +18,7 @@ from sqlalchemy.orm import Session
 
 from app.models import Attempt, Card, DictationItem, Item, ReadingText
 from app.reading.texts import ensure_seed
-from app.services import daily
+from app.services import evidence
 from app.srs.grader import _char_diff
 
 PER_DAY = 5
@@ -198,6 +198,19 @@ def check(typed: str, expected: str) -> dict:
             "diff": [list(p) for p in _char_diff(typed.strip(), expected)]}  # fmt: skip
 
 
+def _diktat_events(db: Session, now: datetime, row: DictationItem, res: dict) -> None:
+    wrong = [w for w in res["words"] if w["kind"] != "ok"]
+    if not wrong:
+        evidence.record_event(db, now, "listening", "diktat", "correct", source_ref=row.ref,
+                              orig=row.de)  # fmt: skip
+    for w in wrong:
+        evidence.record_event(
+            db, now, "listening", "diktat", "error", source_ref=row.ref,
+            tag=evidence.diktat_tag(w["kind"], w["expected"], row.de), orig=row.de, fix=w["expected"],
+            meta={"kind": w["kind"], "given": w["given"]},
+        )  # fmt: skip
+
+
 def submit(db: Session, now: datetime, row: DictationItem, typed: str, elapsed_ms: int,
            replays: int) -> dict:  # fmt: skip
     """First attempt is kept; a repeat returns it (no second try on the same sentence today)."""
@@ -208,6 +221,10 @@ def submit(db: Session, now: datetime, row: DictationItem, typed: str, elapsed_m
     tags = sorted({KIND_TAG[k] for k in res["counts"] if k != "ok"})
     db.add(Attempt(ts=now, task_ref=f"diktat:{row.ref}", input=typed[:2000],
                    correct=res["accuracy"] == 100, error_tags=tags, score=res["accuracy"]))  # fmt: skip
-    daily.add_minutes(db, now, elapsed_ms)
+    evidence.add_activity(db, now, "listening", elapsed_ms)
+    _diktat_events(db, now, row, res)
     db.flush()
+    rows = db.scalars(select(DictationItem).where(DictationItem.date == row.date)).all()
+    if len(rows) >= PER_DAY and all(r.result_json for r in rows):
+        evidence.mark_other_done(db, now)
     return res

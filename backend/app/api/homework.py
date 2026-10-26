@@ -16,8 +16,8 @@ from app.core.auth import require_user
 from app.core.clock import local_date
 from app.db import DB, utcnow
 from app.llm.provider import Provider, get_provider
-from app.models import Homework
-from app.services import ghalti, grading
+from app.models import Homework, Pattern
+from app.services import evidence, ghalti, grading
 
 router = APIRouter(prefix="/api/homework", dependencies=[Depends(require_user)])
 LLM = Annotated[Provider, Depends(get_provider)]
@@ -30,13 +30,24 @@ def view(h: Homework) -> dict:
             "pattern_id": h.pattern_id}  # fmt: skip
 
 
-def _grade(db: Session, llm: Provider, h: Homework, text: str) -> None:
+WRITING_CAP_MS = (
+    30 * 60_000
+)  # active writing time per submit; the editor already drops idle gaps > 60 s
+
+
+def _grade(db: Session, llm: Provider, h: Homework, text: str, elapsed_ms: int = 0) -> None:
     now = utcnow()
-    grade = grading.grade_text(db, llm, text, h.prompt if h.kind == "homework" else "")
+    pattern = db.get(Pattern, h.pattern_id) if h.pattern_id else None
+    tags = evidence.target_tags(pattern.tags if pattern and pattern.tags else [])
+    grade = grading.grade_text(db, llm, text, h.prompt if h.kind == "homework" else "", tags)
+    evidence.add_activity(db, now, "writing", elapsed_ms, cap_ms=WRITING_CAP_MS)
     h.submission, h.grade_json, h.submitted_at = text, grade, now
     h.status = "lt_only" if grade["source"] == "languagetool_only" else "graded"
     if h.status == "graded":
         ghalti.from_grade(db, now, grade, h.kind)
+        evidence.record_grade(db, now, grade, skill="writing", source=h.kind,
+                              source_ref=f"homework:{h.id}",
+                              pattern_code=pattern.code if pattern else None)  # fmt: skip
 
 
 def _today_row(db: Session) -> Homework | None:
@@ -73,6 +84,7 @@ def start_today(db: DB):
 
 class SubmitIn(BaseModel):
     text: str = Field(min_length=1, max_length=5000)
+    elapsed_ms: int = Field(default=0, ge=0)
 
 
 @router.post("/{hw_id}/submit")
@@ -82,7 +94,7 @@ def submit(hw_id: int, body: SubmitIn, db: DB, llm: LLM):
         raise HTTPException(404, "No such homework")
     if h.status == "graded":
         raise HTTPException(409, "Already graded")
-    _grade(db, llm, h, body.text)
+    _grade(db, llm, h, body.text, body.elapsed_ms)
     db.commit()
     return view(h)
 
@@ -100,6 +112,7 @@ def regrade(hw_id: int, db: DB, llm: LLM):
 
 class TagebuchIn(BaseModel):
     text: str = Field(min_length=1, max_length=5000)
+    elapsed_ms: int = Field(default=0, ge=0)
 
 
 @router.post("/tagebuch")
@@ -108,7 +121,7 @@ def tagebuch(body: TagebuchIn, db: DB, llm: LLM):
     h = Homework(kind="tagebuch", assigned=d, due=d, prompt="Tagebuch")
     db.add(h)
     db.flush()
-    _grade(db, llm, h, body.text)
+    _grade(db, llm, h, body.text, body.elapsed_ms)
     db.commit()
     return view(h)
 

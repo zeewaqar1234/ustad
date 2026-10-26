@@ -57,14 +57,39 @@ export function Ghalti() {
                 >
                   <span className="text-2xl font-bold">{t.count}</span>
                   <span className="text-xs leading-tight break-words">{humanTag(t.tag)}</span>
+                  <span className="text-xs">
+                    {t.rate === null ? 'too few uses' : `${Math.round(t.rate * 100)}% wrong`}
+                  </span>
                 </div>
               ))}
             </div>
           </section>
 
+          {data.top_tags.length > 0 && (
+            <section className="flex flex-col gap-2">
+              <h2 className="text-xs tracking-wide text-neutral-500 uppercase">Habits, last 30 days</h2>
+              <ol className="flex flex-col divide-y divide-neutral-200 rounded-lg border border-neutral-300 bg-white">
+                {data.top_tags.map((t) => (
+                  <li key={t.tag} className="flex items-baseline gap-3 p-3 text-sm">
+                    <span className="w-8 shrink-0 font-bold">{t.errors}×</span>
+                    <span className="min-w-0 flex-1">{humanTag(t.tag)}</span>
+                    <span className="text-neutral-600">
+                      {t.rate === null ? 'too few uses' : `${t.errors} wrong, ${t.correct} right`}
+                    </span>
+                    {t.recurring && <Recurring />}
+                  </li>
+                ))}
+              </ol>
+              <p className="text-xs text-neutral-600">
+                Recurring: 3 or more errors from 2 or more different sentences in 30 days. The wrong share needs 5 or
+                more uses of the type.
+              </p>
+            </section>
+          )}
+
           {top.length > 0 && (
             <section className="flex flex-col gap-2">
-              <h2 className="text-xs tracking-wide text-neutral-500 uppercase">Top 10 recurring</h2>
+              <h2 className="text-xs tracking-wide text-neutral-500 uppercase">Most repeated sentences</h2>
               <ol className="flex flex-col divide-y divide-neutral-200 rounded-lg border border-neutral-300 bg-white">
                 {top.map((m) => (
                   <li key={m.id} className="flex gap-3 p-3">

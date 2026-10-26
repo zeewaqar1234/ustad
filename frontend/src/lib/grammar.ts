@@ -148,7 +148,16 @@ export interface Mistake {
 
 export interface Register {
   total: number
-  by_tag: { tag: string; count: number }[]
+  by_tag: {
+    tag: string
+    count: number
+    errors_30d: number
+    correct_30d: number
+    /** errors / (errors + correct uses), last 30 days; null with fewer than 5 events */
+    rate: number | null
+    recurring: boolean
+  }[]
+  top_tags: { tag: string; errors: number; correct: number; rate: number | null; recurring: boolean }[]
   top10: Mistake[]
   rows: Mistake[]
 }

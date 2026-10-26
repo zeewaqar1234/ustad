@@ -4,6 +4,7 @@ import { GermanField } from '../../components/GermanField'
 import { RedPen } from '../../components/RedPen'
 import { Column, PageHeader } from '../../components/ui'
 import { api } from '../../lib/api'
+import { useActiveTime } from '../../lib/activeTime'
 import { countWords } from '../../lib/words'
 import { shortDate, type Homework as Hw, type WritingGrade } from '../../lib/grammar'
 
@@ -41,6 +42,7 @@ function Today() {
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
+  const active = useActiveTime()
 
   if (error) return <p>Error: {(error as Error).message}</p>
   if (!data) return <p>Loading…</p>
@@ -73,13 +75,16 @@ function Today() {
           className="flex flex-col gap-2"
           onSubmit={(e) => {
             e.preventDefault()
-            if (text.trim() && !busy) void send('submit', { text })
+            if (text.trim() && !busy) void send('submit', { text, elapsed_ms: active.read() })
           }}
           onKeyDown={onSubmitKey(() => {
-            if (text.trim() && !busy) void send('submit', { text })
+            if (text.trim() && !busy) void send('submit', { text, elapsed_ms: active.read() })
           })}
         >
-          <GermanField value={text} onChange={setText} label="Your homework in German" placeholder="Schreib hier." multiline disabled={busy} />
+          <GermanField value={text} onChange={(v) => {
+              active.touch()
+              setText(v)
+            }} label="Your homework in German" placeholder="Schreib hier." multiline disabled={busy} />
           <WordCount text={text} />
           {busy && <Busy />}
           {err && <p className="text-sm">Error: {err}</p>}
@@ -119,12 +124,13 @@ function Tagebuch() {
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
   const [result, setResult] = useState<Hw | null>(null)
+  const active = useActiveTime()
 
   async function send() {
     setBusy(true)
     setErr(null)
     try {
-      const r = await api<Hw>('/api/homework/tagebuch', { text })
+      const r = await api<Hw>('/api/homework/tagebuch', { text, elapsed_ms: active.read() })
       setResult(r)
       qc.invalidateQueries({ queryKey: ['homework', 'history'] })
       qc.invalidateQueries({ queryKey: ['mistakes'] })
@@ -163,7 +169,10 @@ function Tagebuch() {
             if (text.trim() && !busy) void send()
           })}
         >
-          <GermanField value={text} onChange={setText} label="Tagebuch entry in German" placeholder="Heute habe ich…" multiline disabled={busy} />
+          <GermanField value={text} onChange={(v) => {
+            active.touch()
+            setText(v)
+          }} label="Tagebuch entry in German" placeholder="Heute habe ich…" multiline disabled={busy} />
           <WordCount text={text} />
           {busy && <Busy />}
           {err && <p className="text-sm">Error: {err}</p>}

@@ -17,6 +17,7 @@ from app.core import languagetool
 from app.llm import prompt
 from app.llm.provider import LLMInvalid, LLMUnavailable, Provider, complete_json
 from app.llm.schemas import ErrorTag, GradeResult
+from app.services import evidence
 
 log = logging.getLogger(__name__)
 
@@ -92,7 +93,33 @@ def _locate(text: str, errors: list[dict]) -> tuple[list[dict], int]:
     return clean, dropped
 
 
-def _user_message(text: str, task: str, matches: list[dict] | None) -> str:
+def locate_correct_uses(
+    text: str, uses: list[dict], errors: list[dict], cap: int = evidence.MAX_CORRECT_USES
+) -> tuple[list[dict], int]:
+    """Add start/end to each correct use. The span must be whole words of the text, outside every error
+    span, and a position is used once; anything else is dropped (counted). At most `cap` are kept."""
+    out, dropped, taken = [], 0, set()
+    for u in uses:
+        pattern = re.compile(r"(?<!\w)" + re.escape(u["span"]) + r"(?!\w)", re.IGNORECASE)
+        hit = next(
+            (
+                m for m in pattern.finditer(text)
+                if (m.start(), m.end()) not in taken
+                and not any(m.start() < e["end"] and e["start"] < m.end() for e in errors)
+            ),
+            None,
+        )  # fmt: skip
+        if hit is None or len(out) >= cap:
+            dropped += 1
+            continue
+        taken.add((hit.start(), hit.end()))
+        out.append({**u, "span": hit.group(0), "start": hit.start(), "end": hit.end()})
+    return out, dropped
+
+
+def _user_message(
+    text: str, task: str, matches: list[dict] | None, tags: list[str] | None = None
+) -> str:
     hints = "LanguageTool was not available."
     if matches is not None:
         hints = (
@@ -102,8 +129,10 @@ def _user_message(text: str, task: str, matches: list[dict] | None) -> str:
             )
             or "- no matches"
         )
+    targets = ", ".join(tags or evidence.target_tags())
     return (
         f"Task given to Zee: {task or 'free writing (Tagebuch)'}\n\n"
+        f"Target structures (list correct uses of these in correct_uses): {targets}\n\n"
         f"LanguageTool pre-check (can be incomplete or wrong):\n{hints}\n\n"
         f"Zee's text:\n{text}"
     )
@@ -123,13 +152,16 @@ def _lt_only(text: str, matches: list[dict] | None, reason: str) -> dict:
     return {
         "source": "languagetool_only", "model": None, "fallback_reason": reason,
         "original": text, "score_10": None, "corrected_text": corrected, "errors": located,
-        "teaching_points": [], "model_sentence_for_srs": [], "dropped_errors": dropped,
+        "correct_uses": [], "teaching_points": [], "model_sentence_for_srs": [],
+        "dropped_errors": dropped,
         "lt_available": matches is not None, "needs_review": True,
         "review_notes": [{"rule": "LT_ONLY", "message": "No tutor grading; LanguageTool only."}],
     }  # fmt: skip
 
 
-def grade_text(db: Session, provider: Provider, text: str, task: str = "") -> dict:
+def grade_text(
+    db: Session, provider: Provider, text: str, task: str = "", tags: list[str] | None = None
+) -> dict:
     text = text.strip()
     matches = lt_check(text)
     try:
@@ -138,20 +170,24 @@ def grade_text(db: Session, provider: Provider, text: str, task: str = "") -> di
             provider,
             "grader",
             prompt("grader"),
-            _user_message(text, task, matches),
+            _user_message(text, task, matches, tags),
             GradeResult,
         )
     except (LLMUnavailable, LLMInvalid) as e:
         log.warning("Grader fallback to LanguageTool only: %s", e)
         return _lt_only(text, matches, type(e).__name__)
     errors, dropped = _locate(text, [e.model_dump(mode="json") for e in result.errors])
+    uses, dropped_uses = locate_correct_uses(
+        text, [u.model_dump(mode="json") for u in result.correct_uses], errors
+    )
     notes = lt_notes(result.corrected_text) if result.corrected_text.strip() else []
     if notes is None:
         notes = [{"rule": "LT_SKIPPED", "message": "LanguageTool not reachable; check by hand."}]
     return {
         "source": provider.vendor, "model": provider.model, "fallback_reason": None,
         "original": text, "score_10": result.score_10, "corrected_text": result.corrected_text,
-        "errors": errors, "teaching_points": result.teaching_points[:3],
+        "errors": errors, "correct_uses": uses, "dropped_correct_uses": dropped_uses,
+        "teaching_points": result.teaching_points[:3],
         "model_sentence_for_srs": result.model_sentence_for_srs, "dropped_errors": dropped,
         "lt_available": matches is not None, "needs_review": bool(notes), "review_notes": notes,
     }  # fmt: skip
