@@ -34,7 +34,7 @@ const reviewed: VoiceSession = {
 function renderSession(session: VoiceSession) {
   const qc = new QueryClient()
   qc.setQueryData(['voice', 'session', '7'], session)
-  qc.setQueryData(['voice', 'settings'], { show_fluency: false, talk_mode: 'tap' })
+  qc.setQueryData(['voice', 'settings'], { show_fluency: false })
   return render(
     <QueryClientProvider client={qc}>
       <MemoryRouter initialEntries={['/voice/session/7']}>
@@ -64,14 +64,13 @@ describe('chat session', () => {
     expect(screen.queryByText(/fluency|pace|seconds/i)).toBeNull()
   })
 
-  it('in the review: stars per line from the server, summary, skipped line not graded', () => {
+  it('in the review: plain-text summary, no stars, skipped line not graded', () => {
     vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})))
     renderSession(reviewed)
     expect(screen.getByRole('heading', { name: 'Say it better' })).toBeInTheDocument()
-    expect(screen.getByLabelText('5 of 6 stars')).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: '3 of 3 stars' })).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: '2 of 3 stars' })).toBeInTheDocument()
-    expect(screen.getAllByRole('img', { name: /of 3 stars/ })).toHaveLength(2) // skipped line: none
+    expect(screen.getByText(/1 of 2 lines without errors/)).toBeInTheDocument()
+    expect(screen.queryAllByRole('img', { name: /stars/ })).toHaveLength(0)
+    expect(screen.queryByText(/stars?\b/i)).toBeNull()
     expect(screen.getByText(/Not graded/)).toBeInTheDocument()
     expect(screen.getByText('Ich bin gegangen.')).toBeInTheDocument()
   })
@@ -81,7 +80,7 @@ describe('chat session', () => {
     renderSession(open)
     await act(async () => fireEvent.click(screen.getByRole('button', { name: 'End and review' })))
     expect(screen.getByText('Ustad is checking your German.')).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Tap to talk' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Start' })).toBeNull()
   })
 })
 
@@ -101,24 +100,21 @@ class FakeRec implements RecognitionLike {
   stop() {}
 }
 
-describe('mic orb', () => {
+describe('listening state', () => {
   afterEach(() => {
     cleanup()
     delete (window as unknown as Record<string, unknown>).SpeechRecognition
   })
 
-  it('pulses while listening and ripples when words arrive; stops only on tap', () => {
+  it('shows plain text and the live transcript; no animation; stops only on click', () => {
     ;(window as unknown as Record<string, unknown>).SpeechRecognition = FakeRec
-    const { container } = render(<TalkInput mode="tap" onSend={() => {}} />)
-    expect(container.querySelector('.motion-safe\\:animate-breathe')).toBeNull()
-    fireEvent.click(screen.getByRole('button', { name: 'Tap to talk' }))
-    expect(container.querySelectorAll('.motion-safe\\:animate-breathe')).toHaveLength(2)
-    expect(container.querySelectorAll('.motion-safe\\:animate-wave')).toHaveLength(5)
-    expect(container.querySelector('.motion-safe\\:animate-ripple')).toBeNull()
+    const { container } = render(<TalkInput onSend={() => {}} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Start' }))
+    expect(screen.getByText('Listening. Click Stop when you are done.')).toBeInTheDocument()
+    expect(container.querySelector('[class*="animate-"]')).toBeNull()
     act(() => FakeRec.last.onresult?.({ resultIndex: 0, results: [Object.assign([{ transcript: 'Hallo' }], { isFinal: false })] }))
-    expect(container.querySelector('.motion-safe\\:animate-ripple')).not.toBeNull()
+    expect(screen.getByText(/Hallo/)).toBeInTheDocument()
     act(() => FakeRec.last.onend?.())
     expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument() // browser end: still live
-    expect(screen.getByText('Listening. Tap when you are done.')).toBeInTheDocument()
   })
 })

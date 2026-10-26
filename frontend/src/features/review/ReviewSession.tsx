@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
+import { Column, PageHeader } from '../../components/ui'
 import { Feedback } from '../../components/Feedback'
 import { ItemCard } from '../../components/ItemCard'
 import { UmlautKeys } from '../../components/UmlautKeys'
@@ -70,29 +71,42 @@ export function ReviewSession({ block }: { block: Block }) {
     setRevealed(r.item)
   }
 
-  if (error) return <p className="p-4">Error: {error}</p>
-  if (card === undefined) return <p className="p-4">Loading…</p>
+  // Keyboard: Enter continues or shows the answer, 1 to 4 rate (or pick a choice).
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (!card || e.metaKey || e.ctrlKey || e.altKey) return
+      const inField = e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement
+      if (e.key === 'Enter' && !inField && !(e.target instanceof HTMLButtonElement)) {
+        if (result) loadNext()
+        else if (card.mode === 'reveal' && !revealed) void reveal()
+      } else if (!inField && /^[1-4]$/.test(e.key)) {
+        const n = Number(e.key)
+        if (card.mode === 'reveal' && revealed) void submit({ self_rating: n })
+        else if (card.mode === 'choice' && !result && card.choices?.[n - 1]) {
+          setAnswer(card.choices[n - 1])
+          void submit({ answer: card.choices[n - 1] })
+        }
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
+
+  if (error) return <p>Error: {error}</p>
+  if (card === undefined) return <p>Loading…</p>
   if (card === null)
     return (
-      <div className="flex flex-col gap-4 p-4">
-        <h1 className="text-2xl font-bold">{TITLE[block]} done.</h1>
-        <p>
-          {count.done} cards, {count.right} right first time.
-        </p>
-        <Link to="/" className="rounded-lg bg-neutral-900 p-4 text-center text-lg text-white">
-          Back to today
+      <Column>
+        <PageHeader title={`${TITLE[block]} done.`} subtitle={`${count.done} cards, ${count.right} right first time.`} />
+        <Link to="/" className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
+          Back to Today
         </Link>
-      </div>
+      </Column>
     )
 
   return (
-    <div className="flex min-h-[calc(100dvh-3.5rem)] flex-col gap-4 p-4">
-      <header className="flex items-baseline justify-between">
-        <h1 className="text-xl font-bold">
-          {TITLE[block]} <span className="text-sm font-normal text-neutral-600">{SUB[block]}</span>
-        </h1>
-        <span className="text-sm text-neutral-600">{left} left</span>
-      </header>
+    <Column>
+      <PageHeader title={TITLE[block]} subtitle={`${SUB[block]}. ${left} left.`} />
 
       <section className="rounded-lg border border-neutral-300 bg-white p-4">
         <p className="text-xs tracking-wide text-neutral-500 uppercase">{promptLabel(card)}</p>
@@ -107,14 +121,14 @@ export function ReviewSession({ block }: { block: Block }) {
         <>
           {result.grade && <Feedback grade={result.grade} given={answer} />}
           <ItemCard item={result.item} />
-          <div className="mt-auto" />
-          <button onClick={loadNext} className="rounded-lg bg-neutral-900 p-4 text-lg text-white">
+          <button onClick={loadNext} className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
             Next
           </button>
+          <p className="text-xs text-neutral-600">Enter continues.</p>
         </>
       ) : card.mode === 'type' ? (
         <form
-          className="mt-auto flex flex-col gap-2"
+          className="flex flex-col gap-2"
           onSubmit={(e) => {
             e.preventDefault()
             submit({ answer })
@@ -135,55 +149,63 @@ export function ReviewSession({ block }: { block: Block }) {
           />
           <UmlautKeys onKey={(ch) => setAnswer((v) => insertAt(input.current, v, ch))} />
           <div className="flex gap-2">
+            <button type="submit" className="rounded-lg bg-neutral-900 px-5 py-3 text-white">
+              Check
+            </button>
             <button
               type="button"
               onClick={() => submit({ answer: '' })}
-              className="flex-1 rounded-lg border border-neutral-400 p-4"
+              className="rounded-lg border border-neutral-400 px-5 py-3"
             >
               I don't know
             </button>
-            <button type="submit" className="flex-[2] rounded-lg bg-neutral-900 p-4 text-lg text-white">
-              Check
-            </button>
           </div>
+          <p className="text-xs text-neutral-600">Enter checks. After the answer, Enter continues.</p>
         </form>
       ) : card.mode === 'choice' ? (
-        <div className="mt-auto grid grid-cols-3 gap-2">
-          {card.choices?.map((c) => (
-            <button
-              key={c}
-              onClick={() => {
-                setAnswer(c)
-                submit({ answer: c })
-              }}
-              className="rounded-lg border-2 border-neutral-900 p-5 text-xl"
-            >
-              {c}
-            </button>
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-3 gap-2">
+            {card.choices?.map((c, i) => (
+              <button
+                key={c}
+                onClick={() => {
+                  setAnswer(c)
+                  submit({ answer: c })
+                }}
+                className="rounded-lg border-2 border-neutral-900 p-4 text-xl"
+              >
+                {c} <span className="text-xs text-neutral-600">({i + 1})</span>
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-neutral-600">Press 1, 2 or 3 to choose.</p>
+        </>
       ) : revealed ? (
         <>
           <ItemCard item={revealed} />
-          <p className="mt-auto text-sm text-neutral-600">How well did you know it?</p>
+          <p className="text-sm text-neutral-600">How well did you know it?</p>
           <div className="grid grid-cols-4 gap-2">
             {[1, 2, 3, 4].map((r) => (
               <button
                 key={r}
                 onClick={() => submit({ self_rating: r })}
-                className="rounded-lg border-2 border-neutral-900 px-1 py-4"
+                className="rounded-lg border-2 border-neutral-900 px-1 py-3"
               >
-                {RATING_LABEL[r]}
+                {RATING_LABEL[r]} <span className="text-xs text-neutral-600">({r})</span>
               </button>
             ))}
           </div>
+          <p className="text-xs text-neutral-600">Press 1 to 4 to rate.</p>
         </>
       ) : (
-        <button onClick={reveal} className="mt-auto rounded-lg bg-neutral-900 p-4 text-lg text-white">
-          Show answer
-        </button>
+        <>
+          <button onClick={reveal} className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
+            Show answer
+          </button>
+          <p className="text-xs text-neutral-600">Enter shows the answer.</p>
+        </>
       )}
-    </div>
+    </Column>
   )
 }
 

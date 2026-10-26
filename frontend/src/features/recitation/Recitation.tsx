@@ -1,9 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router'
+import { Column, PageHeader } from '../../components/ui'
 import { UmlautKeys } from '../../components/UmlautKeys'
 import { api } from '../../lib/api'
 import { insertAt } from '../../lib/insertAt'
+import { useRecitationMode } from './RecitationList'
+import { VoiceRecitation } from './VoiceRecitation'
 import { STAGE_NAME, type RecitationResult, type RecitationTable } from '../../lib/grammar'
 
 function passLine(r: RecitationResult): string {
@@ -13,7 +16,13 @@ function passLine(r: RecitationResult): string {
   return 'Clean.'
 }
 
+/** /recitation/:code. ?mode=speak switches to the spoken version. */
 export function Recitation() {
+  const [mode] = useRecitationMode()
+  return mode === 'speak' ? <VoiceRecitation /> : <TypedRecitation />
+}
+
+function TypedRecitation() {
   const { code = '' } = useParams()
   const qc = useQueryClient()
   const { data, error, refetch } = useQuery({
@@ -32,8 +41,8 @@ export function Recitation() {
     shownAt.current = Date.now()
   }, [data?.code])
 
-  if (error) return <p className="p-4">Error: {(error as Error).message}</p>
-  if (!data) return <p className="p-4">Loading…</p>
+  if (error) return <p>Error: {(error as Error).message}</p>
+  if (!data) return <p>Loading…</p>
 
   const key = (r: number, c: number) => `${r}:${c}`
 
@@ -64,25 +73,18 @@ export function Recitation() {
   }
 
   return (
-    <div className="flex min-h-[calc(100dvh-3.5rem)] flex-col gap-4 p-4">
-      <header>
-        <p className="text-sm text-neutral-600">
-          <Link to="/recitation" className="underline">
-            Pahara
-          </Link>{' '}
-          · Stage {data.stage + 1}: {STAGE_NAME[data.stage] ?? data.stage_name}
-        </p>
-        <h1 className="text-xl font-bold">{data.title}</h1>
-        {!result && (
-          <p className="text-sm text-neutral-700">
-            {data.stage === 0
-              ? 'Read each row, then type it.'
-              : data.stage === 1
-                ? 'Some cells are hidden. Type every cell.'
-                : 'Only the first column is shown. Type the rest.'}
-          </p>
-        )}
-      </header>
+    <Column>
+      <PageHeader
+        back={{ to: '/recitation', label: 'Back to Pahara' }}
+        title={data.title}
+        subtitle={`Typed. Stage ${data.stage + 1}: ${STAGE_NAME[data.stage] ?? data.stage_name}. ${
+          data.stage === 0
+            ? 'Read each row, then type it.'
+            : data.stage === 1
+              ? 'Some cells are hidden. Type every cell.'
+              : 'Only the first column is shown. Type the rest.'
+        }`}
+      />
 
       {result && (
         <p className="rounded-lg border-2 border-neutral-900 p-3 font-semibold" role="status">
@@ -90,7 +92,13 @@ export function Recitation() {
         </p>
       )}
 
-      <div className="flex flex-col gap-2">
+      <form
+        className="flex flex-col gap-2"
+        onSubmit={(e) => {
+          e.preventDefault()
+          if (!result && !busy) void submit()
+        }}
+      >
         {data.rows.map((row, r) => (
           <section key={r} className="rounded-lg border border-neutral-300 bg-white p-3">
             <p className="font-bold" lang="de">
@@ -133,7 +141,7 @@ export function Recitation() {
                         autoCapitalize="off"
                         spellCheck={false}
                         aria-label={`${row[0] ?? ''} ${data.columns[c]}`}
-                        className="rounded border-2 border-neutral-900 p-2 text-lg"
+                        className="w-full rounded border-2 border-neutral-900 p-2 text-lg"
                       />
                     )}
                   </label>
@@ -142,37 +150,37 @@ export function Recitation() {
             </div>
           </section>
         ))}
-      </div>
+        {!result && (
+          <>
+            <UmlautKeys
+              onKey={(ch) => {
+                if (!focus) return
+                const v = insertAt(refs.current[focus] ?? null, typed[focus] ?? '', ch)
+                setTyped((t) => ({ ...t, [focus]: v }))
+              }}
+            />
+            <div className="flex items-center gap-3">
+              <button type="submit" disabled={busy} className="rounded-lg bg-neutral-900 px-5 py-3 text-white disabled:opacity-60">
+                Check
+              </button>
+              <p className="text-xs text-neutral-600">Enter in any cell checks the whole table.</p>
+            </div>
+          </>
+        )}
+      </form>
 
       {err && <p className="text-sm">Error: {err}</p>}
 
-      {result ? (
-        <div className="mt-auto flex flex-col gap-2">
-          <button onClick={again} className="rounded-lg bg-neutral-900 p-4 text-lg text-white">
+      {result && (
+        <div className="flex gap-3">
+          <button onClick={again} autoFocus className="rounded-lg bg-neutral-900 px-5 py-3 text-white">
             {result.passed ? 'Practise again' : 'Try again'}
           </button>
-          <Link to="/recitation" className="rounded-lg border border-neutral-400 p-4 text-center">
+          <Link to="/recitation" className="rounded-lg border border-neutral-400 px-5 py-3">
             Back to Pahara
           </Link>
         </div>
-      ) : (
-        <div className="sticky bottom-0 mt-auto flex flex-col gap-2 border-t border-neutral-300 bg-neutral-50 py-2">
-          <UmlautKeys
-            onKey={(ch) => {
-              if (!focus) return
-              const v = insertAt(refs.current[focus] ?? null, typed[focus] ?? '', ch)
-              setTyped((t) => ({ ...t, [focus]: v }))
-            }}
-          />
-          <button
-            onClick={submit}
-            disabled={busy}
-            className="rounded-lg bg-neutral-900 p-4 text-lg text-white disabled:opacity-60"
-          >
-            Check
-          </button>
-        </div>
       )}
-    </div>
+    </Column>
   )
 }

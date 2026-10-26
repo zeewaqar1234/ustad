@@ -110,11 +110,13 @@ export function TalkInput(props: {
   const listening = phase === 'listening'
   const finishing = phase === 'finishing'
   const sendLabel = props.sendLabel ?? 'Send'
-  toggle.current = () => {
-    if (typing || props.busy || finishing || phase === 'ready') return
-    if (listening) stop()
-    else start()
-  }
+  useEffect(() => {
+    toggle.current = () => {
+      if (typing || props.busy || finishing || phase === 'ready') return
+      if (listening) stop()
+      else start()
+    }
+  })
   const sendBtn = (disabled: boolean) => (
     <button
       onClick={send}
