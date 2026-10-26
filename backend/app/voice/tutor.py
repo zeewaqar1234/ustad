@@ -1,5 +1,9 @@
-"""Voice tutor pipeline (docs/modules.md §5.4): text transcript -> disfluency strip -> Tutor (Ollama)
--> LanguageTool on the generated German. End of session: "Say it better" review (Grader role).
+"""Voice tutor pipeline (docs/modules.md §5.4), two separate steps so the conversation stays fast:
+
+1. Turn: transcript -> disfluency strip -> Tutor (Ollama) replies only ({reply_de, reply_en_gloss}),
+   -> LanguageTool on the generated German. No grading, no stars, no corrections during the talk.
+2. Review (end of session): every line graded in one Grader call with a long timeout -> "Say it better",
+   stars per line, Ghalti Register + fix_sentence cards.
 
 A turn ends only when Zee sends it; nothing here waits, times or ends a turn. If the model is down,
 the turn is still saved (tutor_status "offline") and the review can run later.
@@ -10,10 +14,11 @@ import logging
 from sqlalchemy.orm import Session
 
 from app import content
+from app.core.config import settings
 from app.db import utcnow
 from app.llm import prompt
 from app.llm.provider import LLMInvalid, LLMUnavailable, Provider, complete_json
-from app.llm.schemas import SessionReview, TutorTurn
+from app.llm.schemas import SessionReview, TutorReply
 from app.models import Profile, VoiceSession, VoiceTurn
 from app.services import ghalti
 from app.services.grading import _locate, _lt_only, lt_check, lt_notes
@@ -66,11 +71,8 @@ def _transcript(turns: list[VoiceTurn]) -> str:
 
 def view_turn(t: VoiceTurn) -> dict:
     return {"idx": t.idx, "input_mode": t.input_mode, "user": t.user_clean, "reply_de": t.reply_de,
-            "reply_en": t.reply_en, "prompt_correction": t.prompt_correction,
-            "tutor_status": t.tutor_status, "needs_review": t.needs_review,
-            # German errors the tutor noticed in Zee's turn (never pace or hesitation); None = not graded
-            "error_count": len(t.errors_json or []) if t.user_clean and t.tutor_status == "ok" else None,
-            }  # fmt: skip
+            "reply_en": t.reply_en, "tutor_status": t.tutor_status,
+            "needs_review": t.needs_review}  # fmt: skip
 
 
 def start(db: Session, sc: dict) -> VoiceSession:
@@ -95,15 +97,13 @@ def take_turn(
     db.add(t)
     user = f"Conversation so far:\n{history}\n\nZee's new turn ({input_mode}):\n{cleaned}"
     try:
-        out = complete_json(db, llm, "tutor", system_prompt(db, sc), user, TutorTurn)
+        out = complete_json(db, llm, "tutor", system_prompt(db, sc), user, TutorReply)
     except (LLMUnavailable, LLMInvalid) as e:
         log.warning("Tutor offline: %s", e)
         t.tutor_status = "offline"
         db.flush()
         return t
     t.reply_de, t.reply_en = out.reply_de.strip(), out.reply_en_gloss.strip()
-    t.prompt_correction = (out.prompt_correction or "").strip() or None
-    t.errors_json = [e.model_dump(mode="json") for e in out.errors]
     # generated German must pass LanguageTool or be marked needs_review
     notes = lt_notes(t.reply_de)
     if notes is None:
@@ -123,15 +123,35 @@ def _review_user(db: Session, s: VoiceSession) -> str:
     return f"{_learner(db)}\n\nTranscript (Zee's lines are numbered):\n" + "\n".join(convo)
 
 
+def stars(errors: int) -> int:
+    """1 to 3 stars per line from German errors only (never pace, pauses or fluency)."""
+    return 3 if errors == 0 else 2 if errors == 1 else 1
+
+
+def summary(rows: list[dict]) -> dict:
+    graded = [r for r in rows if r["stars"] is not None]
+    return {
+        "lines": len(rows),
+        "graded": len(graded),
+        "clean": sum(not r["errors"] for r in graded),
+        "errors": sum(len(r["errors"]) for r in graded),
+        "stars": sum(r["stars"] for r in graded),
+        "max_stars": 3 * len(graded),
+    }
+
+
 def review(db: Session, llm: Provider, s: VoiceSession) -> dict:
-    """ "Say it better": Zee's lines left, corrected version right. Errors go to the Ghalti Register.
-    LanguageTool-only results (model down) are provisional and not written to Ghalti (same as homework)."""
+    """ "Say it better": all grading of the session happens here, in one Grader call with a long timeout.
+    Zee's lines left, corrected version right, stars per line, errors to the Ghalti Register.
+    LanguageTool-only results (model down) are provisional: no stars, not written to Ghalti (same as homework).
+    A line the model left out is shown as not graded (no stars), never as correct."""
     now = utcnow()
     lines = [t for t in s.turns if t.user_clean]
     try:
         out = complete_json(
-            db, llm, "grader", prompt("voice_review"), _review_user(db, s), SessionReview
-        )
+            db, llm, "grader", prompt("voice_review"), _review_user(db, s), SessionReview,
+            timeout=settings.ollama_review_timeout, num_ctx=settings.ollama_review_num_ctx,
+        )  # fmt: skip
         by_turn = {ln.turn: ln for ln in out.lines}
         source, teaching = llm.vendor, out.teaching_points[:3]
     except (LLMUnavailable, LLMInvalid) as e:
@@ -142,19 +162,25 @@ def review(db: Session, llm: Provider, s: VoiceSession) -> dict:
         said = t.user_clean or ""
         if by_turn is None:
             g = _lt_only(said, lt_check(said), "offline")
-            rows.append({"turn": t.idx, "said": said, "better": g["corrected_text"],
-                         "errors": g["errors"], "needs_review": True, "review_notes": []})  # fmt: skip
+            rows.append({"turn": t.idx, "said": said, "better": g["corrected_text"], "graded": False,
+                         "errors": g["errors"], "stars": None, "needs_review": True,
+                         "review_notes": []})  # fmt: skip
             continue
         ln = by_turn.get(t.idx)
-        better = ln.better.strip() if ln else said
-        errs, _ = _locate(said, [e.model_dump(mode="json") for e in ln.errors] if ln else [])
+        if ln is None:
+            rows.append({"turn": t.idx, "said": said, "better": said, "graded": False, "errors": [],
+                         "stars": None, "needs_review": False, "review_notes": []})  # fmt: skip
+            continue
+        better = ln.better.strip()
+        errs, _ = _locate(said, [e.model_dump(mode="json") for e in ln.errors])
         notes = lt_notes(better) if better != said else []
         if notes is None:
             notes = [
                 {"rule": "LT_SKIPPED", "message": "LanguageTool not reachable; check by hand."}
             ]
-        rows.append({"turn": t.idx, "said": said, "better": better, "errors": errs,
-                     "needs_review": bool(notes), "review_notes": notes})  # fmt: skip
+        rows.append({"turn": t.idx, "said": said, "better": better, "graded": True, "errors": errs,
+                     "stars": stars(len(errs)), "needs_review": bool(notes),
+                     "review_notes": notes})  # fmt: skip
         if errs and better != said:
             # one card per wrong line; fix_card itself keeps flagged German out of SRS until approved
             card = ghalti.fix_card(db, now, said, better, errs[0]["tag"], errs[0]["reason_en"])
@@ -163,7 +189,8 @@ def review(db: Session, llm: Provider, s: VoiceSession) -> dict:
                 if e["tag"] not in seen:
                     seen.add(e["tag"])
                     ghalti.record(db, now, "voice", said, better, e["tag"], e["reason_en"], card.id)
-    s.review_json = {"source": source, "lines": rows, "teaching_points": teaching}
+    s.review_json = {"source": source, "lines": rows, "teaching_points": teaching,
+                     "summary": summary(rows)}  # fmt: skip
     s.status = "lt_only" if source == "languagetool_only" else "reviewed"
     s.ended = s.ended or now
     db.flush()

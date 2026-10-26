@@ -67,7 +67,7 @@ Each principle has a design rule. Evidence strength in brackets: STRONG = meta-a
 | P3 | **Rote + understanding is not a contradiction.** The "paradox of the Asian learner": memorising and understanding work together (Watkins & Biggs 1996; Marton et al.; Kember 1996). Pure recitation without varied context does not transfer (Hifz studies show no general memory boost). | MOD / CONTESTED | Keep the Pakistani-school repetition habit (recite, copy, dictation, tests) **but** every repetition of a chunk appears in a *new sentence* or context after day 1. Recitation is always followed by a use task. |
 | P4 | **No cramming loops.** Overlearning helps at one week then fades fast (Rohrer et al. 2005). | MOD | Max 3 consecutive repetitions of the same card in a session; after that it goes back to the scheduler. |
 | P5 | **Interleave confusables, block new vocab.** Interleaving overall g≈0.42 but for word learning blocking did better (Brunmair & Richter 2019). | CONTESTED for vocab | New chunk sets are learned in a block. Revision of confusables (der/die/das, Akk/Dat, weil vs denn vs deshalb) is interleaved. |
-| P6 | **Prompts beat recasts.** Recasts (just restating correctly) rarely make learners self-correct; prompts (elicitation, metalinguistic clue) do (Lyster & Ranta 1997; Li 2010 meta-analysis: medium, lasting effect). | MOD–STRONG | Tutor correction is 2-step: first a **prompt** ("Check the verb position after *weil*"), Zee retries; only then the corrected sentence. In voice mode: max one prompt per turn, the rest go to the end-of-session review so conversation flow isn't broken. |
+| P6 | **Prompts beat recasts.** Recasts (just restating correctly) rarely make learners self-correct; prompts (elicitation, metalinguistic clue) do (Lyster & Ranta 1997; Li 2010 meta-analysis: medium, lasting effect). | MOD–STRONG | Tutor correction is 2-step: first a **prompt** ("Check the verb position after *weil*"), Zee retries; only then the corrected sentence. In voice mode (changed 2026-10-26): no correction during the conversation at all; every error goes to the end-of-session review so conversation flow isn't broken and a local model replies fast. The prompt step happens there: the review shows the error first, then the corrected line to shadow. |
 | P7 | **Output forces noticing** (Swain). | MOD | Every Sabaq ends with production (write or say), never only recognition. |
 | P8 | **Comprehensible input** (Krashen): useful for reading/listening volume, but not enough alone; explicit grammar instruction helps. | CONTESTED | Graded texts at ~95–98 % known words (English-based coverage figures; German compounding makes them approximate) **plus** explicit grammar patterns. |
 | P9 | **Chunks first.** Formulaic sequences are processed faster by learners and natives (Conklin & Schmitt 2008). | MOD | Unit of learning = chunk (§5.1). |
@@ -433,15 +433,15 @@ Conversation rules:
 - Never interrupt, never finish his sentences, never comment on pauses, speed, repetitions or
   hesitation. Treat speech content only. He stammers; time pressure is forbidden.
 - Ignore disfluencies in the transcript (repeated sounds/words, fillers) when judging his German.
-- Correction policy: at most ONE in-conversation correction per turn, as a PROMPT not a recast
+- Correction policy (changed 2026-10-26): NO correction during the conversation. Reply to his meaning
+  only. All errors are graded once, in the end-of-session review (Grader role, long timeout).
   (e.g. "Achtung: Verb nach 'weil'?"). Let him retry. Save other errors for the end-of-session review.
 - If he says "Englisch bitte" or is stuck twice, explain briefly in English, then return to German.
 - Use his life context (job role, routine, upcoming events) to make topics real. Never ask for or
   repeat confidential work details (client names, internal systems, trade data). If he mentions any,
   steer to a generic version.
 - No praise inflation. Acknowledge correct use specifically ("weil + Verb am Ende: richtig").
-- Output JSON: {reply_de, reply_en_gloss, prompt_correction|null, errors:[{orig, fix, tag, note}],
-  new_chunks:[...], turn_goal_met: bool}
+- Output JSON: {reply_de, reply_en_gloss}
 ```
 
 **Grader output schema (writing):**
@@ -481,7 +481,7 @@ SQLite (single user), SQLAlchemy 2.x + Alembic migrations. All timestamps UTC, d
 | `placement_result` | id, ts, answers, by_band, writing_homework_id, level_band, items_marked |
 | `text` | id, title, body_de, level, topic, known_density, source_url, licence, audio_asset_id? |
 | `audio_asset` | id, path, kind (tts/user/external), text_ref, voice, duration_s |
-| `voice_session` / `voice_turn` | session meta; turn: user_transcript, reply_de, prompt_correction, pron_json, audio refs |
+| `voice_session` / `voice_turn` | session meta; turn: user_transcript, reply_de, pron_json, audio refs (grading lives in the session review) |
 | `test` / `test_result` | type (weekly/monthly/mock), module scores 0–100, items_json |
 | `milestone` | code, title, achieved_at, evidence_ref |
 | `day_log` | date, study_day bool, freeze_used bool, minutes |

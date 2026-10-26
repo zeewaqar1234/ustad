@@ -30,7 +30,7 @@ def test_grader_fallback_uses_languagetool_tags(db):
     class Down:
         vendor, model = "ollama", "down"
 
-        def chat(self, messages, schema):
+        def chat(self, messages, schema, **kw):
             raise LLMUnavailable("offline")
 
     # LanguageTool 6.8 catches this one, but NOT the inverted "Am Wochenende habe ich nach Frankfurt

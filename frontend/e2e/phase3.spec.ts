@@ -128,17 +128,17 @@ test('shadowing word match and voice recitation; typed fallback', async ({ page 
   await page.screenshot({ path: `${SHOTS}/p3-recitation-voice.png`, fullPage: true })
 })
 
-// Visual check of the graded chat (stars, hint chip) with the turn API mocked: this container has no
-// Ollama, so real replies are always "offline". The mock only shapes the screenshot; logic is tested in vitest.
-test('chat with graded turns: bubbles, stars, hint (API mocked)', async ({ page }) => {
+// Visual check of the chat and the graded review with the API mocked: this container has no Ollama, so
+// real replies are always "offline". The mocks only shape the screenshots; logic is tested in vitest/pytest.
+test('chat without mid-turn grading, stars in the review (API mocked)', async ({ page }) => {
   await login(page)
   await page.goto('/voice')
   await page.getByRole('button', { name: /Deutsche Bahn/ }).click()
   await page.getByRole('button', { name: 'Start' }).click()
   await expect(page.getByText('Guten Tag, wie kann ich Ihnen helfen?')).toBeVisible()
   const replies = [
-    { user: 'Mein Zug hatte Verspätung.', reply_de: 'Das tut mir leid. Wohin möchten Sie fahren?', error_count: 0, prompt_correction: null },
-    { user: 'Ich habe meinen Anschluss nach Frankfurt verpasst mit der Zug.', reply_de: 'Der nächste Zug fährt um 14 Uhr.', error_count: 1, prompt_correction: "Achtung: 'mit' braucht welchen Fall?" },
+    { user: 'Mein Zug hatte Verspätung.', reply_de: 'Das tut mir leid. Wohin möchten Sie fahren?' },
+    { user: 'Ich habe meinen Anschluss nach Frankfurt verpasst mit der Zug.', reply_de: 'Der nächste Zug fährt um 14 Uhr.' },
   ]
   let n = 0
   await page.route('**/api/voice/turn', async (route) => {
@@ -152,13 +152,40 @@ test('chat with graded turns: bubbles, stars, hint (API mocked)', async ({ page 
     await page.getByRole('button', { name: 'Send' }).click()
     await expect(page.getByText(r.reply_de)).toBeVisible()
   }
-  await expect(page.getByRole('img', { name: '3 of 3 stars' })).toBeVisible()
-  await expect(page.getByRole('img', { name: '2 of 3 stars' })).toBeVisible()
+  await expect(page.getByRole('img', { name: /of 3 stars/ })).toHaveCount(0) // no grading during the talk
   await noSideScroll(page)
   await settle(page)
-  await page.screenshot({ path: `${SHOTS}/p3-chat-stars.png` })
-  await page.getByRole('button', { name: 'Tap to talk' }).click()
-  await page.evaluate(() => (window as unknown as { __say: (t: string) => void }).__say('Gilt mein Ticket noch'))
+  await page.screenshot({ path: `${SHOTS}/p3-chat.png` })
+
+  const url = page.url()
+  const id = url.split('/').pop()
+  await page.route(`**/api/voice/session/${id}/review`, async (route) => {
+    const s = await (await page.request.get(`/api/voice/session/${id}`)).json()
+    await route.fulfill({
+      json: {
+        ...s,
+        status: 'reviewed',
+        review: {
+          source: 'ollama',
+          teaching_points: ["'mit' always takes the Dativ: mit dem Zug."],
+          summary: { lines: 2, graded: 2, clean: 1, errors: 1, stars: 5, max_stars: 6 },
+          lines: [
+            { turn: 1, said: replies[0].user, better: replies[0].user, graded: true, errors: [], stars: 3, needs_review: false },
+            {
+              turn: 2, said: replies[1].user, better: 'Ich habe meinen Anschluss nach Frankfurt mit dem Zug verpasst.',
+              graded: true, stars: 2, needs_review: false,
+              errors: [{ span: 'der Zug', fix: 'dem Zug', tag: 'CASE_DAT', reason_en: 'mit + Dativ', start: 54, end: 61 }],
+            },
+          ],
+        },
+      },
+    })
+  })
+  await page.getByRole('button', { name: 'End and review' }).click()
+  await expect(page.getByRole('heading', { name: 'Say it better' })).toBeVisible()
+  await expect(page.getByRole('img', { name: '3 of 3 stars' })).toBeVisible()
+  await expect(page.getByLabel('5 of 6 stars')).toBeVisible()
+  await noSideScroll(page)
   await settle(page)
-  await page.screenshot({ path: `${SHOTS}/p3-chat-listening.png` })
+  await page.screenshot({ path: `${SHOTS}/p3-review-stars.png`, fullPage: true })
 })

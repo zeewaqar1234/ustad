@@ -25,10 +25,8 @@ export interface Turn {
   user: string | null
   reply_de: string | null
   reply_en: string | null
-  prompt_correction: string | null
   tutor_status: 'ok' | 'offline'
   needs_review: boolean
-  error_count: number | null // German errors in Zee's turn; null = not graded (opening line, tutor offline)
 }
 
 export interface ReviewError {
@@ -40,12 +38,24 @@ export interface ReviewError {
   end: number
 }
 
+// All grading of a session comes from the end-of-session review, including the stars.
 export interface ReviewLine {
   turn: number
   said: string
   better: string
+  graded: boolean // false: LanguageTool only, or the model left this line out
   errors: ReviewError[]
+  stars: 1 | 2 | 3 | null
   needs_review: boolean
+}
+
+export interface ReviewSummary {
+  lines: number
+  graded: number
+  clean: number
+  errors: number
+  stars: number
+  max_stars: number
 }
 
 export interface VoiceSession {
@@ -54,7 +64,7 @@ export interface VoiceSession {
   scenario: { code: string; title: string; goal_en: string; chunks: Chunk[] }
   status: 'open' | 'reviewed' | 'lt_only'
   turns: Turn[]
-  review: { source: string | null; lines: ReviewLine[]; teaching_points: string[] } | null
+  review: { source: string | null; lines: ReviewLine[]; teaching_points: string[]; summary?: ReviewSummary } | null
 }
 
 export interface ShadowSentence {

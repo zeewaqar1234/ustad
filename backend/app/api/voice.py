@@ -116,13 +116,15 @@ def turn(body: TurnIn, db: DB, llm: LLM):
 
 @router.post("/session/{sid}/review")
 def review(sid: int, db: DB, llm: LLM):
-    """End the session and build the "Say it better" view. Repeatable while the result is LanguageTool-only."""
+    """End the session: grade every line in one call (long timeout, settings.ollama_review_timeout),
+    stars, Ghalti. Repeatable while the result is LanguageTool-only."""
     s = _session(db, sid)
     if s.status == "reviewed":
         return view(s)
     if not any(t.user_clean for t in s.turns):
         s.status, s.ended = "reviewed", utcnow()
-        s.review_json = {"source": None, "lines": [], "teaching_points": []}
+        s.review_json = {"source": None, "lines": [], "teaching_points": [],
+                         "summary": svc.summary([])}  # fmt: skip
     else:
         svc.review(db, llm, s)
     db.commit()
