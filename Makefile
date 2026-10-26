@@ -1,4 +1,4 @@
-.PHONY: dev backend frontend install test lint migrate seed-build seed-build-fast grammar-build seed-load password lt-up lt-down lt-check test-ollama voice-build texts-build author
+.PHONY: gate-reset dev backend frontend install test lint migrate seed-build seed-build-fast grammar-build seed-load password lt-up lt-down lt-check test-ollama voice-build texts-build author
 
 install:
 	cd backend && uv sync
@@ -54,6 +54,9 @@ author: migrate
 
 seed-load: migrate
 	cd backend && uv run python -m scripts.load_seed
+
+gate-reset: migrate
+	cd backend && uv run python -m scripts.gate_reset
 
 password:
 	cd backend && uv run python -m scripts.set_password

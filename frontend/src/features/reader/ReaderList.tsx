@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link } from 'react-router'
 import { api } from '../../lib/api'
+import { ListRow, PageHeader, StatusPill } from '../../components/ui'
 import type { TextList, TextSummary } from '../../lib/reading'
 
 const TOPICS: Record<string, string> = {
@@ -13,13 +13,13 @@ const TOPICS: Record<string, string> = {
   work: 'Work',
 }
 
-/** Known-word share as a bar. Target band for graded texts is 95 % and up. */
+/** Known-word share as a bar. Readable in black and white: outlined track, solid fill, tick at the 95 % target, number beside it. */
 export function DensityMeter({ pct, unknown }: { pct: number; unknown?: number }) {
   const v = Math.max(0, Math.min(100, pct))
   return (
-    <div className="flex items-center gap-2 text-xs text-neutral-700">
+    <div className="flex items-center gap-2 text-sm text-neutral-800">
       <div
-        className="h-2 flex-1 overflow-hidden rounded-full bg-neutral-200"
+        className="relative h-3 min-w-24 flex-1 overflow-hidden border border-neutral-900 bg-white"
         role="meter"
         aria-label="Known words"
         aria-valuenow={Math.round(v)}
@@ -27,9 +27,10 @@ export function DensityMeter({ pct, unknown }: { pct: number; unknown?: number }
         aria-valuemax={100}
       >
         <div className="h-full bg-neutral-900" style={{ width: `${v}%` }} />
+        <div className="absolute inset-y-0 w-0.5 bg-neutral-500" style={{ left: '95%' }} aria-hidden />
       </div>
-      <span className="shrink-0">
-        {Math.round(v)}% known{unknown != null ? ` · ${unknown} new` : ''}
+      <span className="shrink-0 tabular-nums">
+        {Math.round(v)}% known{unknown != null ? `, ${unknown} new` : ''}
       </span>
     </div>
   )
@@ -37,27 +38,22 @@ export function DensityMeter({ pct, unknown }: { pct: number; unknown?: number }
 
 function TextRow({ t }: { t: TextSummary }) {
   return (
-    <Link
+    <ListRow
       to={`/read/${t.id}`}
-      className="flex flex-col gap-1.5 rounded-lg border border-neutral-300 bg-white px-4 py-3 active:bg-neutral-100"
-    >
-      <div className="flex items-start gap-2">
-        <p className="min-w-0 flex-1 font-semibold">
-          {t.title}
-          {t.series_episode != null && (
-            <span className="font-normal text-neutral-600"> · Episode {t.series_episode}</span>
-          )}
-        </p>
-        <span className="shrink-0 text-sm text-neutral-700">
-          {t.read ? (t.score != null ? `Read · ${Math.round(t.score)}%` : 'Read') : 'New'}
-        </span>
-      </div>
-      <p className="text-sm text-neutral-600">
-        {TOPICS[t.topic] ?? t.topic} · {t.level} · {t.words} words
-        {t.status === 'needs_review' && ' · flagged'}
-      </p>
-      <DensityMeter pct={t.known_pct} />
-    </Link>
+      title={t.title}
+      sub={t.series_episode != null ? `Episode ${t.series_episode}` : undefined}
+      status={`${TOPICS[t.topic] ?? t.topic} · ${t.level} · ${t.words} words${t.status === 'needs_review' ? ' · flagged' : ''}`}
+      right={
+        <div className="flex w-64 shrink-0 flex-col items-end gap-1">
+          <StatusPill strong={!t.read}>
+            {t.read ? (t.score != null ? `Read, ${Math.round(t.score)}%` : 'Read') : 'New'}
+          </StatusPill>
+          <div className="w-full">
+            <DensityMeter pct={t.known_pct} />
+          </div>
+        </div>
+      }
+    />
   )
 }
 
@@ -68,11 +64,11 @@ export function ReaderList() {
     mutationFn: () => api<{ made: number }>('/api/texts/generate', {}),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['texts'] }),
   })
-  if (error) return <p className="p-4">Error: {(error as Error).message}</p>
-  if (!data) return <p className="p-4">Loading…</p>
+  if (error) return <p>Error: {(error as Error).message}</p>
+  if (!data) return <p>Loading…</p>
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <h1 className="text-xl font-bold">Lesen</h1>
+    <div className="flex flex-col gap-4">
+      <PageHeader title="Lesen" subtitle="reading" />
       <section className="flex flex-col gap-2">
         <h2 className="font-semibold">Today</h2>
         {data.today.length === 0 && <p className="text-sm text-neutral-700">No text for today yet.</p>}
@@ -82,7 +78,7 @@ export function ReaderList() {
         <button
           onClick={() => gen.mutate()}
           disabled={gen.isPending}
-          className="rounded-lg border border-neutral-300 bg-white px-4 py-3 text-sm disabled:opacity-60"
+          className="self-start rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm disabled:opacity-60"
         >
           {gen.isPending ? 'Writing texts…' : 'Generate texts now'}
         </button>

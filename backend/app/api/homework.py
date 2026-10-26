@@ -26,7 +26,7 @@ FALLBACK_PROMPT = "Write 4 sentences about your day. Use weil once and one verb 
 
 def view(h: Homework) -> dict:
     return {"id": h.id, "kind": h.kind, "assigned": h.assigned.isoformat(), "prompt": h.prompt,
-            "submission": h.submission, "grade": h.grade_json, "status": h.status,
+            "submission": h.submission, "grade": h.grade_json, "status": h.status or "open",
             "pattern_id": h.pattern_id}  # fmt: skip
 
 
@@ -39,16 +39,33 @@ def _grade(db: Session, llm: Provider, h: Homework, text: str) -> None:
         ghalti.from_grade(db, now, grade, h.kind)
 
 
+def _today_row(db: Session) -> Homework | None:
+    return db.scalar(
+        select(Homework)
+        .where(Homework.kind == "homework", Homework.assigned == local_date(utcnow()))
+        .limit(1)
+    )
+
+
+def _new_today(db: Session) -> Homework:
+    d = local_date(utcnow())
+    p = current_pattern(db)
+    return Homework(kind="homework", assigned=d, due=d, pattern_id=p.id if p else None,
+                    prompt=(p.homework if p and p.homework else FALLBACK_PROMPT))  # fmt: skip
+
+
 @router.get("/today")
 def today(db: DB):
-    d = local_date(utcnow())
-    h = db.scalar(
-        select(Homework).where(Homework.kind == "homework", Homework.assigned == d).limit(1)
-    )
+    """Read only. Before Zee starts, a preview with id null; POST /today creates the row."""
+    h = _today_row(db)
+    return view(h if h is not None else _new_today(db))
+
+
+@router.post("/today")
+def start_today(db: DB):
+    h = _today_row(db)
     if h is None:
-        p = current_pattern(db)
-        h = Homework(kind="homework", assigned=d, due=d, pattern_id=p.id if p else None,
-                     prompt=(p.homework if p and p.homework else FALLBACK_PROMPT))  # fmt: skip
+        h = _new_today(db)
         db.add(h)
         db.commit()
     return view(h)

@@ -23,7 +23,7 @@ class Profile(Base):
     __tablename__ = "profile"
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(80), default="Zee")
-    level_band: Mapped[str] = mapped_column(String(20), default="B1.1")
+    level_band: Mapped[str | None] = mapped_column(String(20), default=None)  # None until placed
     explanation_lang: Mapped[str] = mapped_column(String(10), default="en")
     settings_json: Mapped[dict] = mapped_column(JSON, default=dict)
     gate_override: Mapped[bool] = mapped_column(Boolean, default=False)

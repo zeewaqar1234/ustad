@@ -1,4 +1,4 @@
-# Production image: built PWA served by FastAPI on one origin. Caddy in front does HTTPS.
+# Production image: built frontend served by FastAPI on one origin. Caddy in front does HTTPS.
 FROM mirror.gcr.io/library/node:22-slim AS web
 WORKDIR /web
 COPY frontend/package.json frontend/package-lock.json ./

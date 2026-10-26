@@ -40,9 +40,14 @@ BRIEFS = {
 }
 
 
+NOT_PLACED = "Level not placed yet; write at B1 and keep sentences short."
+
+
 def _learner(db: Session) -> str:
     p = db.get(Profile, 1)
-    return f"Level: {p.level_band if p else 'B1.1'}."
+    if p and p.level_band:
+        return f"Level: {p.level_band}."
+    return NOT_PLACED
 
 
 def _known_list(db: Session) -> str:
