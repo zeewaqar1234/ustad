@@ -56,4 +56,12 @@ test('review hides the answer until an attempt, then shows the diff', async () =
   expect(await screen.findByText('Almost.')).toBeInTheDocument()
   expect(screen.getByText('Rated Hard')).toBeInTheDocument()
   expect(screen.getByTitle('add')).toHaveTextContent('ß')
+  expect(screen.getByText('Enter continues.')).toBeInTheDocument()
+})
+
+test('review: hint line documents the umlaut shortcut', async () => {
+  const card = { card_id: 7, card_type: 'produce', deck: 'life', mode: 'type', prompt: 'the street', hint: null }
+  vi.stubGlobal('fetch', vi.fn(() => respond(200, { card, left: 1 })))
+  wrap(<ReviewSession block="manzil" />)
+  expect(await screen.findByText(/hold a letter for ä ö ü, or Option\+u/)).toBeInTheDocument()
 })

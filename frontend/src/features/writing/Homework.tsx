@@ -4,15 +4,12 @@ import { GermanField } from '../../components/GermanField'
 import { RedPen } from '../../components/RedPen'
 import { Column, PageHeader } from '../../components/ui'
 import { api } from '../../lib/api'
+import { countWords } from '../../lib/words'
 import { shortDate, type Homework as Hw, type WritingGrade } from '../../lib/grammar'
 
 function scoreText(g: WritingGrade | null): string {
   if (!g) return 'Not submitted'
   return g.score_10 === null ? 'No score' : `${g.score_10}/10`
-}
-
-export function countWords(text: string): number {
-  return text.split(/\s+/).filter(Boolean).length
 }
 
 /** Cmd+Enter or Ctrl+Enter submits from inside a multi-line field. */
