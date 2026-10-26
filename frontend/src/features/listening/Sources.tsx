@@ -12,7 +12,7 @@ interface Source {
 // docs/content_sources.md §11. Site and section pages only; nothing is copied into the app here.
 const GROUPS: { title: string; note: string; items: Source[] }[] = [
   {
-    title: 'Read and listen here',
+    title: 'Free to store with credit',
     note: 'Storing allowed with credit. Do not change the text.',
     items: [
       {

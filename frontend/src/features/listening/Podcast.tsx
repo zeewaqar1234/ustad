@@ -45,7 +45,10 @@ function Player({ ep }: { ep: Episode }) {
   const save = async () => {
     setErr(null)
     try {
-      await (await caches.open(CACHE)).add(ep.url)
+      const cache = await caches.open(CACHE)
+      // keep one episode on the phone: a WAV episode can be about 50 MB
+      for (const req of await cache.keys()) if (!req.url.endsWith(ep.url)) await cache.delete(req)
+      await cache.add(ep.url)
       setSaved(true)
     } catch (e) {
       setErr(`Could not save: ${(e as Error).message}`)

@@ -55,6 +55,11 @@ function GlossSheet(props: { textId: number; word: string; onClose: () => void }
                 {gl.gender ? `${ARTICLE[gl.gender]} ` : ''}
                 {gl.lemma}
               </p>
+              {!gl.gender && gl.gender_guess && (
+                <p className="text-sm text-neutral-700">
+                  Probably <span lang="de">{ARTICLE[gl.gender_guess]}</span> (a guess from the sentence; check it)
+                </p>
+              )}
               {gl.plural && (
                 <p className="text-sm text-neutral-700" lang="de">
                   Plural: {gl.plural}

@@ -23,6 +23,13 @@ from app.srs.grader import _char_diff
 
 PER_DAY = 5
 _pick_lock = threading.Lock()
+# articles and pronouns whose last letter carries case/gender (den/dem, ihn/ihm, die/der)
+CLOSED_FORMS = {
+    "der", "die", "das", "den", "dem", "des", "ein", "eine", "einen", "einem", "einer", "eines",
+    "kein", "keine", "keinen", "keinem", "keiner", "keines", "ihn", "ihm", "ihr", "ihre", "ihren",
+    "ihrem", "ihrer", "mein", "meine", "meinen", "meinem", "meiner", "sein", "seine", "seinen",
+    "seinem", "seiner", "dies", "dieser", "diese", "diesen", "diesem", "dieses", "wer", "wen", "wem",
+}  # fmt: skip
 # inflection endings (case, gender, number, person): "einen"/"einem", "gute"/"guten", "neu"/"neue"
 ENDINGS = {"", "e", "en", "em", "er", "es", "n", "m", "r", "s", "t", "st", "et", "te", "ten", "ter"}
 MIN_WORDS, MAX_WORDS = 4, 14
@@ -130,8 +137,15 @@ def classify(given: str, expected: str) -> str:
     if _umlaut_only(g, e):
         return "umlaut"
     gl, el = g.lower(), e.lower()
+    if gl in CLOSED_FORMS and el in CLOSED_FORMS and gl[0] == el[0]:
+        return "ending"  # den/dem, ihn/ihm, die/der: a case ending on an article or pronoun
     stem = len(_common_prefix(gl, el))
-    if stem >= 3 and gl[stem:] in ENDINGS and el[stem:] in ENDINGS:
+    short, long_ = sorted((gl, el), key=len)
+    doubled = len(long_) == len(short) + 1 and any(
+        long_[:i] + long_[i + 1 :] == short and long_[i] == long_[i - 1]
+        for i in range(1, len(long_))
+    )
+    if not doubled and stem >= 3 and gl[stem:] in ENDINGS and el[stem:] in ENDINGS:
         return "ending"
     return "spelling"
 
@@ -160,7 +174,10 @@ def word_diff(typed: str, expected: str) -> list[dict]:
                 elif e is None:
                     out.append({"given": g, "expected": None, "kind": "extra"})
                 else:
-                    out.append({"given": g, "expected": e, "kind": classify(g, e)})
+                    kind = classify(g, e)
+                    out.append({"given": g, "expected": e, "kind": kind,
+                                "capital": kind not in ("ok", "capital") and _bare(g)[:1] != _bare(e)[:1]
+                                and _bare(g)[:1].lower() == _bare(e)[:1].lower()})  # fmt: skip
         elif op == "delete":
             out += [{"given": g, "expected": None, "kind": "extra"} for g in gw[i1:i2]]
         else:  # insert
@@ -173,6 +190,8 @@ def check(typed: str, expected: str) -> dict:
     counts: dict[str, int] = {}
     for w in words:
         counts[w["kind"]] = counts.get(w["kind"], 0) + 1
+        if w.get("capital"):  # e.g. gute -> Guten: an ending and a capital letter
+            counts["capital"] = counts.get("capital", 0) + 1
     extra = counts.get("extra", 0)
     accuracy = round(100 * counts.get("ok", 0) / (len(expected.split()) + extra), 1)
     return {"expected": expected, "accuracy": accuracy, "words": words, "counts": counts,
@@ -186,7 +205,7 @@ def submit(db: Session, now: datetime, row: DictationItem, typed: str, elapsed_m
         return row.result_json
     res = {"ref": row.ref, **check(typed, row.de), "replays": replays}
     row.typed, row.accuracy, row.result_json, row.ts = typed, res["accuracy"], res, now
-    tags = sorted({KIND_TAG[w["kind"]] for w in res["words"] if w["kind"] != "ok"})
+    tags = sorted({KIND_TAG[k] for k in res["counts"] if k != "ok"})
     db.add(Attempt(ts=now, task_ref=f"diktat:{row.ref}", input=typed[:2000],
                    correct=res["accuracy"] == 100, error_tags=tags, score=res["accuracy"]))  # fmt: skip
     daily.add_minutes(db, now, elapsed_ms)
