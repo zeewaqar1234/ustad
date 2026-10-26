@@ -5,11 +5,14 @@ description = "Ustad backend: personal German coach API"
 requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.20.0",
+    "apscheduler>=3.10,<4",
     "argon2-cffi>=25.1.0",
+    "de-core-news-sm",
     "fastapi>=0.156.2",
     "fsrs>=6.3.2",
     "httpx>=0.28.1",
     "pydantic-settings>=2.16.1",
+    "spacy>=3.8",
     "sqlalchemy>=2",
     "tzdata>=2026.5",
     "uvicorn[standard]>=0.54.0",
@@ -29,3 +32,6 @@ markers = ["languagetool: needs the LanguageTool container (make lt-up)"]
 line-length = 100
 target-version = "py312"
 extend-exclude = ["migrations"]
+
+[tool.uv.sources]
+de-core-news-sm = { url = "https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-3.8.0/de_core_news_sm-3.8.0-py3-none-any.whl" }

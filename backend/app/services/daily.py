@@ -152,7 +152,8 @@ def mark_block(db: Session, now: datetime, block: str) -> DayLog:
     return day
 
 
-def add_minutes(db: Session, now: datetime, elapsed_ms: int) -> None:
-    """Active time: an answer that took longer than 60 s counts as 60 s (idle not counted)."""
+def add_minutes(db: Session, now: datetime, elapsed_ms: int, cap_ms: int = 60_000) -> None:
+    """Active time: an answer that took longer than 60 s counts as 60 s (idle not counted).
+    Reading a whole text passes a larger cap."""
     day = get_day(db, local_date(now))
-    day.minutes += min(max(elapsed_ms, 0), 60_000) / 60_000
+    day.minutes += min(max(elapsed_ms, 0), cap_ms) / 60_000

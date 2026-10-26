@@ -29,6 +29,14 @@ class Settings(BaseSettings):
     # German speechSynthesis voice. Empty = off. Example: PIPER_BIN=piper PIPER_MODEL=/models/de_DE-thorsten-medium.onnx
     piper_bin: str = ""
     piper_model: str = ""
+    # Commute Podcast (Phase 4): optional English Piper voice for the prompts (e.g. en_US-lessac-medium);
+    # without it the episode is German only (listen, repeat in your head, hear it again).
+    piper_model_en: str = ""
+    # ffmpeg turns the episode WAV into mp3; if it is missing the episode stays WAV.
+    ffmpeg_bin: str = "ffmpeg"
+    # Nightly Author job (APScheduler inside the app): 2 graded texts per day, 2 days ahead.
+    jobs_enabled: bool = True
+    author_hour: int = 3  # Europe/Berlin
     audio_dir: Path = REPO_ROOT / "audio"
     # Set to bootstrap the login password without the CLI: an argon2 hash, never the plain password.
     password_hash: str = ""

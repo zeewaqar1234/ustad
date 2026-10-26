@@ -31,6 +31,15 @@ export default defineConfig({
       workbox: {
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//, /^\/auth\//],
+        // Commute Podcast: an episode saved with "Save for offline" plays without network.
+        // rangeRequests: <audio> asks for byte ranges; Workbox answers them from the cached file.
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.startsWith('/api/podcast/') && url.pathname.endsWith('/audio'),
+            handler: 'CacheFirst',
+            options: { cacheName: 'ustad-podcast', rangeRequests: true, cacheableResponse: { statuses: [200] } },
+          },
+        ],
       },
     }),
   ],

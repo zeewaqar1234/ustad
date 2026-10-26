@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, Request
@@ -5,24 +6,37 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.exc import OperationalError
 
+from app import jobs
 from app.api import (
     auth,
     daily,
+    dictation,
     health,
     homework,
     items,
     mistakes,
     patterns,
     placement,
+    podcast,
     recitation,
     review,
     sabaq,
     stats,
+    texts,
     voice,
 )  # fmt: skip
 from app.core.config import settings
 
-app = FastAPI(title="Ustad")
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    sched = jobs.start()
+    yield
+    if sched:
+        sched.shutdown(wait=False)
+
+
+app = FastAPI(title="Ustad", lifespan=lifespan)
 
 
 @app.exception_handler(OperationalError)
@@ -37,7 +51,7 @@ def _db_error(request: Request, exc: OperationalError):
 
 
 for r in (health, auth, daily, review, sabaq, stats, items, patterns, homework, mistakes,
-          recitation, placement, voice):  # fmt: skip
+          recitation, placement, voice, texts, dictation, podcast):  # fmt: skip
     app.include_router(r.router)
 
 

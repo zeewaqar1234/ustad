@@ -5,7 +5,13 @@ import { Ghalti } from './features/ghalti/Ghalti'
 import { Drills } from './features/grammar/Drills'
 import { PatternCard } from './features/grammar/PatternCard'
 import { PatternList } from './features/grammar/PatternList'
+import { Diktat } from './features/listening/Diktat'
+import { ListenHome } from './features/listening/ListenHome'
+import { Podcast } from './features/listening/Podcast'
+import { Sources } from './features/listening/Sources'
 import { Placement } from './features/placement/Placement'
+import { Reader } from './features/reader/Reader'
+import { ReaderList } from './features/reader/ReaderList'
 import { Recitation } from './features/recitation/Recitation'
 import { RecitationList } from './features/recitation/RecitationList'
 import { ReviewSession } from './features/review/ReviewSession'
@@ -44,6 +50,11 @@ function VoiceRecitationRoute() {
 function SessionRoute() {
   const { id } = useParams()
   return <Session key={id} />
+}
+
+function ReaderRoute() {
+  const { id } = useParams()
+  return <Reader key={id} />
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -102,6 +113,12 @@ export default function App() {
                 <Route path="/voice/session/:id" element={<SessionRoute />} />
                 <Route path="/voice/recite" element={<VoiceRecitationList />} />
                 <Route path="/voice/recite/:code" element={<VoiceRecitationRoute />} />
+                <Route path="/read" element={<ReaderList />} />
+                <Route path="/read/:id" element={<ReaderRoute />} />
+                <Route path="/listen" element={<ListenHome />} />
+                <Route path="/listen/diktat" element={<Diktat />} />
+                <Route path="/listen/podcast" element={<Podcast />} />
+                <Route path="/listen/sources" element={<Sources />} />
                 <Route path="/check" element={<CheckQueue />} />
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>

@@ -1,0 +1,1035 @@
+{
+ "texts": [
+  {
+   "title": "Bilals erster Tag",
+   "topic": "serial",
+   "level": "B1.1",
+   "series_episode": 1,
+   "sentences": [
+    {
+     "de": "Bilal kommt aus Pakistan und ist 26 Jahre alt.",
+     "en": "Bilal is from Pakistan and is 26 years old."
+    },
+    {
+     "de": "Seit Montag arbeitet er als Trainee bei einer Bank in Frankfurt.",
+     "en": "Since Monday he has been working as a trainee at a bank in Frankfurt."
+    },
+    {
+     "de": "Er gehört zum IT-Team, das die Daten für die Kredite verwaltet.",
+     "en": "He belongs to the IT team that manages the data for the loans."
+    },
+    {
+     "de": "Am ersten Tag ist er sehr früh im Büro, schon um halb acht.",
+     "en": "On the first day he is in the office very early, already at half past seven."
+    },
+    {
+     "de": "Die Tür ist noch zu, und niemand ist da.",
+     "en": "The door is still closed, and nobody is there."
+    },
+    {
+     "de": "Um acht Uhr kommt seine Kollegin Anna und lacht freundlich.",
+     "en": "At eight o'clock his colleague Anna arrives and laughs in a friendly way."
+    },
+    {
+     "de": "„Bei uns fängt niemand vor neun Uhr an“, sagt sie.",
+     "en": "\"Nobody here starts before nine\", she says."
+    },
+    {
+     "de": "Dann zeigt sie ihm seinen Schreibtisch und seinen neuen Laptop.",
+     "en": "Then she shows him his desk and his new laptop."
+    },
+    {
+     "de": "Bilal muss viele Formulare ausfüllen und drei Passwörter erstellen.",
+     "en": "Bilal has to fill in many forms and create three passwords."
+    },
+    {
+     "de": "Mittags gehen alle zusammen in die Kantine.",
+     "en": "At midday everyone goes to the canteen together."
+    },
+    {
+     "de": "Es gibt Schnitzel, aber Bilal nimmt lieber die Gemüsesuppe.",
+     "en": "There is schnitzel, but Bilal prefers the vegetable soup."
+    },
+    {
+     "de": "Am Nachmittag hat er sein erstes Meeting mit dem Teamleiter, Herrn Weber.",
+     "en": "In the afternoon he has his first meeting with the team lead, Mr Weber."
+    },
+    {
+     "de": "Herr Weber spricht sehr schnell, und Bilal versteht nur die Hälfte.",
+     "en": "Mr Weber speaks very fast, and Bilal understands only half."
+    },
+    {
+     "de": "Am Abend schreibt er seiner Mutter: „Der Tag war lang, aber gut.“",
+     "en": "In the evening he writes to his mother: \"The day was long, but good.\""
+    }
+   ],
+   "glossary": [
+    {
+     "word": "verwaltet",
+     "lemma": "verwalten",
+     "en": "to manage",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Kredite",
+     "lemma": "Kredit",
+     "en": "loan",
+     "gender": "m",
+     "plural": "Kredite"
+    },
+    {
+     "word": "Formulare",
+     "lemma": "Formular",
+     "en": "form (document)",
+     "gender": "n",
+     "plural": "Formulare"
+    },
+    {
+     "word": "ausfüllen",
+     "lemma": "ausfüllen",
+     "en": "to fill in",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "erstellen",
+     "lemma": "erstellen",
+     "en": "to create",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Kantine",
+     "lemma": "Kantine",
+     "en": "canteen",
+     "gender": "f",
+     "plural": "Kantinen"
+    },
+    {
+     "word": "Hälfte",
+     "lemma": "Hälfte",
+     "en": "half",
+     "gender": "f",
+     "plural": "Hälften"
+    }
+   ],
+   "questions": [
+    {
+     "id": "q1",
+     "kind": "rf",
+     "prompt": "Bilal kommt am ersten Tag zu spät ins Büro.",
+     "left": [],
+     "options": [
+      "richtig",
+      "falsch"
+     ],
+     "answer": [
+      1
+     ]
+    },
+    {
+     "id": "q2",
+     "kind": "mc",
+     "prompt": "Was isst Bilal in der Kantine?",
+     "left": [],
+     "options": [
+      "Schnitzel",
+      "Gemüsesuppe",
+      "nichts"
+     ],
+     "answer": [
+      1
+     ]
+    },
+    {
+     "id": "q3",
+     "kind": "match",
+     "prompt": "Wer macht was?",
+     "left": [
+      "Sie zeigt Bilal seinen Schreibtisch.",
+      "Er leitet das Meeting am Nachmittag."
+     ],
+     "options": [
+      "Herr Weber",
+      "Anna",
+      "Bilals Mutter"
+     ],
+     "answer": [
+      1,
+      0
+     ]
+    }
+   ],
+   "code": "serial-01",
+   "credit": "Ustad (own text)",
+   "licence": "own",
+   "source_url": null,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "title": "Bilal sucht eine Wohnung",
+   "topic": "serial",
+   "level": "B1.1",
+   "series_episode": 2,
+   "sentences": [
+    {
+     "de": "Bilal wohnt seit drei Wochen in einem kleinen Hotelzimmer in Frankfurt.",
+     "en": "Bilal has been living in a small hotel room in Frankfurt for three weeks."
+    },
+    {
+     "de": "Das ist teuer, deshalb sucht er dringend eine Wohnung.",
+     "en": "That is expensive, so he urgently needs a flat."
+    },
+    {
+     "de": "Jeden Abend liest er Anzeigen im Internet.",
+     "en": "Every evening he reads ads on the internet."
+    },
+    {
+     "de": "Die meisten Wohnungen sind zu teuer oder schon weg.",
+     "en": "Most flats are too expensive or already gone."
+    },
+    {
+     "de": "Seine Kollegin Anna gibt ihm einen Tipp: „Schreib kurze und freundliche Nachrichten.“",
+     "en": "His colleague Anna gives him a tip: \"Write short and friendly messages.\""
+    },
+    {
+     "de": "Bilal schreibt an zehn Vermieter, aber nur eine Frau antwortet.",
+     "en": "Bilal writes to ten landlords, but only one woman replies."
+    },
+    {
+     "de": "Sie heißt Frau Schulz und hat eine Zweizimmerwohnung in Bockenheim.",
+     "en": "Her name is Mrs Schulz and she has a two-room flat in Bockenheim."
+    },
+    {
+     "de": "Am Samstag besichtigt Bilal die Wohnung zusammen mit vielen anderen Leuten.",
+     "en": "On Saturday Bilal views the flat together with many other people."
+    },
+    {
+     "de": "Die Küche ist alt, aber das Wohnzimmer ist hell und ruhig.",
+     "en": "The kitchen is old, but the living room is bright and quiet."
+    },
+    {
+     "de": "Frau Schulz möchte eine Kopie von seinem Arbeitsvertrag sehen.",
+     "en": "Mrs Schulz wants to see a copy of his employment contract."
+    },
+    {
+     "de": "Außerdem fragt sie nach seinen letzten drei Gehaltsabrechnungen.",
+     "en": "She also asks for his last three payslips."
+    },
+    {
+     "de": "Bilal hat alle Unterlagen schon in einer Mappe dabei.",
+     "en": "Bilal already has all the documents with him in a folder."
+    },
+    {
+     "de": "Am Montag ruft Frau Schulz an und sagt: „Sie bekommen die Wohnung.“",
+     "en": "On Monday Mrs Schulz calls and says: \"You get the flat.\""
+    },
+    {
+     "de": "Bilal ist so glücklich, dass er Anna sofort davon erzählt.",
+     "en": "Bilal is so happy that he tells Anna about it straight away."
+    }
+   ],
+   "glossary": [
+    {
+     "word": "dringend",
+     "lemma": "dringend",
+     "en": "urgently",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Anzeigen",
+     "lemma": "Anzeige",
+     "en": "advert, listing",
+     "gender": "f",
+     "plural": "Anzeigen"
+    },
+    {
+     "word": "Vermieter",
+     "lemma": "Vermieter",
+     "en": "landlord",
+     "gender": "m",
+     "plural": "Vermieter"
+    },
+    {
+     "word": "besichtigt",
+     "lemma": "besichtigen",
+     "en": "to view (a flat)",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Arbeitsvertrag",
+     "lemma": "Arbeitsvertrag",
+     "en": "employment contract",
+     "gender": "m",
+     "plural": "Arbeitsverträge"
+    },
+    {
+     "word": "Gehaltsabrechnungen",
+     "lemma": "Gehaltsabrechnung",
+     "en": "payslip",
+     "gender": "f",
+     "plural": "Gehaltsabrechnungen"
+    },
+    {
+     "word": "Unterlagen",
+     "lemma": "Unterlagen",
+     "en": "documents (plural only)",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Mappe",
+     "lemma": "Mappe",
+     "en": "folder",
+     "gender": "f",
+     "plural": "Mappen"
+    }
+   ],
+   "questions": [
+    {
+     "id": "q1",
+     "kind": "rf",
+     "prompt": "Viele Vermieter antworten Bilal.",
+     "left": [],
+     "options": [
+      "richtig",
+      "falsch"
+     ],
+     "answer": [
+      1
+     ]
+    },
+    {
+     "id": "q2",
+     "kind": "mc",
+     "prompt": "Wo wohnt Bilal am Anfang?",
+     "left": [],
+     "options": [
+      "in einem Hotelzimmer",
+      "bei Anna",
+      "in Bockenheim"
+     ],
+     "answer": [
+      0
+     ]
+    },
+    {
+     "id": "q3",
+     "kind": "match",
+     "prompt": "Wie ist die Wohnung?",
+     "left": [
+      "Die Küche",
+      "Das Wohnzimmer"
+     ],
+     "options": [
+      "ist hell und ruhig.",
+      "ist alt.",
+      "ist zu klein."
+     ],
+     "answer": [
+      1,
+      0
+     ]
+    }
+   ],
+   "code": "serial-02",
+   "credit": "Ustad (own text)",
+   "licence": "own",
+   "source_url": null,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "title": "Was ist der DAX?",
+   "topic": "markets",
+   "level": "B1.1",
+   "series_episode": null,
+   "sentences": [
+    {
+     "de": "Der DAX ist der wichtigste Aktienindex in Deutschland.",
+     "en": "The DAX is the most important stock index in Germany."
+    },
+    {
+     "de": "Er zeigt, wie sich die Aktien von 40 großen deutschen Unternehmen entwickeln.",
+     "en": "It shows how the shares of 40 large German companies develop."
+    },
+    {
+     "de": "Dazu gehören zum Beispiel Siemens, SAP und die Deutsche Bank.",
+     "en": "These include, for example, Siemens, SAP and Deutsche Bank."
+    },
+    {
+     "de": "Die Deutsche Börse in Frankfurt berechnet den Index während des Handels laufend neu.",
+     "en": "Deutsche Börse in Frankfurt recalculates the index continuously during trading."
+    },
+    {
+     "de": "Steigen die Kurse dieser Firmen, steigt auch der DAX.",
+     "en": "If the share prices of these companies rise, the DAX rises too."
+    },
+    {
+     "de": "Fallen die Kurse, dann fällt auch der Index.",
+     "en": "If the prices fall, the index falls too."
+    },
+    {
+     "de": "Viele Menschen sehen den DAX deshalb als Thermometer der deutschen Wirtschaft.",
+     "en": "That is why many people see the DAX as a thermometer of the German economy."
+    },
+    {
+     "de": "Man kann den DAX nicht direkt kaufen, weil er nur eine Zahl ist.",
+     "en": "You cannot buy the DAX directly, because it is only a number."
+    },
+    {
+     "de": "Aber man kann einen ETF kaufen, der den DAX nachbildet.",
+     "en": "But you can buy an ETF that tracks the DAX."
+    },
+    {
+     "de": "Ein ETF ist ein Fonds, der an der Börse gehandelt wird.",
+     "en": "An ETF is a fund that is traded on the stock exchange."
+    },
+    {
+     "de": "Damit kauft man mit wenig Geld kleine Teile von allen 40 Firmen.",
+     "en": "With it you buy small parts of all 40 companies with little money."
+    },
+    {
+     "de": "Das Risiko ist kleiner als bei einer einzelnen Aktie, aber es bleibt ein Risiko.",
+     "en": "The risk is smaller than with a single share, but it is still a risk."
+    },
+    {
+     "de": "Man sollte deshalb nur Geld anlegen, das man nicht bald braucht.",
+     "en": "So you should only invest money that you will not need soon."
+    }
+   ],
+   "glossary": [
+    {
+     "word": "Aktienindex",
+     "lemma": "Aktienindex",
+     "en": "stock index",
+     "gender": "m",
+     "plural": "Aktienindizes"
+    },
+    {
+     "word": "Unternehmen",
+     "lemma": "Unternehmen",
+     "en": "company",
+     "gender": "n",
+     "plural": "Unternehmen"
+    },
+    {
+     "word": "berechnet",
+     "lemma": "berechnen",
+     "en": "to calculate",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Kurse",
+     "lemma": "Kurs",
+     "en": "share price",
+     "gender": "m",
+     "plural": "Kurse"
+    },
+    {
+     "word": "nachbildet",
+     "lemma": "nachbilden",
+     "en": "to track, to copy",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Fonds",
+     "lemma": "Fonds",
+     "en": "fund",
+     "gender": "m",
+     "plural": "Fonds"
+    },
+    {
+     "word": "Risiko",
+     "lemma": "Risiko",
+     "en": "risk",
+     "gender": "n",
+     "plural": "Risiken"
+    },
+    {
+     "word": "anlegen",
+     "lemma": "anlegen",
+     "en": "to invest (money)",
+     "gender": null,
+     "plural": null
+    }
+   ],
+   "questions": [
+    {
+     "id": "q1",
+     "kind": "rf",
+     "prompt": "Im DAX sind 40 Unternehmen.",
+     "left": [],
+     "options": [
+      "richtig",
+      "falsch"
+     ],
+     "answer": [
+      0
+     ]
+    },
+    {
+     "id": "q2",
+     "kind": "mc",
+     "prompt": "Was ist ein ETF?",
+     "left": [],
+     "options": [
+      "ein Fonds, der an der Börse gehandelt wird",
+      "eine einzelne Aktie",
+      "eine Bank in Frankfurt"
+     ],
+     "answer": [
+      0
+     ]
+    },
+    {
+     "id": "q3",
+     "kind": "match",
+     "prompt": "Was passiert mit dem DAX?",
+     "left": [
+      "Die Kurse steigen.",
+      "Die Kurse fallen."
+     ],
+     "options": [
+      "Der DAX fällt.",
+      "Der DAX steigt.",
+      "Der DAX bleibt immer gleich."
+     ],
+     "answer": [
+      1,
+      0
+     ]
+    }
+   ],
+   "code": "markets-01",
+   "credit": "Ustad (own text)",
+   "licence": "own",
+   "source_url": null,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "title": "Der Abend, an dem die Mauer fiel",
+   "topic": "history",
+   "level": "B1.1",
+   "series_episode": null,
+   "sentences": [
+    {
+     "de": "Am 9. November 1989 gab es in Ost-Berlin eine Pressekonferenz.",
+     "en": "On 9 November 1989 there was a press conference in East Berlin."
+    },
+    {
+     "de": "Der Politiker Günter Schabowski sprach über neue Regeln für Reisen in den Westen.",
+     "en": "The politician Günter Schabowski spoke about new rules for travel to the West."
+    },
+    {
+     "de": "Ein Journalist fragte, ab wann diese Regeln gelten.",
+     "en": "A journalist asked from when these rules would apply."
+    },
+    {
+     "de": "Schabowski las in seinen Papieren und war sichtbar unsicher.",
+     "en": "Schabowski read through his papers and was visibly unsure."
+    },
+    {
+     "de": "Dann sagte er, dass die Regeln nach seiner Kenntnis sofort gelten.",
+     "en": "Then he said that, as far as he knew, the rules applied immediately."
+    },
+    {
+     "de": "Die Pressekonferenz lief live im Fernsehen.",
+     "en": "The press conference was shown live on television."
+    },
+    {
+     "de": "Am Abend gingen Tausende Menschen zu den Grenzübergängen in Berlin.",
+     "en": "In the evening thousands of people went to the border crossings in Berlin."
+    },
+    {
+     "de": "Sie wollten sofort in den Westen.",
+     "en": "They wanted to go to the West right away."
+    },
+    {
+     "de": "Die Soldaten an der Grenze hatten keine klaren Befehle.",
+     "en": "The soldiers at the border had no clear orders."
+    },
+    {
+     "de": "An der Bornholmer Straße öffneten sie am späten Abend die Grenze.",
+     "en": "At Bornholmer Straße they opened the border late in the evening."
+    },
+    {
+     "de": "In dieser Nacht feierten Menschen aus Ost und West zusammen auf der Mauer.",
+     "en": "That night people from East and West celebrated together on the Wall."
+    },
+    {
+     "de": "Die Mauer hatte die Stadt seit 1961 geteilt.",
+     "en": "The Wall had divided the city since 1961."
+    },
+    {
+     "de": "Am 3. Oktober 1990 wurde Deutschland wieder vereinigt.",
+     "en": "On 3 October 1990 Germany was reunited."
+    },
+    {
+     "de": "Dieser Tag ist heute ein Feiertag.",
+     "en": "That day is a public holiday today."
+    }
+   ],
+   "glossary": [
+    {
+     "word": "Pressekonferenz",
+     "lemma": "Pressekonferenz",
+     "en": "press conference",
+     "gender": "f",
+     "plural": "Pressekonferenzen"
+    },
+    {
+     "word": "unsicher",
+     "lemma": "unsicher",
+     "en": "unsure",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "gelten",
+     "lemma": "gelten",
+     "en": "to apply, to be valid",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Grenzübergängen",
+     "lemma": "Grenzübergang",
+     "en": "border crossing",
+     "gender": "m",
+     "plural": "Grenzübergänge"
+    },
+    {
+     "word": "Befehle",
+     "lemma": "Befehl",
+     "en": "order, command",
+     "gender": "m",
+     "plural": "Befehle"
+    },
+    {
+     "word": "geteilt",
+     "lemma": "teilen",
+     "en": "to divide",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "vereinigt",
+     "lemma": "vereinigen",
+     "en": "to unite",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Feiertag",
+     "lemma": "Feiertag",
+     "en": "public holiday",
+     "gender": "m",
+     "plural": "Feiertage"
+    }
+   ],
+   "questions": [
+    {
+     "id": "q1",
+     "kind": "rf",
+     "prompt": "Die Pressekonferenz lief live im Fernsehen.",
+     "left": [],
+     "options": [
+      "richtig",
+      "falsch"
+     ],
+     "answer": [
+      0
+     ]
+    },
+    {
+     "id": "q2",
+     "kind": "mc",
+     "prompt": "Wo öffneten die Soldaten zuerst die Grenze?",
+     "left": [],
+     "options": [
+      "an der Bornholmer Straße",
+      "am Flughafen",
+      "in Bonn"
+     ],
+     "answer": [
+      0
+     ]
+    },
+    {
+     "id": "q3",
+     "kind": "match",
+     "prompt": "Was passierte wann?",
+     "left": [
+      "im Jahr 1961",
+      "am 3. Oktober 1990"
+     ],
+     "options": [
+      "Deutschland wird wieder vereinigt.",
+      "Die Mauer teilt die Stadt.",
+      "Es gibt eine Pressekonferenz."
+     ],
+     "answer": [
+      1,
+      0
+     ]
+    }
+   ],
+   "code": "history-01",
+   "credit": "Ustad (own text)",
+   "licence": "own",
+   "source_url": null,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "title": "Chai oder Kaffee?",
+   "topic": "pk_de",
+   "level": "B1.1",
+   "series_episode": null,
+   "sentences": [
+    {
+     "de": "In Pakistan trinken viele Menschen mehrmals am Tag Chai.",
+     "en": "In Pakistan many people drink chai several times a day."
+    },
+    {
+     "de": "Chai ist schwarzer Tee, den man mit Milch, Zucker und oft mit Kardamom kocht.",
+     "en": "Chai is black tea that is cooked with milk, sugar and often cardamom."
+    },
+    {
+     "de": "Gäste bekommen fast immer sofort eine Tasse, auch wenn sie nur kurz bleiben.",
+     "en": "Guests almost always get a cup straight away, even if they only stay briefly."
+    },
+    {
+     "de": "In Deutschland trinkt man im Büro vor allem Kaffee.",
+     "en": "In Germany people mainly drink coffee at the office."
+    },
+    {
+     "de": "Viele Firmen haben eine Kaffeemaschine, und der Kaffee ist oft kostenlos.",
+     "en": "Many companies have a coffee machine, and the coffee is often free."
+    },
+    {
+     "de": "Tee trinken viele Deutsche eher am Abend oder wenn sie krank sind.",
+     "en": "Many Germans drink tea rather in the evening or when they are ill."
+    },
+    {
+     "de": "Dann ist es meistens Kräutertee oder Pfefferminztee ohne Milch.",
+     "en": "Then it is usually herbal tea or peppermint tea without milk."
+    },
+    {
+     "de": "Wer in einem Café Tee mit Milch bestellt, bekommt manchmal einen überraschten Blick.",
+     "en": "Anyone who orders tea with milk in a café sometimes gets a surprised look."
+    },
+    {
+     "de": "Am Nachmittag gibt es in vielen Familien Kaffee und Kuchen, besonders am Sonntag.",
+     "en": "In the afternoon many families have coffee and cake, especially on Sunday."
+    },
+    {
+     "de": "In Pakistan ist die Teezeit vor allem ein Moment zum Reden.",
+     "en": "In Pakistan tea time is above all a moment for talking."
+    },
+    {
+     "de": "Beide Länder haben also ein Getränk, das Menschen zusammenbringt.",
+     "en": "So both countries have a drink that brings people together."
+    },
+    {
+     "de": "Viele Pakistaner in Deutschland kochen ihren Chai zu Hause weiter selbst.",
+     "en": "Many Pakistanis in Germany still make their own chai at home."
+    },
+    {
+     "de": "Manche kochen ihn auch im Büro, und die Kollegen sind oft begeistert.",
+     "en": "Some also make it at the office, and their colleagues are often delighted."
+    }
+   ],
+   "glossary": [
+    {
+     "word": "mehrmals",
+     "lemma": "mehrmals",
+     "en": "several times",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Kardamom",
+     "lemma": "Kardamom",
+     "en": "cardamom",
+     "gender": "m",
+     "plural": null
+    },
+    {
+     "word": "kostenlos",
+     "lemma": "kostenlos",
+     "en": "free of charge",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Kräutertee",
+     "lemma": "Kräutertee",
+     "en": "herbal tea",
+     "gender": "m",
+     "plural": "Kräutertees"
+    },
+    {
+     "word": "überraschten",
+     "lemma": "überrascht",
+     "en": "surprised",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "Getränk",
+     "lemma": "Getränk",
+     "en": "drink",
+     "gender": "n",
+     "plural": "Getränke"
+    },
+    {
+     "word": "zusammenbringt",
+     "lemma": "zusammenbringen",
+     "en": "to bring together",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "begeistert",
+     "lemma": "begeistert",
+     "en": "delighted, enthusiastic",
+     "gender": null,
+     "plural": null
+    }
+   ],
+   "questions": [
+    {
+     "id": "q1",
+     "kind": "rf",
+     "prompt": "In deutschen Büros trinkt man vor allem Tee.",
+     "left": [],
+     "options": [
+      "richtig",
+      "falsch"
+     ],
+     "answer": [
+      1
+     ]
+    },
+    {
+     "id": "q2",
+     "kind": "mc",
+     "prompt": "Was kommt in pakistanischen Chai?",
+     "left": [],
+     "options": [
+      "Milch, Zucker und oft Kardamom",
+      "nur heißes Wasser",
+      "Pfefferminze und Zitrone"
+     ],
+     "answer": [
+      0
+     ]
+    },
+    {
+     "id": "q3",
+     "kind": "match",
+     "prompt": "Was passt?",
+     "left": [
+      "In Pakistan",
+      "In Deutschland"
+     ],
+     "options": [
+      "trinkt man im Büro vor allem Kaffee.",
+      "bekommen Gäste sofort eine Tasse Chai.",
+      "trinkt niemand Tee."
+     ],
+     "answer": [
+      1,
+      0
+     ]
+    }
+   ],
+   "code": "pk-de-01",
+   "credit": "Ustad (own text)",
+   "licence": "own",
+   "source_url": null,
+   "status": "ok",
+   "review_notes": []
+  },
+  {
+   "title": "Krank? Dann bleib zu Hause",
+   "topic": "work",
+   "level": "B1.1",
+   "series_episode": null,
+   "sentences": [
+    {
+     "de": "Wer in Deutschland krank ist, muss das dem Arbeitgeber sofort sagen.",
+     "en": "Anyone who is ill in Germany has to tell the employer straight away."
+    },
+    {
+     "de": "Am besten ruft man vor Arbeitsbeginn an oder schreibt eine kurze E-Mail.",
+     "en": "It is best to call before work starts or write a short email."
+    },
+    {
+     "de": "Man muss nicht sagen, welche Krankheit man hat.",
+     "en": "You do not have to say which illness you have."
+    },
+    {
+     "de": "Ein Satz wie „Ich bin heute krank und kann nicht arbeiten“ reicht.",
+     "en": "A sentence like \"I am ill today and cannot work\" is enough."
+    },
+    {
+     "de": "Dauert die Krankheit länger als drei Kalendertage, braucht man eine Bescheinigung vom Arzt.",
+     "en": "If the illness lasts longer than three calendar days, you need a certificate from the doctor."
+    },
+    {
+     "de": "Manche Firmen wollen diese Bescheinigung aber schon ab dem ersten Tag.",
+     "en": "Some companies want this certificate from the first day, though."
+    },
+    {
+     "de": "Das steht dann im Arbeitsvertrag.",
+     "en": "That is then written in the employment contract."
+    },
+    {
+     "de": "Seit 2023 schickt die Arztpraxis die Daten meistens elektronisch an die Krankenkasse.",
+     "en": "Since 2023 the doctor's practice usually sends the data electronically to the health insurer."
+    },
+    {
+     "de": "Der Arbeitgeber holt sie dort ab, deshalb muss man meistens kein Papier mehr abgeben.",
+     "en": "The employer collects it there, so you usually no longer have to hand in paper."
+    },
+    {
+     "de": "Während man krank ist, bekommt man bis zu sechs Wochen weiter sein Gehalt.",
+     "en": "While you are ill, you keep getting your salary for up to six weeks."
+    },
+    {
+     "de": "Danach zahlt die Krankenkasse Krankengeld.",
+     "en": "After that the health insurer pays sickness benefit."
+    },
+    {
+     "de": "Wichtig ist: Wer krank ist, soll sich ausruhen und keine E-Mails beantworten.",
+     "en": "The important thing: anyone who is ill should rest and not answer emails."
+    },
+    {
+     "de": "Wer krank ins Büro kommt, steckt oft die Kollegen an.",
+     "en": "Anyone who comes to the office ill often infects their colleagues."
+    }
+   ],
+   "glossary": [
+    {
+     "word": "Arbeitgeber",
+     "lemma": "Arbeitgeber",
+     "en": "employer",
+     "gender": "m",
+     "plural": "Arbeitgeber"
+    },
+    {
+     "word": "Arbeitsbeginn",
+     "lemma": "Arbeitsbeginn",
+     "en": "start of work",
+     "gender": "m",
+     "plural": null
+    },
+    {
+     "word": "Bescheinigung",
+     "lemma": "Bescheinigung",
+     "en": "certificate",
+     "gender": "f",
+     "plural": "Bescheinigungen"
+    },
+    {
+     "word": "Krankenkasse",
+     "lemma": "Krankenkasse",
+     "en": "health insurer",
+     "gender": "f",
+     "plural": "Krankenkassen"
+    },
+    {
+     "word": "Gehalt",
+     "lemma": "Gehalt",
+     "en": "salary",
+     "gender": "n",
+     "plural": "Gehälter"
+    },
+    {
+     "word": "Krankengeld",
+     "lemma": "Krankengeld",
+     "en": "sickness benefit",
+     "gender": "n",
+     "plural": null
+    },
+    {
+     "word": "ausruhen",
+     "lemma": "sich ausruhen",
+     "en": "to rest",
+     "gender": null,
+     "plural": null
+    },
+    {
+     "word": "steckt an",
+     "lemma": "anstecken",
+     "en": "to infect",
+     "gender": null,
+     "plural": null
+    }
+   ],
+   "questions": [
+    {
+     "id": "q1",
+     "kind": "rf",
+     "prompt": "Man muss dem Arbeitgeber sagen, welche Krankheit man hat.",
+     "left": [],
+     "options": [
+      "richtig",
+      "falsch"
+     ],
+     "answer": [
+      1
+     ]
+    },
+    {
+     "id": "q2",
+     "kind": "mc",
+     "prompt": "Wie lange bekommt man bei Krankheit weiter sein Gehalt?",
+     "left": [],
+     "options": [
+      "bis zu sechs Wochen",
+      "drei Tage",
+      "ein ganzes Jahr"
+     ],
+     "answer": [
+      0
+     ]
+    },
+    {
+     "id": "q3",
+     "kind": "match",
+     "prompt": "Wer macht was?",
+     "left": [
+      "die Arztpraxis",
+      "der Arbeitgeber"
+     ],
+     "options": [
+      "holt die Daten bei der Krankenkasse ab.",
+      "schickt die Daten an die Krankenkasse.",
+      "zahlt das Krankengeld."
+     ],
+     "answer": [
+      1,
+      0
+     ]
+    }
+   ],
+   "code": "work-01",
+   "credit": "Ustad (own text)",
+   "licence": "own",
+   "source_url": null,
+   "status": "ok",
+   "review_notes": []
+  }
+ ]
+}

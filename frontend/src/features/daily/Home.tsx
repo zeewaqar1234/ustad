@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { api, type Daily } from '../../lib/api'
 import type { Homework, PatternList, PlacementTest, RecitationRow } from '../../lib/grammar'
+import type { DiktatToday, TextList } from '../../lib/reading'
 
 function LinkRow({ name, status, to }: { name: string; status: string; to: string }) {
   return (
@@ -51,6 +52,25 @@ function GrammarWriting() {
       <LinkRow name="Bolna (speaking)" status="Shadowing, roleplays, free talk" to="/voice" />
       <LinkRow name="Ghalti Register" status="Your mistakes by type" to="/ghalti" />
       <LinkRow name="Placement test" status={plStatus} to="/placement" />
+    </section>
+  )
+}
+
+function ReadingListening() {
+  const texts = useQuery({ queryKey: ['texts'], queryFn: () => api<TextList>('/api/texts') })
+  const dik = useQuery({ queryKey: ['dictation'], queryFn: () => api<DiktatToday>('/api/dictation/today') })
+  const today = texts.data?.today
+  const readStatus = !today
+    ? '…'
+    : today.length === 0
+      ? 'No text for today yet'
+      : `${today.filter((t) => t.read).length} of ${today.length} texts read today`
+  const listenStatus = dik.data ? `Diktat ${dik.data.done} of ${dik.data.total}` : '…'
+  return (
+    <section className="flex flex-col gap-2">
+      <h2 className="text-xl font-bold">Reading and listening</h2>
+      <LinkRow name="Lesen (reading)" status={readStatus} to="/read" />
+      <LinkRow name="Hören (listening)" status={listenStatus} to="/listen" />
     </section>
   )
 }
@@ -164,6 +184,7 @@ export function Home() {
       )}
 
       <GrammarWriting />
+      <ReadingListening />
     </div>
   )
 }
