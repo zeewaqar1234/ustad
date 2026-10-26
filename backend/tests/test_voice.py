@@ -31,10 +31,14 @@ class RecordingLLM(FakeLLM):
     def __init__(self):
         super().__init__()
         self.calls: list[list[dict]] = []
+        self.kws: list[dict] = []
+        self.schemas: list[dict] = []
 
-    def chat(self, messages, schema):
+    def chat(self, messages, schema, **kw):
         self.calls.append(messages)
-        return super().chat(messages, schema)
+        self.kws.append(kw)
+        self.schemas.append(schema)
+        return super().chat(messages, schema, **kw)
 
 
 @pytest.fixture
@@ -164,22 +168,28 @@ def test_pipeline_turn_and_review(api, llm, session_factory, fx):
                                           "stt_restarts": 2, "elapsed_ms": 20_000}).json()  # fmt: skip
     assert t["user"] == fx["clean"]
     assert t["reply_de"] == fx["reply"]["reply_de"]
-    assert t["prompt_correction"] == fx["reply"]["prompt_correction"]
+    # the turn only talks: no correction, no grading, no stars
+    assert "prompt_correction" not in t and "error_count" not in t
+    assert set(llm.schemas[-1]["properties"]) == {"reply_de", "reply_en_gloss"}
+    assert "timeout" not in llm.kws[-1]  # normal timeout for the fast reply
     assert t["tutor_status"] == "ok" and t["needs_review"] is False
     # the model saw the cleaned transcript, never the stammered one
     sent = llm.calls[-1][-1]["content"]
     assert fx["clean"] in sent and fx["raw"] not in sent
     assert "Never interrupt" in llm.calls[-1][0]["content"]  # tutor rules in the system prompt
 
-    orig = fx["reply"]["errors"][0]
-    llm.queue.append({"lines": [{"turn": 1, "better": fx["clean"].replace(orig["orig"], orig["fix"]),
-                                 "errors": [{"span": orig["orig"], "fix": orig["fix"],
-                                             "tag": fx["expected_tag"], "reason_en": orig["note"]}]}],
-                      "teaching_points": [orig["note"]]})  # fmt: skip
+    e = fx["review_error"]
+    llm.queue.append({"lines": [{"turn": 1, "better": fx["clean"].replace(e["span"], e["fix"]),
+                                 "errors": [e]}], "teaching_points": [e["reason_en"]]})  # fmt: skip
     v = api.post(f"/api/voice/session/{sess['id']}/review").json()
     assert v["status"] == "reviewed"
     line = v["review"]["lines"][0]
     assert line["said"] == fx["clean"] and line["errors"][0]["tag"] == fx["expected_tag"]
+    # all grading happens here: stars per line + summary, long timeout and a bigger context window
+    assert line["stars"] == 2 and line["graded"] is True
+    assert v["review"]["summary"] == {"lines": 1, "graded": 1, "clean": 0, "errors": 1, "stars": 2,
+                                      "max_stars": 3}  # fmt: skip
+    assert llm.kws[-1]["timeout"] >= 90 and llm.kws[-1]["num_ctx"] >= 8192
     s = session_factory()
     m = s.scalar(select(Mistake).where(Mistake.source == "voice"))
     assert m.tag == fx["expected_tag"] and m.card_id is not None
@@ -263,9 +273,9 @@ def test_server_has_no_turn_timeout_or_silence_logic():
         "turn_timeout",
     ):
         assert banned not in src, banned
-    assert (
-        src.count("timeout=") == 1 and "timeout=60" in src
-    )  # the only timeout: Piper's process limit
+    # the only timeouts: Piper's process limit and the review's model-call limit, never a turn limit
+    assert src.count("timeout=") == 2 and "timeout=60" in src
+    assert "timeout=settings.ollama_review_timeout" in src
 
 
 # --- recitation by voice --------------------------------------------------------------------------
@@ -358,17 +368,50 @@ def test_shadow_post_refuses_untaught_item(api, session_factory):
     assert r.status_code == 404 and "Geheim" not in r.text
 
 
-def test_turn_reports_error_count_for_stars(api, llm):
+def test_review_stars_per_line_and_skipped_line_is_not_graded(api, llm):
     sess = api.post("/api/voice/session", json={"scenario_code": "KANTINE"}).json()
-    assert sess["turns"][0]["error_count"] is None  # tutor's opening line: nothing to grade
-    llm.queue.append(FIXTURES[0]["reply"])
-    t = api.post(
-        "/api/voice/turn", json={"session_id": sess["id"], "text": FIXTURES[0]["raw"]}
-    ).json()
-    assert t["error_count"] == 1
-    llm.queue += [LLMUnavailable("down"), LLMUnavailable("down")]
-    t = api.post("/api/voice/turn", json={"session_id": sess["id"], "text": "Ich bin müde."}).json()
-    assert t["error_count"] is None  # offline: no stars, not a fake score
+    for text in ("Ich war zu Hause.", "Ich habe nach Frankfurt gefahren.", "Ich bin müde."):
+        llm.queue.append(FIXTURES[0]["reply"])
+        api.post("/api/voice/turn", json={"session_id": sess["id"], "text": text})
+    llm.queue.append(
+        {
+            "lines": [
+                {"turn": 1, "better": "Ich war zu Hause.", "errors": []},
+                {
+                    "turn": 2,
+                    "better": "Ich bin nach Frankfurt gefahren.",
+                    "errors": [
+                        {
+                            "span": "habe",
+                            "fix": "bin",
+                            "tag": "AUX_HABEN_SEIN",
+                            "reason_en": "fahren: sein",
+                        }
+                    ],
+                },
+            ],
+            "teaching_points": [],
+        }
+    )  # fmt: skip  (turn 3 left out by the model)
+    r = api.post(f"/api/voice/session/{sess['id']}/review").json()["review"]
+    assert [ln["stars"] for ln in r["lines"]] == [3, 2, None]
+    assert r["lines"][2]["graded"] is False  # skipped by the model: not shown as correct
+    assert r["summary"] == {
+        "lines": 3,
+        "graded": 2,
+        "clean": 1,
+        "errors": 1,
+        "stars": 5,
+        "max_stars": 6,
+    }
+
+
+def test_review_timeout_setting_is_at_least_90_seconds():
+    assert settings.ollama_review_timeout >= 90
+    assert (
+        settings.ollama_review_timeout > settings.ollama_timeout
+        or settings.ollama_review_timeout >= 90
+    )
 
 
 def test_voice_start_on_unmigrated_db_says_run_migrate(tmp_path):
@@ -413,3 +456,24 @@ def test_every_scenario_starts_a_session(api, session_factory, code):
     row = s.get(VoiceSession, r.json()["id"])
     assert row.scenario_code == code and row.mode == ("free" if code == "GUPSHUP" else "roleplay")
     assert api.get(f"/api/voice/session/{row.id}").status_code == 200
+
+
+def test_ollama_request_uses_review_timeout_and_context(monkeypatch):
+    import httpx
+
+    from app.llm.provider import OllamaProvider
+
+    sent = {}
+
+    def fake_post(url, json, timeout):
+        sent.update(json=json, timeout=timeout)
+        return httpx.Response(
+            200, json={"message": {"content": "{}"}}, request=httpx.Request("POST", url)
+        )
+
+    monkeypatch.setattr(httpx, "post", fake_post)
+    p = OllamaProvider(url="http://ollama.test", model="m")
+    p.chat([], {})
+    assert sent["timeout"] == settings.ollama_timeout and "num_ctx" not in sent["json"]["options"]
+    p.chat([], {}, timeout=settings.ollama_review_timeout, num_ctx=settings.ollama_review_num_ctx)
+    assert sent["timeout"] == 180.0 and sent["json"]["options"]["num_ctx"] == 8192

@@ -52,15 +52,15 @@ Conversation rules:
 - Never interrupt, never finish his sentences, never comment on pauses, speed, repetitions or
   hesitation. Treat speech content only. He stammers; time pressure is forbidden.
 - Ignore disfluencies in the transcript (repeated sounds/words, fillers) when judging his German.
-- Correction policy: at most ONE in-conversation correction per turn, as a PROMPT not a recast
+- Correction policy (changed 2026-10-26): NO correction during the conversation. Reply to his meaning
+  only. All errors are graded once, in the end-of-session review (Grader role, long timeout).
   (e.g. "Achtung: Verb nach 'weil'?"). Let him retry. Save other errors for the end-of-session review.
 - If he says "Englisch bitte" or is stuck twice, explain briefly in English, then return to German.
 - Use his life context (job role, routine, upcoming events) to make topics real. Never ask for or
   repeat confidential work details (client names, internal systems, trade data). If he mentions any,
   steer to a generic version.
 - No praise inflation. Acknowledge correct use specifically ("weil + Verb am Ende: richtig").
-- Output JSON: {reply_de, reply_en_gloss, prompt_correction|null, errors:[{orig, fix, tag, note}],
-  new_chunks:[...], turn_goal_met: bool}
+- Output JSON: {reply_de, reply_en_gloss}
 ```
 
 **Grader output schema (writing):**
@@ -76,9 +76,12 @@ Implementation (Phase 2): `app/llm/provider.py` (`OllamaProvider`, `complete_jso
 `app/services/grading.py`: LanguageTool pre-check → Ollama Grader → span check → LanguageTool check of the
 corrected text (flags → `needs_review`).
 
-Implementation (Phase 3): voice Tutor turns in `app/voice/tutor.py` (`TutorTurn` schema, static system
-prompt = `prompts/tutor.md` + learner + scenario card, conversation in the user message, transcript
-disfluency-stripped first); end-of-session review with `prompts/voice_review.md` (`SessionReview`, Grader role).
+Implementation (Phase 3, split 2026-10-26): voice Tutor turns in `app/voice/tutor.py` return the reply only
+(`TutorReply` = {reply_de, reply_en_gloss}; static system prompt = `prompts/tutor.md` + learner + scenario
+card, conversation in the user message, transcript disfluency-stripped first; normal `OLLAMA_TIMEOUT`).
+All grading, stars and Ghalti writes happen in the end-of-session review (`prompts/voice_review.md`,
+`SessionReview`, Grader role) in one call with `OLLAMA_REVIEW_TIMEOUT` (default 180 s, at least 90) and
+`OLLAMA_REVIEW_NUM_CTX` (default 8192, so a long session is not cut by Ollama's small default context).
 
 Sources: Ollama API https://github.com/ollama/ollama/blob/main/docs/api.md · structured outputs release
 https://github.com/ollama/ollama/releases/tag/v0.5.0 · RAM guidance https://github.com/ollama/ollama/blob/v0.5.0/README.md

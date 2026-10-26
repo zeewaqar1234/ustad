@@ -26,7 +26,7 @@ class FakeLLM:
     def __init__(self):
         self.queue: list = []
 
-    def chat(self, messages, schema):
+    def chat(self, messages, schema, **kw):
         r = self.queue.pop(0) if self.queue else LLMUnavailable("no reply queued")
         if isinstance(r, Exception):
             raise r

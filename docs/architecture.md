@@ -95,7 +95,7 @@ SQLite (single user), SQLAlchemy 2.x + Alembic migrations. All timestamps UTC, d
 | `placement_result` | id, ts, answers, by_band, writing_homework_id, level_band, items_marked |
 | `text` | id, title, body_de, level, topic, known_density, source_url, licence, audio_asset_id? |
 | `audio_asset` | id, path, kind (tts/user/external), text_ref, voice, duration_s |
-| `voice_session` / `voice_turn` | session meta; turn: user_transcript, reply_de, prompt_correction, pron_json, audio refs |
+| `voice_session` / `voice_turn` | session meta; turn: user_transcript, reply_de, pron_json, audio refs (grading lives in the session review) |
 | `test` / `test_result` | type (weekly/monthly/mock), module scores 0–100, items_json |
 | `milestone` | code, title, achieved_at, evidence_ref |
 | `day_log` | date, study_day bool, freeze_used bool, minutes |

@@ -7,21 +7,31 @@ import type { VoiceSession } from '../../lib/voice'
 import { Session } from './Session'
 import { TalkInput } from './TalkInput'
 
-const session: VoiceSession = {
-  id: 7,
-  mode: 'roleplay',
-  scenario: { code: 'KANTINE', title: 'Kantine: small talk', goal_en: 'Say what you did.', chunks: [] },
-  status: 'open',
-  review: null,
-  turns: [
-    { idx: 0, input_mode: null, user: null, reply_de: 'Wie war dein Wochenende?', reply_en: 'How was your weekend?', prompt_correction: null, tutor_status: 'ok', needs_review: false, error_count: null },
-    { idx: 1, input_mode: 'voice', user: 'Ich bin nach Hause gefahren.', reply_de: 'Schön. Und dann?', reply_en: 'Nice.', prompt_correction: null, tutor_status: 'ok', needs_review: false, error_count: 0 },
-    { idx: 2, input_mode: 'text', user: 'Ich habe gegangen.', reply_de: 'Wohin?', reply_en: 'Where?', prompt_correction: 'Achtung: gehen mit haben oder sein?', tutor_status: 'ok', needs_review: false, error_count: 1 },
-    { idx: 3, input_mode: 'voice', user: 'Ich war müde.', reply_de: null, reply_en: null, prompt_correction: null, tutor_status: 'offline', needs_review: false, error_count: null },
-  ],
+const turns: VoiceSession['turns'] = [
+  { idx: 0, input_mode: null, user: null, reply_de: 'Wie war dein Wochenende?', reply_en: 'How was your weekend?', tutor_status: 'ok', needs_review: false },
+  { idx: 1, input_mode: 'voice', user: 'Ich bin nach Hause gefahren.', reply_de: 'Schön. Und dann?', reply_en: 'Nice.', tutor_status: 'ok', needs_review: false },
+  { idx: 2, input_mode: 'text', user: 'Ich habe gegangen.', reply_de: 'Wohin?', reply_en: 'Where?', tutor_status: 'ok', needs_review: false },
+  { idx: 3, input_mode: 'voice', user: 'Ich war müde.', reply_de: null, reply_en: null, tutor_status: 'offline', needs_review: false },
+]
+const scenario = { code: 'KANTINE', title: 'Kantine: small talk', goal_en: 'Say what you did.', chunks: [] }
+const open: VoiceSession = { id: 7, mode: 'roleplay', scenario, status: 'open', review: null, turns }
+const reviewed: VoiceSession = {
+  ...open,
+  status: 'reviewed',
+  review: {
+    source: 'ollama',
+    teaching_points: ['gehen takes sein in the Perfekt.'],
+    summary: { lines: 3, graded: 2, clean: 1, errors: 1, stars: 5, max_stars: 6 },
+    lines: [
+      { turn: 1, said: 'Ich bin nach Hause gefahren.', better: 'Ich bin nach Hause gefahren.', graded: true, errors: [], stars: 3, needs_review: false },
+      { turn: 2, said: 'Ich habe gegangen.', better: 'Ich bin gegangen.', graded: true, stars: 2, needs_review: false,
+        errors: [{ span: 'habe', fix: 'bin', tag: 'AUX_HABEN_SEIN', reason_en: 'gehen takes sein', start: 4, end: 8 }] },
+      { turn: 3, said: 'Ich war müde.', better: 'Ich war müde.', graded: false, errors: [], stars: null, needs_review: false },
+    ],
+  },
 }
 
-function renderSession() {
+function renderSession(session: VoiceSession) {
   const qc = new QueryClient()
   qc.setQueryData(['voice', 'session', '7'], session)
   qc.setQueryData(['voice', 'settings'], { show_fluency: false, talk_mode: 'tap' })
@@ -37,22 +47,41 @@ function renderSession() {
 }
 
 describe('chat session', () => {
-  afterEach(cleanup)
-
-  it('shows bubbles, a star rating per graded turn, and no stars when the tutor was offline', () => {
-    vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})))
-    renderSession()
-    expect(screen.getByText('Wie war dein Wochenende?')).toBeInTheDocument()
-    expect(screen.getByText('Ich bin nach Hause gefahren.')).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: '3 of 3 stars' })).toBeInTheDocument()
-    expect(screen.getByText('No errors found')).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: '2 of 3 stars' })).toBeInTheDocument()
-    expect(screen.getByText('1 error · details in the review')).toBeInTheDocument()
-    expect(screen.getByText('Achtung: gehen mit haben oder sein?')).toBeInTheDocument()
-    expect(screen.getByText(/Tutor offline/)).toBeInTheDocument()
-    expect(screen.getAllByRole('img', { name: /of 3 stars/ })).toHaveLength(2) // offline turn: none
-    expect(screen.queryByText(/fluency|pace|seconds/i)).toBeNull()
+  afterEach(() => {
+    cleanup()
     vi.unstubAllGlobals()
+  })
+
+  it('during the talk: bubbles only, no stars, no corrections, no grading', () => {
+    vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})))
+    renderSession(open)
+    expect(screen.getByText('Wie war dein Wochenende?')).toBeInTheDocument()
+    expect(screen.getByText('Ich habe gegangen.')).toBeInTheDocument()
+    expect(screen.queryAllByRole('img', { name: /stars/ })).toHaveLength(0)
+    expect(screen.queryByText(/error/i)).toBeNull()
+    expect(screen.queryByText(/Achtung/)).toBeNull()
+    expect(screen.getByText(/Tutor offline/)).toBeInTheDocument()
+    expect(screen.queryByText(/fluency|pace|seconds/i)).toBeNull()
+  })
+
+  it('in the review: stars per line from the server, summary, skipped line not graded', () => {
+    vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})))
+    renderSession(reviewed)
+    expect(screen.getByRole('heading', { name: 'Say it better' })).toBeInTheDocument()
+    expect(screen.getByLabelText('5 of 6 stars')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: '3 of 3 stars' })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: '2 of 3 stars' })).toBeInTheDocument()
+    expect(screen.getAllByRole('img', { name: /of 3 stars/ })).toHaveLength(2) // skipped line: none
+    expect(screen.getByText(/Not graded/)).toBeInTheDocument()
+    expect(screen.getByText('Ich bin gegangen.')).toBeInTheDocument()
+  })
+
+  it('End shows a patient grading card while the review runs', async () => {
+    vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {}))) // review never returns in this test
+    renderSession(open)
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'End and review' })))
+    expect(screen.getByText('Ustad is checking your German.')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Tap to talk' })).toBeNull()
   })
 })
 

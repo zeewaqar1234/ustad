@@ -15,6 +15,11 @@ class Settings(BaseSettings):
     ollama_url: str = "http://localhost:11434"
     ollama_model: str = "llama3.1:8b"
     ollama_timeout: float = 120.0
+    # End-of-session voice review grades every line in one call: give the local model time and room.
+    # Must stay >= 90 s (llama3.1:8b on a laptop CPU). num_ctx: Ollama's default context window is small
+    # (2048 or 4096 tokens depending on the version), which would cut a long session's transcript.
+    ollama_review_timeout: float = 180.0
+    ollama_review_num_ctx: int = 8192
     timezone: str = "Europe/Berlin"
     seed_dir: Path = REPO_ROOT / "data" / "seed"
     # Built frontend (served by FastAPI in production). Ignored if the folder does not exist.
