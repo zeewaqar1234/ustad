@@ -320,6 +320,46 @@ Same as Phase 1 (below), plus `make grammar-build` before `load_seed` if `data/s
 Same setup as Phase 1 (below). `npx playwright test` runs all three specs; `phase3.spec.ts` injects a fake
 `SpeechRecognition` (headless Chromium has no speech service). Without Ollama the tutor shows "offline".
 
+## Phase 3.1: Bolna UX overhaul (2026-10-26, before Phase 4)
+
+Gate: container DB `study_days_last_7 = 0`, `gate_override = true` (Zee's override from 2026-10-21) → open.
+
+- **Bug fix: roleplay/Gupshup Start returned 500** on a DB without the Phase 3 migration (`no such table:
+  voice_session`). Reproduced: Phase 2 DB → 500 for GUPSHUP and KANTINE; migrated DB → 200. Cause: the Docker
+  image runs `alembic upgrade head` on start, but `make dev` / `make backend` did not. Fix: both now depend on
+  `make migrate`; a missing table/column now returns 503 "The database is older than the app. Run: make migrate"
+  instead of a bare 500. Tests: `test_voice_start_on_unmigrated_db_says_run_migrate`, and every scenario
+  (6 roleplays + Gupshup) starts a `voice_session` row (`test_every_scenario_starts_a_session`).
+- **Chat UI** (`Session.tsx`): messenger layout, sticky header (scenario avatar, chunks sheet, End), tutor
+  bubbles left (Listen, English toggle), Zee's bubbles right (spoken/typed icon), the one prompt correction
+  as an amber hint chip, "Ustad is replying" dots, auto-scroll that also follows the growing composer,
+  Say it better below the chat with a summary (lines spoken, lines without errors).
+- **Live mic** (`TalkInput.tsx`): mic orb with breathing rings and a sound-bar wave while listening, plus a
+  ripple each time the recogniser delivers words (driven by recognition results, not a second mic stream:
+  opening `getUserMedia` next to `SpeechRecognition` can fight over the mic on Android). Live transcript in a
+  draft bubble. CSS animations only, `motion-safe:` so reduced-motion users get none; still no timers.
+- **Stars** (`lib/stars.ts`): 1 to 3 stars, German content only. Shadowing: share of words heard
+  (≥ 90 % = 3, ≥ 60 % = 2). Turns: errors the tutor found (0 = 3, 1 = 2, more = 1), from the new
+  `error_count` on each turn; no stars when the tutor was offline or the review is LanguageTool-only.
+  Words: green with ✓ = heard, rose struck through = not heard. This is recognition, not pronunciation
+  (Web Speech has no pronunciation score), and the copy says "heard".
+- **Hub** redesigned (hero with Gupshup, Takrar/Pahara tiles, roleplay cards with level badges, segmented
+  talk-mode control, fluency switch still off by default); shadowing with a progress strip and round stars;
+  Pahara by voice restyled.
+- Colour is used in Bolna only; report cards stay grayscale (CLAUDE.md).
+
+| Check | Result |
+|---|---|
+| pytest | 207 passed, 8 skipped (real-model tests) |
+| vitest | 24 passed (new: star rules, chat bubbles + stars + no stars when offline, mic orb pulses/ripples and stays live on browser `end`) |
+| Playwright 375px | phase3: 3 passed (new: graded chat with the turn API mocked, since there is no Ollama here); full suite 7 passed before the last two visual-only changes |
+| Screenshots | `docs/evidence/phase3/p3-chat-stars.png`, `p3-chat-listening.png`, `p3-shadowing.png`, `p3-voice-home.png` |
+| make lint | ruff clean; oxlint 0 errors (2 old warnings); tsc clean |
+| New dependencies | none (inline SVG icons, Tailwind keyframes) |
+
+Open: pedagogy check. P6 says in-conversation feedback stays light; stars per turn show an error count during
+the talk. If Zee finds it distracting, hide turn stars and keep them in the review only.
+
 ## Dependencies added (one-line reasons)
 
 Backend:

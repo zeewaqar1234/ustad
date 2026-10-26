@@ -356,3 +356,60 @@ def test_shadow_post_refuses_untaught_item(api, session_factory):
     s.commit()
     r = api.post("/api/voice/shadow", json={"item_id": item.id, "transcript": "x"})
     assert r.status_code == 404 and "Geheim" not in r.text
+
+
+def test_turn_reports_error_count_for_stars(api, llm):
+    sess = api.post("/api/voice/session", json={"scenario_code": "KANTINE"}).json()
+    assert sess["turns"][0]["error_count"] is None  # tutor's opening line: nothing to grade
+    llm.queue.append(FIXTURES[0]["reply"])
+    t = api.post(
+        "/api/voice/turn", json={"session_id": sess["id"], "text": FIXTURES[0]["raw"]}
+    ).json()
+    assert t["error_count"] == 1
+    llm.queue += [LLMUnavailable("down"), LLMUnavailable("down")]
+    t = api.post("/api/voice/turn", json={"session_id": sess["id"], "text": "Ich bin müde."}).json()
+    assert t["error_count"] is None  # offline: no stars, not a fake score
+
+
+def test_voice_start_on_unmigrated_db_says_run_migrate(tmp_path):
+    """Phase 3 pulled onto a Phase 2 DB: a clear 503, not a bare 500."""
+    from fastapi.testclient import TestClient
+    from sqlalchemy.orm import sessionmaker
+
+    from app import db as dbmod
+    from app.core.auth import require_user
+    from app.db import Base, make_engine
+
+    engine = make_engine(f"sqlite:///{tmp_path}/old.db")
+    tables = [t for name, t in Base.metadata.tables.items() if not name.startswith("voice_")]
+    Base.metadata.create_all(engine, tables=tables)
+    factory = sessionmaker(bind=engine)
+
+    def _get_db():
+        s = factory()
+        try:
+            yield s
+        finally:
+            s.close()
+
+    app.dependency_overrides[dbmod.get_db] = _get_db
+    app.dependency_overrides[require_user] = lambda: None
+    try:
+        for code in ("GUPSHUP", "KANTINE"):
+            r = TestClient(app).post("/api/voice/session", json={"scenario_code": code})
+            assert r.status_code == 503 and "make migrate" in r.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+@pytest.mark.parametrize("code", ["GUPSHUP", "KANTINE", "DESK_MEETING", "INCIDENT", "MANAGER", "ARZT_TELEFON",
+                                  "BAHN_ANSCHLUSS"])  # fmt: skip
+def test_every_scenario_starts_a_session(api, session_factory, code):
+    r = api.post("/api/voice/session", json={"scenario_code": code})
+    assert r.status_code == 200
+    s = session_factory()
+    from app.models import VoiceSession
+
+    row = s.get(VoiceSession, r.json()["id"])
+    assert row.scenario_code == code and row.mode == ("free" if code == "GUPSHUP" else "roleplay")
+    assert api.get(f"/api/voice/session/{row.id}").status_code == 200

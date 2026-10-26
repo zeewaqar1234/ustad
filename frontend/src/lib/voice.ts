@@ -28,6 +28,7 @@ export interface Turn {
   prompt_correction: string | null
   tutor_status: 'ok' | 'offline'
   needs_review: boolean
+  error_count: number | null // German errors in Zee's turn; null = not graded (opening line, tutor offline)
 }
 
 export interface ReviewError {
@@ -70,4 +71,14 @@ export interface ShadowResult {
   total: number
   pct: number
   fluency?: number
+}
+
+export const SCENARIO_ICON: Record<string, string> = {
+  KANTINE: '🍽️',
+  DESK_MEETING: '💻',
+  INCIDENT: '🚨',
+  MANAGER: '📈',
+  ARZT_TELEFON: '🩺',
+  BAHN_ANSCHLUSS: '🚆',
+  GUPSHUP: '💬',
 }
