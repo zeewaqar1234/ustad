@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link, Navigate, Route, Routes, useParams } from 'react-router'
+import { useQuery } from '@tanstack/react-query'
+import { Navigate, NavLink, Route, Routes, useParams } from 'react-router'
 import { Home } from './features/daily/Home'
 import { Ghalti } from './features/ghalti/Ghalti'
 import { Drills } from './features/grammar/Drills'
@@ -9,6 +9,8 @@ import { Diktat } from './features/listening/Diktat'
 import { ListenHome } from './features/listening/ListenHome'
 import { Podcast } from './features/listening/Podcast'
 import { Sources } from './features/listening/Sources'
+import { Progress } from './pages/Progress'
+import { Settings } from './pages/Settings'
 import { Placement } from './features/placement/Placement'
 import { Reader } from './features/reader/Reader'
 import { ReaderList } from './features/reader/ReaderList'
@@ -57,36 +59,63 @@ function ReaderRoute() {
   return <Reader key={id} />
 }
 
+const NAV: { heading?: string; items: { to: string; label: string; sub: string; end?: boolean }[] }[] = [
+  { items: [{ to: '/', label: 'Today', sub: 'the daily loop', end: true }] },
+  {
+    heading: 'Practice',
+    items: [
+      { to: '/read', label: 'Lesen', sub: 'reading' },
+      { to: '/listen', label: 'Hören', sub: 'listening' },
+      { to: '/homework', label: 'Schreiben', sub: 'writing' },
+      { to: '/voice', label: 'Sprechen', sub: 'speaking' },
+    ],
+  },
+  {
+    items: [
+      { to: '/grammar', label: 'Grammatik', sub: 'patterns and Pahara' },
+      { to: '/ghalti', label: 'Ghalti', sub: 'your mistakes' },
+      { to: '/progress', label: 'Fortschritt', sub: 'progress' },
+    ],
+  },
+]
+
 function Shell({ children }: { children: React.ReactNode }) {
-  const qc = useQueryClient()
+  const link = ({ isActive }: { isActive: boolean }) =>
+    `block rounded-lg px-3 py-2 ${isActive ? 'bg-neutral-900 text-white' : 'hover:bg-neutral-200'}`
   return (
-    <div className="mx-auto min-h-dvh max-w-md bg-neutral-50">
-      <nav className="flex h-14 items-center justify-between border-b border-neutral-300 px-4">
-        <Link to="/" className="text-lg font-bold">
+    <div className="flex min-h-screen min-w-[1024px] bg-neutral-50">
+      <aside className="fixed inset-y-0 left-0 flex w-[220px] flex-col border-r border-neutral-300 bg-neutral-100 p-3">
+        <NavLink to="/" className="mb-4 px-3 py-2 text-xl font-bold">
           Ustad
-        </Link>
-        <div className="flex gap-4 text-sm">
-          <Link to="/ghalti">Ghalti</Link>
-          <Link to="/check">Check queue</Link>
-          <button
-            onClick={async () => {
-              await api('/auth/logout', {})
-              qc.clear()
-              location.assign('/login')
-            }}
-          >
-            Log out
-          </button>
-        </div>
-      </nav>
-      {children}
+        </NavLink>
+        <nav className="flex flex-1 flex-col gap-4 overflow-y-auto" aria-label="Main">
+          {NAV.map((g, i) => (
+            <div key={i} className="flex flex-col gap-1">
+              {g.heading && <p className="px-3 text-xs font-semibold uppercase text-neutral-600">{g.heading}</p>}
+              {g.items.map((it) => (
+                <NavLink key={it.to} to={it.to} end={it.end} className={link}>
+                  <span className="block font-semibold leading-tight">{it.label}</span>
+                  <span className="block text-xs opacity-70">{it.sub}</span>
+                </NavLink>
+              ))}
+            </div>
+          ))}
+        </nav>
+        <NavLink to="/settings" className={link}>
+          <span className="block font-semibold leading-tight">Settings</span>
+          <span className="block text-xs opacity-70">placement, check queue, sources</span>
+        </NavLink>
+      </aside>
+      <main className="ml-[220px] flex-1 px-8 py-8">
+        <div className="mx-auto w-full max-w-[1120px]">{children}</div>
+      </main>
     </div>
   )
 }
 
 export default function App() {
   const me = useQuery({ queryKey: ['me'], queryFn: () => api('/auth/me'), retry: false })
-  if (me.isPending) return <p className="p-4">Loading…</p>
+  if (me.isPending) return <p className="p-8">Loading…</p>
   const loggedIn = !(me.error instanceof AuthError) && !me.isError
   return (
     <Routes>
@@ -111,8 +140,8 @@ export default function App() {
                 <Route path="/voice" element={<VoiceHome />} />
                 <Route path="/voice/shadow" element={<Shadowing />} />
                 <Route path="/voice/session/:id" element={<SessionRoute />} />
-                <Route path="/voice/recite" element={<VoiceRecitationList />} />
-                <Route path="/voice/recite/:code" element={<VoiceRecitationRoute />} />
+                <Route path="/progress" element={<Progress />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="/read" element={<ReaderList />} />
                 <Route path="/read/:id" element={<ReaderRoute />} />
                 <Route path="/listen" element={<ListenHome />} />

@@ -1,6 +1,5 @@
 export interface VoiceSettings {
   show_fluency: boolean
-  talk_mode: 'hold' | 'tap'
 }
 
 export interface Chunk {
@@ -38,7 +37,7 @@ export interface ReviewError {
   end: number
 }
 
-// All grading of a session comes from the end-of-session review, including the stars.
+// All grading of a session comes from the end-of-session review. The server still sends star fields; the UI ignores them.
 export interface ReviewLine {
   turn: number
   said: string
@@ -81,14 +80,4 @@ export interface ShadowResult {
   total: number
   pct: number
   fluency?: number
-}
-
-export const SCENARIO_ICON: Record<string, string> = {
-  KANTINE: '🍽️',
-  DESK_MEETING: '💻',
-  INCIDENT: '🚨',
-  MANAGER: '📈',
-  ARZT_TELEFON: '🩺',
-  BAHN_ANSCHLUSS: '🚆',
-  GUPSHUP: '💬',
 }

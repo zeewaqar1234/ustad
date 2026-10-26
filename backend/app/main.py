@@ -56,7 +56,7 @@ for r in (health, auth, daily, review, sabaq, stats, items, patterns, homework, 
 
 
 def _mount_frontend(dist: Path) -> None:
-    """Production: serve the built PWA from the same origin (cookie + service worker scope)."""
+    """Production: serve the built frontend from the same origin (cookie)."""
     if not (dist / "index.html").exists():
         return
     app.mount("/assets", StaticFiles(directory=dist / "assets"), name="assets")

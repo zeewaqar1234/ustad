@@ -44,8 +44,11 @@ def scenario(code: str, include_flagged: bool = False) -> dict:
 
 def _learner(db: Session) -> str:
     p = db.get(Profile, 1)
-    band = p.level_band if p else "B1.1"
-    return f"Learner: Zee. Level band: {band}. Explanations in English."
+    if p and p.level_band:
+        level = f"Level band: {p.level_band}."
+    else:
+        level = "Level not placed yet; speak at B1 and keep sentences short."
+    return f"Learner: Zee. {level} Explanations in English."
 
 
 def system_prompt(db: Session, sc: dict) -> str:
