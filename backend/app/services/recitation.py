@@ -85,3 +85,35 @@ def check(db: Session, code: str, typed: list[list[str]], today: date) -> dict:
     next_stage = min(stage + 1, 2) if passed else stage
     return {"passed": passed, "wrong": wrong, "cells": cells, "stage": stage,
             "next_stage": next_stage, "next_from": "tomorrow" if passed else "now"}  # fmt: skip
+
+
+def rows_from_speech(code: str, spoken: list[str]) -> list[list[str]]:
+    """Recitation by voice: one transcript per row -> typed-style rows for `check`.
+
+    Each cell's words are searched in order in the row's transcript (fillers dropped; case, punctuation
+    and umlaut spelling ignored). Repeats are not stripped: rows like "wir uns uns" need both words,
+    and a stammered repeat is just an extra word the search skips. A cell found -> its expected text; not found -> "".
+    The cue column (column 0) may be said or not.
+    """
+    from app.voice.disfluency import FILLERS
+    from app.voice.shadowing import norm, words
+
+    out = []
+    for r, row in enumerate(table(code)["rows"]):
+        said = spoken[r] if r < len(spoken) else ""
+        heard = [norm(w) for w in words(said) if w.lower() not in FILLERS]
+        pos, cells = 0, [row[0]]
+        for want in row[1:]:
+            need = [norm(w) for w in words(want)]
+            found = -1
+            for i in range(pos, len(heard) - len(need) + 1):
+                if need and heard[i : i + len(need)] == need:
+                    found = i
+                    break
+            if found < 0:
+                cells.append("")
+            else:
+                cells.append(want)
+                pos = found + len(need)
+        out.append(cells)
+    return out

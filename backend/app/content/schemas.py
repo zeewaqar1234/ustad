@@ -199,3 +199,44 @@ class RecitationTable(BaseModel):
 
 class Recitation(BaseModel):
     tables: list[RecitationTable] = Field(min_length=1)
+
+
+class Chunk(BaseModel):
+    de: str = Field(min_length=2)
+    en: str = Field(min_length=2)
+
+
+class Scenario(BaseModel):
+    """Voice roleplay card (docs/modules.md §5.4): goal + 5 useful chunks shown before starting."""
+
+    code: str = Field(pattern=r"^[A-Z0-9_]+$")
+    kind: Literal["roleplay", "free"]
+    title: str
+    level: Literal["A2", "A2/B1", "B1"]
+    tutor_role_en: str = Field(description="who the tutor plays, for the system prompt")
+    setting_en: str
+    goal_en: str
+    address: Literal["du", "Sie"]
+    chunks: list[Chunk] = Field(min_length=5, max_length=5)
+    opening_de: str = Field(
+        min_length=5, description="tutor's first line, spoken before Zee starts"
+    )
+
+    @model_validator(mode="after")
+    def _rules(self):
+        _no_dashes(self.title, self.goal_en, self.opening_de, *(c.de for c in self.chunks))
+        return self
+
+    def correct_german(self) -> list[str]:
+        return [self.opening_de, *(c.de for c in self.chunks)]
+
+
+class Scenarios(BaseModel):
+    scenarios: list[Scenario]
+
+    @model_validator(mode="after")
+    def _unique(self):
+        codes = [s.code for s in self.scenarios]
+        if len(codes) != len(set(codes)):
+            raise ValueError("duplicate scenario code")
+        return self

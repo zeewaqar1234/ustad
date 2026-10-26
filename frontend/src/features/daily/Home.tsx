@@ -48,6 +48,7 @@ function GrammarWriting() {
       <LinkRow name="Pattern" status={patternStatus} to={cur ? `/grammar/${cur.code}` : '/grammar'} />
       <LinkRow name="Homework" status={hwStatus} to="/homework" />
       <LinkRow name="Pahara" status={recStatus} to="/recitation" />
+      <LinkRow name="Bolna (speaking)" status="Shadowing, roleplays, free talk" to="/voice" />
       <LinkRow name="Ghalti Register" status="Your mistakes by type" to="/ghalti" />
       <LinkRow name="Placement test" status={plStatus} to="/placement" />
     </section>

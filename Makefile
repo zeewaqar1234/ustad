@@ -1,4 +1,4 @@
-.PHONY: dev backend frontend install test lint migrate seed-build seed-build-fast grammar-build seed-load password lt-up lt-down lt-check test-ollama
+.PHONY: dev backend frontend install test lint migrate seed-build seed-build-fast grammar-build seed-load password lt-up lt-down lt-check test-ollama voice-build
 
 install:
 	cd backend && uv sync
@@ -36,6 +36,10 @@ seed-build:
 seed-build-fast:
 	cd backend && uv run python -m scripts.build_seed --skip-lt
 
+# Voice roleplay scenario cards (6 roleplays + free talk). Needs `make lt-up`.
+voice-build:
+	cd backend && uv run python -m scripts.build_voice
+
 # Grammar content: 40 patterns (8 batches of 5), placement test, recitation tables. Needs `make lt-up`.
 grammar-build:
 	cd backend && uv run python -m scripts.build_grammar
@@ -48,7 +52,7 @@ password:
 
 # Real local-model check of the 5 grader fixtures (needs Ollama + `ollama pull llama3.1:8b`).
 test-ollama:
-	cd backend && RUN_OLLAMA=1 uv run pytest tests/test_grader_llm.py -v
+	cd backend && RUN_OLLAMA=1 uv run pytest tests/test_grader_llm.py tests/test_voice_llm.py -v
 
 lt-up:
 	docker compose up -d languagetool
