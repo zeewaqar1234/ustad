@@ -36,7 +36,10 @@ class Provider(Protocol):
     vendor: str
     model: str
 
-    def chat(self, messages: list[dict], schema: dict) -> tuple[str, Usage]: ...
+    def chat(
+        self, messages: list[dict], schema: dict, *, timeout: float | None = None,
+        num_ctx: int | None = None,
+    ) -> tuple[str, Usage]: ...  # fmt: skip
 
 
 def inline_schema(model: type[BaseModel]) -> dict:
@@ -63,16 +66,24 @@ class OllamaProvider:
         self.url = (url or settings.ollama_url).rstrip("/")
         self.model = model or settings.ollama_model
 
-    def chat(self, messages: list[dict], schema: dict) -> tuple[str, Usage]:
+    def chat(
+        self, messages: list[dict], schema: dict, *, timeout: float | None = None,
+        num_ctx: int | None = None,
+    ) -> tuple[str, Usage]:  # fmt: skip
+        options: dict = {"temperature": 0}
+        if num_ctx:
+            options["num_ctx"] = num_ctx
         body = {
             "model": self.model,
             "messages": messages,
             "format": schema,
             "stream": False,
-            "options": {"temperature": 0},
+            "options": options,
         }
         try:
-            resp = httpx.post(f"{self.url}/api/chat", json=body, timeout=settings.ollama_timeout)
+            resp = httpx.post(
+                f"{self.url}/api/chat", json=body, timeout=timeout or settings.ollama_timeout
+            )
             resp.raise_for_status()
         except httpx.HTTPError as e:
             raise LLMUnavailable(str(e)) from e
@@ -100,12 +111,15 @@ def _ledger(db: Session, provider: Provider, role: str, usage: Usage) -> None:
 
 
 def complete_json[T: BaseModel](
-    db: Session, provider: Provider, role: str, system: str, user: str, out: type[T]
-) -> T:
+    db: Session, provider: Provider, role: str, system: str, user: str, out: type[T],
+    *, timeout: float | None = None, num_ctx: int | None = None,
+) -> T:  # fmt: skip
+    """`timeout`/`num_ctx` apply to each attempt; None = the provider's defaults."""
     schema = inline_schema(out)
     messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
     for attempt in range(2):
-        raw, usage = provider.chat(messages, schema)
+        kw = {k: v for k, v in (("timeout", timeout), ("num_ctx", num_ctx)) if v is not None}
+        raw, usage = provider.chat(messages, schema, **kw)
         _ledger(db, provider, role, usage)
         try:
             return out.model_validate(json.loads(raw))

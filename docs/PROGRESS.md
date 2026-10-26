@@ -360,6 +360,35 @@ Gate: container DB `study_days_last_7 = 0`, `gate_override = true` (Zee's overri
 Open: pedagogy check. P6 says in-conversation feedback stays light; stars per turn show an error count during
 the talk. If Zee finds it distracting, hide turn stars and keep them in the review only.
 
+## Phase 3.2: talk now, grade later (2026-10-26)
+
+Gate: `study_days_last_7 = 0`, `gate_override = true` → open. Reason: waiting for grammar grading mid-turn broke
+the speaking flow, and the local model was slow doing reply + JSON grading in one call.
+
+- `POST /api/voice/turn` only replies: schema `TutorReply` = {reply_de, reply_en_gloss}; tutor prompt says
+  "do not correct". No prompt correction, no errors, no stars per turn (old `prompt_correction`/`errors_json`
+  columns stay in the table for old rows, unused). Normal `OLLAMA_TIMEOUT` (120 s).
+- `POST /api/voice/session/{id}/review` does all grading: one Grader call for every line with
+  `OLLAMA_REVIEW_TIMEOUT` (default 180 s, test asserts >= 90) and `OLLAMA_REVIEW_NUM_CTX` 8192 (Ollama's default
+  context of 2048/4096 tokens would cut a long session). Stars per line (0 errors = 3, 1 = 2, more = 1) and a
+  summary {lines, graded, clean, errors, stars, max_stars} are computed on the server. A line the model leaves
+  out is "not graded" (no stars), no longer shown as correct. Ghalti + fix_sentence cards as before.
+- UI: chat shows bubbles only; End shows "Ustad is checking your German" while the review runs; the review
+  opens at its top with 3 tiles (lines, without errors, stars) and stars per line.
+- Rule change synced in SPEC.md + docs/pedagogy.md (P6), docs/llm.md (tutor prompt, implementation),
+  docs/architecture.md (voice_turn columns).
+
+| Check | Result |
+|---|---|
+| pytest | 209 passed, 8 skipped (new: turn schema is reply-only and uses the normal timeout; review passes timeout >= 90 and num_ctx 8192; real Ollama request body carries both; stars + summary; skipped line not graded) |
+| vitest | 25 passed (chat has no stars/corrections; review stars from server; grading card on End) |
+| Playwright 375px | 8 passed on a fresh e2e DB; `docs/evidence/phase3/p3-chat.png`, `p3-review-stars.png` (API mocked: no Ollama here) |
+| make lint | ruff clean; oxlint 0 errors (2 old warnings); tsc clean |
+
+Open: the review's real duration on Zee's laptop is unmeasured (no Ollama here). Worst case is two attempts
+(one retry on invalid JSON), so up to 2 × 180 s. If a 15-turn session still times out, raise
+`OLLAMA_REVIEW_TIMEOUT` or try a smaller model for the review.
+
 ## Dependencies added (one-line reasons)
 
 Backend:

@@ -30,7 +30,7 @@ class FakeLLM:
         self.replies = list(replies)
         self.calls: list[list[dict]] = []
 
-    def chat(self, messages, schema):
+    def chat(self, messages, schema, **kw):
         self.calls.append(messages)
         r = self.replies.pop(0)
         if isinstance(r, Exception):
