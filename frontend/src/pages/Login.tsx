@@ -11,7 +11,7 @@ export function Login() {
 
   return (
     <form
-      className="mx-auto flex max-w-md flex-col gap-3 p-4 pt-16"
+      className="mx-auto mt-32 flex w-[360px] flex-col gap-3 rounded-lg border border-neutral-300 bg-white p-6"
       onSubmit={async (e) => {
         e.preventDefault()
         setError(null)
@@ -34,10 +34,10 @@ export function Login() {
         autoComplete="current-password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="rounded-lg border-2 border-neutral-900 p-3 text-lg"
+        className="rounded-lg border-2 border-neutral-900 p-2 text-lg"
       />
       {error && <p role="alert">{error}</p>}
-      <button type="submit" className="rounded-lg bg-neutral-900 p-4 text-lg text-white">
+      <button type="submit" className="rounded-lg bg-neutral-900 px-5 py-3 text-white">
         Log in
       </button>
     </form>

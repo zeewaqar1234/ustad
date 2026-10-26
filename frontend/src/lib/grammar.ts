@@ -121,7 +121,8 @@ export interface RoundResult {
 }
 
 export interface Homework {
-  id: number
+  /** null for today's preview before Zee starts (GET /api/homework/today is read only). */
+  id: number | null
   kind: 'homework' | 'tagebuch'
   assigned: string
   prompt: string
@@ -199,11 +200,11 @@ export interface PlacementItem {
 export interface PlacementTest {
   items: PlacementItem[]
   writing: { prompt_en: string; min_sentences: number }
-  last_result: { ts: string; level_band: string } | null
+  last_result: { ts: string; level_band: string | null } | null
 }
 
 export interface PlacementResult {
-  level_band: string
+  level_band: string | null
   by_band: Record<string, { correct: number; total: number }>
   items_marked: number
   writing: WritingGrade
