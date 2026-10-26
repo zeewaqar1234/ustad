@@ -1,4 +1,4 @@
-.PHONY: dev backend frontend install test lint migrate seed-build seed-build-fast grammar-build seed-load password lt-up lt-down lt-check test-ollama voice-build
+.PHONY: dev backend frontend install test lint migrate seed-build seed-build-fast grammar-build seed-load password lt-up lt-down lt-check test-ollama voice-build texts-build author
 
 install:
 	cd backend && uv sync
@@ -43,6 +43,14 @@ voice-build:
 # Grammar content: 40 patterns (8 batches of 5), placement test, recitation tables. Needs `make lt-up`.
 grammar-build:
 	cd backend && uv run python -m scripts.build_grammar
+
+# Seed reading texts (6 own B1 texts). Needs `make lt-up`.
+texts-build:
+	cd backend && uv run python -m scripts.build_texts
+
+# Author job by hand: 2 graded texts for today and tomorrow (needs Ollama). Runs nightly inside the app.
+author: migrate
+	cd backend && uv run python -m scripts.author
 
 seed-load: migrate
 	cd backend && uv run python -m scripts.load_seed

@@ -240,3 +240,84 @@ class Scenarios(BaseModel):
         if len(codes) != len(set(codes)):
             raise ValueError("duplicate scenario code")
         return self
+
+
+# --- Phase 4: graded reading texts (docs/modules.md §5.3). Same shape for seed texts and Author output.
+
+Topic = Literal["serial", "markets", "crypto", "history", "pk_de", "life", "work"]
+
+
+class TextSentence(BaseModel):
+    de: str = Field(min_length=2)
+    en: str = Field(min_length=2)
+
+
+class GlossEntry(BaseModel):
+    """A word in the text Zee probably does not know yet: shown on tap, can be added to SRS."""
+
+    word: str  # as it appears in the text
+    lemma: str  # dictionary form
+    en: str
+    gender: Literal["m", "f", "n"] | None = None
+    plural: str | None = None
+
+
+class TextQuestion(BaseModel):
+    """Goethe B1 Lesen style. rf: options ["richtig", "falsch"]. mc: 3 options, one answer.
+    match: `left` holds 2-3 statements, `answer[i]` is the option index for left[i]."""
+
+    id: str
+    kind: Literal["rf", "mc", "match"]
+    prompt: str
+    left: list[str] = Field(default_factory=list)
+    options: list[str] = Field(min_length=2, max_length=5)
+    answer: list[int] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def _shape(self):
+        if any(not 0 <= a < len(self.options) for a in self.answer):
+            raise ValueError(f"{self.id}: answer index out of range")
+        if self.kind == "rf" and self.options != ["richtig", "falsch"]:
+            raise ValueError(f"{self.id}: rf options must be ['richtig', 'falsch']")
+        if self.kind == "match":
+            if not 2 <= len(self.left) <= 3 or len(self.answer) != len(self.left):
+                raise ValueError(f"{self.id}: match needs 2-3 left items and one answer each")
+        elif self.left or len(self.answer) != 1:
+            raise ValueError(f"{self.id}: {self.kind} has no left items and exactly one answer")
+        return self
+
+
+class GradedText(BaseModel):
+    title: str
+    topic: Topic
+    level: str = "B1.1"
+    series_episode: int | None = None
+    sentences: list[TextSentence] = Field(min_length=4)
+    glossary: list[GlossEntry] = Field(default_factory=list)
+    questions: list[TextQuestion] = Field(min_length=3, max_length=3)
+
+    @model_validator(mode="after")
+    def _plain(self):
+        _no_dashes(self.title, *(s.de for s in self.sentences), *(s.en for s in self.sentences))
+        return self
+
+    def words(self) -> int:
+        return sum(len(s.de.split()) for s in self.sentences)
+
+    def correct_german(self) -> list[str]:
+        """German checked by LanguageTool: the body sentence by sentence and the question texts."""
+        qs = [
+            t for q in self.questions for t in (q.prompt, *q.left, *q.options) if len(t.split()) > 1
+        ]
+        return [" ".join(s.de for s in self.sentences), *qs]
+
+
+class SeedText(GradedText):
+    code: str
+    credit: str = "Ustad (own text)"
+    licence: str = "own"
+    source_url: str | None = None
+
+
+class SeedTexts(BaseModel):
+    texts: list[SeedText]
