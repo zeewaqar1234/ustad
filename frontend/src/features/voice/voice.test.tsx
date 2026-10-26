@@ -70,7 +70,7 @@ describe('TalkInput', () => {
     act(() => rec.onend?.())
     expect(onSend).not.toHaveBeenCalled() // Zee can still check or fix the text
     fireEvent.click(screen.getByRole('button', { name: 'Send' }))
-    expect(onSend).toHaveBeenCalledWith('ich ich bin', { input_mode: 'voice', stt_restarts: 10 })
+    expect(onSend).toHaveBeenCalledWith('ich ich bin', expect.objectContaining({ input_mode: 'voice', stt_restarts: 10 }))
   })
 
   it('hold mode: letting go stops listening, Send still needs a tap', () => {
@@ -85,7 +85,16 @@ describe('TalkInput', () => {
     act(() => FakeRec.last.onend?.())
     expect(onSend).not.toHaveBeenCalled()
     fireEvent.click(screen.getByRole('button', { name: 'Send' }))
-    expect(onSend).toHaveBeenCalledWith('Hallo', { input_mode: 'voice', stt_restarts: 0 })
+    expect(onSend).toHaveBeenCalledWith('Hallo', expect.objectContaining({ input_mode: 'voice', stt_restarts: 0 }))
+  })
+
+  it('keeps the text when sending fails', async () => {
+    const onSend = vi.fn().mockResolvedValue(false)
+    render(<TalkInput mode="tap" onSend={onSend} />)
+    fireEvent.change(screen.getByLabelText('Your answer in German'), { target: { value: 'Ich bin da.' } })
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Send' })))
+    expect(onSend).toHaveBeenCalled()
+    expect(screen.getByLabelText('Your answer in German')).toHaveValue('Ich bin da.')
   })
 
   it('falls back to typing when SpeechRecognition is missing', () => {
@@ -94,7 +103,7 @@ describe('TalkInput', () => {
     expect(screen.getByText(/not available in this browser/)).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Your answer in German'), { target: { value: 'Ich bin müde.' } })
     fireEvent.click(screen.getByRole('button', { name: 'Send' }))
-    expect(onSend).toHaveBeenCalledWith('Ich bin müde.', { input_mode: 'text', stt_restarts: 0 })
+    expect(onSend).toHaveBeenCalledWith('Ich bin müde.', expect.objectContaining({ input_mode: 'text', stt_restarts: 0 }))
   })
 })
 

@@ -323,3 +323,36 @@ def test_shadow_a_say_it_better_line(api, llm):
     }
     assert api.post("/api/voice/shadow", json=body).json()["pct"] == 100
     assert api.post("/api/voice/shadow", json={**body, "turn": 7}).status_code == 404
+
+
+@pytest.mark.parametrize(
+    ("raw", "want"),
+    [
+        ("Ich mag das, das ist gut.", "Ich mag das, das ist gut."),
+        ("Ich kenne die, die hier wohnen.", "Ich kenne die, die hier wohnen."),
+        ("Die Frau, die die Stelle hat", "Die Frau, die die Stelle hat"),
+        ("Die Frau, die die die Stelle hat", "Die Frau, die die Stelle hat"),
+        ("Ich brauche 2 20-Cent-Stücke", "Ich brauche 2 20-Cent-Stücke"),
+        ("Ich glaube, äh, dass er kommt.", "Ich glaube, dass er kommt."),
+    ],
+)
+def test_real_german_is_not_stripped(raw, want):
+    assert clean(raw) == want
+
+
+def test_recitation_by_voice_keeps_repeated_cells():
+    t = rec.table("PRONOUNS_CASE")
+    rows = rec.rows_from_speech("PRONOUNS_CASE", [" ".join(r) for r in t["rows"]])
+    assert rows == [list(r) for r in t["rows"]]
+
+
+def test_shadow_post_refuses_untaught_item(api, session_factory):
+    s = session_factory()
+    item = Item(deck="life", unit=1, unit_order=1, unit_title="x", kind="sentence", de="Geheim.",
+                en="secret", status="ok")  # fmt: skip
+    s.add(item)
+    s.flush()
+    s.add(Card(item_id=item.id, card_type="produce"))
+    s.commit()
+    r = api.post("/api/voice/shadow", json={"item_id": item.id, "transcript": "x"})
+    assert r.status_code == 404 and "Geheim" not in r.text

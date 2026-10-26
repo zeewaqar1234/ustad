@@ -273,9 +273,9 @@ Same as Phase 1 (below), plus `make grammar-build` before `load_seed` if `data/s
 | Text fallback without `SpeechRecognition` | vitest fallback test; typed turns stored as `input_mode=text`, minutes counted the same |
 | Piper server TTS | code + test with a fake binary only; real Piper **not run** (voice download from huggingface.co refused by the network policy). Open item |
 | Self-hosted Whisper fallback | **not built**: the phase makes it conditional on Zee's speech test losing words. Open item |
-| pytest | see final run below |
-| vitest | see final run below |
-| Playwright 375px | 7 passed (2 new Phase 3 + 3 Phase 2 + 2 Phase 1), no horizontal scroll on new screens |
+| pytest | 198 passed, 8 skipped (5 grader + 3 voice real-model tests, need `RUN_OLLAMA=1`) |
+| vitest | 20 passed (8 new recognizer tests, 6 new voice UI tests) |
+| Playwright 375px | 7 passed on a fresh e2e DB (2 new Phase 3 + 3 Phase 2 + 2 Phase 1), no horizontal scroll on new screens. A third run on a reused DB failed 2 old tests (homework already graded, no due card): the known order/state dependency, not a regression |
 | make lint | ruff check + format clean; oxlint 0 errors (2 old warnings); tsc clean |
 | New dependencies | none (Piper is a separate local program, called by path like Ollama) |
 
@@ -294,6 +294,26 @@ Same as Phase 1 (below), plus `make grammar-build` before `load_seed` if `data/s
 - [ ] Browser speech privacy note in `docs/vendors.md` (architecture.md §12) before daily voice use.
 - Fixture transcripts in `tests/fixtures/voice/transcripts.json` are authored, not recorded from Zee.
   Replace with his real transcripts after the STT test.
+
+### End-of-phase diff review (subagent) and fixes
+
+- Fixed: disfluency stripping removed real German: a repeat across a comma ("Ich mag das, das ist gut."),
+  relative pronoun + article ("Die Frau, die die Stelle hat"), a digit before a number ("2 20-Cent-Stücke"),
+  and the comma before "dass" around a filler. Tests added for each.
+- Fixed: Pahara by voice ran the repeat stripper, so "wir uns uns" (PRONOUNS_CASE) could never pass;
+  now only fillers are dropped. Test added.
+- Fixed (ask before tell): `POST /api/voice/shadow` returned the German of any item, also Sabaq items not
+  yet attempted. Now only taught items, like the list. Test added.
+- Fixed: a failed Send cleared the spoken text; now the text stays and the error says so. Test added.
+- Fixed: if restarting recognition threw, the turn hung in "One moment" with the text locked. Now one
+  fresh instance is tried, then the text is handed back editable. Test added.
+- Fixed: Pahara by voice had no retry after a failed submit; voice practice added 0 minutes to the day
+  (now active time per turn, capped at 60 s like other modules, never shown); old sessions of a scenario
+  later flagged needs_review returned 500.
+- Open (nit): the Android duplicate-result guard compares text prefixes, so a final "Ja" followed by
+  "Ja, genau" in the same recognition session keeps only "Ja, genau". Check with Zee's phone in the STT test.
+- Open (nit): hold mode ends listening on `pointercancel` (e.g. a system gesture). The text is kept and
+  "Add more" continues the turn; nothing is sent.
 
 ### How to rerun the Phase 3 e2e check
 

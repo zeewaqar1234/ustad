@@ -66,7 +66,7 @@ def _session(db, sid: int) -> VoiceSession:
 
 
 def view(s: VoiceSession) -> dict:
-    sc = svc.scenario(s.scenario_code)
+    sc = svc.scenario(s.scenario_code, include_flagged=True)
     return {"id": s.id, "mode": s.mode, "scenario": {"code": sc["code"], "title": sc["title"],
             "goal_en": sc["goal_en"], "chunks": sc["chunks"]}, "status": s.status,
             "turns": [svc.view_turn(t) for t in s.turns], "review": s.review_json}  # fmt: skip
@@ -170,12 +170,17 @@ class ShadowIn(BaseModel):
     turn: int | None = None
     transcript: str = Field(max_length=2000)
     stt_restarts: int = Field(default=0, ge=0)
+    elapsed_ms: int = Field(default=0, ge=0)
 
 
 def _shadow_reference(db, body: ShadowIn) -> tuple[str, str]:
     if body.item_id is not None:
         item = db.get(Item, body.item_id)
-        if item is not None and item.status == "ok":
+        # ask before tell: only items already attempted (same rule as the GET list)
+        taught = item is not None and any(
+            c.card_type == "produce" and c.introduced_at is not None for c in item.cards
+        )
+        if taught and item.status == "ok" and item.deck != "ghalti":
             return _shadow_text(item), f"shadow:{item.id}"
     elif body.session_id is not None:
         s = db.get(VoiceSession, body.session_id)
@@ -190,6 +195,7 @@ def _shadow_reference(db, body: ShadowIn) -> tuple[str, str]:
 def shadow_attempt(body: ShadowIn, db: DB):
     reference, ref = _shadow_reference(db, body)
     result = shadowing.score(reference, body.transcript)
+    daily.add_minutes(db, utcnow(), body.elapsed_ms)
     db.add(Attempt(ts=utcnow(), task_ref=ref, input=body.transcript[:2000],
                    correct=result["pct"] >= 80, score=result["pct"]))  # fmt: skip
     db.commit()

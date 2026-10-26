@@ -7,6 +7,7 @@ from app.core.auth import require_user
 from app.core.clock import local_date
 from app.db import DB, utcnow
 from app.models import Attempt
+from app.services import daily
 from app.services import recitation as svc
 
 router = APIRouter(prefix="/api/recitation", dependencies=[Depends(require_user)])
@@ -69,6 +70,7 @@ def recite_by_voice(code: str, body: VoiceRecitalIn, db: DB):
     rows = svc.rows_from_speech(code, body.rows)
     result = svc.check(db, code, rows, local_date(now))
     result["heard"] = body.rows
+    daily.add_minutes(db, now, body.elapsed_ms)
     db.add(Attempt(ts=now, task_ref=f"recitation_voice:{code}", correct=result["passed"],
                    input=" | ".join(body.rows)[:2000], score=result["wrong"]))  # fmt: skip
     db.commit()

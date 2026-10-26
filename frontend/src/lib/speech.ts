@@ -43,6 +43,7 @@ export const FATAL_MESSAGE: Record<string, string> = {
   'service-not-allowed': 'Speech recognition is off in this browser. Type instead.',
   'audio-capture': 'No microphone found. Type instead.',
   'language-not-supported': 'German speech recognition is not available here. Type instead.',
+  'restart-failed': 'Listening stopped. Your text is kept: fix it here and send, or type more.',
 }
 
 function join(a: string, b: string): string {
@@ -89,6 +90,11 @@ export class Recognizer {
     this.fatal = null
     this.restarts = 0
     this.listening = true
+    this.rec = this.make()
+    this.open(false)
+  }
+
+  private make(): RecognitionLike {
     const r = new this.ctor()
     r.lang = 'de-DE'
     r.continuous = true
@@ -104,8 +110,7 @@ export class Recognizer {
       // no-speech, aborted, network: `end` follows and recognition is started again
     }
     r.onend = () => this.onEnd()
-    this.rec = r
-    this.open()
+    return r
   }
 
   // Only Zee calls this (Stop tap or releasing the hold button). The turn's text arrives in onStopped
@@ -116,11 +121,23 @@ export class Recognizer {
     this.rec.stop()
   }
 
-  private open(): void {
+  // A restart that throws gets one fresh instance. If that throws too, no `end` will ever come, so
+  // listening stops here and the text is handed back (editable, nothing lost, nothing sent).
+  private open(restart: boolean): void {
     try {
       this.rec?.start()
+      return
     } catch {
-      // InvalidStateError: already started. Nothing to do.
+      if (!restart) return // InvalidStateError on the first start: already running
+    }
+    try {
+      this.rec = this.make()
+      this.rec.start()
+    } catch {
+      this.listening = false
+      this.rec = null
+      this.ev.onFatal('restart-failed')
+      this.ev.onStopped(this.text)
     }
   }
 
@@ -155,7 +172,7 @@ export class Recognizer {
     if (this.listening && !this.fatal) {
       this.restarts += 1
       this.ev.onText(this.text, '')
-      this.open()
+      this.open(true)
       return
     }
     this.rec = null

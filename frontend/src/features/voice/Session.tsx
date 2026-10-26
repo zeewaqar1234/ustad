@@ -45,9 +45,17 @@ function BetterLine(props: { sid: number; line: ReviewLine; ltOnly: boolean; sho
   const { sid, line, ltOnly, showFluency, mode } = props
   const [shadow, setShadow] = useState(false)
   const [res, setRes] = useState<ShadowResult | null>(null)
+  const [err, setErr] = useState<string | null>(null)
   const same = line.better === line.said
   async function check(text: string, meta: SendMeta) {
-    setRes(await api<ShadowResult>('/api/voice/shadow', { session_id: sid, turn: line.turn, transcript: text, stt_restarts: meta.stt_restarts }))
+    setErr(null)
+    try {
+      setRes(await api<ShadowResult>('/api/voice/shadow', { session_id: sid, turn: line.turn, transcript: text, ...meta }))
+      return true
+    } catch (e) {
+      setErr((e as Error).message)
+      return false
+    }
   }
   return (
     <li className="flex flex-col gap-2 rounded-lg border border-neutral-300 bg-white p-3">
@@ -86,6 +94,7 @@ function BetterLine(props: { sid: number; line: ReviewLine; ltOnly: boolean; sho
         </button>
       </div>
       {shadow && (res ? <ShadowScore r={res} showFluency={showFluency} /> : <TalkInput mode={mode} sendLabel="Check" onSend={check} />)}
+      {err && <p className="text-sm">Error: {err}. Your text is kept; try again.</p>}
     </li>
   )
 }
@@ -110,8 +119,10 @@ export function Session() {
       const t = await api<Turn>('/api/voice/turn', { session_id: Number(id), text, ...meta })
       qc.setQueryData<VoiceSession>(key, (s) => (s ? { ...s, turns: [...s.turns, t] } : s))
       if (t.reply_de) void speak(t.reply_de)
+      return true
     } catch (e) {
-      setErr((e as Error).message)
+      setErr(`${(e as Error).message}. Your text is kept; tap Send again.`)
+      return false
     } finally {
       setBusy(false)
     }
