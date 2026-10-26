@@ -4,7 +4,6 @@ import { Link, useParams } from 'react-router'
 import { marked } from '../../components/marked'
 import { api } from '../../lib/api'
 import { humanTag } from '../../lib/grammar'
-import { turnLine, turnStars } from '../../lib/stars'
 import { speak } from '../../lib/tts'
 import { SCENARIO_ICON, type ReviewLine, type ShadowResult, type Turn, type VoiceSession } from '../../lib/voice'
 import { ShadowScore } from './ShadowScore'
@@ -52,34 +51,35 @@ function TutorBubble({ t }: { t: Turn }) {
         </div>
         {t.needs_review && <p className="mt-1 text-xs text-neutral-500">Not confirmed by LanguageTool.</p>}
       </div>
-      {t.prompt_correction && (
-        <p className="motion-safe:animate-pop flex items-start gap-1.5 self-start rounded-2xl bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 ring-1 ring-amber-200" lang="de">
-          <Icon name="bulb" className="mt-0.5 size-4 shrink-0" />
-          {t.prompt_correction}
-        </p>
-      )}
     </div>
   )
 }
 
+// No grading during the talk: Zee's bubble shows only what he said. Stars and corrections come in
+// the end-of-session review, so the conversation keeps flowing.
 function ZeeBubble({ t }: { t: Turn }) {
-  const stars = turnStars(t.error_count)
   return (
-    <div className="motion-safe:animate-rise flex max-w-[85%] flex-col items-end gap-1 self-end">
-      <div className="rounded-3xl rounded-tr-md bg-emerald-600 px-4 py-3 text-white shadow-md shadow-emerald-600/20">
-        <p className="text-lg leading-snug" lang="de">
-          {t.user}
-        </p>
-        <p className="mt-1 flex justify-end text-emerald-100" aria-label={t.input_mode === 'text' ? 'typed' : 'spoken'}>
-          <Icon name={t.input_mode === 'text' ? 'keyboard' : 'mic'} className="size-3.5" />
-        </p>
-      </div>
-      {stars !== null && t.error_count !== null && (
-        <p className="flex items-center gap-1.5 text-xs text-neutral-600">
-          <StarRow stars={stars} size="size-4" />
-          {turnLine(t.error_count)}
-        </p>
-      )}
+    <div className="motion-safe:animate-rise max-w-[85%] self-end rounded-3xl rounded-tr-md bg-emerald-600 px-4 py-3 text-white shadow-md shadow-emerald-600/20">
+      <p className="text-lg leading-snug" lang="de">
+        {t.user}
+      </p>
+      <p className="mt-1 flex justify-end text-emerald-100" aria-label={t.input_mode === 'text' ? 'typed' : 'spoken'}>
+        <Icon name={t.input_mode === 'text' ? 'keyboard' : 'mic'} className="size-3.5" />
+      </p>
+    </div>
+  )
+}
+
+function Grading() {
+  return (
+    <div className="motion-safe:animate-rise flex flex-col items-center gap-3 rounded-3xl bg-white p-5 text-center shadow-sm ring-1 ring-neutral-200" role="status">
+      <span className="flex gap-1.5" aria-hidden="true">
+        {[0, 1, 2].map((i) => (
+          <span key={i} className="size-2.5 rounded-full bg-emerald-500 motion-safe:animate-dot" style={{ animationDelay: `${i * 0.15}s` }} />
+        ))}
+      </span>
+      <p className="font-semibold">Ustad is checking your German.</p>
+      <p className="text-sm text-neutral-500">All your lines are graded together now. On a local model this can take a minute or two.</p>
     </div>
   )
 }
@@ -104,8 +104,7 @@ function BetterLine(props: { sid: number; line: ReviewLine; ltOnly: boolean; sho
   const [res, setRes] = useState<ShadowResult | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const same = line.better === line.said
-  // LanguageTool-only errors are incomplete: no stars for them
-  const stars = ltOnly ? null : turnStars(line.errors.length)
+  const stars = line.stars // from the server review; null = not graded (LanguageTool only, or skipped)
   async function check(text: string, meta: SendMeta) {
     setErr(null)
     try {
@@ -130,7 +129,15 @@ function BetterLine(props: { sid: number; line: ReviewLine; ltOnly: boolean; sho
       <div className={`rounded-2xl p-3 ${ltOnly ? 'bg-neutral-50' : 'bg-emerald-50'}`}>
         <p className={`text-xs font-semibold ${ltOnly ? 'text-neutral-500' : 'tracking-wide text-emerald-700 uppercase'}`}>
           {/* LanguageTool misses many errors, so an LT-only result never says "correct" */}
-          {ltOnly ? (same ? 'No LanguageTool flags. The tutor may still find errors.' : 'LanguageTool suggestion') : same ? 'Correct as said' : 'Better'}
+          {ltOnly
+            ? same
+              ? 'No LanguageTool flags. The tutor may still find errors.'
+              : 'LanguageTool suggestion'
+            : !line.graded
+              ? 'Not graded: the tutor skipped this line. Review again to retry.'
+              : same
+                ? 'Correct as said'
+                : 'Better'}
         </p>
         <p className="text-lg font-semibold" lang="de">
           {line.better}
@@ -181,19 +188,26 @@ function Review(props: { data: VoiceSession; mode: 'hold' | 'tap'; showFluency: 
   const { data, mode, showFluency, busy, retry } = props
   const lines = data.review?.lines ?? []
   const ltOnly = data.status === 'lt_only'
-  const clean = lines.filter((l) => l.errors.length === 0).length
+  const sum = data.review?.summary
   return (
     <section className="flex flex-col gap-3 p-4">
       <h2 className="text-xl font-bold">Say it better</h2>
-      {lines.length > 0 && !ltOnly && (
-        <div className="grid grid-cols-2 gap-2">
+      {sum && sum.graded > 0 && !ltOnly && (
+        <div className="motion-safe:animate-pop grid grid-cols-3 gap-2">
           <div className="rounded-3xl bg-white p-3 text-center shadow-sm ring-1 ring-neutral-200">
-            <p className="text-3xl font-bold">{lines.length}</p>
-            <p className="text-xs text-neutral-500">{lines.length === 1 ? 'line' : 'lines'} spoken</p>
+            <p className="text-3xl font-bold">{sum.lines}</p>
+            <p className="text-xs text-neutral-500">{sum.lines === 1 ? 'line' : 'lines'} spoken</p>
           </div>
           <div className="rounded-3xl bg-white p-3 text-center shadow-sm ring-1 ring-neutral-200">
-            <p className="text-3xl font-bold text-emerald-700">{clean}</p>
+            <p className="text-3xl font-bold text-emerald-700">{sum.clean}</p>
             <p className="text-xs text-neutral-500">without errors</p>
+          </div>
+          <div className="rounded-3xl bg-amber-50 p-3 text-center shadow-sm ring-1 ring-amber-200" aria-label={`${sum.stars} of ${sum.max_stars} stars`}>
+            <p className="text-3xl font-bold text-amber-700">
+              {sum.stars}
+              <span className="text-base text-amber-700/60">/{sum.max_stars}</span>
+            </p>
+            <p className="text-xs text-amber-800/70">stars</p>
           </div>
         </div>
       )}
@@ -238,23 +252,28 @@ export function Session() {
   const key = ['voice', 'session', id]
   const { data, error } = useQuery({ queryKey: key, queryFn: () => api<VoiceSession>(`/api/voice/session/${id}`) })
   const [busy, setBusy] = useState(false)
+  const [grading, setGrading] = useState(false)
   const [err, setErr] = useState<string | null>(null)
   const [chunks, setChunks] = useState(false)
   const end = useRef<HTMLDivElement>(null)
   const scroller = useRef<HTMLDivElement>(null)
+  const reviewTop = useRef<HTMLDivElement>(null)
   const count = data?.turns.length ?? 0
   const status = data?.status
 
-  // keep the newest message in view, like a messenger
+  // keep the newest message in view, like a messenger; when the review arrives, start at its top
   useEffect(() => {
-    end.current?.scrollIntoView?.({ behavior: 'smooth', block: 'end' })
-  }, [count, busy, status])
+    if (status && status !== 'open' && !grading) reviewTop.current?.scrollIntoView?.({ behavior: 'smooth', block: 'start' })
+    else end.current?.scrollIntoView?.({ behavior: 'smooth', block: 'end' })
+  }, [count, busy, status, grading])
 
   // the composer grows while Zee speaks (live transcript): keep the newest message above it
   useEffect(() => {
     const el = scroller.current
     if (!el || typeof ResizeObserver === 'undefined') return
-    const ro = new ResizeObserver(() => end.current?.scrollIntoView?.({ block: 'end' }))
+    const ro = new ResizeObserver(() => {
+      if (el.dataset.open === 'true') end.current?.scrollIntoView?.({ block: 'end' })
+    })
     ro.observe(el)
     return () => ro.disconnect()
   }, [data?.id])
@@ -280,6 +299,7 @@ export function Session() {
 
   async function finish() {
     setBusy(true)
+    setGrading(true)
     setErr(null)
     try {
       qc.setQueryData(key, await api<VoiceSession>(`/api/voice/session/${id}/review`, {}))
@@ -288,6 +308,7 @@ export function Session() {
       setErr((e as Error).message)
     } finally {
       setBusy(false)
+      setGrading(false)
     }
   }
 
@@ -303,7 +324,9 @@ export function Session() {
         <Avatar code={data.scenario.code} />
         <div className="min-w-0 flex-1">
           <h1 className="truncate font-bold">{data.scenario.title}</h1>
-          <p className="truncate text-xs text-neutral-500">{busy && open ? 'replying…' : 'Take your time'}</p>
+          <p className="truncate text-xs text-neutral-500">
+            {grading ? 'checking your German…' : busy && open ? 'replying…' : 'Take your time'}
+          </p>
         </div>
         <button
           onClick={() => setChunks((c) => !c)}
@@ -336,7 +359,7 @@ export function Session() {
         </ul>
       )}
 
-      <div ref={scroller} className="flex-1 overflow-y-auto bg-[radial-gradient(circle,rgb(0_0_0/0.05)_1px,transparent_1px)] [background-size:16px_16px]">
+      <div ref={scroller} data-open={String(open && !grading)} className="flex-1 overflow-y-auto bg-[radial-gradient(circle,rgb(0_0_0/0.05)_1px,transparent_1px)] [background-size:16px_16px]">
         <div className="flex flex-col gap-3 p-4">
           <SystemPill>Goal: {data.scenario.goal_en}</SystemPill>
           {data.turns.map((t) => (
@@ -345,14 +368,16 @@ export function Session() {
               <TutorBubble t={t} />
             </div>
           ))}
-          {busy && open && <Typing />}
+          {busy && open && !grading && <Typing />}
+          {grading && <Grading />}
           {err && <SystemPill>{err}</SystemPill>}
         </div>
-        {!open && <Review data={data} mode={settings.talk_mode} showFluency={settings.show_fluency} busy={busy} retry={finish} />}
+        <div ref={reviewTop} className="scroll-mt-2" />
+        {!open && !grading && <Review data={data} mode={settings.talk_mode} showFluency={settings.show_fluency} busy={busy} retry={finish} />}
         <div ref={end} />
       </div>
 
-      {open && (
+      {open && !grading && (
         <div className="border-t border-neutral-200 bg-white/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur">
           <TalkInput mode={settings.talk_mode} busy={busy} onSend={send} />
         </div>
