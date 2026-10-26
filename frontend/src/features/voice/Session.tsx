@@ -1,42 +1,99 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { marked } from '../../components/marked'
 import { api } from '../../lib/api'
 import { humanTag } from '../../lib/grammar'
+import { turnLine, turnStars } from '../../lib/stars'
 import { speak } from '../../lib/tts'
-import type { ReviewLine, ShadowResult, Turn, VoiceSession } from '../../lib/voice'
+import { SCENARIO_ICON, type ReviewLine, type ShadowResult, type Turn, type VoiceSession } from '../../lib/voice'
 import { ShadowScore } from './ShadowScore'
 import { TalkInput, type SendMeta } from './TalkInput'
+import { Icon, StarRow } from './ui'
 import { useVoiceSettings } from './useVoiceSettings'
 
-function TutorLine({ t }: { t: Turn }) {
+function Avatar({ code }: { code: string }) {
+  return (
+    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-lg shadow-sm">
+      <span aria-hidden="true">{SCENARIO_ICON[code] ?? '🎓'}</span>
+    </span>
+  )
+}
+
+function SystemPill({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="mx-auto max-w-[85%] rounded-2xl bg-white/80 px-3 py-1.5 text-center text-xs text-neutral-600 shadow-sm ring-1 ring-neutral-200">
+      {children}
+    </p>
+  )
+}
+
+function TutorBubble({ t }: { t: Turn }) {
   const [gloss, setGloss] = useState(false)
-  if (t.tutor_status === 'offline')
-    return <p className="rounded-lg border border-neutral-900 p-2 text-sm">Tutor offline. Your turn is saved; the review still works.</p>
+  if (t.tutor_status === 'offline') return <SystemPill>Tutor offline. Your turn is saved; the review still works.</SystemPill>
   if (!t.reply_de) return null
   return (
-    <div className="flex flex-col gap-1 rounded-lg border border-neutral-300 bg-white p-3">
-      <p className="text-lg" lang="de">
-        {t.reply_de}
-      </p>
-      {t.needs_review && <p className="text-xs text-neutral-600">Not confirmed by LanguageTool.</p>}
-      {gloss && t.reply_en && <p className="text-sm text-neutral-600">{t.reply_en}</p>}
-      <div className="flex gap-3 text-sm">
-        <button onClick={() => speak(t.reply_de ?? '')} className="underline">
-          Play
-        </button>
-        {t.reply_en && (
-          <button onClick={() => setGloss((g) => !g)} className="underline">
-            {gloss ? 'Hide English' : 'English'}
+    <div className="motion-safe:animate-rise flex max-w-[85%] flex-col gap-1.5 self-start">
+      <div className="rounded-3xl rounded-tl-md bg-white px-4 py-3 shadow-sm ring-1 ring-neutral-200">
+        <p className="text-lg leading-snug" lang="de">
+          {t.reply_de}
+        </p>
+        {gloss && t.reply_en && <p className="mt-1 border-t border-neutral-100 pt-1 text-sm text-neutral-500">{t.reply_en}</p>}
+        <div className="mt-2 flex items-center gap-3 text-sm text-emerald-700">
+          <button onClick={() => speak(t.reply_de ?? '')} aria-label="Play" className="flex items-center gap-1 active:scale-95">
+            <Icon name="speaker" className="size-4" />
+            Listen
           </button>
-        )}
+          {t.reply_en && (
+            <button onClick={() => setGloss((g) => !g)} className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold">
+              {gloss ? 'Hide English' : 'English'}
+            </button>
+          )}
+        </div>
+        {t.needs_review && <p className="mt-1 text-xs text-neutral-500">Not confirmed by LanguageTool.</p>}
       </div>
       {t.prompt_correction && (
-        <p className="mt-1 border-l-4 border-neutral-900 pl-2 text-sm font-semibold" lang="de">
+        <p className="motion-safe:animate-pop flex items-start gap-1.5 self-start rounded-2xl bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 ring-1 ring-amber-200" lang="de">
+          <Icon name="bulb" className="mt-0.5 size-4 shrink-0" />
           {t.prompt_correction}
         </p>
       )}
+    </div>
+  )
+}
+
+function ZeeBubble({ t }: { t: Turn }) {
+  const stars = turnStars(t.error_count)
+  return (
+    <div className="motion-safe:animate-rise flex max-w-[85%] flex-col items-end gap-1 self-end">
+      <div className="rounded-3xl rounded-tr-md bg-emerald-600 px-4 py-3 text-white shadow-md shadow-emerald-600/20">
+        <p className="text-lg leading-snug" lang="de">
+          {t.user}
+        </p>
+        <p className="mt-1 flex justify-end text-emerald-100" aria-label={t.input_mode === 'text' ? 'typed' : 'spoken'}>
+          <Icon name={t.input_mode === 'text' ? 'keyboard' : 'mic'} className="size-3.5" />
+        </p>
+      </div>
+      {stars !== null && t.error_count !== null && (
+        <p className="flex items-center gap-1.5 text-xs text-neutral-600">
+          <StarRow stars={stars} size="size-4" />
+          {turnLine(t.error_count)}
+        </p>
+      )}
+    </div>
+  )
+}
+
+function Typing() {
+  return (
+    <div
+      className="flex items-center gap-1 self-start rounded-3xl rounded-tl-md bg-white px-4 py-3.5 shadow-sm ring-1 ring-neutral-200"
+      role="status"
+      aria-label="Ustad is replying"
+    >
+      {[0, 1, 2].map((i) => (
+        <span key={i} className="size-2 rounded-full bg-neutral-400 motion-safe:animate-dot" style={{ animationDelay: `${i * 0.15}s` }} />
+      ))}
     </div>
   )
 }
@@ -47,6 +104,8 @@ function BetterLine(props: { sid: number; line: ReviewLine; ltOnly: boolean; sho
   const [res, setRes] = useState<ShadowResult | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const same = line.better === line.said
+  // LanguageTool-only errors are incomplete: no stars for them
+  const stars = ltOnly ? null : turnStars(line.errors.length)
   async function check(text: string, meta: SendMeta) {
     setErr(null)
     try {
@@ -58,44 +117,117 @@ function BetterLine(props: { sid: number; line: ReviewLine; ltOnly: boolean; sho
     }
   }
   return (
-    <li className="flex flex-col gap-2 rounded-lg border border-neutral-300 bg-white p-3">
-      <div>
-        <p className="text-xs text-neutral-600">You said</p>
-        <p lang="de">{marked(line.said, [...line.errors].sort((a, b) => a.start - b.start))}</p>
+    <li className="motion-safe:animate-rise flex flex-col gap-3 rounded-3xl bg-white p-4 shadow-sm ring-1 ring-neutral-200">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="text-xs font-semibold tracking-wide text-neutral-500 uppercase">You said</p>
+          <p className="text-lg" lang="de">
+            {marked(line.said, [...line.errors].sort((a, b) => a.start - b.start))}
+          </p>
+        </div>
+        {stars !== null && <StarRow stars={stars} size="size-4" />}
       </div>
-      <div>
-        <p className="text-xs text-neutral-600">
+      <div className={`rounded-2xl p-3 ${ltOnly ? 'bg-neutral-50' : 'bg-emerald-50'}`}>
+        <p className={`text-xs font-semibold ${ltOnly ? 'text-neutral-500' : 'tracking-wide text-emerald-700 uppercase'}`}>
           {/* LanguageTool misses many errors, so an LT-only result never says "correct" */}
           {ltOnly ? (same ? 'No LanguageTool flags. The tutor may still find errors.' : 'LanguageTool suggestion') : same ? 'Correct as said' : 'Better'}
         </p>
-        <p className="font-semibold" lang="de">
+        <p className="text-lg font-semibold" lang="de">
           {line.better}
         </p>
-        {line.needs_review && !ltOnly && <p className="text-xs text-neutral-600">Not confirmed by LanguageTool.</p>}
+        {line.needs_review && !ltOnly && <p className="text-xs text-neutral-500">Not confirmed by LanguageTool.</p>}
       </div>
       {line.errors.length > 0 && (
-        <ol className="list-decimal pl-5 text-sm">
+        <ol className="flex flex-col gap-1 text-sm">
           {line.errors.map((e, i) => (
-            <li key={i}>
-              <span lang="de">
-                {e.span} → {e.fix}
+            <li key={i} className="flex gap-2">
+              <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-rose-100 text-xs font-bold text-rose-800">
+                {i + 1}
               </span>
-              : {e.reason_en} <span className="text-xs text-neutral-600">({humanTag(e.tag)})</span>
+              <span>
+                <span lang="de" className="font-semibold">
+                  {e.span} → {e.fix}
+                </span>
+                : {e.reason_en} <span className="text-xs text-neutral-500">({humanTag(e.tag)})</span>
+              </span>
             </li>
           ))}
         </ol>
       )}
-      <div className="flex gap-3 text-sm">
-        <button onClick={() => speak(line.better)} className="underline">
-          Play
+      <div className="flex gap-2 text-sm">
+        <button
+          onClick={() => speak(line.better)}
+          aria-label="Play"
+          className="flex items-center gap-1 rounded-full bg-neutral-100 px-3 py-1.5 font-semibold active:scale-95"
+        >
+          <Icon name="speaker" className="size-4" />
+          Listen
         </button>
-        <button onClick={() => setShadow((s) => !s)} className="underline">
+        <button
+          onClick={() => setShadow((s) => !s)}
+          className="flex items-center gap-1 rounded-full bg-emerald-600 px-3 py-1.5 font-semibold text-white active:scale-95"
+        >
+          <Icon name={shadow ? 'x' : 'mic'} className="size-4" />
           {shadow ? 'Close' : 'Shadow it'}
         </button>
       </div>
       {shadow && (res ? <ShadowScore r={res} showFluency={showFluency} /> : <TalkInput mode={mode} sendLabel="Check" onSend={check} />)}
-      {err && <p className="text-sm">Error: {err}. Your text is kept; try again.</p>}
+      {err && <p className="text-sm text-rose-700">Error: {err}. Your text is kept; try again.</p>}
     </li>
+  )
+}
+
+function Review(props: { data: VoiceSession; mode: 'hold' | 'tap'; showFluency: boolean; busy: boolean; retry: () => void }) {
+  const { data, mode, showFluency, busy, retry } = props
+  const lines = data.review?.lines ?? []
+  const ltOnly = data.status === 'lt_only'
+  const clean = lines.filter((l) => l.errors.length === 0).length
+  return (
+    <section className="flex flex-col gap-3 p-4">
+      <h2 className="text-xl font-bold">Say it better</h2>
+      {lines.length > 0 && !ltOnly && (
+        <div className="grid grid-cols-2 gap-2">
+          <div className="rounded-3xl bg-white p-3 text-center shadow-sm ring-1 ring-neutral-200">
+            <p className="text-3xl font-bold">{lines.length}</p>
+            <p className="text-xs text-neutral-500">{lines.length === 1 ? 'line' : 'lines'} spoken</p>
+          </div>
+          <div className="rounded-3xl bg-white p-3 text-center shadow-sm ring-1 ring-neutral-200">
+            <p className="text-3xl font-bold text-emerald-700">{clean}</p>
+            <p className="text-xs text-neutral-500">without errors</p>
+          </div>
+        </div>
+      )}
+      {ltOnly && (
+        <div className="flex flex-col gap-2 rounded-3xl bg-amber-50 p-4 text-sm text-amber-900 ring-1 ring-amber-200">
+          <p>Tutor offline: LanguageTool check only. Not added to the Ghalti Register yet.</p>
+          <button onClick={retry} disabled={busy} className="self-start font-semibold underline">
+            Review again
+          </button>
+        </div>
+      )}
+      {data.review?.teaching_points.length ? (
+        <ul className="flex flex-col gap-1 rounded-3xl bg-white p-4 text-sm shadow-sm ring-1 ring-neutral-200">
+          {data.review.teaching_points.map((p) => (
+            <li key={p} className="flex gap-2">
+              <Icon name="bulb" className="size-4 shrink-0 text-amber-600" />
+              {p}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      {lines.length ? (
+        <ol className="flex flex-col gap-3">
+          {lines.map((l) => (
+            <BetterLine key={l.turn} sid={data.id} line={l} ltOnly={ltOnly} showFluency={showFluency} mode={mode} />
+          ))}
+        </ol>
+      ) : (
+        <p>Nothing said in this session.</p>
+      )}
+      <Link to="/voice" className="rounded-full bg-emerald-600 p-3 text-center font-semibold text-white shadow-md shadow-emerald-600/30">
+        Done
+      </Link>
+    </section>
   )
 }
 
@@ -108,6 +240,24 @@ export function Session() {
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
   const [chunks, setChunks] = useState(false)
+  const end = useRef<HTMLDivElement>(null)
+  const scroller = useRef<HTMLDivElement>(null)
+  const count = data?.turns.length ?? 0
+  const status = data?.status
+
+  // keep the newest message in view, like a messenger
+  useEffect(() => {
+    end.current?.scrollIntoView?.({ behavior: 'smooth', block: 'end' })
+  }, [count, busy, status])
+
+  // the composer grows while Zee speaks (live transcript): keep the newest message above it
+  useEffect(() => {
+    const el = scroller.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver(() => end.current?.scrollIntoView?.({ block: 'end' }))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [data?.id])
 
   if (error) return <p className="p-4">Error: {(error as Error).message}</p>
   if (!data) return <p className="p-4">Loading…</p>
@@ -145,84 +295,68 @@ export function Session() {
   const said = data.turns.some((t) => t.user)
 
   return (
-    <div className="flex flex-col gap-3 p-4">
-      <header>
-        <p className="text-sm text-neutral-600">
-          <Link to="/voice" className="underline">
-            Bolna
-          </Link>
-        </p>
-        <h1 className="text-xl font-bold">{data.scenario.title}</h1>
-        <p className="text-sm">{data.scenario.goal_en}</p>
-        <button onClick={() => setChunks((c) => !c)} className="text-sm underline">
-          {chunks ? 'Hide chunks' : 'Useful chunks'}
+    <div className="flex h-[calc(100dvh-3.5rem)] flex-col bg-neutral-100">
+      <header className="flex items-center gap-2 border-b border-neutral-200 bg-white/90 px-3 py-2 backdrop-blur">
+        <Link to="/voice" aria-label="Back to Bolna" className="flex size-9 items-center justify-center rounded-full active:bg-neutral-100">
+          <Icon name="back" />
+        </Link>
+        <Avatar code={data.scenario.code} />
+        <div className="min-w-0 flex-1">
+          <h1 className="truncate font-bold">{data.scenario.title}</h1>
+          <p className="truncate text-xs text-neutral-500">{busy && open ? 'replying…' : 'Take your time'}</p>
+        </div>
+        <button
+          onClick={() => setChunks((c) => !c)}
+          aria-label={chunks ? 'Hide chunks' : 'Useful chunks'}
+          aria-expanded={chunks}
+          className={`flex size-9 items-center justify-center rounded-full ${chunks ? 'bg-amber-100 text-amber-800' : 'text-neutral-600 active:bg-neutral-100'}`}
+        >
+          <Icon name="bulb" />
         </button>
-        {chunks && (
-          <ul className="mt-1 text-sm" lang="de">
-            {data.scenario.chunks.map((c) => (
-              <li key={c.de}>{c.de}</li>
-            ))}
-          </ul>
-        )}
-      </header>
-
-      <ol className="flex flex-col gap-2">
-        {data.turns.map((t) => (
-          <li key={t.idx} className="flex flex-col gap-2">
-            {t.user && (
-              <p className="self-end rounded-lg bg-neutral-900 p-3 text-white" lang="de">
-                {t.user}
-              </p>
-            )}
-            <TutorLine t={t} />
-          </li>
-        ))}
-      </ol>
-
-      {open ? (
-        <>
-          <TalkInput mode={settings.talk_mode} busy={busy} onSend={send} />
+        {open && (
           <button
             onClick={finish}
             disabled={busy}
-            className="mt-2 rounded-lg border-2 border-neutral-900 p-3 font-semibold disabled:opacity-40"
+            aria-label={said ? 'End and review' : 'End'}
+            className="rounded-full border border-neutral-300 px-3 py-1.5 text-sm font-semibold active:scale-95 disabled:opacity-40"
           >
-            {said ? 'End and review' : 'End'}
+            End
           </button>
-        </>
-      ) : (
-        <section className="flex flex-col gap-3">
-          <h2 className="text-lg font-bold">Say it better</h2>
-          {data.status === 'lt_only' && (
-            <div className="flex flex-col gap-2 rounded border border-neutral-900 p-2 text-sm">
-              <p>Tutor offline: LanguageTool check only. Not added to the Ghalti Register yet.</p>
-              <button onClick={finish} disabled={busy} className="self-start underline">
-                Review again
+        )}
+      </header>
+      {chunks && (
+        <ul className="motion-safe:animate-rise flex flex-col gap-1 border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm" lang="de">
+          {data.scenario.chunks.map((c) => (
+            <li key={c.de}>
+              <button onClick={() => speak(c.de)} className="text-left">
+                <span className="font-semibold">{c.de}</span> <span className="text-amber-800/70">{c.en}</span>
               </button>
-            </div>
-          )}
-          {data.review?.teaching_points.length ? (
-            <ul className="list-disc pl-5 text-sm">
-              {data.review.teaching_points.map((p) => (
-                <li key={p}>{p}</li>
-              ))}
-            </ul>
-          ) : null}
-          {data.review?.lines.length ? (
-            <ol className="flex flex-col gap-2">
-              {data.review.lines.map((l) => (
-                <BetterLine key={l.turn} sid={data.id} line={l} ltOnly={data.status === 'lt_only'} showFluency={settings.show_fluency} mode={settings.talk_mode} />
-              ))}
-            </ol>
-          ) : (
-            <p>Nothing said in this session.</p>
-          )}
-          <Link to="/voice" className="rounded-lg bg-neutral-900 p-3 text-center font-semibold text-white">
-            Done
-          </Link>
-        </section>
+            </li>
+          ))}
+        </ul>
       )}
-      {err && <p className="text-sm">Error: {err}</p>}
+
+      <div ref={scroller} className="flex-1 overflow-y-auto bg-[radial-gradient(circle,rgb(0_0_0/0.05)_1px,transparent_1px)] [background-size:16px_16px]">
+        <div className="flex flex-col gap-3 p-4">
+          <SystemPill>Goal: {data.scenario.goal_en}</SystemPill>
+          {data.turns.map((t) => (
+            <div key={t.idx} className="flex flex-col gap-3">
+              {t.user && <ZeeBubble t={t} />}
+              <TutorBubble t={t} />
+            </div>
+          ))}
+          {busy && open && <Typing />}
+          {err && <SystemPill>{err}</SystemPill>}
+        </div>
+        {!open && <Review data={data} mode={settings.talk_mode} showFluency={settings.show_fluency} busy={busy} retry={finish} />}
+        <div ref={end} />
+      </div>
+
+      {open && (
+        <div className="border-t border-neutral-200 bg-white/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur">
+          <TalkInput mode={settings.talk_mode} busy={busy} onSend={send} />
+        </div>
+      )}
     </div>
   )
 }

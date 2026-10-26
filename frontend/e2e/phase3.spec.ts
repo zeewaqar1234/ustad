@@ -46,6 +46,11 @@ async function login(page: Page) {
   await expect(page.getByRole('heading', { name: 'Today' })).toBeVisible()
 }
 
+// let entry animations finish so screenshots show the settled screen (test code only)
+async function settle(page: Page) {
+  await page.waitForTimeout(900)
+}
+
 async function noSideScroll(page: Page) {
   const w = await page.evaluate(() => document.documentElement.scrollWidth)
   expect(w).toBeLessThanOrEqual(375)
@@ -57,10 +62,12 @@ test('roleplay: restarts keep the turn open, Stop + Send, then Say it better', a
   await expect(page.getByRole('heading', { name: 'Bolna' })).toBeVisible()
   await expect(page.getByText(/no speech recognition/)).toHaveCount(0)
   await noSideScroll(page)
+  await settle(page)
   await page.screenshot({ path: `${SHOTS}/p3-voice-home.png`, fullPage: true })
 
   await page.getByRole('button', { name: /Kantine/ }).click()
   await expect(page.getByText('Useful chunks', { exact: false }).or(page.getByText('Goal:'))).toBeVisible()
+  await settle(page)
   await page.screenshot({ path: `${SHOTS}/p3-scenario-card.png`, fullPage: true })
   await page.getByRole('button', { name: 'Start' }).click()
   await expect(page.getByText('Wie war dein Wochenende?')).toBeVisible()
@@ -73,6 +80,7 @@ test('roleplay: restarts keep the turn open, Stop + Send, then Say it better', a
   expect(await page.evaluate(() => (window as unknown as { __starts: number }).__starts)).toBe(4)
   await expect(page.getByRole('button', { name: 'Stop' })).toBeVisible()
   await noSideScroll(page)
+  await settle(page)
   await page.screenshot({ path: `${SHOTS}/p3-listening.png`, fullPage: true })
 
   await page.getByRole('button', { name: 'Stop' }).click()
@@ -81,11 +89,13 @@ test('roleplay: restarts keep the turn open, Stop + Send, then Say it better', a
   await page.getByRole('button', { name: 'Send' }).click()
   // stored text is the cleaned transcript
   await expect(page.getByText('Am Wochenende habe ich nach Frankfurt gefahren', { exact: true })).toBeVisible({ timeout: 60_000 })
+  await settle(page)
   await page.screenshot({ path: `${SHOTS}/p3-turn.png`, fullPage: true })
 
   await page.getByRole('button', { name: 'End and review' }).click()
   await expect(page.getByRole('heading', { name: 'Say it better' })).toBeVisible({ timeout: 60_000 })
   await noSideScroll(page)
+  await settle(page)
   await page.screenshot({ path: `${SHOTS}/p3-say-it-better.png`, fullPage: true })
 })
 
@@ -98,9 +108,11 @@ test('shadowing word match and voice recitation; typed fallback', async ({ page 
   await page.evaluate((t) => (window as unknown as { __say: (t: string) => void }).__say(t), sentence)
   await page.getByRole('button', { name: 'Stop' }).click()
   await page.getByRole('button', { name: 'Check' }).click()
-  await expect(page.getByText(/words heard/)).toBeVisible()
+  await expect(page.getByRole('status').filter({ hasText: /heard/ })).toBeVisible()
+  await expect(page.getByRole('img', { name: /of 3 stars/ }).first()).toBeVisible()
   await expect(page.getByText(/fluency/i)).toHaveCount(0)
   await noSideScroll(page)
+  await settle(page)
   await page.screenshot({ path: `${SHOTS}/p3-shadowing.png`, fullPage: true })
 
   await page.goto('/voice/recite/SEIN_PRAESENS')
@@ -112,5 +124,41 @@ test('shadowing word match and voice recitation; typed fallback', async ({ page 
   }
   await expect(page.getByText('Clean.')).toBeVisible()
   await noSideScroll(page)
+  await settle(page)
   await page.screenshot({ path: `${SHOTS}/p3-recitation-voice.png`, fullPage: true })
+})
+
+// Visual check of the graded chat (stars, hint chip) with the turn API mocked: this container has no
+// Ollama, so real replies are always "offline". The mock only shapes the screenshot; logic is tested in vitest.
+test('chat with graded turns: bubbles, stars, hint (API mocked)', async ({ page }) => {
+  await login(page)
+  await page.goto('/voice')
+  await page.getByRole('button', { name: /Deutsche Bahn/ }).click()
+  await page.getByRole('button', { name: 'Start' }).click()
+  await expect(page.getByText('Guten Tag, wie kann ich Ihnen helfen?')).toBeVisible()
+  const replies = [
+    { user: 'Mein Zug hatte Verspätung.', reply_de: 'Das tut mir leid. Wohin möchten Sie fahren?', error_count: 0, prompt_correction: null },
+    { user: 'Ich habe meinen Anschluss nach Frankfurt verpasst mit der Zug.', reply_de: 'Der nächste Zug fährt um 14 Uhr.', error_count: 1, prompt_correction: "Achtung: 'mit' braucht welchen Fall?" },
+  ]
+  let n = 0
+  await page.route('**/api/voice/turn', async (route) => {
+    const r = replies[n++]
+    await route.fulfill({ json: { idx: n, input_mode: 'voice', reply_en: 'gloss', tutor_status: 'ok', needs_review: false, ...r } })
+  })
+  for (const r of replies) {
+    await page.getByRole('button', { name: 'Tap to talk' }).click()
+    await page.evaluate((t) => (window as unknown as { __say: (t: string) => void }).__say(t), r.user)
+    await page.getByRole('button', { name: 'Stop' }).click()
+    await page.getByRole('button', { name: 'Send' }).click()
+    await expect(page.getByText(r.reply_de)).toBeVisible()
+  }
+  await expect(page.getByRole('img', { name: '3 of 3 stars' })).toBeVisible()
+  await expect(page.getByRole('img', { name: '2 of 3 stars' })).toBeVisible()
+  await noSideScroll(page)
+  await settle(page)
+  await page.screenshot({ path: `${SHOTS}/p3-chat-stars.png` })
+  await page.getByRole('button', { name: 'Tap to talk' }).click()
+  await page.evaluate(() => (window as unknown as { __say: (t: string) => void }).__say('Gilt mein Ticket noch'))
+  await settle(page)
+  await page.screenshot({ path: `${SHOTS}/p3-chat-listening.png` })
 })

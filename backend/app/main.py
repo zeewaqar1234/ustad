@@ -1,8 +1,9 @@
 from pathlib import Path
 
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy.exc import OperationalError
 
 from app.api import (
     auth,
@@ -22,6 +23,19 @@ from app.api import (
 from app.core.config import settings
 
 app = FastAPI(title="Ustad")
+
+
+@app.exception_handler(OperationalError)
+def _db_error(request: Request, exc: OperationalError):
+    """A DB from an older phase (e.g. Phase 3 pulled, `make migrate` not run) has no new tables yet.
+    Say how to fix it instead of a bare 500."""
+    if "no such table" in str(exc.orig) or "no such column" in str(exc.orig):
+        return JSONResponse(
+            {"detail": "The database is older than the app. Run: make migrate"}, status_code=503
+        )
+    raise exc
+
+
 for r in (health, auth, daily, review, sabaq, stats, items, patterns, homework, mistakes,
           recitation, placement, voice):  # fmt: skip
     app.include_router(r.router)

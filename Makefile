@@ -4,14 +4,14 @@ install:
 	cd backend && uv sync
 	cd frontend && npm install
 
-# Backend :8000 + frontend :5173 in one command. Ctrl+C stops both.
-dev:
+# Backend :8000 + frontend :5173 in one command (migrates the DB first). Ctrl+C stops both.
+dev: migrate
 	@trap 'kill 0' INT TERM EXIT; \
 	(cd backend && uv run uvicorn app.main:app --reload --port 8000) & \
 	(cd frontend && npm run dev -- --port 5173 --strictPort) & \
 	wait
 
-backend:
+backend: migrate
 	cd backend && uv run uvicorn app.main:app --reload --port 8000
 
 frontend:

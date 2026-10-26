@@ -67,7 +67,10 @@ def _transcript(turns: list[VoiceTurn]) -> str:
 def view_turn(t: VoiceTurn) -> dict:
     return {"idx": t.idx, "input_mode": t.input_mode, "user": t.user_clean, "reply_de": t.reply_de,
             "reply_en": t.reply_en, "prompt_correction": t.prompt_correction,
-            "tutor_status": t.tutor_status, "needs_review": t.needs_review}  # fmt: skip
+            "tutor_status": t.tutor_status, "needs_review": t.needs_review,
+            # German errors the tutor noticed in Zee's turn (never pace or hesitation); None = not graded
+            "error_count": len(t.errors_json or []) if t.user_clean and t.tutor_status == "ok" else None,
+            }  # fmt: skip
 
 
 def start(db: Session, sc: dict) -> VoiceSession:
