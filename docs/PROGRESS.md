@@ -9,12 +9,13 @@ Read this first every session. Then read only the docs/ file for the current pha
 | 0. Scaffold | Done | 2026-10-20 |
 | 1. MVP: SRS + daily loop | Done except deploy (open item below) | 2026-10-20 |
 | 2. Grammar (§5.2) + writing (§5.6) + Ghalti (§5.7) | Done (acceptance evidence below); real local-model run open | 2026-10-21 |
-| 3. Voice tutor | Not started | |
+| 3. Voice tutor | Done in code (evidence below); open: Zee's real-speech STT test, real Ollama + Piper runs | 2026-10-26 |
 | 4. Reading (§5.3) + listening (§5.5) | Not started; Reading stays scheduled here | |
 | 5–7 | Not started (work-writing templates of §5.6 scheduled in Phase 5) | |
 
-**Next session:** run `make test-ollama` on Zee's machine (open Phase 2 item), approve the 7 flagged
-patterns in the check queue, then Phase 3. Deploy over HTTPS is still open from Phase 1.
+**Next session:** on Zee's machine: the Phase 3 STT word-loss test with his own speech (below), then
+`make test-ollama` (now covers grader + voice), approve the 7 flagged patterns, then Phase 4.
+Deploy over HTTPS is still open from Phase 1 (speech recognition and the mic need HTTPS on the phone).
 Acceptance list: docs/phases.md.
 
 ## Builder gate log
@@ -22,6 +23,7 @@ Acceptance list: docs/phases.md.
 | Date | study_days_last_7 | Result |
 |---|---|---|
 | 2026-10-21 | 1 (Zee's count; the cloud-container DB had 0 because it is a fresh copy) | Closed by the rule. Zee overrode it: `profile.gate_override = true` in the container DB, `GET /api/stats/gate` → `{"study_days_last_7":0,"open":true,"override":true}`. Zee first asked for 4 mock `day_log` rows; Claude proposed the existing override instead so streak/attendance data stays real, and Zee chose the override. Phase 2 built as a gate exception. |
+| 2026-10-26 | 0 in the container DB (fresh copy; Zee's real count unknown here) | `gate_override = true` still set from 2026-10-21, so the gate reads open. Zee asked for Phase 3 in this session; built under that override. Zee: clear the override (`profile.gate_override = false`) once real study days are logged, so the gate works again. |
 
 ## Decision 2026-10-21: 100 % free resources
 
@@ -219,6 +221,85 @@ cd ../frontend && E2E_SHOTS=$SP/shots PW_CHROMIUM=/opt/pw-browsers/chromium npx 
 Same as Phase 1 (below), plus `make grammar-build` before `load_seed` if `data/seed/patterns.json` is stale.
 `npx playwright test` runs both `phone.spec.ts` and `phase2.spec.ts`.
 
+## Phase 3: what exists
+
+- **Speech in the browser** `frontend/src/lib/speech.ts`: `Recognizer` wraps `SpeechRecognition`
+  (`de-DE`, `continuous`, `interimResults`). On every `end` it starts recognition again and keeps the text;
+  interim words not finalised before `end` are kept (restart gap); Android cumulative results are not
+  doubled; fatal errors (mic blocked, service off) stop restarting and switch to typing. Only Zee's
+  Stop (or letting go of Hold) ends listening, and only Send ends the turn. No timers, no silence logic.
+- **TalkInput** (`features/voice/TalkInput.tsx`): tap-start/tap-stop (default) or hold-to-talk (Settings);
+  after Stop the transcript is editable, with Send / Add more / Clear; "Type instead" always there; text
+  fallback when `SpeechRecognition` is missing. The restart count goes to the server with each turn
+  (`voice_turn.stt_restarts`) for the word-loss test.
+- **TTS** `lib/tts.ts`: `speechSynthesis` with a German device voice, rate 0.9; if there is none,
+  `POST /api/voice/tts` (Piper on the server, cached wav in `audio/tts/`, ledger row vendor `piper`, €0);
+  if Piper is not configured (`PIPER_BIN`, `PIPER_MODEL`) the text stays on screen.
+- **Backend** `app/voice/`: `disfluency.clean` (fillers, sound repeats, broken-off starts, word and
+  phrase repeats; "um", "eh", "in Indien" stay), `shadowing.score` (word match in order, umlaut spelling
+  and digits tolerated, no time or pace), `visible_scores` (drops fluency/pace keys unless the setting is
+  on), `tutor.take_turn` (clean → Tutor JSON `TutorTurn` → LanguageTool on `reply_de`, flags →
+  `needs_review`), `tutor.review` ("Say it better", Grader JSON `SessionReview`; errors → Ghalti source
+  `voice` + `fix_sentence` cards). Model down: turn saved as `offline`; review is LanguageTool only,
+  provisional, not written to Ghalti, can be re-run. Tables `voice_session`, `voice_turn` (migration
+  `db5d1f875cd8`).
+- **API** `/api/voice/settings|scenarios|session|session/{id}|turn|session/{id}/review|shadow|tts|tts/status`,
+  `/api/recitation/{code}/voice` (one transcript per row, cells matched in order, same stages as typed).
+- **Content**: 6 roleplays (Kantine, desk meeting, on-call incident, asking the manager, doctor by phone,
+  DB missed connection) + free talk (Gupshup), each with goal + 5 chunks + opening line, in
+  `data/seed/source/scenarios.json`, built by `make voice-build` (LanguageTool: 7 scenarios, 0 needs_review;
+  the first run flagged the name "Zee" in an opening line, removed).
+- **Screens** (`/voice`): Bolna hub (settings: talk button, fluency score off by default), Takrar
+  (shadowing from today's Sabaq items already attempted, else recent ones), roleplay/free-talk session
+  with chunks, tutor line + Play + English toggle + one prompt correction, End and review → Say it better
+  (shadow any corrected line), Pahara by voice row by row. Home has a "Bolna (speaking)" row.
+
+### Phase 3 acceptance evidence (run 2026-10-26)
+
+| Check | Result |
+|---|---|
+| Builder gate | container DB: `study_days_last_7 = 0`, `gate_override = true` → open (see gate log) |
+| Hold-to-talk + tap-start/tap-stop | vitest `TalkInput` tests (tap: 10 browser `end` events, still listening, no send; hold: let go stops, Send still needed); Playwright `p3-listening.png` |
+| Restart on every `end`, only Zee's tap ends a turn | vitest `speech.test.ts` 6 tests; Playwright: 3 forced `end` events → 4 starts, turn still open, text kept |
+| Pipeline STT → Tutor (Ollama) → TTS | `test_pipeline_turn_and_review` ×3 fixture transcripts with a **mocked** model: cleaned text sent (raw not), reply, one prompt correction, review tags AUX_HABEN_SEIN / V2_POSITION / CASE_DAT reach Ghalti + fix_sentence card |
+| One real call behind `RUN_OLLAMA=1` | `tests/test_voice_llm.py` written, **not run**: no Ollama in this container (localhost:11434 not reachable, model registry blocked). Open item |
+| Shadowing word match, no fluency score | `test_shadowing_word_match`; API drops a fluency key while the setting is off (`test_shadow_api_scores_and_hides_fluency_by_default`); `p3-shadowing.png` |
+| Fluency score not displayed when setting off | vitest `ShadowScore` test (score 41 given, not rendered; rendered only with the setting on) + backend `test_fluency_hidden_unless_setting_on` |
+| No code path ends a user turn automatically | vitest static guard (no `setTimeout`/`setInterval`/`onspeechend`/`onsoundend`/`onaudioend`/`onnomatch` in voice turn code) + `test_server_has_no_turn_timeout_or_silence_logic` + the restart tests above |
+| Disfluency stripping before grading | 7 + 3 cases in `test_voice.py`; filler-only turn refused (422) without a model call |
+| Recitation by voice | `test_recitation_by_voice_passes_with_stammer_and_flags_missing_cell`; Playwright `p3-recitation-voice.png` |
+| 6 scenario roleplays, free talk, Say it better | `test_scenarios_six_roleplays_plus_free_talk`; `p3-voice-home.png`, `p3-scenario-card.png`, `p3-turn.png`, `p3-say-it-better.png` (model offline → LanguageTool-only review) |
+| Cost ledger for every LLM call | tutor + grader rows, vendor `ollama`, €0, tokens counted (in the pipeline test); Piper rows `piper`/chars/€0 (`test_tts_with_piper_caches_and_writes_ledger`, fake piper binary) |
+| Text fallback without `SpeechRecognition` | vitest fallback test; typed turns stored as `input_mode=text`, minutes counted the same |
+| Piper server TTS | code + test with a fake binary only; real Piper **not run** (voice download from huggingface.co refused by the network policy). Open item |
+| Self-hosted Whisper fallback | **not built**: the phase makes it conditional on Zee's speech test losing words. Open item |
+| pytest | see final run below |
+| vitest | see final run below |
+| Playwright 375px | 7 passed (2 new Phase 3 + 3 Phase 2 + 2 Phase 1), no horizontal scroll on new screens |
+| make lint | ruff check + format clean; oxlint 0 errors (2 old warnings); tsc clean |
+| New dependencies | none (Piper is a separate local program, called by path like Ollama) |
+
+### Open Phase 3 items
+
+- [ ] **STT word-loss test with Zee's speech** (docs/architecture.md §16). On the phone (HTTPS) and laptop
+  Chrome: read the 10 test sentences below in a roleplay, with pauses and blocks as they come; compare
+  the stored `voice_turn.user_raw` with the text, count lost words, note `stt_restarts`. If words are lost
+  in restart gaps, build the Whisper fallback (record with `MediaRecorder`, transcribe on the server)
+  behind the same `TalkInput`. Sentences: the 5 Kantine chunks and the 5 Bahn chunks in `scenarios.json`.
+- [ ] **Real model run**: `make test-ollama` now also runs `tests/test_voice_llm.py` (3 fixtures, tutor
+  turn + review must find the expected tag).
+- [ ] **Piper**: install Piper, download `de_DE-thorsten-medium` (CC0), set `PIPER_BIN`/`PIPER_MODEL`,
+  open the app in a browser without a German voice and press Play. The CLI flags used are
+  `--model` and `--output_file` (text on stdin); check them against the installed Piper version.
+- [ ] Browser speech privacy note in `docs/vendors.md` (architecture.md §12) before daily voice use.
+- Fixture transcripts in `tests/fixtures/voice/transcripts.json` are authored, not recorded from Zee.
+  Replace with his real transcripts after the STT test.
+
+### How to rerun the Phase 3 e2e check
+
+Same setup as Phase 1 (below). `npx playwright test` runs all three specs; `phase3.spec.ts` injects a fake
+`SpeechRecognition` (headless Chromium has no speech service). Without Ollama the tutor shows "offline".
+
 ## Dependencies added (one-line reasons)
 
 Backend:
@@ -236,6 +317,7 @@ react-router + @tanstack/react-query (multi-page UI, server state), vite-plugin-
 @playwright/test (phone-width e2e + screenshots). No new dependencies for the Phase 1 finish.
 Phase 2: none (Ollama is called with the existing httpx; Ollama itself is a separate local program, not a
 Python/npm dependency).
+Phase 3: none (Web Speech is a browser API; Piper is an optional separate program run by path).
 
 ## Known issues / notes
 

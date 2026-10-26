@@ -17,12 +17,13 @@ from app.api import (
     review,
     sabaq,
     stats,
+    voice,
 )  # fmt: skip
 from app.core.config import settings
 
 app = FastAPI(title="Ustad")
 for r in (health, auth, daily, review, sabaq, stats, items, patterns, homework, mistakes,
-          recitation, placement):  # fmt: skip
+          recitation, placement, voice):  # fmt: skip
     app.include_router(r.router)
 
 

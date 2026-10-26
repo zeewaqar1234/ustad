@@ -1,0 +1,109 @@
+{
+ "scenarios": [
+  {
+   "code": "KANTINE", "kind": "roleplay", "title": "Kantine: small talk", "level": "A2",
+   "tutor_role_en": "a friendly colleague at lunch in the office canteen",
+   "setting_en": "Lunch in the Kantine. Talk about the weekend, the weather and the Bahn.",
+   "goal_en": "Say what you did at the weekend (Perfekt) and ask one question back.",
+   "address": "du",
+   "chunks": [
+    {"de": "Am Wochenende war ich zu Hause.", "en": "At the weekend I was at home."},
+    {"de": "Ich habe einen Freund getroffen.", "en": "I met a friend."},
+    {"de": "Das Wetter war leider schlecht.", "en": "The weather was bad, unfortunately."},
+    {"de": "Meine Bahn hatte heute Verspätung.", "en": "My train was late today."},
+    {"de": "Und was hast du gemacht?", "en": "And what did you do?"}
+   ],
+   "opening_de": "Hallo! Ist hier noch frei? Wie war dein Wochenende?"
+  },
+  {
+   "code": "DESK_MEETING", "kind": "roleplay", "title": "Morning desk meeting", "level": "A2/B1",
+   "tutor_role_en": "the team lead running a short morning stand-up",
+   "setting_en": "Daily stand-up at the desk. Say what you worked on yesterday and what you do today.",
+   "goal_en": "Say one thing from yesterday (Perfekt) and one plan for today, with a reason (weil).",
+   "address": "du",
+   "chunks": [
+    {"de": "Gestern habe ich an einem Bericht gearbeitet.", "en": "Yesterday I worked on a report."},
+    {"de": "Heute teste ich die neue Version.", "en": "Today I am testing the new version."},
+    {"de": "Ich brauche noch etwas Zeit, weil die Daten fehlen.", "en": "I need a bit more time because the data is missing."},
+    {"de": "Kann mir jemand dabei helfen?", "en": "Can someone help me with it?"},
+    {"de": "Das ist fast fertig.", "en": "That is almost finished."}
+   ],
+   "opening_de": "Guten Morgen! Woran hast du gestern gearbeitet?"
+  },
+  {
+   "code": "INCIDENT", "kind": "roleplay", "title": "Explaining an incident from on-call", "level": "B1",
+   "tutor_role_en": "a colleague from another team who asks about a system problem during your on-call week (generic, no real system names)",
+   "setting_en": "Coffee point. Explain what went wrong during your on-call week and what you did.",
+   "goal_en": "Tell the incident in order (zuerst, dann, danach) in the Perfekt, and say what you will change.",
+   "address": "du",
+   "chunks": [
+    {"de": "In der Nacht ist ein System ausgefallen.", "en": "In the night a system went down."},
+    {"de": "Zuerst habe ich die Logs geprüft.", "en": "First I checked the logs."},
+    {"de": "Danach haben wir den Dienst neu gestartet.", "en": "After that we restarted the service."},
+    {"de": "Der Fehler ist seitdem nicht mehr aufgetreten.", "en": "The error has not happened again since then."},
+    {"de": "Nächstes Mal würde ich früher eskalieren.", "en": "Next time I would escalate earlier."}
+   ],
+   "opening_de": "Du hattest doch Rufbereitschaft, oder? Was ist passiert?"
+  },
+  {
+   "code": "MANAGER", "kind": "roleplay", "title": "Asking for more responsibility", "level": "B1",
+   "tutor_role_en": "your manager in a one-to-one meeting, polite but asks for reasons",
+   "setting_en": "One-to-one with your manager. Ask for more responsibility and give reasons.",
+   "goal_en": "Ask politely with Konjunktiv II (ich würde gern, könnte ich) and give two reasons.",
+   "address": "Sie",
+   "chunks": [
+    {"de": "Ich würde gern mehr Verantwortung übernehmen.", "en": "I would like to take on more responsibility."},
+    {"de": "Könnte ich ein eigenes Projekt leiten?", "en": "Could I lead a project of my own?"},
+    {"de": "Ich habe schon Erfahrung damit, weil ich das früher gemacht habe.", "en": "I already have experience with it because I did it before."},
+    {"de": "Ich möchte mich weiterentwickeln.", "en": "I want to develop further."},
+    {"de": "Was müsste ich dafür tun?", "en": "What would I need to do for that?"}
+   ],
+   "opening_de": "Sie wollten mit mir sprechen. Worum geht es?"
+  },
+  {
+   "code": "ARZT_TELEFON", "kind": "roleplay", "title": "Doctor appointment by phone", "level": "A2",
+   "tutor_role_en": "the receptionist at a doctor's practice on the phone",
+   "setting_en": "You call a Hausarzt practice to get an appointment.",
+   "goal_en": "Say who you are, what the problem is, and agree on a day and time.",
+   "address": "Sie",
+   "chunks": [
+    {"de": "Ich hätte gern einen Termin.", "en": "I would like an appointment."},
+    {"de": "Ich habe seit drei Tagen Halsschmerzen.", "en": "I have had a sore throat for three days."},
+    {"de": "Haben Sie morgen Vormittag etwas frei?", "en": "Do you have anything free tomorrow morning?"},
+    {"de": "Ich bin gesetzlich versichert.", "en": "I have public health insurance."},
+    {"de": "Können Sie das bitte wiederholen?", "en": "Can you repeat that, please?"}
+   ],
+   "opening_de": "Praxis Dr. Becker, guten Tag. Was kann ich für Sie tun?"
+  },
+  {
+   "code": "BAHN_ANSCHLUSS", "kind": "roleplay", "title": "Deutsche Bahn: missed connection", "level": "A2/B1",
+   "tutor_role_en": "a staff member at the Deutsche Bahn service desk",
+   "setting_en": "Your train was late and you missed your connection. Ask for alternatives at the service desk.",
+   "goal_en": "Explain the problem, ask for the next connection, and ask if your ticket is still valid.",
+   "address": "Sie",
+   "chunks": [
+    {"de": "Mein Zug hatte Verspätung.", "en": "My train was late."},
+    {"de": "Ich habe meinen Anschluss verpasst.", "en": "I missed my connection."},
+    {"de": "Wann fährt der nächste Zug nach Frankfurt?", "en": "When does the next train to Frankfurt leave?"},
+    {"de": "Gilt mein Ticket noch?", "en": "Is my ticket still valid?"},
+    {"de": "Von welchem Gleis fährt er ab?", "en": "Which platform does it leave from?"}
+   ],
+   "opening_de": "Guten Tag, wie kann ich Ihnen helfen?"
+  },
+  {
+   "code": "GUPSHUP", "kind": "free", "title": "Free talk (Gupshup)", "level": "A2/B1",
+   "tutor_role_en": "Ustad, the teacher, in an open chat about Zee's day; asks follow-up questions",
+   "setting_en": "Open conversation about your day, your plans and your life in Germany.",
+   "goal_en": "Talk about your day. Use one weil and one verb in the Perfekt.",
+   "address": "du",
+   "chunks": [
+    {"de": "Heute habe ich viel gearbeitet.", "en": "Today I worked a lot."},
+    {"de": "Ich bin müde, weil ich wenig geschlafen habe.", "en": "I am tired because I slept little."},
+    {"de": "Am Abend möchte ich kochen.", "en": "In the evening I want to cook."},
+    {"de": "Morgen habe ich einen Termin.", "en": "Tomorrow I have an appointment."},
+    {"de": "Das finde ich interessant.", "en": "I find that interesting."}
+   ],
+   "opening_de": "Hallo! Wie war dein Tag heute?"
+  }
+ ]
+}

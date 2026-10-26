@@ -10,6 +10,10 @@ import { Recitation } from './features/recitation/Recitation'
 import { RecitationList } from './features/recitation/RecitationList'
 import { ReviewSession } from './features/review/ReviewSession'
 import { Sabaq } from './features/sabaq/Sabaq'
+import { Session } from './features/voice/Session'
+import { Shadowing } from './features/voice/Shadowing'
+import { VoiceHome } from './features/voice/VoiceHome'
+import { VoiceRecitation, VoiceRecitationList } from './features/voice/VoiceRecitation'
 import { Homework } from './features/writing/Homework'
 import { api, AuthError } from './lib/api'
 import { CheckQueue } from './pages/CheckQueue'
@@ -30,6 +34,16 @@ function DrillsRoute() {
 function RecitationRoute() {
   const { code } = useParams()
   return <Recitation key={code} />
+}
+
+function VoiceRecitationRoute() {
+  const { code } = useParams()
+  return <VoiceRecitation key={code} />
+}
+
+function SessionRoute() {
+  const { id } = useParams()
+  return <Session key={id} />
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -83,6 +97,11 @@ export default function App() {
                 <Route path="/recitation" element={<RecitationList />} />
                 <Route path="/recitation/:code" element={<RecitationRoute />} />
                 <Route path="/placement" element={<Placement />} />
+                <Route path="/voice" element={<VoiceHome />} />
+                <Route path="/voice/shadow" element={<Shadowing />} />
+                <Route path="/voice/session/:id" element={<SessionRoute />} />
+                <Route path="/voice/recite" element={<VoiceRecitationList />} />
+                <Route path="/voice/recite/:code" element={<VoiceRecitationRoute />} />
                 <Route path="/check" element={<CheckQueue />} />
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>
