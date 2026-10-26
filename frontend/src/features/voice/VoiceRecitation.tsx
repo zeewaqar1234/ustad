@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { api } from '../../lib/api'
 import { STAGE_NAME, type RecitationResult, type RecitationRow, type RecitationTable } from '../../lib/grammar'
-import { TalkInput } from './TalkInput'
+import { TalkInput, type SendMeta } from './TalkInput'
 import { useVoiceSettings } from './useVoiceSettings'
 
 export function VoiceRecitationList() {
@@ -40,6 +40,7 @@ export function VoiceRecitation() {
   const [result, setResult] = useState<(RecitationResult & { heard: string[] }) | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [elapsed, setElapsed] = useState(0)
 
   if (error) return <p className="p-4">Error: {(error as Error).message}</p>
   if (!data) return <p className="p-4">Loading…</p>
@@ -49,7 +50,7 @@ export function VoiceRecitation() {
     setBusy(true)
     setErr(null)
     try {
-      setResult(await api(`/api/recitation/${code}/voice`, { rows }))
+      setResult(await api(`/api/recitation/${code}/voice`, { rows, elapsed_ms: elapsed }))
       qc.invalidateQueries({ queryKey: ['recitation'] })
     } catch (e) {
       setErr((e as Error).message)
@@ -58,9 +59,10 @@ export function VoiceRecitation() {
     }
   }
 
-  function next(text: string) {
+  function next(text: string, meta: SendMeta) {
     const rows = [...said, text]
     setSaid(rows)
+    setElapsed((ms) => ms + meta.elapsed_ms)
     if (rows.length === data!.rows.length) void submit(rows)
   }
 
@@ -107,11 +109,17 @@ export function VoiceRecitation() {
           <TalkInput key={row} mode={settings.talk_mode} busy={busy} sendLabel="Next row" onSend={next} />
         </>
       )}
+      {!result && err && said.length === data.rows.length && (
+        <button onClick={() => submit(said)} disabled={busy} className="rounded-lg bg-neutral-900 p-3 font-semibold text-white">
+          Check again
+        </button>
+      )}
       {result && (
         <button
           onClick={async () => {
             setResult(null)
             setSaid([])
+            setElapsed(0)
             await refetch()
           }}
           className="rounded-lg bg-neutral-900 p-3 font-semibold text-white"

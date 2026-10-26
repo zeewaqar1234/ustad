@@ -29,8 +29,9 @@ def scenarios(include_flagged: bool = False) -> list[dict]:
     ]
 
 
-def scenario(code: str) -> dict:
-    for s in scenarios():
+def scenario(code: str, include_flagged: bool = False) -> dict:
+    """New sessions only start from approved scenarios; old sessions still open after a rebuild flags one."""
+    for s in scenarios(include_flagged):
         if s["code"] == code:
             return s
     raise KeyError(code)
@@ -83,7 +84,7 @@ def take_turn(
     db: Session, llm: Provider, s: VoiceSession, raw: str, input_mode: str, stt_restarts: int = 0
 ) -> VoiceTurn:
     """Zee's turn is already finished (he tapped Send). Clean it, ask the tutor, check the German."""
-    sc = scenario(s.scenario_code)
+    sc = scenario(s.scenario_code, include_flagged=True)
     cleaned = clean(raw)
     history = _transcript(s.turns)
     t = VoiceTurn(session_id=s.id, idx=len(s.turns), ts=utcnow(), input_mode=input_mode,

@@ -91,6 +91,25 @@ describe('Recognizer (stammer rule: only Zee ends a turn)', () => {
     expect(ev.onStopped).toHaveBeenCalledWith('Guten Tag')
   })
 
+  it('a restart that throws twice hands the text back instead of hanging', () => {
+    const { r, ev } = make()
+    r.start()
+    FakeRec.last.say([['Mein Zug', true]])
+    FakeRec.prototype.start = () => {
+      throw new Error('InvalidStateError')
+    }
+    try {
+      FakeRec.last.end()
+    } finally {
+      FakeRec.prototype.start = function (this: FakeRec) {
+        this.starts++
+      }
+    }
+    expect(r.active).toBe(false)
+    expect(ev.onFatal).toHaveBeenCalledWith('restart-failed')
+    expect(ev.onStopped).toHaveBeenCalledWith('Mein Zug')
+  })
+
   it('ignores no-speech: restart, turn stays open', () => {
     const { r, ev } = make()
     r.start()

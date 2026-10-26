@@ -90,16 +90,18 @@ def check(db: Session, code: str, typed: list[list[str]], today: date) -> dict:
 def rows_from_speech(code: str, spoken: list[str]) -> list[list[str]]:
     """Recitation by voice: one transcript per row -> typed-style rows for `check`.
 
-    Each cell's words are searched in order in the row's transcript (disfluencies stripped first;
-    case, punctuation and umlaut spelling ignored). A cell found -> its expected text; not found -> "".
+    Each cell's words are searched in order in the row's transcript (fillers dropped; case, punctuation
+    and umlaut spelling ignored). Repeats are not stripped: rows like "wir uns uns" need both words,
+    and a stammered repeat is just an extra word the search skips. A cell found -> its expected text; not found -> "".
     The cue column (column 0) may be said or not.
     """
-    from app.voice.disfluency import clean
+    from app.voice.disfluency import FILLERS
     from app.voice.shadowing import norm, words
 
     out = []
     for r, row in enumerate(table(code)["rows"]):
-        heard = [norm(w) for w in words(clean(spoken[r] if r < len(spoken) else ""))]
+        said = spoken[r] if r < len(spoken) else ""
+        heard = [norm(w) for w in words(said) if w.lower() not in FILLERS]
         pos, cells = 0, [row[0]]
         for want in row[1:]:
             need = [norm(w) for w in words(want)]

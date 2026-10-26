@@ -5,7 +5,7 @@ import { api } from '../../lib/api'
 import { speak } from '../../lib/tts'
 import type { ShadowResult, ShadowSentence } from '../../lib/voice'
 import { ShadowScore } from './ShadowScore'
-import { TalkInput } from './TalkInput'
+import { TalkInput, type SendMeta } from './TalkInput'
 import { useVoiceSettings } from './useVoiceSettings'
 
 export function Shadowing() {
@@ -40,13 +40,15 @@ export function Shadowing() {
     setNoAudio((await speak(s.de)) === 'none')
   }
 
-  async function check(text: string, meta: { stt_restarts: number }) {
+  async function check(text: string, meta: SendMeta) {
     setBusy(true)
     setErr(null)
     try {
       setResult(await api<ShadowResult>('/api/voice/shadow', { item_id: s.item_id, transcript: text, ...meta }))
+      return true
     } catch (e) {
-      setErr((e as Error).message)
+      setErr(`${(e as Error).message}. Your text is kept; tap Check again.`)
+      return false
     } finally {
       setBusy(false)
     }

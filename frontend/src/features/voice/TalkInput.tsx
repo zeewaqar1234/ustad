@@ -5,6 +5,7 @@ import { stopSpeaking } from '../../lib/tts'
 export interface SendMeta {
   input_mode: 'voice' | 'text'
   stt_restarts: number
+  elapsed_ms: number // active time for the day's minutes; never shown, never a limit
 }
 
 type Phase = 'idle' | 'listening' | 'finishing' | 'ready'
@@ -16,7 +17,8 @@ export function TalkInput(props: {
   busy?: boolean
   sendLabel?: string
   placeholder?: string
-  onSend: (text: string, meta: SendMeta) => void
+  // Return false (or reject) when sending failed: the text stays so Zee does not have to say it again.
+  onSend: (text: string, meta: SendMeta) => void | boolean | Promise<void | boolean>
 }) {
   const ctor = recognitionCtor()
   const rec = useRef<Recognizer | null>(null)
@@ -27,6 +29,7 @@ export function TalkInput(props: {
   const [typing, setTyping] = useState(!ctor)
   const restarts = useRef(0)
   const spoke = useRef(false)
+  const startedAt = useRef<number | null>(null)
 
   useEffect(() => () => rec.current?.stop(), [])
 
@@ -56,6 +59,7 @@ export function TalkInput(props: {
     if (!r || r.active) return
     stopSpeaking() // do not record the tutor's voice
     spoke.current = true
+    startedAt.current ??= Date.now()
     setFatal(null)
     setPhase('listening')
     r.start(keep)
@@ -67,14 +71,26 @@ export function TalkInput(props: {
     rec.current.stop()
   }
 
-  function send() {
+  async function send() {
     const t = text.trim()
     if (!t) return
-    props.onSend(t, { input_mode: spoke.current && !typing ? 'voice' : 'text', stt_restarts: restarts.current })
+    const meta = {
+      input_mode: spoke.current && !typing ? ('voice' as const) : ('text' as const),
+      stt_restarts: restarts.current,
+      elapsed_ms: startedAt.current === null ? 0 : Date.now() - startedAt.current,
+    }
+    let ok: void | boolean = false
+    try {
+      ok = await props.onSend(t, meta)
+    } catch {
+      ok = false
+    }
+    if (ok === false) return
     setText('')
     setPhase('idle')
     restarts.current = 0
     spoke.current = false
+    startedAt.current = null
   }
 
   const listening = phase === 'listening'
@@ -87,7 +103,10 @@ export function TalkInput(props: {
         {!ctor && <p className="text-sm">Speech recognition is not available in this browser. Type your answer.</p>}
         <textarea
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => {
+            startedAt.current ??= Date.now()
+            setText(e.target.value)
+          }}
           lang="de"
           rows={3}
           aria-label="Your answer in German"
