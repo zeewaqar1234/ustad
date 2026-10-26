@@ -76,5 +76,9 @@ Implementation (Phase 2): `app/llm/provider.py` (`OllamaProvider`, `complete_jso
 `app/services/grading.py`: LanguageTool pre-check → Ollama Grader → span check → LanguageTool check of the
 corrected text (flags → `needs_review`).
 
+Implementation (Phase 3): voice Tutor turns in `app/voice/tutor.py` (`TutorTurn` schema, static system
+prompt = `prompts/tutor.md` + learner + scenario card, conversation in the user message, transcript
+disfluency-stripped first); end-of-session review with `prompts/voice_review.md` (`SessionReview`, Grader role).
+
 Sources: Ollama API https://github.com/ollama/ollama/blob/main/docs/api.md · structured outputs release
 https://github.com/ollama/ollama/releases/tag/v0.5.0 · RAM guidance https://github.com/ollama/ollama/blob/v0.5.0/README.md

@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     # Built frontend (served by FastAPI in production). Ignored if the folder does not exist.
     static_dir: Path = REPO_ROOT / "frontend" / "dist"
     session_days: int = 30
+    # Server-side TTS fallback (docs/architecture.md §8): Piper, only used when the browser has no
+    # German speechSynthesis voice. Empty = off. Example: PIPER_BIN=piper PIPER_MODEL=/models/de_DE-thorsten-medium.onnx
+    piper_bin: str = ""
+    piper_model: str = ""
+    audio_dir: Path = REPO_ROOT / "audio"
     # Set to bootstrap the login password without the CLI: an argon2 hash, never the plain password.
     password_hash: str = ""
 

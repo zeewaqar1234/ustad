@@ -1,4 +1,4 @@
-"""Tables (docs/architecture.md §10). Phase 1: SRS + daily loop. Phase 2: grammar, writing, Ghalti."""
+"""Tables (docs/architecture.md §10). Phase 1: SRS + daily loop. Phase 2: grammar, writing, Ghalti. Phase 3: voice."""
 
 from datetime import date, datetime
 
@@ -238,3 +238,42 @@ class PlacementResult(Base):
     writing_homework_id: Mapped[int | None] = mapped_column(ForeignKey("homework.id"))
     level_band: Mapped[str] = mapped_column(String(20))
     items_marked: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class VoiceSession(Base):
+    """One roleplay / free-talk conversation (docs/modules.md §5.4). Shadowing attempts go to `attempt`."""
+
+    __tablename__ = "voice_session"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    mode: Mapped[str] = mapped_column(String(10))  # roleplay / free
+    scenario_code: Mapped[str] = mapped_column(String(40))
+    started: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
+    ended: Mapped[datetime | None] = mapped_column(UTCDateTime)
+    status: Mapped[str] = mapped_column(String(10), default="open")  # open / reviewed / lt_only
+    review_json: Mapped[dict | None] = mapped_column(JSON)
+    turns: Mapped[list["VoiceTurn"]] = relationship(order_by="VoiceTurn.idx")
+
+
+class VoiceTurn(Base):
+    """idx 0 is the tutor's opening line (no user text). Later turns: Zee's text + the tutor's reply."""
+
+    __tablename__ = "voice_turn"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    session_id: Mapped[int] = mapped_column(ForeignKey("voice_session.id"), index=True)
+    idx: Mapped[int] = mapped_column(Integer)
+    ts: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
+    input_mode: Mapped[str | None] = mapped_column(String(5))  # voice / text
+    user_raw: Mapped[str | None] = mapped_column(
+        Text
+    )  # transcript as recognised (kept, never graded)
+    user_clean: Mapped[str | None] = mapped_column(Text)  # disfluencies stripped: what gets graded
+    stt_restarts: Mapped[int] = mapped_column(
+        Integer, default=0
+    )  # Web Speech restarts in this turn
+    reply_de: Mapped[str | None] = mapped_column(Text)
+    reply_en: Mapped[str | None] = mapped_column(Text)
+    prompt_correction: Mapped[str | None] = mapped_column(Text)
+    errors_json: Mapped[list] = mapped_column(JSON, default=list)
+    tutor_status: Mapped[str] = mapped_column(String(10), default="ok")  # ok / offline
+    needs_review: Mapped[bool] = mapped_column(Boolean, default=False)
+    review_notes: Mapped[list] = mapped_column(JSON, default=list)
