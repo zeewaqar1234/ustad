@@ -10,13 +10,14 @@ Read this first every session. Then read only the docs/ file for the current pha
 | 1. MVP: SRS + daily loop | Done except deploy (open item below) | 2026-10-20 |
 | 2. Grammar (§5.2) + writing (§5.6) + Ghalti (§5.7) | Done (acceptance evidence below); real local-model run open | 2026-10-21 |
 | 3. Voice tutor | Done in code (evidence below); open: Zee's real-speech STT test, real Ollama + Piper runs | 2026-10-26 |
-| 4. Reading (§5.3) + listening (§5.5) | Not started; Reading stays scheduled here | |
+| 4. Reading (§5.3) + listening (§5.5) | Done in code (evidence below); open: real Ollama Author run, real Piper episode | 2026-10-26 |
 | 5–7 | Not started (work-writing templates of §5.6 scheduled in Phase 5) | |
 
-**Next session:** on Zee's machine: the Phase 3 STT word-loss test with his own speech (below), then
-`make test-ollama` (now covers grader + voice), approve the 7 flagged patterns, then Phase 4.
-Deploy over HTTPS is still open from Phase 1 (speech recognition and the mic need HTTPS on the phone).
-Acceptance list: docs/phases.md.
+**Next session:** on Zee's machine: the Phase 3 STT word-loss test with his own speech, then
+`make test-ollama` (grader + voice) and `make author` (first real Author texts; check density and German),
+install Piper + `de_DE-thorsten-medium` and build one Commute Podcast episode on the phone, approve the
+7 flagged patterns. Then Phase 5. Deploy over HTTPS is still open from Phase 1 (mic, speech recognition and
+the offline podcast cache all need HTTPS on the phone). Acceptance list: docs/phases.md.
 
 ## Builder gate log
 
@@ -24,6 +25,8 @@ Acceptance list: docs/phases.md.
 |---|---|---|
 | 2026-10-21 | 1 (Zee's count; the cloud-container DB had 0 because it is a fresh copy) | Closed by the rule. Zee overrode it: `profile.gate_override = true` in the container DB, `GET /api/stats/gate` → `{"study_days_last_7":0,"open":true,"override":true}`. Zee first asked for 4 mock `day_log` rows; Claude proposed the existing override instead so streak/attendance data stays real, and Zee chose the override. Phase 2 built as a gate exception. |
 | 2026-10-26 | 0 in the container DB (fresh copy; Zee's real count unknown here) | `gate_override = true` still set from 2026-10-21, so the gate reads open. Zee asked for Phase 3 in this session; built under that override. Zee: clear the override (`profile.gate_override = false`) once real study days are logged, so the gate works again. |
+
+| 2026-10-26 (Phase 4) | 0 in the container DB (`GET /api/stats/gate` → `{"study_days_last_7":0,"open":true,"override":true}`) | Open only through Zee's override from 2026-10-21. Zee asked for Phase 4 in this session; built under it. The override is still set: clear it (`profile.gate_override = false`) so the gate guards Phase 5. |
 
 ## Decision 2026-10-21: 100 % free resources
 
@@ -389,6 +392,103 @@ Open: the review's real duration on Zee's laptop is unmeasured (no Ollama here).
 (one retry on invalid JSON), so up to 2 × 180 s. If a 15-turn session still times out, raise
 `OLLAMA_REVIEW_TIMEOUT` or try a smaller model for the review.
 
+## Phase 4: what exists (2026-10-26)
+
+Gate: see the gate log (override). Branch restarted from `main` after PR #4 merged.
+
+- **Tables** (migration `165b7859bd8a`): `text` (model `ReadingText`; sentences `[{de, en}]`, glossary,
+  questions with answers, `known_density`, `for_date`, `source_url`/`licence`/`credit`, status, first
+  comprehension result), `audio_asset` (podcast episodes, script in `meta_json`), `dictation_item` (the
+  day's 5 Diktat sentences, fixed when first asked for).
+- **Known-word density** `app/reading/density.py`: spaCy `de_core_news_sm` lemmas. Counted: every word
+  except names, numbers, punctuation. Closed-class words (articles, pronouns, prepositions, conjunctions,
+  auxiliaries, particles) count as known. Known set = lemmas and forms of every taught item (any card
+  introduced) plus placement-known items, cached until that set changes. Compounds are not split, so the
+  measure errs on the hard side.
+- **Seed texts**: 6 own B1.1 texts (2 episodes of the Bilal serial, markets, history, Pakistan/Germany, sick
+  note at work), 128 to 146 words each, `data/seed/source/texts.json` → `make texts-build` (LanguageTool:
+  6 texts, 0 needs_review; the first run flagged "Lahore" and two short match options, both rewritten).
+  Loaded into the DB on first use (idempotent, keeps read state).
+- **Author job** `app/reading/author.py`: Author JSON `GradedText` (Pydantic, sent as Ollama `format`) →
+  density against Zee's words → outside 93 to 99 %: one regeneration with feedback (unknown words named, or
+  "too easy"), the closer draft kept → LanguageTool on body + question text; flag or LanguageTool down →
+  `needs_review`. Per day: slot 1 = next serial episode (continues from the seed episodes), slot 2 rotates
+  markets / crypto / history / pk_de / work / life. Ledger row per call (vendor `ollama`, €0).
+  **Nightly**: APScheduler in the app lifespan, 03:17 Europe/Berlin, fills today + tomorrow up to 2 texts
+  each; model offline = logged, retried next night. By hand: `make author` or "Generate texts now" in Lesen
+  (`POST /api/texts/generate`, 503 when the model is offline). `JOBS_ENABLED=false` turns the job off.
+- **Reader** (`/read`, `/read/:id`): today's texts (Author texts for today, else 2 unread seed texts) +
+  library with a known-words meter; tap a word → gloss sheet (lemma in sentence context, article, plural,
+  meaning from the text glossary or an existing item; gender guessed by spaCy when nothing is stored; no
+  meaning → Zee types one) → Add to SRS (deck `reader`, recog + produce cards taught now, example sentence
+  from the text). Long-press or EN → that sentence's English; "English under" (interlinear) off by default;
+  density meter; credit line always shown; `needs_review` banner. 3 questions (richtig/falsch, multiple
+  choice, matching), answers only in the Check response; first attempt kept; reading time counts up to
+  15 active minutes per text.
+- **Read-aloud / listening flow**: Listen to all, per-sentence replay, 0.75× / 1×, text hide/show
+  (read first optional, then listen, then answer), via `speechSynthesis` (Piper fallback as in Phase 3).
+- **Diktat** (`/listen/diktat`): 5 a day, from taught items' sentences (never untaught: ask before tell),
+  then sentences of texts read, then seed texts; 4 to 14 words. Word diff names each error: umlaut
+  (ä/ö/ü/ß in any spelling), capital, ending (known inflection endings), spelling, missing, extra; char
+  diff as in reviews; accuracy = right words / (expected + extra). First attempt kept; attempt row with
+  error tags.
+- **Commute Podcast** (`/listen/podcast`): yesterday's mistakes first ("Falsch: … pause … Richtig: …",
+  whole sentences from the fix card when there is one), then today's taught Sabaq sentences, then recently
+  taught ones, until about 10 min (cap 20 min). German only by default: sentence (slow, Piper
+  `--length_scale 1.3`), 4 s pause to say it in your head, sentence again. With `PIPER_MODEL_EN`: English
+  prompt, pause, German answer. Segments synthesised by Piper (cached, ledger rows), joined with silences
+  into one WAV (other sample rates resampled by ffmpeg), encoded to mp3 by ffmpeg when installed, else WAV.
+  One episode a day, rebuilt on demand. Offline: "Save for offline" puts it in the `ustad-podcast` cache;
+  the service worker serves `/api/podcast/*/audio` cache-first with range requests. Script viewable without
+  Piper.
+- **Sources** (`/listen/sources`): §11 groups with a one-line licence note each; links only to site or
+  section pages; YouTube box embeds the official player (`youtube-nocookie.com/embed/<id>?cc_load_policy=1&cc_lang_pref=de`),
+  no transcript scraping.
+- Home: "Reading and listening" with Lesen and Hören (Diktat x of 5).
+
+### Phase 4 acceptance evidence (run 2026-10-26)
+
+| Check | Result |
+|---|---|
+| Builder gate | `{"study_days_last_7":0,"open":true,"override":true}` (override, see gate log) |
+| Reader: tap-to-gloss/add, comprehension Qs | pytest: answers absent from `GET /api/texts/{id}`, scored once and kept, gloss from glossary, lemma in context ("Jahre" → "Jahr"), gender from context ("Bank" → f), add creates reader item with cards taught, second add `added: false`, known % rises after teaching; vitest: answers only after Check, interlinear off by default, tap opens gloss; Playwright `p4-reader-list.png`, `p4-reader.png`, `p4-gloss.png`, `p4-questions.png` |
+| Nightly Author job, 2 texts/day, density check | pytest (model mocked): regeneration once when out of band and the closer draft kept, feedback names unknown words, in-band draft not regenerated, LanguageTool flag → `needs_review`, ledger rows €0, `ensure` makes 2/day (serial episodes 3, 4 after the seed's 1, 2), nothing more when filled, offline → 503 / job returns 0, scheduler registers the 03:xx job, off with `JOBS_ENABLED=false`. **Not run against a real model** (no Ollama here). Open item |
+| Density calculator unit test | `test_density_counts_known_lemmas_and_skips_names_numbers_punct`, surface-form match, empty text, spaCy lemma test |
+| Read-aloud via `speechSynthesis` | Reader buttons (all, per sentence, 0.75×/1×, text toggle); headless Chromium has no German voice, so audio itself is not verified here |
+| Diktat (5/day) with diff | pytest: 15 word-kind cases (umlaut incl. ß/ae spellings, capitals, endings "einen/einem", "neu/neue", spelling), alignment with missing/extra, accuracy; API: 5 fixed per day, first attempt kept, 404 for other refs, attempt row; only taught items; vitest: sentence never shown before Check; result stays after the refetch; Playwright `p4-diktat.png` |
+| Commute Podcast (Piper, concatenation, offline cache) | pytest with a fake Piper writing real WAVs: silence join exact to the frame, mistakes before sentences with pauses, English prompts only with an English voice, 10 to 20 min length bound, 503 without Piper, 422 with nothing to read, build → mp3 (ffmpeg present here) served as audio, a 16 kHz English voice resampled, rebuild replaces the file, ledger rows; Playwright `p4-podcast.png`; `vite build` sw.js has the `ustad-podcast` cache rule. **Real Piper voice not run** (as in Phase 3). Open item |
+| Sources page per §11 | vitest YouTube parser + embed URL; Playwright `p4-sources.png` (embed has `cc_load_policy=1&cc_lang_pref=de`) |
+| pytest | 258 passed, 8 skipped (real-model tests) |
+| vitest | 35 passed (10 new: reader 5, listening 5) |
+| Playwright 375px | 11 passed on a fresh e2e DB (3 new Phase 4 + 8 earlier), no horizontal scroll on new screens |
+| make lint | ruff check + format clean; oxlint 0 errors (2 old warnings); tsc clean |
+
+Bugs found by the e2e run and fixed (with regression tests): first visit to Home on a fresh DB returned 500
+(texts and Diktat requests both inserting the seed texts / the day's Diktat set at once; now chosen and
+committed inside a lock); Diktat jumped to the next sentence after Check and hid the result.
+
+### Open Phase 4 items
+
+- [ ] **Real Author run**: `make author` with Ollama. Check: density lands in 93 to 99 % (in a fresh DB the
+  seed texts read about 48 % known because almost nothing is taught yet; Zee's real DB will read higher),
+  German quality, questions answerable. If the local model cannot hit the band, the closer draft is stored
+  with its measured density.
+- [ ] **Real Piper episode** on the phone: Piper + `de_DE-thorsten-medium`, optional English voice
+  (check its licence first; `thorsten`/`kerstin` are the CC0 ones in §11), Build, Save for offline, play in
+  flight mode. Piper flag `--length_scale` to be checked against the installed version.
+- [ ] Docker image has no ffmpeg (episodes stay WAV there) and no Piper; add both if the server builds episodes.
+- [ ] Not built (later): importing Bundesbank/BaFin RSS texts into the reader (storable with credit), DW
+  Top-Thema MP3 feed in-app. The sources page links to them for now.
+- Facts in seed texts are from the author's knowledge, not checked against sources here: history-01
+  (Schabowski, 9 Nov 1989, paraphrased), work-01 (sick note after more than 3 calendar days, eAU since 2023,
+  6 weeks continued pay). Zee: check before relying on them.
+
+### How to rerun the Phase 4 e2e check
+
+Same as Phase 1, plus a fake Piper so the podcast builds: start the server with
+`PIPER_BIN=<fake piper> PIPER_MODEL=de_DE-thorsten-medium.onnx AUDIO_DIR=<scratch>/audio JOBS_ENABLED=false`
+(the fake is `FAKE_PIPER` in `backend/tests/test_phase4.py`, saved as an executable file).
+
 ## Dependencies added (one-line reasons)
 
 Backend:
@@ -407,6 +507,9 @@ react-router + @tanstack/react-query (multi-page UI, server state), vite-plugin-
 Phase 2: none (Ollama is called with the existing httpx; Ollama itself is a separate local program, not a
 Python/npm dependency).
 Phase 3: none (Web Speech is a browser API; Piper is an optional separate program run by path).
+Phase 4: spacy + de_core_news_sm (lemmas for known-word density, as chosen in §8; model wheel pinned by URL,
+MIT); apscheduler 3.x (nightly Author job inside the app, as chosen in §8). ffmpeg (mp3) is an optional
+separate program, like Piper. Frontend: none.
 
 ## Known issues / notes
 
