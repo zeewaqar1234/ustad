@@ -1,0 +1,50 @@
+{
+ "_note": "Three transcripts in the shape Web Speech returns for stammered speech (authored to match the patterns in docs/modules.md §5.4, not recorded from Zee). Replace with Zee's real transcripts after the Phase 3 STT test.",
+ "fixtures": [
+  {
+   "id": "kantine_perfekt",
+   "scenario": "KANTINE",
+   "raw": "Am am Wochenende ähm habe ich ich nach Frankfurt ge-ge-gefahren",
+   "clean": "Am Wochenende habe ich nach Frankfurt gefahren",
+   "reply": {
+    "reply_de": "Oh, nach Frankfurt! Was hast du dort gemacht?",
+    "reply_en_gloss": "Oh, to Frankfurt! What did you do there?",
+    "prompt_correction": "Achtung: fahren im Perfekt, mit haben oder sein?",
+    "errors": [{"orig": "habe", "fix": "bin", "tag": "AUX_HABEN_SEIN", "note": "fahren (movement) takes sein"}],
+    "new_chunks": [],
+    "turn_goal_met": false
+   },
+   "expected_tag": "AUX_HABEN_SEIN"
+  },
+  {
+   "id": "desk_weil",
+   "scenario": "DESK_MEETING",
+   "raw": "Heute ich teste die neue Version w- w- weil, äh, die Daten fehlen",
+   "clean": "Heute ich teste die neue Version weil die Daten fehlen",
+   "reply": {
+    "reply_de": "Gut. Wann ist der Test fertig?",
+    "reply_en_gloss": "Good. When is the test finished?",
+    "prompt_correction": "Nach 'Heute': wo steht das Verb?",
+    "errors": [{"orig": "Heute ich teste", "fix": "Heute teste ich", "tag": "V2_POSITION", "note": "verb second after a time word"}],
+    "new_chunks": ["Ich bin fast fertig."],
+    "turn_goal_met": true
+   },
+   "expected_tag": "V2_POSITION"
+  },
+  {
+   "id": "bahn_dativ",
+   "scenario": "BAHN_ANSCHLUSS",
+   "raw": "Ich ich habe meinen Anschluss verpasst mit der mit der Zug aus Köln hm",
+   "clean": "Ich habe meinen Anschluss verpasst mit der Zug aus Köln",
+   "reply": {
+    "reply_de": "Das tut mir leid. Wohin möchten Sie fahren?",
+    "reply_en_gloss": "I am sorry. Where do you want to go?",
+    "prompt_correction": null,
+    "errors": [{"orig": "mit der Zug", "fix": "mit dem Zug", "tag": "CASE_DAT", "note": "mit + Dativ: dem Zug"}],
+    "new_chunks": [],
+    "turn_goal_met": false
+   },
+   "expected_tag": "CASE_DAT"
+  }
+ ]
+}

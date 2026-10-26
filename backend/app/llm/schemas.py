@@ -56,3 +56,50 @@ class GradeResult(BaseModel):
     @classmethod
     def _no_blank(cls, v: list[str]) -> list[str]:
         return [s.strip() for s in v if s.strip()]
+
+
+class TurnError(BaseModel):
+    orig: str = Field(min_length=1, description="Zee's wrong words, exact")
+    fix: str
+    tag: ErrorTag
+    note: str = Field(description="one line, English")
+
+
+class TutorTurn(BaseModel):
+    """Tutor output for one voice turn (docs/llm.md, tutor system prompt)."""
+
+    reply_de: str = Field(
+        min_length=1, max_length=400, description="max 2 sentences, then a question"
+    )
+    reply_en_gloss: str
+    prompt_correction: str | None = Field(
+        default=None, max_length=200, description="at most ONE prompt (not a recast), or null"
+    )
+    errors: list[TurnError] = Field(default_factory=list, max_length=6)
+    new_chunks: list[str] = Field(default_factory=list, max_length=3)
+    turn_goal_met: bool = False
+
+
+class BetterError(BaseModel):
+    span: str = Field(min_length=1, description="exact substring of what Zee said")
+    fix: str
+    tag: ErrorTag
+    reason_en: str = Field(min_length=1)
+
+
+class BetterLine(BaseModel):
+    turn: int = Field(ge=1, description="turn number as given in the transcript")
+    better: str = Field(min_length=1, description="corrected, more natural version of the line")
+    errors: list[BetterError] = Field(default_factory=list)
+
+
+class SessionReview(BaseModel):
+    """End-of-session "Say it better" review (docs/modules.md §5.4 mode 5), Grader role."""
+
+    lines: list[BetterLine]
+    teaching_points: list[str] = Field(max_length=3)
+
+    @field_validator("teaching_points")
+    @classmethod
+    def _no_blank(cls, v: list[str]) -> list[str]:
+        return [s.strip() for s in v if s.strip()]
