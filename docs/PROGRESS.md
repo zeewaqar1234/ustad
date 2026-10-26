@@ -11,6 +11,7 @@ Read this first every session. Then read only the docs/ file for the current pha
 | 2. Grammar (§5.2) + writing (§5.6) + Ghalti (§5.7) | Done (acceptance evidence below); real local-model run open | 2026-10-21 |
 | 3. Voice tutor | Done in code (evidence below); open: Zee's real-speech STT test, real Ollama + Piper runs | 2026-10-26 |
 | 4. Reading (§5.3) + listening (§5.5) | Done in code (evidence below); open: real Ollama Author run, real Piper episode | 2026-10-26 |
+| V0 (v2 brief) | Done (evidence in "V2 phases" below) | 2026-10-26 |
 | 5–7 | Not started (work-writing templates of §5.6 scheduled in Phase 5) | |
 
 **Next session:** on Zee's machine: the Phase 3 STT word-loss test with his own speech, then
@@ -540,3 +541,43 @@ separate program, like Piper. Frontend: none.
 - In the cloud container the Docker daemon is not started automatically: run `dockerd` in the background first.
 - pytest shows a StarletteDeprecationWarning about `httpx` in TestClient (upstream; harmless for now).
 - The LanguageTool test skips (not fails) when the container is not running, so `make test` works without Docker.
+
+## V2 phases
+
+Brief: docs/USTAD_V2_CODEX_BRIEF.md (v2 overrides phone-first, PWA and stars in older docs). Next phase: V1.
+Builder gate applies from V3 on; V0 is a UI and bug-fix phase.
+
+### V0: MacBook layout, clean UI shell, cleanup (2026-10-26)
+
+- AGENTS.md created, CLAUDE.md updated to the same rules (46 lines each).
+- Shell: fixed 220 px sidebar (Today; Practice: Lesen, Hören, Schreiben, Sprechen; Grammatik, Ghalti,
+  Fortschritt; Settings with Placement, Check queue, Sources, Log out). Main area max 1120 px, exercise
+  screens a centered 720 px column. Shared `PageHeader`, `ListRow`, `StatusPill`, `Column` in `components/ui.tsx`.
+- Removed: phone layout, bottom sheets, hold-to-talk, PWA (`vite-plugin-pwa`, manifest, icons; `main.tsx`
+  unregisters old service workers and caches), "Save for offline" (podcast keeps a download link), stars,
+  emoji, mic orb animations, gradients and colour pills in the voice screens.
+- Pahara typed and spoken merged on `/recitation` (Type / Speak switch, `?mode=speak`); old `/voice/recite` routes gone.
+- Voice: click Start / Stop; Space toggles listening only outside text fields; Stop never sends. No timers.
+- Today: Next, Today's loop, Practice. Placement, Ghalti, Check queue left Home.
+- Backend: L8 `profile.level_band` NULL until placement (migration `a0c1v2zero01` with downgrade; Author and
+  tutor get "level not placed" text; UI "Not placed"); L9 copy "Curriculum start: B1.1 stage. This is the app's
+  own placement, not an official CEFR result."; L11 `GET /api/homework/today` read-only (`id: null` preview),
+  `POST /api/homework/today` creates; L13 `make gate-reset`.
+- Dependencies: removed `vite-plugin-pwa`. Added none.
+
+| Check | Result |
+|---|---|
+| pytest | 265 passed, 10 skipped, 1 failed: `test_daily_loop` (assert on sibling card due > 1 h). It also fails on the commit before V0 (checked with the V0 changes stashed), so it is not from V0. Not investigated yet. |
+| vitest | 43 passed |
+| Playwright 1440x900 | 14 passed on a fresh e2e DB with a fake Piper; includes no horizontal scroll at 1024 and 1440 on 12 routes plus reading/listening routes and the voice routes |
+| make lint | ruff check and format clean; oxlint 0 errors, 1 old warning (set-state-in-effect in ReviewSession); tsc clean |
+| Forbidden-term grep | `max-w-md`, `isMobile`, `orientation`, `vite-plugin-pwa`, `StarRow`: no hits in frontend src, e2e, config |
+| Emoji/symbol scan of `frontend/src` | only ✓ and ✗ marking right/wrong answers (Drills, Recitation, VoiceRecitation, Placement, Reader, ShadowScore). ▲ ● ■ gender symbols are outside the scanned ranges and kept on purpose. |
+| Screenshots | `docs/evidence/v2/v0-*.png` at 1440x900 (today, reader gloss, voice chat, ghalti, settings and more) |
+
+Open after V0:
+- `test_daily_loop` failure above.
+- Backend `VoiceSettings` still accepts `talk_mode` (dead; frontend no longer sends it).
+- Docs older than V0 (SPEC.md, docs/*.md) still say phone-first; the brief and CLAUDE.md win.
+- Zee: run `make gate-reset` on the Mac DB. The override from 2026-10-21 is still set there.
+- Run the e2e on a fresh DB; the specs still depend on order and state. Login is rate limited in memory, so restart the server after failed login runs.

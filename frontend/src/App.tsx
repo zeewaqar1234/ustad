@@ -21,7 +21,6 @@ import { Sabaq } from './features/sabaq/Sabaq'
 import { Session } from './features/voice/Session'
 import { Shadowing } from './features/voice/Shadowing'
 import { VoiceHome } from './features/voice/VoiceHome'
-import { VoiceRecitation, VoiceRecitationList } from './features/voice/VoiceRecitation'
 import { Homework } from './features/writing/Homework'
 import { api, AuthError } from './lib/api'
 import { CheckQueue } from './pages/CheckQueue'
@@ -42,11 +41,6 @@ function DrillsRoute() {
 function RecitationRoute() {
   const { code } = useParams()
   return <Recitation key={code} />
-}
-
-function VoiceRecitationRoute() {
-  const { code } = useParams()
-  return <VoiceRecitation key={code} />
 }
 
 function SessionRoute() {

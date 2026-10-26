@@ -5,14 +5,12 @@ import { Column, PageHeader } from '../../components/ui'
 import { api } from '../../lib/api'
 import { STAGE_NAME, type RecitationResult, type RecitationTable } from '../../lib/grammar'
 import { TalkInput, type SendMeta } from '../voice/TalkInput'
-import { useVoiceSettings } from '../voice/useVoiceSettings'
 
 // One row at a time: Zee says the row (the cue word may be said or not), checks the text, next row.
 // No timer, no auto turn-end: only Send ends a row.
 export function VoiceRecitation() {
   const { code = '' } = useParams()
   const qc = useQueryClient()
-  const settings = useVoiceSettings()
   const { data, error, refetch } = useQuery({
     queryKey: ['recitation', code],
     queryFn: () => api<RecitationTable>(`/api/recitation/${code}`),
@@ -88,7 +86,7 @@ export function VoiceRecitation() {
       {!result && row < data.rows.length && (
         <>
           <p className="text-sm text-neutral-600">Say row {row + 1} of {data.rows.length}.</p>
-          <TalkInput key={row} mode={settings.talk_mode} busy={busy} sendLabel="Next row" onSend={next} />
+          <TalkInput key={row} busy={busy} sendLabel="Next row" onSend={next} />
         </>
       )}
       {!result && err && said.length === data.rows.length && (

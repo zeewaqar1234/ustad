@@ -9,7 +9,7 @@ async function login(page: Page) {
   await page.goto('/')
   await page.getByLabel('Password').fill(PASSWORD)
   await page.getByRole('button', { name: 'Log in' }).click()
-  await expect(page.getByRole('heading', { name: 'Today' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible()
 }
 
 async function noSideScroll(page: Page) {

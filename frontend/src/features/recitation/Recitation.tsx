@@ -5,7 +5,7 @@ import { Column, PageHeader } from '../../components/ui'
 import { UmlautKeys } from '../../components/UmlautKeys'
 import { api } from '../../lib/api'
 import { insertAt } from '../../lib/insertAt'
-import { useRecitationMode } from './RecitationList'
+import { useRecitationMode } from './useRecitationMode'
 import { VoiceRecitation } from './VoiceRecitation'
 import { STAGE_NAME, type RecitationResult, type RecitationTable } from '../../lib/grammar'
 
