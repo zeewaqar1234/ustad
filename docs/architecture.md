@@ -93,8 +93,9 @@ SQLite (single user), SQLAlchemy 2.x + Alembic migrations. All timestamps UTC, d
 | `homework` | id, kind (homework/tagebuch/placement), assigned, due, pattern_id?, prompt, submission, grade_json, status (open/graded/lt_only), submitted_at |
 | `recitation_progress` | code, stage (highest passed, -1 none), last_passed, passes |
 | `placement_result` | id, ts, answers, by_band, writing_homework_id, level_band, items_marked |
-| `text` | id, title, body_de, level, topic, known_density, source_url, licence, audio_asset_id? |
-| `audio_asset` | id, path, kind (tts/user/external), text_ref, voice, duration_s |
+| `text` | id, title, body_de, sentences (de/en), glossary, questions, level, topic, known_density, for_date, source_url, licence, credit, status, audio_asset_id? |
+| `audio_asset` | id, path, kind (tts/podcast/user/external), text_ref, voice, duration_s, meta_json (podcast script) |
+| `dictation_item` | date, idx, ref (item/text sentence), de, typed, accuracy, result_json (the day's 5 Diktat sentences) |
 | `voice_session` / `voice_turn` | session meta; turn: user_transcript, reply_de, pron_json, audio refs (grading lives in the session review) |
 | `test` / `test_result` | type (weekly/monthly/mock), module scores 0–100, items_json |
 | `milestone` | code, title, achieved_at, evidence_ref |
