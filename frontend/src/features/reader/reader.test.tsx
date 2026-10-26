@@ -103,17 +103,35 @@ describe('Reader', () => {
     expect(screen.getByText('The train is late.')).toBeInTheDocument()
   })
 
-  it('tap a word opens the gloss with article and Add to SRS', async () => {
+  it('click a word opens the gloss panel, Escape and Close shut it', async () => {
     const fetchMock = mockFetch()
     renderReader()
     await screen.findByText('Bilal in Frankfurt')
     fireEvent.click(screen.getByRole('button', { name: 'Bahn' }))
+    const panel = await screen.findByRole('dialog', { name: 'Meaning of Bahn' })
+    expect(panel.tagName).toBe('ASIDE')
+    expect(panel.className).not.toMatch(/fixed|bottom-0/)
     expect(await screen.findByText('die Bahn')).toBeInTheDocument()
     expect(screen.getByText('train, railway')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Add to SRS' }))
     expect(await screen.findByText('Added to your cards.')).toBeInTheDocument()
     const add = fetchMock.mock.calls.find(([u]) => u === '/api/texts/3/add')
     expect(JSON.parse(add![1]!.body as string)).toMatchObject({ word: 'Bahn', en: 'train, railway' })
+    fireEvent.keyDown(window, { key: 'Escape' })
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Bahn' }))
+    fireEvent.click(await screen.findByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('EN button per sentence shows the translation', async () => {
+    mockFetch()
+    renderReader()
+    await screen.findByText('Bilal in Frankfurt')
+    expect(screen.queryByText('The train is late.')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Translate sentence 2' }))
+    expect(screen.getByText('The train is late.')).toBeInTheDocument()
+    expect(screen.queryByText('Bilal goes to work.')).not.toBeInTheDocument()
   })
 
   it('hides answers until Check, then shows them', async () => {

@@ -59,8 +59,8 @@ describe('TalkInput', () => {
   it('never ends or sends a turn by itself; only Stop then Send do', () => {
     ;(window as unknown as Record<string, unknown>).SpeechRecognition = FakeRec
     const onSend = vi.fn()
-    render(<TalkInput mode="tap" onSend={onSend} />)
-    fireEvent.click(screen.getByRole('button', { name: 'Tap to talk' }))
+    render(<TalkInput onSend={onSend} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Start' }))
     const rec = FakeRec.last
     act(() => rec.onresult?.({ resultIndex: 0, results: [Object.assign([{ transcript: 'ich ich bin' }], { isFinal: true })] }))
     for (let i = 0; i < 10; i++) act(() => rec.onend?.()) // the browser keeps ending recognition
@@ -73,24 +73,37 @@ describe('TalkInput', () => {
     expect(onSend).toHaveBeenCalledWith('ich ich bin', expect.objectContaining({ input_mode: 'voice', stt_restarts: 10 }))
   })
 
-  it('hold mode: letting go stops listening, Send still needs a tap', () => {
+  it('Space starts and stops listening outside text fields; Stop never sends', () => {
     ;(window as unknown as Record<string, unknown>).SpeechRecognition = FakeRec
     const onSend = vi.fn()
-    render(<TalkInput mode="hold" onSend={onSend} />)
-    const btn = screen.getByRole('button', { name: 'Hold to talk' })
-    btn.setPointerCapture = () => {}
-    fireEvent.pointerDown(btn, { pointerId: 1 })
+    render(<TalkInput onSend={onSend} />)
+    fireEvent.keyDown(document.body, { key: ' ' })
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
     act(() => FakeRec.last.onresult?.({ resultIndex: 0, results: [Object.assign([{ transcript: 'Hallo' }], { isFinal: true })] }))
-    fireEvent.pointerUp(btn, { pointerId: 1 })
+    fireEvent.keyDown(document.body, { key: ' ' })
     act(() => FakeRec.last.onend?.())
+    expect(screen.getByLabelText('What was heard (you can fix it)')).toHaveValue('Hallo')
     expect(onSend).not.toHaveBeenCalled()
     fireEvent.click(screen.getByRole('button', { name: 'Send' }))
     expect(onSend).toHaveBeenCalledWith('Hallo', expect.objectContaining({ input_mode: 'voice', stt_restarts: 0 }))
   })
 
+  it('Space does nothing inside the text box or on a button', () => {
+    ;(window as unknown as Record<string, unknown>).SpeechRecognition = FakeRec
+    render(<TalkInput onSend={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Type instead' }))
+    const box = screen.getByLabelText('Your answer in German')
+    fireEvent.keyDown(box, { key: ' ' })
+    expect(screen.queryByRole('button', { name: 'Stop' })).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Speak instead' }))
+    const startBtn = screen.getByRole('button', { name: 'Start' })
+    fireEvent.keyDown(startBtn, { key: ' ' })
+    expect(screen.queryByRole('button', { name: 'Stop' })).toBeNull()
+  })
+
   it('keeps the text when sending fails', async () => {
     const onSend = vi.fn().mockResolvedValue(false)
-    render(<TalkInput mode="tap" onSend={onSend} />)
+    render(<TalkInput onSend={onSend} />)
     fireEvent.change(screen.getByLabelText('Your answer in German'), { target: { value: 'Ich bin da.' } })
     await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Send' })))
     expect(onSend).toHaveBeenCalled()
@@ -99,7 +112,7 @@ describe('TalkInput', () => {
 
   it('falls back to typing when SpeechRecognition is missing', () => {
     const onSend = vi.fn()
-    render(<TalkInput mode="tap" onSend={onSend} />)
+    render(<TalkInput onSend={onSend} />)
     expect(screen.getByText(/not available in this browser/)).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Your answer in German'), { target: { value: 'Ich bin müde.' } })
     fireEvent.click(screen.getByRole('button', { name: 'Send' }))
@@ -113,7 +126,7 @@ const sources = import.meta.glob(['./*.tsx', '../../lib/speech.ts'], { query: '?
 describe('no code path ends a user turn automatically', () => {
   it('voice turn code has no timers or speech-end handlers', () => {
     const files = Object.entries(sources).filter(([f]) => !f.endsWith('.test.tsx'))
-    expect(files.length).toBeGreaterThanOrEqual(6)
+    expect(files.length).toBeGreaterThanOrEqual(5)
     for (const [file, src] of files) {
       for (const banned of ['setTimeout', 'setInterval', 'onspeechend', 'onsoundend', 'onaudioend', 'onnomatch']) {
         expect(`${file}: ${(src as string).includes(banned)}`).toBe(`${file}: false`)

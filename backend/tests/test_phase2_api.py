@@ -87,7 +87,7 @@ def test_wrong_drill_answer_lands_in_ghalti(api):
 
 
 def test_homework_red_pen_creates_fix_card_in_manzil(api, llm):
-    hw = api.get("/api/homework/today").json()
+    hw = api.post("/api/homework/today").json()
     assert hw["status"] == "open" and hw["prompt"]
     fx = FIXTURES[0]
     llm.queue.append(fx["model_reply"])
@@ -104,7 +104,7 @@ def test_homework_red_pen_creates_fix_card_in_manzil(api, llm):
 
 
 def test_homework_offline_model_gives_lt_only_and_regrade(api, llm, session_factory):
-    hw = api.get("/api/homework/today").json()
+    hw = api.post("/api/homework/today").json()
     r = api.post(f"/api/homework/{hw['id']}/submit", json={"text": "Ich bin müde."}).json()
     assert r["status"] == "lt_only" and r["grade"]["source"] == "languagetool_only"
     assert api.get("/api/mistakes").json()["total"] == 0  # provisional: not in Ghalti
@@ -197,7 +197,7 @@ def test_placement_level_rule():
 
 def test_fix_sentence_cards_never_become_sabaq(api, llm, session_factory):
     llm.queue.append(FIXTURES[0]["model_reply"])
-    hw = api.get("/api/homework/today").json()
+    hw = api.post("/api/homework/today").json()
     api.post(f"/api/homework/{hw['id']}/submit", json={"text": FIXTURES[0]["text"]})
     from app.services.daily import next_unit_order
 
@@ -257,3 +257,26 @@ def test_untested_band_is_not_passed():
 
     by = {b: {"correct": 10, "total": 10} for b in ("A2", "B1.1", "B1.2")}
     assert level({**by, "B2": {"correct": 0, "total": 0}}, 9) == "B1 Board"
+
+
+def test_get_today_homework_does_not_write(api, session_factory):
+    from app.models import Homework
+
+    s = session_factory()
+    pre = api.get("/api/homework/today").json()
+    assert pre["id"] is None and pre["prompt"] and pre["status"] == "open"
+    assert s.query(Homework).count() == 0
+    created = api.post("/api/homework/today").json()
+    assert created["id"] is not None
+    assert api.post("/api/homework/today").json()["id"] == created["id"]
+    assert api.get("/api/homework/today").json()["id"] == created["id"]
+
+
+def test_level_band_is_null_until_placement_and_prompts_say_so(api, session_factory):
+    from app.reading.author import NOT_PLACED, _learner
+    from app.voice import tutor
+
+    s = session_factory()
+    assert s.get(Profile, 1).level_band is None
+    assert _learner(s) == NOT_PLACED
+    assert "not placed" in tutor._learner(s)

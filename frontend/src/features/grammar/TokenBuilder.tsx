@@ -1,4 +1,4 @@
-/** Sentence surgery: tap word chips to build the sentence, tap a placed chip to take it back. */
+/** Sentence surgery: click word chips to build the sentence, click a placed chip to take it back. */
 export function TokenBuilder(props: {
   tokens: string[]
   placed: number[]
@@ -13,14 +13,14 @@ export function TokenBuilder(props: {
         aria-label="Your sentence"
         lang="de"
       >
-        {placed.length === 0 && <span className="p-2 text-neutral-500">Tap the words in order.</span>}
+        {placed.length === 0 && <span className="p-2 text-neutral-500">Click the words in order.</span>}
         {placed.map((ti, pi) => (
           <button
             key={`${ti}-${pi}`}
             type="button"
             disabled={disabled}
             onClick={() => onChange(placed.filter((_, j) => j !== pi))}
-            className="min-h-11 rounded border-2 border-neutral-900 bg-neutral-900 px-3 text-lg text-white"
+            className="min-h-10 rounded border-2 border-neutral-900 bg-neutral-900 px-3 text-lg text-white"
             aria-label={`Remove ${tokens[ti]}`}
           >
             {tokens[ti]}
@@ -32,7 +32,7 @@ export function TokenBuilder(props: {
           placed.includes(ti) ? (
             <span
               key={ti}
-              className="min-h-11 rounded border-2 border-dashed border-neutral-300 px-3 text-lg leading-10 text-transparent"
+              className="min-h-10 rounded border-2 border-dashed border-neutral-300 px-3 text-lg leading-9 text-transparent"
               aria-hidden
             >
               {t}
@@ -44,7 +44,7 @@ export function TokenBuilder(props: {
               disabled={disabled}
               data-token
               onClick={() => onChange([...placed, ti])}
-              className="min-h-11 rounded border-2 border-neutral-900 bg-white px-3 text-lg active:bg-neutral-200"
+              className="min-h-10 rounded border-2 border-neutral-900 bg-white px-3 text-lg hover:bg-neutral-200"
             >
               {t}
             </button>

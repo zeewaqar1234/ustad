@@ -1,5 +1,3 @@
-import type { Stars } from '../../lib/stars'
-
 // Small inline icons (no icon library: no new dependency).
 const P = { fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const
 
@@ -31,26 +29,5 @@ export function Icon({ name, className = 'size-5' }: { name: string; className?:
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true" {...P}>
       {paths[name]}
     </svg>
-  )
-}
-
-// Stars pop in one after another. The label carries the meaning (not colour alone).
-export function StarRow({ stars, size = 'size-6', label }: { stars: Stars; size?: string; label?: string }) {
-  return (
-    <span className="inline-flex items-center gap-0.5" role="img" aria-label={label ?? `${stars} of 3 stars`}>
-      {[1, 2, 3].map((i) => (
-        <svg
-          key={i}
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          className={`${size} motion-safe:animate-pop ${i <= stars ? 'fill-amber-400 text-amber-500' : 'fill-neutral-200 text-neutral-300'}`}
-          style={{ animationDelay: `${(i - 1) * 120}ms` }}
-          stroke="currentColor"
-          strokeWidth={1}
-        >
-          <path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9L12 2.5Z" />
-        </svg>
-      ))}
-    </span>
   )
 }

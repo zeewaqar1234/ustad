@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { DiktatResult, DiktatToday } from '../../lib/reading'
 import { Diktat } from './Diktat'
+import { Podcast } from './Podcast'
 import { embedUrl, youtubeId } from './youtube'
 
 const SAY = 'Ich möchte einen Termin vereinbaren.'
@@ -57,7 +58,7 @@ describe('Diktat', () => {
     await screen.findByText(/Sentence 1 of 1/)
     expect(container.textContent).not.toContain('Termin')
     fireEvent.change(screen.getByLabelText('Write what you hear'), { target: { value: 'Ich mochte einen termin vereinbaren' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Check' }))
+    fireEvent.keyDown(screen.getByLabelText('Write what you hear'), { key: 'Enter' })
     expect(await screen.findByText('60% of words right')).toBeInTheDocument()
     expect(screen.getByText(`Correct: ${SAY}`)).toBeInTheDocument()
     expect(screen.getByLabelText('Difference to the correct answer')).toBeInTheDocument()
@@ -103,6 +104,33 @@ describe('Diktat', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(await screen.findByText(/Sentence 2 of 2/)).toBeInTheDocument()
     expect(screen.queryByText('Wir fahren mit der Bahn.')).toBeNull()
+  })
+})
+
+describe('Podcast', () => {
+  afterEach(() => {
+    cleanup()
+    vi.unstubAllGlobals()
+  })
+
+  it('offers a plain mp3 download and no offline save', async () => {
+    const ep = { id: 1, date: '2026-10-26', url: '/api/podcast/audio/1', duration_s: 300, format: 'mp3', segments: 3, script: [] }
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(new Response(JSON.stringify({ piper: true, english_voice: true, latest: ep }), { status: 200 }))),
+    )
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+    render(
+      <QueryClientProvider client={qc}>
+        <MemoryRouter>
+          <Podcast />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    )
+    const link = await screen.findByRole('link', { name: 'Download mp3' })
+    expect(link).toHaveAttribute('download', 'ustad-podcast-2026-10-26.mp3')
+    expect(link).toHaveAttribute('href', '/api/podcast/audio/1')
+    expect(screen.queryByText(/offline/i)).toBeNull()
   })
 })
 

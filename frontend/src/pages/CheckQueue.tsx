@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { PageHeader } from '../components/ui'
 import { api } from '../lib/api'
 import type { GrammarReview, ReviewNote } from '../lib/grammar'
 
@@ -17,14 +18,14 @@ export function CheckQueue() {
     queryKey: ['needs-review'],
     queryFn: () => api<Flagged[]>('/api/items/needs-review'),
   })
-  if (!data) return <p className="p-4">Loading…</p>
+  if (!data) return <p>Loading…</p>
   return (
-    <div className="flex flex-col gap-3 p-4">
-      <h1 className="text-xl font-bold">Check queue ({data.length})</h1>
-      <p className="text-sm text-neutral-700">
-        LanguageTool flagged these. Approve only if the German is right. Fix wrong ones in the seed
-        source and rebuild.
-      </p>
+    <div className="flex max-w-[720px] flex-col gap-3">
+      <PageHeader
+        back={{ to: '/settings', label: 'Back to Settings' }}
+        title={`Check queue (${data.length})`}
+        subtitle="LanguageTool flagged these. Approve only if the German is right. Fix wrong ones in the seed source and rebuild."
+      />
       {data.map((it) => (
         <div key={it.id} className="rounded-lg border border-neutral-300 bg-white p-3 text-sm">
           <p className="font-semibold" lang="de">
@@ -47,7 +48,7 @@ export function CheckQueue() {
               await api(`/api/items/${it.id}/approve`, {})
               refetch()
             }}
-            className="mt-2 rounded border border-neutral-900 px-3 py-2"
+            className="mt-2 rounded border border-neutral-900 px-4 py-2 hover:bg-neutral-100"
           >
             Approve
           </button>
@@ -91,7 +92,7 @@ function GrammarQueue() {
               await api(`/api/items/patterns/${p.code}/approve`, {})
               refetch()
             }}
-            className="mt-2 rounded border border-neutral-900 px-3 py-2"
+            className="mt-2 rounded border border-neutral-900 px-4 py-2 hover:bg-neutral-100"
           >
             Approve
           </button>
@@ -113,7 +114,7 @@ function GrammarQueue() {
               await api(`/api/items/placement/${p.id}/approve`, {})
               refetch()
             }}
-            className="mt-2 rounded border border-neutral-900 px-3 py-2"
+            className="mt-2 rounded border border-neutral-900 px-4 py-2 hover:bg-neutral-100"
           >
             Approve
           </button>

@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
+import { Column, PageHeader } from '../../components/ui'
 import { Feedback } from '../../components/Feedback'
 import { ItemCard } from '../../components/ItemCard'
 import { UmlautKeys } from '../../components/UmlautKeys'
@@ -40,16 +41,28 @@ export function Sabaq() {
     input.current?.focus()
   }, [current?.item_id])
 
-  if (error) return <p className="p-4">Error: {(error as Error).message}</p>
-  if (!data) return <p className="p-4">Loading…</p>
+  const showingResult = result !== null
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== 'Enter' || !showingResult) return
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLButtonElement) return
+      void next()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
+
+  if (error) return <p>Error: {(error as Error).message}</p>
+  if (!data) return <p>Loading…</p>
   if (data.locked)
     return (
-      <div className="flex flex-col gap-4 p-4">
+      <Column>
+        <PageHeader title="Sabaq" subtitle="New material" />
         <p>{data.locked}</p>
-        <Link to="/" className="rounded-lg bg-neutral-900 p-4 text-center text-white">
-          Back to today
+        <Link to="/" className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
+          Back to Today
         </Link>
-      </div>
+      </Column>
     )
 
   const doneCount = data.items.filter((i) => i.done).length
@@ -72,23 +85,20 @@ export function Sabaq() {
   }
 
   return (
-    <div className="flex min-h-[calc(100dvh-3.5rem)] flex-col gap-4 p-4">
-      <header>
-        <p className="text-sm text-neutral-600">
-          Sabaq · {doneCount}/{data.items.length}
-        </p>
-        <h1 className="text-xl font-bold">{data.title}</h1>
-        <p className="text-sm text-neutral-700">{data.scenario}</p>
-      </header>
+    <Column>
+      <PageHeader
+        title={data.title}
+        subtitle={`Sabaq, new material. ${doneCount} of ${data.items.length} done. ${data.scenario}`}
+      />
 
       {result ? (
         <>
           <Feedback grade={result.grade} given={answer} />
           <ItemCard item={result.item} />
-          <div className="mt-auto" />
-          <button onClick={next} className="rounded-lg bg-neutral-900 p-4 text-lg text-white">
+          <button onClick={next} className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
             {doneCount === data.items.length ? 'Finish' : 'Next'}
           </button>
+          <p className="text-xs text-neutral-600">Enter continues.</p>
         </>
       ) : current ? (
         <>
@@ -98,7 +108,7 @@ export function Sabaq() {
             {current.hint && <p className="mt-1 text-sm text-neutral-600">{current.hint}</p>}
           </section>
           <form
-            className="mt-auto flex flex-col gap-2"
+            className="flex flex-col gap-2"
             onSubmit={(e) => {
               e.preventDefault()
               submit(answer)
@@ -119,28 +129,29 @@ export function Sabaq() {
             />
             <UmlautKeys onKey={(ch) => setAnswer((v) => insertAt(input.current, v, ch))} />
             <div className="flex gap-2">
+              <button type="submit" className="rounded-lg bg-neutral-900 px-5 py-3 text-white">
+                Check
+              </button>
               <button
                 type="button"
                 onClick={() => submit('')}
-                className="flex-1 rounded-lg border border-neutral-400 p-4"
+                className="rounded-lg border border-neutral-400 px-5 py-3"
               >
                 No idea
               </button>
-              <button type="submit" className="flex-[2] rounded-lg bg-neutral-900 p-4 text-lg text-white">
-                Check
-              </button>
             </div>
+            <p className="text-xs text-neutral-600">Enter checks. The answer shows after your attempt.</p>
           </form>
         </>
       ) : (
         <div className="flex flex-col gap-4">
           <p className="font-semibold">Sabaq done. {data.items.length} new items.</p>
           <p className="text-sm text-neutral-700">They come back in Manzil and Sabqi.</p>
-          <Link to="/" className="rounded-lg bg-neutral-900 p-4 text-center text-lg text-white">
-            Back to today
+          <Link to="/" className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
+            Back to Today
           </Link>
         </div>
       )}
-    </div>
+    </Column>
   )
 }
