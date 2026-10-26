@@ -94,7 +94,7 @@ def test_homework_red_pen_creates_fix_card_in_manzil(api, llm):
     r = api.post(f"/api/homework/{hw['id']}/submit", json={"text": fx["text"]}).json()
     assert r["status"] == "graded" and r["grade"]["errors"][0]["tag"] == "VERB_FINAL"
     reg = api.get("/api/mistakes").json()
-    assert reg["by_tag"] == [{"tag": "VERB_FINAL", "count": 1}]
+    assert [(r["tag"], r["count"]) for r in reg["by_tag"]] == [("VERB_FINAL", 1)]
     nxt = api.get("/api/review/next?block=manzil").json()["card"]
     assert nxt["card_type"] == "fix_sentence" and nxt["prompt"] == fx["text"]
     ans = api.post("/api/review/answer", json={"card_id": nxt["card_id"], "block": "manzil",
@@ -236,7 +236,7 @@ def test_two_same_tag_errors_in_one_sentence_count_once(api, llm):
     llm.queue.append(reply)
     api.post("/api/homework/tagebuch", json={"text": text})
     reg = api.get("/api/mistakes").json()
-    assert reg["by_tag"] == [{"tag": "VERB_FINAL", "count": 1}]
+    assert [(r["tag"], r["count"]) for r in reg["by_tag"]] == [("VERB_FINAL", 1)]
 
 
 def test_choice_hit_does_not_mark_pattern_known(db):

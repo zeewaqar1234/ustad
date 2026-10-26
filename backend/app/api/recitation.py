@@ -7,7 +7,7 @@ from app.core.auth import require_user
 from app.core.clock import local_date
 from app.db import DB, utcnow
 from app.models import Attempt
-from app.services import daily
+from app.services import evidence
 from app.services import recitation as svc
 
 router = APIRouter(prefix="/api/recitation", dependencies=[Depends(require_user)])
@@ -41,6 +41,11 @@ def get_table(code: str, db: DB):
     return svc.view(t, svc.shown_stage(p, local_date(utcnow())))
 
 
+def _recitation_event(db, now, code: str, result: dict, mode: str) -> None:
+    evidence.record_event(db, now, "grammar", "recitation", "correct" if result["passed"] else "error",
+                          source_ref=code, meta={"mode": mode, "wrong_cells": result["wrong"]})  # fmt: skip
+
+
 class RecitalIn(BaseModel):
     rows: list[list[str]]
     elapsed_ms: int = 0
@@ -51,6 +56,8 @@ def recite(code: str, body: RecitalIn, db: DB):
     _table(code)
     now = utcnow()
     result = svc.check(db, code, body.rows, local_date(now))
+    _recitation_event(db, now, code, result, "typed")
+    evidence.add_activity(db, now, "grammar", body.elapsed_ms)
     db.add(Attempt(ts=now, task_ref=f"recitation:{code}", correct=result["passed"],
                    input=str(body.rows)[:2000], score=result["wrong"]))  # fmt: skip
     db.commit()
@@ -70,7 +77,8 @@ def recite_by_voice(code: str, body: VoiceRecitalIn, db: DB):
     rows = svc.rows_from_speech(code, body.rows)
     result = svc.check(db, code, rows, local_date(now))
     result["heard"] = body.rows
-    daily.add_minutes(db, now, body.elapsed_ms)
+    _recitation_event(db, now, code, result, "voice")
+    evidence.add_activity(db, now, "grammar", body.elapsed_ms)
     db.add(Attempt(ts=now, task_ref=f"recitation_voice:{code}", correct=result["passed"],
                    input=" | ".join(body.rows)[:2000], score=result["wrong"]))  # fmt: skip
     db.commit()

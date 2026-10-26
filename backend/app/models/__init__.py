@@ -9,6 +9,7 @@ from sqlalchemy import (
     Date,
     Float,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
@@ -118,19 +119,9 @@ class Lesson(Base):
     completed_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
 
 
-class StudySession(Base):
-    __tablename__ = "session"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    kind: Mapped[str] = mapped_column(String(10))
-    started: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
-    ended: Mapped[datetime | None] = mapped_column(UTCDateTime)
-    active_s: Mapped[float] = mapped_column(Float, default=0)
-
-
 class Attempt(Base):
     __tablename__ = "attempt"
     id: Mapped[int] = mapped_column(primary_key=True)
-    session_id: Mapped[int | None] = mapped_column(ForeignKey("session.id"))
     ts: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
     task_ref: Mapped[str] = mapped_column(String(60))
     input: Mapped[str | None] = mapped_column(Text)
@@ -148,6 +139,42 @@ class DayLog(Base):
     manzil_done: Mapped[bool] = mapped_column(Boolean, default=False)
     sabqi_done: Mapped[bool] = mapped_column(Boolean, default=False)
     sabaq_done: Mapped[bool] = mapped_column(Boolean, default=False)
+    # V1: Mazmoon submitted, a voice session reviewed, Diktat 5 of 5, or a text read with its questions
+    other_done: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class EvidenceEvent(Base):
+    """V1: one row per right or wrong use, from every skill (docs/v2/metrics.md)."""
+
+    __tablename__ = "evidence_event"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    ts: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
+    skill: Mapped[str] = mapped_column(
+        String(12)
+    )  # vocab grammar reading listening writing speaking
+    source: Mapped[str] = mapped_column(String(16))
+    source_ref: Mapped[str] = mapped_column(String(60), default="")
+    pattern_code: Mapped[str | None] = mapped_column(String(40))
+    tag: Mapped[str | None] = mapped_column(String(30))
+    outcome: Mapped[str] = mapped_column(String(8))  # correct | error
+    severity: Mapped[int | None] = mapped_column(Integer)
+    orig: Mapped[str] = mapped_column(Text, default="")
+    fix: Mapped[str | None] = mapped_column(Text)
+    meta_json: Mapped[dict] = mapped_column(JSON, default=dict)
+    __table_args__ = (
+        Index("ix_evidence_tag_ts", "tag", "ts"),
+        Index("ix_evidence_pattern_ts", "pattern_code", "ts"),
+        Index("ix_evidence_skill_ts", "skill", "ts"),
+    )
+
+
+class ActivityLog(Base):
+    """V1: active seconds per Berlin day and skill."""
+
+    __tablename__ = "activity_log"
+    date: Mapped[date] = mapped_column(Date, primary_key=True)
+    skill: Mapped[str] = mapped_column(String(12), primary_key=True)
+    seconds: Mapped[float] = mapped_column(Float, default=0)
 
 
 class CostLedger(Base):

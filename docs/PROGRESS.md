@@ -12,6 +12,7 @@ Read this first every session. Then read only the docs/ file for the current pha
 | 3. Voice tutor | Done in code (evidence below); open: Zee's real-speech STT test, real Ollama + Piper runs | 2026-10-26 |
 | 4. Reading (§5.3) + listening (§5.5) | Done in code (evidence below); open: real Ollama Author run, real Piper episode | 2026-10-26 |
 | V0 (v2 brief) | Done (evidence in "V2 phases" below) | 2026-10-26 |
+| V1 (v2 brief) | Done in code (evidence below); real-model correct-use run open | 2026-10-26 |
 | 5–7 | Not started (work-writing templates of §5.6 scheduled in Phase 5) | |
 
 **Next session:** on Zee's machine: the Phase 3 STT word-loss test with his own speech, then
@@ -544,7 +545,7 @@ separate program, like Piper. Frontend: none.
 
 ## V2 phases
 
-Brief: docs/USTAD_V2_CODEX_BRIEF.md (v2 overrides phone-first, PWA and stars in older docs). Next phase: V1.
+Brief: docs/USTAD_V2_CODEX_BRIEF.md (v2 overrides phone-first, PWA and stars in older docs). Next phase: V2 (after about 5 study days of use, brief section 0).
 Builder gate applies from V3 on; V0 is a UI and bug-fix phase.
 
 ### V0: MacBook layout, clean UI shell, cleanup (2026-10-26)
@@ -581,3 +582,44 @@ Open after V0:
 - Docs older than V0 (SPEC.md, docs/*.md) still say phone-first; the brief and CLAUDE.md win.
 - Zee: run `make gate-reset` on the Mac DB. The override from 2026-10-21 is still set there.
 - Run the e2e on a fresh DB; the specs still depend on order and state. Login is rate limited in memory, so restart the server after failed login runs.
+
+### V1: one evidence ledger for all four skills (2026-10-26)
+
+Gate: not applicable (rule starts at V3).
+- Tables (migration `b1e7v1evid02`, with downgrade): `evidence_event`, `activity_log`, `day_log.other_done`.
+  The unused `session` table and `attempt.session_id` are dropped (L12); the table is kept if it has rows.
+- `services/evidence.py`: `record_event`, `add_activity`, `record_grade`, card and Diktat helpers. Every
+  `add_minutes` call is replaced by `add_activity` with the right skill. Writing time is new (L7): the editor
+  sends `elapsed_ms`, counting gaps of 60 s or less (`lib/activeTime.ts`, no visible timer).
+- Grader: `correct_uses` (max 12, spans must be whole words of Zee's text and outside error spans; dropped ones
+  counted) for texts and per voice line; prompts and `grader_fixtures.json` extended.
+- Ghalti by tag (L1): recurring = 3 or more errors from 2 or more sentences in 30 days; wrong share with 5 or
+  more events, else "too few uses". The Ghalti page shows both. Sentence rows stay.
+- Study day (L6): Manzil plus Sabqi, Sabaq, or `other_done` (voice session reviewed, Diktat 5 of 5, text read
+  with its questions). Mazmoon joins in V3.
+- Backfill (`services/backfill.py`, run in the migration and by `scripts.backfill_evidence`): idempotent, skips rows
+  newer than the first live event. Formulas and rules: docs/v2/metrics.md.
+- Dependencies: none.
+
+| Check | Result |
+|---|---|
+| pytest | 309 passed, 15 skipped (real-model tests need `RUN_OLLAMA=1`). New file `tests/test_v1_evidence.py`: one test per source (review, sabaq, drill, recitation, homework, tagebuch, placement, voice review, shadow, diktat, reading questions), all six skills present in one run, typed voice lines are writing not speaking, correct-use span rules, recurring for 3 errors in 2 sentences and not for 3 repeats of one, 30-day window, 5-event rate rule, study-day rule, backfill idempotent, homework time in `activity_log` |
+| Grader fixtures | 5 fixtures carry known correct uses; mocked-model test passes; real-model test `test_real_model_correct_uses_are_valid_spans` written, **not run** (no Ollama here) |
+| Migration | upgrade, downgrade, upgrade on a DB with a `mistake`, an `attempt` and a `session` row: events created, `session` dropped, round trip clean |
+| vitest / lint | 44 passed; ruff clean; oxlint 0 errors (1 old warning); tsc clean |
+| Playwright 1440x900 | 14 passed. `SELECT skill, count(*) FROM evidence_event GROUP BY skill` after that run: grammar 1, listening 5, reading 3, speaking 1, vocab 2. **No writing rows**: the model is offline in e2e, so the red pen is LanguageTool-only, which is provisional and writes no evidence. The pytest run above shows all 6 skills. |
+
+End-of-phase diff review (subagent): 7 findings. Fixed with tests: backfill re-run double counting live rows;
+drill first-try window used UTC instead of the Berlin day; free drills wrote evidence on every re-submit;
+sentence-less errors collapsed into one sentence for "recurring" (now source_ref); correct old drills had no tag;
+substring and duplicate correct-use spans; reading time counted twice (read mark plus answers).
+Not fixed: the migration's backfill imports the current ORM models, so a future migration that adds a column to
+`attempt`, `card`, `item`, `mistake`, `text`, `review_log` or the voice tables could break a replay of the chain
+from scratch. Existing databases are fine. If that happens, run the schema part and then
+`python -m scripts.backfill_evidence`.
+
+Open after V1:
+- Real-model check of `correct_uses` on Zee's Mac (`make test-ollama`).
+- Diktat attempts from before V1 only know the coarse tag (ending = OTHER).
+- `test_daily_loop` failed twice on 2026-10-26 and passed later the same day: it depends on the time of day.
+  Not investigated.

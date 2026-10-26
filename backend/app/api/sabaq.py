@@ -12,6 +12,7 @@ from app.db import DB, utcnow
 from app.models import Item, ReviewLog
 from app.services import cards as cardsvc
 from app.services import daily as svc
+from app.services import evidence
 from app.srs import grader, scheduler
 
 router = APIRouter(prefix="/api/sabaq", dependencies=[Depends(require_user)])
@@ -86,7 +87,7 @@ def attempt(body: AttemptIn, db: DB):
             elapsed_ms=body.elapsed_ms, block="sabaq",
         )
     )  # fmt: skip
-    svc.add_minutes(db, now, body.elapsed_ms)
+    evidence.record_card_review(db, now, produce, g.rating, "sabaq", body.elapsed_ms)
     db.flush()
     if all(_produce(db.get(Item, i)).introduced_at is not None for i in lesson.items):
         lesson.status, lesson.completed_at = "done", now

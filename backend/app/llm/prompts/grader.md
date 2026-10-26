@@ -13,6 +13,9 @@ Rules:
   "reason_en" is one short English line, "severity" 1 = small (spelling, capital letter), 2 = clear grammar
   error, 3 = breaks understanding.
 - One error per entry. If a sentence has two errors, give two entries.
+- "correct_uses": up to 12 places where Zee used one of the target structures (named in the user message)
+  correctly. Each is {span, tag}: "span" copied EXACTLY from Zee's text, a few words, and never overlapping
+  an error span. Only list a use if you are sure it is correct. An empty list is fine.
 - "corrected_text": the full text with all errors fixed and nothing else changed (keep Zee's words and ideas).
 - "score_10": 10 = no errors; take off about 1 point per severity-2 error, 0.5 per severity-1, 2 per
   severity-3. Never below 0.

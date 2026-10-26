@@ -13,7 +13,7 @@ from app.core.clock import local_date
 from app.core.config import settings
 from app.models import Attempt, Card, Item, ReadingText
 from app.reading import density
-from app.services import daily
+from app.services import evidence
 from app.services.cards import card_types_for
 from app.srs import scheduler
 
@@ -249,6 +249,11 @@ def check_answers(db: Session, now: datetime, t: ReadingText, answers: dict[str,
     score = round(100 * got / total) if total else 0
     t.result_json = {"score": score, "results": results}
     mark_read(db, now, t, elapsed_ms)
+    evidence.mark_other_done(db, now)
+    kinds = {q["id"]: q["kind"] for q in t.questions_json}
+    for r in results:
+        evidence.record_event(db, now, "reading", "reading_q", "correct" if r["correct"] else "error",
+                              source_ref=f"text:{t.id}:{r['id']}", meta={"question_type": kinds.get(r["id"])})  # fmt: skip
     db.add(Attempt(ts=now, task_ref=f"text:{t.id}", input=json.dumps(answers)[:2000],
                    correct=score >= 60, score=score))  # fmt: skip
     db.flush()
@@ -256,9 +261,9 @@ def check_answers(db: Session, now: datetime, t: ReadingText, answers: dict[str,
 
 
 def mark_read(db: Session, now: datetime, t: ReadingText, elapsed_ms: int) -> None:
-    if t.read_at is None:
+    if t.read_at is None:  # reading time counts once per text, whichever call comes first
         t.read_at = now
-    daily.add_minutes(db, now, elapsed_ms, cap_ms=READ_CAP_MS)
+        evidence.add_activity(db, now, "reading", elapsed_ms, cap_ms=READ_CAP_MS)
 
 
 def today(now: datetime) -> date:

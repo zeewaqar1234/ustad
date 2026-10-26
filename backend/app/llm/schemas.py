@@ -43,12 +43,20 @@ class GradeError(BaseModel):
     severity: Literal[1, 2, 3]
 
 
+class CorrectUse(BaseModel):
+    """A place where Zee used a target structure correctly (V1 evidence ledger)."""
+
+    span: str = Field(min_length=1, description="exact substring of the text that is correct")
+    tag: ErrorTag
+
+
 class GradeResult(BaseModel):
     """Grader output for writing (docs/llm.md, Grader output schema)."""
 
     score_10: int = Field(ge=0, le=10)
     corrected_text: str
     errors: list[GradeError]
+    correct_uses: list[CorrectUse] = Field(default_factory=list, max_length=12)
     teaching_points: list[str] = Field(max_length=3)
     model_sentence_for_srs: list[str] = Field(default_factory=list, max_length=5)
 
@@ -80,6 +88,7 @@ class BetterLine(BaseModel):
     turn: int = Field(ge=1, description="turn number as given in the transcript")
     better: str = Field(min_length=1, description="corrected, more natural version of the line")
     errors: list[BetterError] = Field(default_factory=list)
+    correct_uses: list[CorrectUse] = Field(default_factory=list, max_length=12)
 
 
 class SessionReview(BaseModel):

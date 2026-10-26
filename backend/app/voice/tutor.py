@@ -20,8 +20,8 @@ from app.llm import prompt
 from app.llm.provider import LLMInvalid, LLMUnavailable, Provider, complete_json
 from app.llm.schemas import SessionReview, TutorReply
 from app.models import Profile, VoiceSession, VoiceTurn
-from app.services import ghalti
-from app.services.grading import _locate, _lt_only, lt_check, lt_notes
+from app.services import evidence, ghalti
+from app.services.grading import _locate, _lt_only, locate_correct_uses, lt_check, lt_notes
 from app.voice.disfluency import clean
 
 log = logging.getLogger(__name__)
@@ -184,6 +184,15 @@ def review(db: Session, llm: Provider, s: VoiceSession) -> dict:
         rows.append({"turn": t.idx, "said": said, "better": better, "graded": True, "errors": errs,
                      "stars": stars(len(errs)), "needs_review": bool(notes),
                      "review_notes": notes})  # fmt: skip
+        uses, _ = locate_correct_uses(
+            said, [u.model_dump(mode="json") for u in ln.correct_uses], errs
+        )
+        skill = "speaking" if t.input_mode == "voice" else "writing"  # typed lines are not speech
+        evidence.record_grade(
+            db, now, {"source": llm.vendor, "original": said, "errors": errs, "correct_uses": uses},
+            skill=skill, source="voice_review", source_ref=f"voice:{s.id}:{t.idx}",
+            meta={"input_mode": t.input_mode},
+        )  # fmt: skip
         if errs and better != said:
             # one card per wrong line; fix_card itself keeps flagged German out of SRS until approved
             card = ghalti.fix_card(db, now, said, better, errs[0]["tag"], errs[0]["reason_en"])
@@ -195,6 +204,8 @@ def review(db: Session, llm: Provider, s: VoiceSession) -> dict:
     s.review_json = {"source": source, "lines": rows, "teaching_points": teaching,
                      "summary": summary(rows)}  # fmt: skip
     s.status = "lt_only" if source == "languagetool_only" else "reviewed"
+    if s.status == "reviewed":
+        evidence.mark_other_done(db, now)
     s.ended = s.ended or now
     db.flush()
     return s.review_json

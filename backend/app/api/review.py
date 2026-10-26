@@ -13,6 +13,7 @@ from app.db import DB, utcnow
 from app.models import Card, ReviewLog
 from app.services import cards as cardsvc
 from app.services import daily as svc
+from app.services import evidence
 from app.srs import grader, scheduler
 
 router = APIRouter(prefix="/api/review", dependencies=[Depends(require_user)])
@@ -97,7 +98,7 @@ def answer(body: AnswerIn, db: DB):
             elapsed_ms=body.elapsed_ms, block=body.block, scheduled=scheduled,
         )
     )  # fmt: skip
-    svc.add_minutes(db, now, body.elapsed_ms)
+    evidence.record_card_review(db, now, card, rating, body.block, body.elapsed_ms)
     db.commit()
     return {
         "rating": rating,
