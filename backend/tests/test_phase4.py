@@ -91,6 +91,8 @@ def test_density_with_spacy_lemmas():
         ("arbeite", "arbeitet", "ending"),
         ("Kollegen", "Kollegin", "spelling"), ("Haus", "Häuser", "spelling"),
         ("Arzt.", "Arzt", "ok"),
+        ("den", "dem", "ending"), ("ihn", "ihm", "ending"), ("die", "der", "ending"),
+        ("mus", "muss", "spelling"), ("Komen", "Kommen", "spelling"),
     ],
 )  # fmt: skip
 def test_diktat_word_kinds(given, expected, kind):
@@ -191,7 +193,8 @@ def test_gloss_lemma_from_sentence_context_and_no_meaning_without_glossary(api):
     g = api.get("/api/texts/gloss", params={"word": "Jahre,", "text_id": tid}).json()
     assert (g["word"], g["lemma"], g["en"]) == ("Jahre", "Jahr", None)
     bank = api.get("/api/texts/gloss", params={"word": "Bank", "text_id": tid}).json()
-    assert bank["gender"] == "f"  # from spaCy morphology in context, nothing stored
+    # spaCy's guess from context is shown apart and never stored as fact
+    assert bank["gender"] is None and bank["gender_guess"] == "f"
 
 
 def test_known_pct_rises_when_words_are_taught(api, session_factory):
@@ -341,12 +344,21 @@ def test_jobs_off_when_disabled(monkeypatch):
     assert jobs.start() is None
 
 
-def test_jobs_schedule_author_nightly(monkeypatch):
+def test_jobs_schedule_author_nightly_and_catch_up_at_startup(monkeypatch):
+    ran = []
+    monkeypatch.setattr(jobs, "nightly_author", lambda: ran.append(1) or 0)
     monkeypatch.setattr(settings, "jobs_enabled", True)
     sched = jobs.start()
     try:
         job = sched.get_job("author")
         assert job is not None and "hour='3'" in str(job.trigger)
+        import time
+
+        for _ in range(50):  # the one-off catch-up runs right after start
+            if ran:
+                break
+            time.sleep(0.05)
+        assert ran == [1]
     finally:
         sched.shutdown(wait=False)
 
@@ -533,3 +545,33 @@ def test_first_visit_parallel_requests_do_not_collide(api):
         codes = list(pool.map(lambda u: api.get(u).status_code, urls))
     assert codes == [200] * 8
     assert api.get("/api/dictation/today").json()["total"] == 5
+
+
+def test_diktat_capital_counted_with_an_ending():
+    r = diktat.check("gute Morgen", "Guten Morgen")
+    assert r["words"][0]["kind"] == "ending" and r["words"][0]["capital"] is True
+    assert r["counts"]["capital"] == 1 and r["counts"]["ending"] == 1
+
+
+def test_author_keeps_first_draft_when_regeneration_fails(db, llm, known_all):  # noqa: F811
+    llm.queue += [draft(), {"title": "kaputt"}, {"title": "kaputt"}]  # regeneration invalid twice
+    t = author.write_text(db, llm, "serial", None)
+    assert t.id and "Bilal arbeitet" in t.body_de
+
+
+def test_podcast_failed_rebuild_keeps_current_episode(api, piper, monkeypatch, session_factory):
+    s = session_factory()
+    _taught_item(s, 1, "Ich habe morgen einen Termin.")
+    s.commit()
+    ep = api.post("/api/podcast/build").json()
+    before = api.get(ep["url"]).content
+
+    def broken(parts, out):
+        out.write_bytes(b"half")
+        raise OSError("disk full")
+
+    monkeypatch.setattr(podcast, "join", broken)
+    r = api.post("/api/podcast/build")
+    assert r.status_code == 503 and "failed" in r.json()["detail"]
+    assert api.get(ep["url"]).content == before
+    assert not list(Path(settings.audio_dir, "podcast").glob("*.build.*"))

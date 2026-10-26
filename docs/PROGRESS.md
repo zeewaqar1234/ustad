@@ -458,8 +458,8 @@ Gate: see the gate log (override). Branch restarted from `main` after PR #4 merg
 | Diktat (5/day) with diff | pytest: 15 word-kind cases (umlaut incl. ß/ae spellings, capitals, endings "einen/einem", "neu/neue", spelling), alignment with missing/extra, accuracy; API: 5 fixed per day, first attempt kept, 404 for other refs, attempt row; only taught items; vitest: sentence never shown before Check; result stays after the refetch; Playwright `p4-diktat.png` |
 | Commute Podcast (Piper, concatenation, offline cache) | pytest with a fake Piper writing real WAVs: silence join exact to the frame, mistakes before sentences with pauses, English prompts only with an English voice, 10 to 20 min length bound, 503 without Piper, 422 with nothing to read, build → mp3 (ffmpeg present here) served as audio, a 16 kHz English voice resampled, rebuild replaces the file, ledger rows; Playwright `p4-podcast.png`; `vite build` sw.js has the `ustad-podcast` cache rule. **Real Piper voice not run** (as in Phase 3). Open item |
 | Sources page per §11 | vitest YouTube parser + embed URL; Playwright `p4-sources.png` (embed has `cc_load_policy=1&cc_lang_pref=de`) |
-| pytest | 258 passed, 8 skipped (real-model tests) |
-| vitest | 35 passed (10 new: reader 5, listening 5) |
+| pytest | 266 passed, 8 skipped (real-model tests) |
+| vitest | 37 passed (12 new: reader 5, listening 5, server TTS chunks 2) |
 | Playwright 375px | 11 passed on a fresh e2e DB (3 new Phase 4 + 8 earlier), no horizontal scroll on new screens |
 | make lint | ruff check + format clean; oxlint 0 errors (2 old warnings); tsc clean |
 
@@ -467,7 +467,29 @@ Bugs found by the e2e run and fixed (with regression tests): first visit to Home
 (texts and Diktat requests both inserting the seed texts / the day's Diktat set at once; now chosen and
 committed inside a lock); Diktat jumped to the next sentence after Check and hid the result.
 
+### End-of-phase diff review (subagent) and fixes
+
+All 7 findings fixed, each with a test:
+- Diktat: short case forms (den/dem, ihn/ihm, die/der) were "spelling", now "ending"; a doubled consonant
+  (mus/muss) is "spelling", not "ending"; a capital error next to an ending error (gute/Guten) is counted too.
+- Author: a regeneration that fails validation twice threw the first draft away; now the first draft is stored.
+- Nightly job: a night missed because the app was off was never made up; now a catch-up run at startup
+  (it calls the model only for days still missing texts).
+- SQLite lock: Author and podcast builds held the write lock through slow model/Piper calls (other requests
+  could get "database is locked"); ledger rows are now committed before each slow step.
+- Podcast: a failed rebuild could corrupt today's episode and returned 500; it now builds to a temp file,
+  replaces the episode only on success, and returns 503.
+- Gloss: spaCy's gender guess was saved with the card as fact; it is now a separate `gender_guess`, shown as
+  "Probably die (a guess from the sentence; check it)", never saved.
+- Read-aloud without a German device voice: "Listen to all" sent 900+ characters to the server voice
+  (limit 600, 422); now sent in sentence chunks under 500 characters, played in order, stoppable.
+- Small: "Save for offline" keeps only the current episode in the cache; the sources heading now says
+  "Free to store with credit" (the links leave the app).
+
 ### Open Phase 4 items
+
+- [ ] YouTube box: §5.5 wants the app's own questions and vocab list next to an embedded video. Not built
+  (needs per-video content; the Author could write them from a title Zee enters).
 
 - [ ] **Real Author run**: `make author` with Ollama. Check: density lands in 93 to 99 % (in a fresh DB the
   seed texts read about 48 % known because almost nothing is taught yet; Zee's real DB will read higher),

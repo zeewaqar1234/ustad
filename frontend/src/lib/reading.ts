@@ -65,6 +65,8 @@ export interface Gloss {
   lemma: string
   en: string | null
   gender: 'm' | 'f' | 'n' | null
+  /** spaCy's guess from the sentence; shown as a guess, never saved with the card */
+  gender_guess?: 'm' | 'f' | 'n' | null
   plural: string | null
   item_id: number | null
   in_srs: boolean

@@ -188,20 +188,29 @@ def build(db: Session, now: datetime) -> AudioAsset:
             parts.append(1.0)
     folder = settings.audio_dir / "podcast"
     folder.mkdir(parents=True, exist_ok=True)
-    wav = folder / f"{today.isoformat()}.wav"
-    duration = join(parts, wav)
-    path, fmt = wav, "wav"
-    exe = ffmpeg()
-    if exe:
-        mp3 = wav.with_suffix(".mp3")
-        try:
-            subprocess.run([exe, "-y", "-loglevel", "error", "-i", str(wav), "-codec:a",
-                            "libmp3lame", "-b:a", "64k", "-ac", "1", str(mp3)],
-                           capture_output=True, check=True, timeout=600)  # fmt: skip
-            wav.unlink()
-            path, fmt = mp3, "mp3"
-        except (OSError, subprocess.SubprocessError):
-            mp3.unlink(missing_ok=True)  # keep the WAV
+    stem = folder / today.isoformat()
+    tmp = stem.with_suffix(".build.wav")
+    try:
+        duration = join(parts, tmp)  # a failed build never touches today's current episode
+        path, fmt = tmp, "wav"
+        exe = ffmpeg()
+        if exe:
+            mp3 = stem.with_suffix(".build.mp3")
+            try:
+                subprocess.run([exe, "-y", "-loglevel", "error", "-i", str(tmp), "-codec:a",
+                                "libmp3lame", "-b:a", "64k", "-ac", "1", str(mp3)],
+                               capture_output=True, check=True, timeout=600)  # fmt: skip
+                path, fmt = mp3, "mp3"
+            except (OSError, subprocess.SubprocessError):
+                mp3.unlink(missing_ok=True)  # keep the WAV
+    except (OSError, subprocess.SubprocessError, wave.Error) as e:
+        tmp.unlink(missing_ok=True)
+        raise tts.TTSUnavailable(f"Building the episode failed: {e}") from e
+    final = stem.with_suffix(f".{fmt}")
+    path.replace(final)
+    if path != tmp:
+        tmp.unlink(missing_ok=True)
+    path = final
     ref = f"podcast:{today.isoformat()}"
     for old in db.scalars(select(AudioAsset).where(AudioAsset.text_ref == ref)):
         if Path(old.path) != path:

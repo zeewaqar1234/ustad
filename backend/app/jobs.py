@@ -36,8 +36,11 @@ def start() -> BackgroundScheduler | None:
     if not settings.jobs_enabled:
         return None
     sched = BackgroundScheduler(timezone=settings.timezone)
-    # minute 17: off the hour; one run at a time, a missed run (laptop asleep) runs within 6 h
+    # minute 17: off the hour; one run at a time; a run missed while the app is up (busy) runs within 6 h
     sched.add_job(nightly_author, CronTrigger(hour=settings.author_hour, minute=17),
                   id="author", max_instances=1, coalesce=True, misfire_grace_time=6 * 3600)  # fmt: skip
+    # The scheduler keeps no record while the app is down (laptop off at night): catch up once at
+    # startup. It only calls the model for days that still miss texts.
+    sched.add_job(nightly_author, id="author_catchup", max_instances=1)
     sched.start()
     return sched

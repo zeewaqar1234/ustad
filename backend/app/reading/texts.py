@@ -188,7 +188,8 @@ def gloss(db: Session, word: str, t: ReadingText | None) -> dict:
     return {
         "word": word, "lemma": lemma,
         "en": entry["en"] if entry else (item.en if item else None),
-        "gender": entry.get("gender") if entry else (item.gender if item and item.gender else guess),
+        "gender": entry.get("gender") if entry else (item.gender if item else None),
+        "gender_guess": None if entry or (item and item.gender) else guess,  # shown, never saved
         "plural": entry.get("plural") if entry else (item.plural if item else None),
         "item_id": item.id if item else None, "in_srs": _taught(item),
         "known": lemma.lower() in known or word.lower() in known,

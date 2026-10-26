@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 
 from app.content.schemas import GradedText
 from app.llm import prompt
-from app.llm.provider import Provider, complete_json
+from app.llm.provider import LLMInvalid, LLMUnavailable, Provider, complete_json
 from app.models import Item, Profile, ReadingText
 from app.reading import density
 from app.reading.texts import ensure_seed, known_items, known_words
@@ -95,7 +95,14 @@ def write_text(db: Session, llm: Provider, topic: str, for_date: date | None) ->
     best: tuple[GradedText, density.Density] | None = None
     user = brief
     for _ in range(2):  # first draft + at most one regeneration (docs/llm.md "Level control")
-        draft = complete_json(db, llm, "author", system, user, GradedText)
+        try:
+            draft = complete_json(db, llm, "author", system, user, GradedText)
+        except (LLMInvalid, LLMUnavailable):
+            if best is None:
+                raise
+            break  # the regeneration failed: keep the first draft
+        finally:
+            db.commit()  # ledger rows now: do not hold the SQLite write lock through slow calls
         draft.topic, draft.series_episode = topic, episode
         d = density.text_density(" ".join(s.de for s in draft.sentences), known)
         if best is None or _distance(d.pct) < _distance(best[1].pct):
