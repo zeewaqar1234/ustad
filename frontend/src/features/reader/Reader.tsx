@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { PageHeader } from '../../components/ui'
 import { api } from '../../lib/api'
@@ -38,13 +38,14 @@ function GlossPanel(props: { textId: number; word: string; onClose: () => void }
     onSuccess: () => qc.invalidateQueries({ queryKey: ['gloss', props.textId, props.word] }),
   })
   const gl = g.data
+  const { onClose } = props
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') props.onClose()
+      if (e.key === 'Escape') onClose()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [props])
+  }, [onClose])
   return (
     <aside
       role="dialog"
@@ -195,6 +196,8 @@ export function Reader() {
   const [answers, setAnswers] = useState<Record<string, number[]>>({})
   const [noVoice, setNoVoice] = useState(false)
   const [openedAt] = useState(() => Date.now())
+
+  const closeGloss = useCallback(() => setWord(null), [])
 
   const check = useMutation({
     mutationFn: () =>
@@ -370,7 +373,7 @@ export function Reader() {
         )}
       </div>
 
-      {word && <GlossPanel key={word} textId={data.id} word={word} onClose={() => setWord(null)} />}
+      {word && <GlossPanel key={word} textId={data.id} word={word} onClose={closeGloss} />}
     </div>
   )
 }

@@ -1,45 +1,55 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router'
+import { useSearchParams } from 'react-router'
+import { ListRow, PageHeader, StatusPill } from '../../components/ui'
 import { api } from '../../lib/api'
 import { STAGE_NAME, type RecitationRow } from '../../lib/grammar'
 
+/** Type / Speak switch, stored in the query string as ?mode=speak. */
+export function useRecitationMode(): ['type' | 'speak', (m: 'type' | 'speak') => void] {
+  const [params, setParams] = useSearchParams()
+  const mode = params.get('mode') === 'speak' ? 'speak' : 'type'
+  return [mode, (m) => setParams(m === 'speak' ? { mode: 'speak' } : {}, { replace: true })]
+}
+
 export function RecitationList() {
+  const [mode, setMode] = useRecitationMode()
   const { data, error } = useQuery({
     queryKey: ['recitation'],
     queryFn: () => api<RecitationRow[]>('/api/recitation'),
   })
-  if (error) return <p className="p-4">Error: {(error as Error).message}</p>
-  if (!data) return <p className="p-4">Loading…</p>
+  if (error) return <p>Error: {(error as Error).message}</p>
+  if (!data) return <p>Loading…</p>
   return (
-    <div className="flex flex-col gap-3 p-4">
-      <h1 className="text-xl font-bold">Pahara</h1>
-      <p className="text-sm text-neutral-700">
-        Type each table row by row. Stage 1 shows the full table, stage 2 has gaps, stage 3 is blank. A
-        clean recital opens the next stage the next day.
-      </p>
-      {data.map((t) => (
-        <Link
-          key={t.code}
-          to={`/recitation/${t.code}`}
-          className="flex items-center gap-3 rounded-lg border border-neutral-300 bg-white p-3 active:bg-neutral-100"
-        >
-          <span
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-neutral-900 text-sm font-semibold ${t.passed_today ? 'bg-neutral-900 text-white' : ''}`}
-            aria-hidden
+    <div className="max-w-[720px]">
+      <PageHeader
+        back={{ to: '/grammar', label: 'Back to Grammatik' }}
+        title="Pahara"
+        subtitle="Recite grammar tables. Stage 1 shows the full table, stage 2 has gaps, stage 3 is blank. A clean recital opens the next stage the next day."
+      />
+      <div className="mb-4 flex gap-2" role="group" aria-label="How to recite">
+        {(['type', 'speak'] as const).map((m) => (
+          <button
+            key={m}
+            type="button"
+            aria-pressed={mode === m}
+            onClick={() => setMode(m)}
+            className={`rounded-lg border px-4 py-2 ${mode === m ? 'border-neutral-900 bg-neutral-900 font-semibold text-white' : 'border-neutral-400'}`}
           >
-            {t.passed_today ? '✓' : t.stage + 1}
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="font-semibold">{t.title}</p>
-            <p className="text-sm text-neutral-700">
-              Stage {t.stage + 1}: {STAGE_NAME[t.stage] ?? t.stage}
-              {t.passed_today && ' · Clean today'}
-              {t.passes > 0 && ` · ${t.passes} clean`}
-            </p>
-          </div>
-          <span aria-hidden>›</span>
-        </Link>
-      ))}
+            {m === 'type' ? 'Type' : 'Speak'}
+          </button>
+        ))}
+      </div>
+      <div className="flex flex-col gap-2">
+        {data.map((t) => (
+          <ListRow
+            key={t.code}
+            to={`/recitation/${t.code}${mode === 'speak' ? '?mode=speak' : ''}`}
+            title={t.title}
+            status={`Stage ${t.stage + 1}: ${STAGE_NAME[t.stage] ?? t.stage}${t.passes > 0 ? `, ${t.passes} clean` : ''}`}
+            right={t.passed_today ? <StatusPill strong>Clean today</StatusPill> : undefined}
+          />
+        ))}
+      </div>
     </div>
   )
 }
