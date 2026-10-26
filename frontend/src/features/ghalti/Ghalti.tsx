@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { PageHeader } from '../../components/ui'
 import { api } from '../../lib/api'
 import { humanTag, shortDate, type Register } from '../../lib/grammar'
 
@@ -22,27 +23,23 @@ function shade(count: number, max: number): string {
 
 function Recurring() {
   return (
-    <span className="text-xs font-semibold whitespace-nowrap">
-      <span aria-hidden>↻</span> recurring
-    </span>
+    <span className="text-xs font-semibold whitespace-nowrap underline">recurring</span>
   )
 }
 
 export function Ghalti() {
   const { data, error } = useQuery({ queryKey: ['mistakes'], queryFn: () => api<Register>('/api/mistakes') })
-  if (error) return <p className="p-4">Error: {(error as Error).message}</p>
-  if (!data) return <p className="p-4">Loading…</p>
+  if (error) return <p>Error: {(error as Error).message}</p>
+  if (!data) return <p>Loading…</p>
   const max = Math.max(0, ...data.by_tag.map((t) => t.count))
   const top = data.top10.filter((m) => m.count > 1)
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <header>
-        <h1 className="text-xl font-bold">Ghalti Register</h1>
-        <p className="text-sm text-neutral-700">
-          {data.total} mistakes counted. Each wrong sentence comes back as a Fix this sentence card.
-        </p>
-      </header>
+    <div className="flex max-w-[960px] flex-col gap-4">
+      <PageHeader
+        title="Ghalti Register"
+        subtitle={`Your mistakes. ${data.total} counted. Each wrong sentence comes back as a Fix this sentence card.`}
+      />
 
       {data.rows.length === 0 ? (
         <p className="rounded-lg border border-neutral-300 bg-white p-3">
@@ -52,7 +49,7 @@ export function Ghalti() {
         <>
           <section className="flex flex-col gap-2">
             <h2 className="text-xs tracking-wide text-neutral-500 uppercase">By type</h2>
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-5 gap-2">
               {data.by_tag.map((t) => (
                 <div
                   key={t.tag}
