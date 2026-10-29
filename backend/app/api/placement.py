@@ -11,7 +11,7 @@ from app.core.clock import local_date
 from app.db import DB, utcnow
 from app.llm.provider import Provider, get_provider
 from app.models import Homework, PlacementResult, Profile
-from app.services import ghalti, grading
+from app.services import evidence, ghalti, grading
 from app.services import placement as svc
 from app.services.ghalti import sentences
 
@@ -52,6 +52,14 @@ def submit(body: PlacementIn, db: DB, llm: LLM):
     db.flush()
     if hw.status == "graded":
         ghalti.from_grade(db, now, grade, "placement")
+        evidence.record_grade(db, now, grade, skill="writing", source="placement",
+                              source_ref=f"homework:{hw.id}")  # fmt: skip
+    for r in results:
+        evidence.record_event(
+            db, now, "grammar" if r["item"]["skill"] == "grammar" else "vocab", "placement",
+            "correct" if r["ok"] else "error", source_ref=r["id"],
+            pattern_code=r["item"].get("pattern") or None, meta={"band": r["item"]["band"]},
+        )  # fmt: skip
     band = svc.level(by_band, grade["score_10"])
     marked = svc.mark_known(db, now, results)
     profile = db.get(Profile, 1)

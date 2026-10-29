@@ -9,11 +9,11 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.auth import require_user
+from app.core.clock import day_bounds, local_date
 from app.db import DB, utcnow
 from app.llm.provider import Provider, get_provider
-from app.models import Attempt, Pattern
-from app.services import daily as dailysvc
-from app.services import drills, ghalti, grading
+from app.models import Attempt, EvidenceEvent, Pattern
+from app.services import drills, evidence, ghalti, grading
 
 router = APIRouter(prefix="/api", dependencies=[Depends(require_user)])
 LLM = Annotated[Provider, Depends(get_provider)]
@@ -108,6 +108,9 @@ def drill_answer(body: DrillAnswerIn, db: DB, llm: LLM):
         result = {"correct": correct, "missing": missing, "grade": grade, "tag": exp.tag}
         if grade["source"] != "languagetool_only":  # provisional results stay out of Ghalti
             ghalti.from_grade(db, now, grade, "drill")
+            if _first_try_today(db, now, body.drill_id):
+                evidence.record_grade(db, now, grade, skill="grammar", source="drill",
+                                      source_ref=body.drill_id, pattern_code=p.code)  # fmt: skip
     else:
         result = drills.check(p, body.drill_id, body.answer, body.answers)
         correct = result["correct"]
@@ -122,9 +125,35 @@ def drill_answer(body: DrillAnswerIn, db: DB, llm: LLM):
                 input=body.answer or " / ".join(body.answers),
                 error_tags=[] if correct else [exp.tag])
     )  # fmt: skip
-    dailysvc.add_minutes(db, now, body.elapsed_ms)
+    if kind != "free" and (body.answer.strip() or any(a.strip() for a in body.answers)):
+        _drill_event(db, now, p.code, body.drill_id, exp.tag, correct, result.get("expected"))
+    evidence.add_activity(db, now, "grammar", body.elapsed_ms)
     db.commit()
     return result
+
+
+def _first_try_today(db: Session, now: datetime, drill_id: str) -> bool:
+    """True if no drill event exists yet for this drill on today's Berlin calendar day."""
+    start, _ = day_bounds(local_date(now))
+    return (
+        db.scalar(
+            select(EvidenceEvent.id)
+            .where(EvidenceEvent.source == "drill", EvidenceEvent.source_ref == drill_id,
+                   EvidenceEvent.ts >= start)
+            .limit(1)
+        )
+        is None
+    )  # fmt: skip
+
+
+def _drill_event(db: Session, now: datetime, code: str, drill_id: str, tag: str, correct: bool,
+                 expected: str | None) -> None:  # fmt: skip
+    """First try of a drill per day only; a skipped drill ("I don't know") is not an error here either."""
+    if not _first_try_today(db, now, drill_id):
+        return
+    evidence.record_event(db, now, "grammar", "drill", "correct" if correct else "error",
+                          source_ref=drill_id, pattern_code=code, tag=tag, orig=drill_id,
+                          fix=None if correct else expected)  # fmt: skip
 
 
 class FinishIn(BaseModel):

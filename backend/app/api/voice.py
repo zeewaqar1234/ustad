@@ -16,7 +16,7 @@ from app.core.clock import local_date
 from app.db import DB, utcnow
 from app.llm.provider import Provider, get_provider
 from app.models import Attempt, Card, Item, Profile, VoiceSession
-from app.services import daily
+from app.services import daily, evidence
 from app.voice import shadowing, tts
 from app.voice import tutor as svc
 from app.voice.disfluency import clean
@@ -109,7 +109,9 @@ def turn(body: TurnIn, db: DB, llm: LLM):
         raise HTTPException(422, "Only fillers were heard. Say it again or type it.")
     now = utcnow()
     t = svc.take_turn(db, llm, s, body.text, body.input_mode, body.stt_restarts)
-    daily.add_minutes(db, now, body.elapsed_ms)  # spoken and typed turns count the same
+    # spoken turns are speaking time, typed turns are writing time
+    evidence.add_activity(db, now, "speaking" if body.input_mode == "voice" else "writing",
+                          body.elapsed_ms)  # fmt: skip
     db.commit()
     return svc.view_turn(t)
 
@@ -197,7 +199,10 @@ def _shadow_reference(db, body: ShadowIn) -> tuple[str, str]:
 def shadow_attempt(body: ShadowIn, db: DB):
     reference, ref = _shadow_reference(db, body)
     result = shadowing.score(reference, body.transcript)
-    daily.add_minutes(db, utcnow(), body.elapsed_ms)
+    now = utcnow()
+    evidence.add_activity(db, now, "speaking", body.elapsed_ms)
+    evidence.record_event(db, now, "speaking", "shadow", "correct" if result["pct"] >= 90 else "error",
+                          source_ref=ref, meta={"kind": "recognition", "pct": result["pct"]})  # fmt: skip
     db.add(Attempt(ts=utcnow(), task_ref=ref, input=body.transcript[:2000],
                    correct=result["pct"] >= 80, score=result["pct"]))  # fmt: skip
     db.commit()

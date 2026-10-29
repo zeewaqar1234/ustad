@@ -1,0 +1,18 @@
+{
+  "checked": "2026-10-26",
+  "sources": {
+    "global_scale": "https://www.coe.int/en/web/common-european-framework-reference-languages/table-1-cefr-3.3-common-reference-levels-global-scale",
+    "companion_volume_2020": "https://rm.coe.int/common-european-framework-of-reference-for-languages-learning-teaching/16809ea0d4"
+  },
+  "levels": {
+    "B1": "Understands the main points of clear standard input on familiar matters. Writes simple connected text. Gives brief reasons for opinions and plans.",
+    "B2": "Understands the main ideas of complex texts, including technical discussion in his field. Interacts without strain. Writes clear, detailed text and explains a viewpoint with pros and cons."
+  },
+  "no_numbers_note": "The CEFR gives no vocabulary sizes and no study hours. The app never derives 'enough words for B1' from a CEFR number.",
+  "word_lists": {
+    "A1": {"size": 650, "note": "about"},
+    "A2": {"size": 1300, "note": "about"},
+    "B1": {"size": 2400, "note": "circa 2400 lexikalische Einheiten (2016)"}
+  },
+  "word_list_source": "https://www.goethe.de/pro/relaunch/prf/de/Goethe-Zertifikat_B1_Wortliste.pdf"
+}

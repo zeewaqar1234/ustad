@@ -56,6 +56,17 @@ def test_fixture_grades_validate_and_carry_expected_tags(db, fx):
     assert grade["score_10"] is not None and len(grade["teaching_points"]) <= 3
 
 
+@pytest.mark.parametrize("fx", FIXTURES, ids=[f["id"] for f in FIXTURES])
+def test_fixture_correct_uses_are_located_and_kept(db, fx):
+    grade = grading.grade_text(db, FakeLLM(fx["model_reply"]), fx["text"], "test")
+    got = [(u["span"], u["tag"]) for u in grade["correct_uses"]]
+    assert got == [(u["span"], u["tag"]) for u in fx["expected_correct_uses"]]
+    assert grade["dropped_correct_uses"] == 0
+    for u in grade["correct_uses"]:
+        assert fx["text"][u["start"] : u["end"]] == u["span"]
+        assert not any(u["start"] < e["end"] and e["start"] < u["end"] for e in grade["errors"])
+
+
 def test_schema_rejects_bad_output():
     good = FIXTURES[0]["model_reply"]
     for bad in (
