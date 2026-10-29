@@ -1,0 +1,101 @@
+{
+  "exam": "Goethe-Zertifikat B1",
+  "level": "B1",
+  "checked": "2026-10-26",
+  "rules_stand": "1. September 2025",
+  "sources": {
+    "rules": "https://www.goethe.de/pro/relaunch/prf/de/Durchfuehrungsbestimmungen_B1.pdf",
+    "practice_test_adults": "https://www.goethe.de/pro/relaunch/prf/materialien/B1/B1_Uebungssatz_Erwachsene.pdf",
+    "model_test_adults": "https://www.goethe.de/pro/relaunch/prf/materialien/B1/b1_modellsatz_erwachsene.pdf",
+    "practice_page": "https://www.goethe.de/ins/de/de/prf/gzb1/ueb.html"
+  },
+  "module_max_points": 100,
+  "pass_points": 60,
+  "grade_bands": [
+    {"label": "sehr gut", "min": 90, "max": 100},
+    {"label": "gut", "min": 80, "max": 89},
+    {"label": "befriedigend", "min": 70, "max": 79},
+    {"label": "ausreichend", "min": 60, "max": 69},
+    {"label": "nicht bestanden", "min": 0, "max": 59}
+  ],
+  "modules": {
+    "lesen": {
+      "label": "Lesen",
+      "minutes": 65,
+      "raw_max": 30,
+      "raw_to_points_factor": 3.33,
+      "teile": [
+        {"n": 1, "items": 6, "max": 6},
+        {"n": 2, "items": 6, "max": 6},
+        {"n": 3, "items": 7, "max": 7},
+        {"n": 4, "items": 7, "max": 7},
+        {"n": 5, "items": 4, "max": 4}
+      ],
+      "scoring": "One point per item. Module points = raw x 3.33, rounded to the nearest whole point (18 correct = 60).",
+      "source_url": "https://www.goethe.de/pro/relaunch/prf/de/Durchfuehrungsbestimmungen_B1.pdf",
+      "verified": true
+    },
+    "hoeren": {
+      "label": "Hören",
+      "minutes": 40,
+      "raw_max": 30,
+      "raw_to_points_factor": 3.33,
+      "teile": [
+        {"n": 1, "items": 10, "max": 10},
+        {"n": 2, "items": 5, "max": 5},
+        {"n": 3, "items": 7, "max": 7},
+        {"n": 4, "items": 8, "max": 8}
+      ],
+      "scoring": "One point per item, same conversion as Lesen. The exam time is about 40 minutes.",
+      "source_url": "https://www.goethe.de/pro/relaunch/prf/de/Durchfuehrungsbestimmungen_B1.pdf",
+      "verified": true
+    },
+    "schreiben": {
+      "label": "Schreiben",
+      "minutes": 60,
+      "raw_max": 100,
+      "teile": [
+        {"n": 1, "label": "E-Mail, about 80 words", "words": 80, "minutes": 20, "max": 40,
+         "criteria": {"Erfüllung": 10, "Kohärenz": 10, "Wortschatz": 10, "Strukturen": 10}},
+        {"n": 2, "label": "Diskussionsbeitrag, about 80 words", "words": 80, "minutes": 25, "max": 40,
+         "criteria": {"Erfüllung": 10, "Kohärenz": 10, "Wortschatz": 10, "Strukturen": 10}},
+        {"n": 3, "label": "Semi-formal e-mail, about 40 words", "words": 40, "minutes": 15, "max": 20,
+         "criteria": {"Erfüllung": 4, "Kohärenz": 4, "Wortschatz": 6, "Strukturen": 6}}
+      ],
+      "scoring": "Rated in bands A to E by two independent raters; no in-between values. Band E for Erfüllung (including less than 50 percent of the required words, or off topic) scores 0 for the whole Aufgabe. The app cannot be a second rater, so any essay points it gives are an estimate.",
+      "source_url": "https://www.goethe.de/pro/relaunch/prf/materialien/B1/B1_Uebungssatz_Erwachsene.pdf",
+      "verified": true
+    },
+    "sprechen": {
+      "label": "Sprechen",
+      "minutes": 15,
+      "preparation_minutes": 15,
+      "raw_max": 100,
+      "pronunciation_max": 16,
+      "teile": [
+        {"n": 1, "label": "Plan something together", "max": 28,
+         "criteria": {"Erfüllung": 8, "Interaktion": 4, "Wortschatz": 8, "Strukturen": 8}},
+        {"n": 2, "label": "Present a topic", "max": 40,
+         "criteria": {"Erfüllung": 12, "Kohärenz": 4, "Wortschatz": 12, "Strukturen": 12}},
+        {"n": 3, "label": "React to feedback and questions", "max": 16,
+         "criteria": {"Erfüllung": 16}}
+      ],
+      "scoring": "Criteria per Teil plus Aussprache (16) across all Teile. About 15 minutes per pair plus 15 minutes of preparation. The app cannot score Aussprache (the browser gives no pronunciation score), so app-made and self-entered practice points are out of the Teile total and the module range allows for the unknown Aussprache.",
+      "source_url": "https://www.goethe.de/pro/relaunch/prf/materialien/B1/B1_Uebungssatz_Erwachsene.pdf",
+      "verified": false,
+      "verify_note": "Criteria names and scales were confirmed; which scale belongs to which criterion was not. Check the Prüferblätter in the Übungssatz PDF."
+    }
+  },
+  "conflicts": [
+    "The 2015 Modellsatz also names Register and soziokulturelle Angemessenheit for Schreiben; the Übungssatz rating sheet uses the four criteria above, which match the point table. The four criteria are used."
+  ],
+  "word_list": {
+    "name": "Goethe-Zertifikat B1 Wortliste",
+    "size": 2400,
+    "size_note": "circa 2400 lexikalische Einheiten (2016)",
+    "source_url": "https://www.goethe.de/pro/relaunch/prf/de/Goethe-Zertifikat_B1_Wortliste.pdf",
+    "private_file": "goethe_b1_wortliste.txt",
+    "licence_note": "The PDF restricts storing it in a network. Keep the file in data/private/ on the Mac only; never in git."
+  },
+  "hours_note": "Goethe course-hour ranges are not used in any calculation: sources disagree and describe classroom courses from zero."
+}

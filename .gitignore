@@ -34,3 +34,4 @@ coverage/
 
 # Playwright
 frontend/e2e/.results/
+data/private/

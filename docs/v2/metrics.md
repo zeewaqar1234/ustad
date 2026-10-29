@@ -53,3 +53,50 @@ logs (rating 2 skipped); reviewed voice sessions line by line. Skipped on purpos
 and voice (they come from the attempts and the voice review, so nothing counts twice) and drill attempts with an
 empty answer. Diktat attempts only know the coarse tag (ending = OTHER). Every converted row has
 `meta_json.backfilled = true` and a `backfill_key`; a second run adds nothing.
+
+## V2: Stand box and Progress page
+
+Code: `services/standing.py`, `api/standing.py`. Constants: exam facts in `data/official/goethe_b1.json`,
+`goethe_b2.json`, `cefr.json` (each with source URL and check date); method parameters (weights, half-life,
+range floor, thresholds) in `data/official/standing_method.json`. A test fails if `standing.py` holds a numeric
+literal other than 0, 1, 2. Nothing is asked of a model.
+
+**exam_result** (Zee enters it in Settings): kind real_exam, practice_full, practice_teil (app_check is
+reserved for V3/V5). `points` is on the measurable scale: 0 to 100, or 0 to 84 for Sprechen without a real exam.
+- Lesen, Hören whole test: raw = sum of correct items over all Teile; points = raw x 3.33 rounded to the nearest
+  point, capped at 100 (18 correct = 60). One Teil: points = correct / items of that Teil x 100.
+- Schreiben, Sprechen whole test: points = sum of the rater points per Teil (Schreiben max 100, Sprechen max 84
+  without Aussprache). One Teil: points = points / Teil max x module scale.
+- Real exam: the module points from the certificate, 0 to 100.
+
+**Estimate per module.** Evidence weight: real exam replaces everything (latest one is shown, no range);
+whole practice test 1.0; one Teil 0.5; app check 0.35. Age weight 0.5^(age days / 30). Weighted mean
+`m = sum(w p) / sum(w)`, `n_eff = (sum w)^2 / sum(w^2)`, weighted SD `s`. Half range = 10 while n_eff < 2, else
+`max(5, 1.96 s / sqrt(n_eff))`. Range = m -/+ half range, clipped to 0..100. Sprechen: the high end adds 16
+(Aussprache cannot be measured), the low end is never scaled up. No evidence = "Not measured yet", no number.
+Status from the range: low >= 60 "At or above the pass line"; high >= 60 "Near the pass line"; else "Below".
+"About N to pass" = 60 minus the centre of the range, rounded.
+
+**Pace.** Hours per week = active hours of the last 28 days / 4, total and per skill, shown when at least 7 days
+have `activity_log` rows.
+
+**Forecast.** Needs at least 3 results spanning at least 14 days. Least-squares fit of points against cumulative
+active hours (from the first activity or result day) of the module's skills (Lesen: reading + vocab, Hören:
+listening, Schreiben: writing + grammar, Sprechen: speaking). Slope <= 0 or R^2 < 0.3: "No reliable trend yet".
+Else hours needed = (60 - fitted points at today's cumulative hours) / slope; date = today + hours needed / (last 28
+days weekly hours of those skills); more than 12 months: "More than a year at this pace". No practice in 28 days:
+no date. Sprechen uses 60 on the measured scale (assumes Aussprache adds nothing). If a target date is set,
+needed pace = sum of hours needed over modules below the pass line / weeks left; modules without a trend are
+listed as missing.
+
+**Indicators (not exam points).**
+- Grammar pattern state: last 20 evidence events of the pattern, weights 0.5^(age days / 14); accuracy < 60 % shaky,
+  > 85 % and last seen more than 14 days ago solid, else ok, no events new (SPEC section 7; the 14-day half-life is
+  this app's choice, SPEC says only "recency-weighted").
+- Verb position error rate: errors / (errors + correct) for tags VERB_FINAL and V2_POSITION in writing and
+  speaking, last 14 days, shown with at least 20 uses. Target below 10 % (SPEC section 1).
+- Error rate per tag per week: top 5 tags by errors in 12 weeks, a week shown only with at least 5 uses.
+- Goethe B1 word list: list file `data/private/goethe_b1_wortliste.txt` (one entry per line, gitignored, Mac only).
+  Mature = known from placement or a card with stability of at least 21 days. Matching by lemma or de without
+  article. Without the file: "Add the Goethe B1 word list to measure this."
+- Hours per skill: last 7 and 28 days, and weekly for 12 weeks (Monday start).

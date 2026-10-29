@@ -13,6 +13,7 @@ Read this first every session. Then read only the docs/ file for the current pha
 | 4. Reading (§5.3) + listening (§5.5) | Done in code (evidence below); open: real Ollama Author run, real Piper episode | 2026-10-26 |
 | V0 (v2 brief) | Done (evidence in "V2 phases" below) | 2026-10-26 |
 | V1 (v2 brief) | Done in code (evidence below); real-model correct-use run open | 2026-10-26 |
+| V2 (v2 brief) | Done in code (evidence below) | 2026-10-29 |
 | 5–7 | Not started (work-writing templates of §5.6 scheduled in Phase 5) | |
 
 **Next session:** on Zee's machine: the Phase 3 STT word-loss test with his own speech, then
@@ -623,3 +624,45 @@ Open after V1:
 - Diktat attempts from before V1 only know the coarse tag (ending = OTHER).
 - `test_daily_loop` failed twice on 2026-10-26 and passed later the same day: it depends on the time of day.
   Not investigated.
+
+### V2: the Stand box and the Progress page (2026-10-29)
+
+Gate: not applicable (rule starts at V3).
+- Official data: `data/official/goethe_b1.json`, `goethe_b2.json`, `cefr.json` (facts from brief section 4, each with
+  source URL and check date; Sprechen `verified: false`) and `standing_method.json` (weights, half-life, thresholds).
+  `data/private/` is now in `.gitignore` (the B1 word list goes there).
+- Table `exam_result` (migration `c2v2stand03`, with downgrade, round trip tested). Goals (target exam, date, weekly
+  hours) live in `profile.settings_json["goals"]`.
+- `services/standing.py` (deterministic, no model; test forbids numeric literals beyond 0, 1, 2): estimate with range,
+  status words, forecast, needed pace, pace, indicators. API: `GET /api/standing`, `/api/progress`, `/api/goals`
+  (GET, POST), `/api/exam-results` (GET, POST), `/api/exam-format`. Formulas: docs/v2/metrics.md.
+- UI: Stand box at the top of Today (`features/standing/StandBox.tsx`), Progress page (module cards with history,
+  evidence, official tasks, indicators; hours per skill as patterned stacked bars; error rate per tag per week; 40-cell
+  grammar grid with state words; word-list line; "Then and now" waits for V3), Settings: goal form and "Add a result"
+  (real result, whole practice test per Teil, one Teil). Accent colour only on the pass tick and pass line.
+- Dependencies: none.
+
+| Check | Result |
+|---|---|
+| pytest | 345 passed, 15 skipped. New `tests/test_standing.py` (36): empty DB gives "Not measured yet" and no numbers; one entry gives +/- 10; recency and weights; floor of 5; real exam overrides; Sprechen range +16 and never scaled up; rising results over 14+ days give a date; falling give "No reliable trend yet"; spans under 14 days; "More than a year"; pace needs 7 days in the window; needed pace; entry scoring (18 correct = 60, Teil scaling, rater points, whole items only, refused entries); grammar states; error rate gate of 20; weekly tag gate of 5; word list with and without the private file; no numeric literals in the service; official files carry source URLs and Teil sums; migration round trip |
+| vitest | 48 passed (4 new: empty box has no number and no pass tick for modules, the four states, mixed box, pace line) |
+| Playwright 1440x900 | `e2e/v2.spec.ts` 2 passed on a fresh e2e DB: empty box (5 "Not measured yet", 0 pass ticks, 4 Measure links, box height <= 260 px), results entered through the forms change the box, Progress at `?module=lesen`; no horizontal scroll at 1024 and 1440 on Today, Progress, Settings. Older specs were not re-run on this DB (they depend on state) |
+| make lint | ruff clean; oxlint 0 errors, 1 old warning; tsc clean |
+| Screenshots | `docs/evidence/v2/v2-stand-empty.png`, `v2-stand-data.png`, `v2-progress-empty.png`, `v2-progress-lesen.png`, `v2-settings.png` (the "data" shots use a throwaway e2e DB, not Zee's) |
+
+End-of-phase diff review (subagent): 7 findings, 6 fixed with tests: Sprechen history chart scaled 84 up to 100;
+Settings form kept a stale Teil or scores after switching module; fractional Lesen/Hören items and certificate
+points accepted; forecast wording did not match the 3-checks-over-14-days gate; needed pace showed a partial number
+when modules had no trend (now "Not measured yet" naming them); pace counted all-time activity days instead of the
+28-day window.
+Not fixed, for Zee to decide: **an entered result cannot be corrected or removed** (a mistyped real exam of 85 instead
+of 58 would override everything). Rules say never delete user data, so no DELETE was added; options: a `voided`
+flag with a Remove button, or enter a newer real result.
+
+Known limits:
+- The Stand box is about 290 px high at 1440x900 (brief: about 200). The pace and forecast lines wrap.
+- Sprechen scales are `verified: false` until the Prüferblätter are checked; the UI says "provisional".
+- B2 Sprechen is entered as one total out of 84 (per-Teil split not confirmed).
+- Word list coverage needs `data/private/goethe_b1_wortliste.txt` (one entry per line) on the Mac.
+- Forecasts need activity hours (V1 onward); a module with results but no recorded practice shows "No reliable trend yet".
+

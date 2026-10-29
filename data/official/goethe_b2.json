@@ -1,0 +1,84 @@
+{
+  "exam": "Goethe-Zertifikat B2",
+  "level": "B2",
+  "checked": "2026-10-26",
+  "sources": {
+    "rules": "https://www.goethe.de/pro/relaunch/prf/de/Durchfuehrungsbestimmungen_B2.pdf",
+    "model_test_adults": "https://www.goethe.de/pro/relaunch/prf/materialien/B2/b2_modellsatz_erwachsene.pdf"
+  },
+  "module_max_points": 100,
+  "pass_points": 60,
+  "grade_bands": [
+    {"label": "sehr gut", "min": 90, "max": 100},
+    {"label": "gut", "min": 80, "max": 89},
+    {"label": "befriedigend", "min": 70, "max": 79},
+    {"label": "ausreichend", "min": 60, "max": 69},
+    {"label": "nicht bestanden", "min": 0, "max": 59}
+  ],
+  "modules": {
+    "lesen": {
+      "label": "Lesen",
+      "minutes": 65,
+      "raw_max": 30,
+      "raw_to_points_factor": 3.33,
+      "teile": [
+        {"n": 1, "items": 9, "max": 9},
+        {"n": 2, "items": 6, "max": 6},
+        {"n": 3, "items": 6, "max": 6},
+        {"n": 4, "items": 6, "max": 6},
+        {"n": 5, "items": 3, "max": 3}
+      ],
+      "scoring": "One point per item. Module points = raw x 3.33, rounded to the nearest whole point.",
+      "source_url": "https://www.goethe.de/pro/relaunch/prf/de/Durchfuehrungsbestimmungen_B2.pdf",
+      "verified": true
+    },
+    "hoeren": {
+      "label": "Hören",
+      "minutes": 40,
+      "raw_max": 30,
+      "raw_to_points_factor": 3.33,
+      "teile": [
+        {"n": 1, "items": 10, "max": 10},
+        {"n": 2, "items": 6, "max": 6},
+        {"n": 3, "items": 6, "max": 6},
+        {"n": 4, "items": 8, "max": 8}
+      ],
+      "scoring": "One point per item, same conversion as Lesen. The exam time is about 40 minutes.",
+      "source_url": "https://www.goethe.de/pro/relaunch/prf/de/Durchfuehrungsbestimmungen_B2.pdf",
+      "verified": true
+    },
+    "schreiben": {
+      "label": "Schreiben",
+      "minutes": 75,
+      "raw_max": 100,
+      "teile": [
+        {"n": 1, "label": "Forumsbeitrag (opinion), about 150 words", "words": 150, "minutes": 50, "max": 60,
+         "criteria": {"Erfüllung": 14, "Kohärenz": 14, "Wortschatz": 16, "Strukturen": 16}},
+        {"n": 2, "label": "Message to a superior, about 100 words", "words": 100, "minutes": 25, "max": 40,
+         "criteria": {"Erfüllung": 10, "Kohärenz": 10, "Wortschatz": 10, "Strukturen": 10}}
+      ],
+      "scoring": "Rated by raters on the official criteria; the app's essay points are an estimate.",
+      "source_url": "https://www.goethe.de/pro/relaunch/prf/de/Durchfuehrungsbestimmungen_B2.pdf",
+      "verified": true
+    },
+    "sprechen": {
+      "label": "Sprechen",
+      "minutes": 15,
+      "preparation_minutes": 15,
+      "raw_max": 100,
+      "pronunciation_max": 16,
+      "teile": [
+        {"n": 1, "label": "All Teile together (Teil 1 talk and questions, Teil 2 discussion)", "max": 84}
+      ],
+      "scoring": "Teil 1 talk and questions, Teil 2 discussion, Aussprache 16 across both. The split of the other 84 points per Teil was not confirmed, so practice points are entered as one total out of 84.",
+      "source_url": "https://www.goethe.de/pro/relaunch/prf/de/Durchfuehrungsbestimmungen_B2.pdf",
+      "verified": false,
+      "verify_note": "Same check as B1 Sprechen. Aussprache cannot be measured by the app."
+    }
+  },
+  "conflicts": [
+    "The old pre-modular B2 Prüfungsziele PDF (4 x 25 points) describes the retired format and is not used."
+  ],
+  "word_list": null,
+  "word_list_note": "No official Goethe word list for B2 was found. With a B2 target the B1 list coverage is shown."
+}
