@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     ollama_review_num_ctx: int = 8192
     timezone: str = "Europe/Berlin"
     seed_dir: Path = REPO_ROOT / "data" / "seed"
+    # V2: official exam facts (committed) and files that must stay on the Mac (gitignored).
+    official_dir: Path = REPO_ROOT / "data" / "official"
+    private_dir: Path = REPO_ROOT / "data" / "private"
     # Built frontend (served by FastAPI in production). Ignored if the folder does not exist.
     static_dir: Path = REPO_ROOT / "frontend" / "dist"
     session_days: int = 30

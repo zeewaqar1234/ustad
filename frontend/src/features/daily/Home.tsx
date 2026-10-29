@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { ListRow, PageHeader } from '../../components/ui'
 import { api, type Daily } from '../../lib/api'
+import type { Standing } from '../../lib/standing'
+import { StandBox } from '../standing/StandBox'
 import type { Homework } from '../../lib/grammar'
 import type { DiktatToday, TextList } from '../../lib/reading'
 
@@ -11,6 +13,7 @@ export function Home() {
   const { data, error } = useQuery({ queryKey: ['daily'], queryFn: () => api<Daily>('/api/daily') })
   const texts = useQuery({ queryKey: ['texts'], queryFn: () => api<TextList>('/api/texts') })
   const dik = useQuery({ queryKey: ['dictation'], queryFn: () => api<DiktatToday>('/api/dictation/today') })
+  const stand = useQuery({ queryKey: ['standing'], queryFn: () => api<Standing>('/api/standing') })
   const hw = useQuery({ queryKey: ['homework', 'today'], queryFn: () => api<Homework>('/api/homework/today') })
   if (error) return <p>Error: {(error as Error).message}</p>
   if (!data) return <p>Loading…</p>
@@ -67,8 +70,10 @@ export function Home() {
   const hwStatus = !hw.data ? '…' : hw.data.status === 'open' ? 'Today’s writing task is open' : 'Written today'
 
   return (
-    <div className="max-w-[720px]">
+    <div>
       <PageHeader title="Today" subtitle="Your daily loop, in order" />
+      {stand.data && <StandBox data={stand.data} />}
+      <div className="max-w-[720px]">
 
       {data.makeup && (
         <p className="mb-4 rounded-lg border-2 border-neutral-900 p-3 text-sm">
@@ -121,6 +126,7 @@ export function Home() {
         <ListRow title="Schreiben" sub="writing" status={hwStatus} to="/homework" />
         <ListRow title="Sprechen" sub="speaking, untimed" status="Shadowing, roleplays, free talk" to="/voice" />
       </section>
+      </div>
     </div>
   )
 }

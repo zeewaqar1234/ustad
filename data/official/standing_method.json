@@ -1,0 +1,66 @@
+{
+  "note": "Method parameters for services/standing.py. These are not official exam facts: they are the formulas in docs/v2/metrics.md. Changing a value changes every estimate.",
+  "source": "docs/USTAD_V2_CODEX_BRIEF.md section V2.2 to V2.3 and docs/v2/metrics.md",
+  "evidence_weights": {
+    "real_exam": 1.0,
+    "practice_full": 1.0,
+    "practice_teil": 0.5,
+    "app_check": 0.35
+  },
+  "half_life_days": 30,
+  "range_floor": 5,
+  "range_default": 10,
+  "range_z": 1.96,
+  "n_eff_min": 2,
+  "forecast_min_items": 3,
+  "forecast_min_span_days": 14,
+  "forecast_min_r2": 0.3,
+  "forecast_max_months": 12,
+  "pace_min_days": 7,
+  "pace_window_days": 28,
+  "short_window_days": 7,
+  "week_days": 7,
+  "weeks_shown": 12,
+  "seconds_per_hour": 3600,
+  "days_per_month": 30,
+  "skills_for_module": {
+    "lesen": [
+      "reading",
+      "vocab"
+    ],
+    "hoeren": [
+      "listening"
+    ],
+    "schreiben": [
+      "writing",
+      "grammar"
+    ],
+    "sprechen": [
+      "speaking"
+    ]
+  },
+  "indicators": {
+    "grammar_attempts": 20,
+    "grammar_half_life_days": 14,
+    "grammar_shaky_below": 0.6,
+    "grammar_solid_above": 0.85,
+    "grammar_solid_unseen_days": 14,
+    "grammar_source": "SPEC.md section 7 (mastery states)",
+    "error_rate_tags": [
+      "VERB_FINAL",
+      "V2_POSITION"
+    ],
+    "error_rate_skills": [
+      "writing",
+      "speaking"
+    ],
+    "error_rate_window_days": 14,
+    "error_rate_min_opportunities": 20,
+    "error_rate_target_pct": 10,
+    "error_rate_source": "SPEC.md section 1 target: verb position error rate below 10 percent",
+    "tag_week_min_uses": 5,
+    "top_tags": 5,
+    "mature_stability_days": 21
+  },
+  "percent": 100
+}

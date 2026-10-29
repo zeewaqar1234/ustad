@@ -177,6 +177,26 @@ class ActivityLog(Base):
     seconds: Mapped[float] = mapped_column(Float, default=0)
 
 
+class ExamResult(Base):
+    """V2: one exam-format result Zee entered (docs/v2/metrics.md). `points` is on the module's measurable
+    scale: 0 to 100, or 0 to 84 for Sprechen without a real exam (Aussprache cannot be measured)."""
+
+    __tablename__ = "exam_result"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    created: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
+    taken: Mapped[date] = mapped_column(Date, index=True)
+    level: Mapped[str] = mapped_column(String(4))  # B1 | B2
+    module: Mapped[str] = mapped_column(String(12))  # lesen hoeren schreiben sprechen
+    kind: Mapped[str] = mapped_column(String(16))  # real_exam practice_full practice_teil app_check
+    teil: Mapped[int | None] = mapped_column(Integer)
+    raw: Mapped[float | None] = mapped_column(Float)
+    raw_max: Mapped[float | None] = mapped_column(Float)
+    points: Mapped[float] = mapped_column(Float)
+    points_max: Mapped[float] = mapped_column(Float)
+    note: Mapped[str] = mapped_column(Text, default="")
+    meta_json: Mapped[dict] = mapped_column(JSON, default=dict)
+
+
 class CostLedger(Base):
     __tablename__ = "cost_ledger"
     id: Mapped[int] = mapped_column(primary_key=True)
