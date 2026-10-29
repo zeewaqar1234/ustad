@@ -64,7 +64,7 @@ def list_results(db: DB):
     return {"results": [
         {"id": r.id, "taken": r.taken.isoformat(), "level": r.level, "module": r.module, "kind": r.kind,
          "teil": r.teil, "raw": r.raw, "raw_max": r.raw_max, "points": r.points,
-         "points_max": r.points_max, "note": r.note}
+         "points_max": r.points_max, "note": r.note, "voided": r.voided}
         for r in rows
     ]}  # fmt: skip
 
@@ -91,5 +91,20 @@ def add_result(body: ResultIn, db: DB):
                      raw_max=e["raw_max"], points=e["points"], points_max=e["points_max"],
                      note=body.note, meta_json=e["meta"])  # fmt: skip
     db.add(row)
+    db.commit()
+    return st.standing(db, utcnow())
+
+
+class VoidIn(BaseModel):
+    voided: bool = True
+
+
+@router.post("/exam-results/{result_id}/void")
+def void_result(result_id: int, body: VoidIn, db: DB):
+    """Soft delete: the row stays, but estimates, forecasts and pace ignore it. Undo with voided=false."""
+    row = db.get(ExamResult, result_id)
+    if row is None:
+        raise HTTPException(404, "No such result")
+    row.voided = body.voided
     db.commit()
     return st.standing(db, utcnow())

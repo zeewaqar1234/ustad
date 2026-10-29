@@ -7,7 +7,7 @@ import { formatDate, KIND_LABEL, type ModuleKey, type Standing } from '../lib/st
 
 interface Teil { n: number; label?: string; items?: number; max: number }
 type Format = Record<'B1' | 'B2', { exam: string; pass_points: number; modules: Record<ModuleKey, { label: string; teile: Teil[]; scoring: string; verified: boolean; verify_note?: string }> }>
-interface ResultRow { id: number; taken: string; level: string; module: string; kind: string; teil: number | null; raw: number | null; raw_max: number | null; points: number; points_max: number }
+interface ResultRow { id: number; taken: string; level: string; module: string; kind: string; teil: number | null; raw: number | null; raw_max: number | null; points: number; points_max: number; voided: boolean }
 
 const field = 'rounded-lg border border-neutral-400 bg-white px-3 py-1.5'
 const label = 'flex flex-col gap-1 text-sm font-semibold'
@@ -94,6 +94,10 @@ function AddResult({ preset }: { preset: ModuleKey | null }) {
     },
     onError: (e: Error) => setMsg(e.message),
   })
+  const toggle = useMutation({
+    mutationFn: (r: ResultRow) => api(`/api/exam-results/${r.id}/void`, { voided: !r.voided }),
+    onSuccess: () => qc.invalidateQueries(),
+  })
   const complete = kind === 'real_exam' ? points !== '' : kind === 'practice_teil' ? raw !== '' : !!mod && mod.teile.every((t) => teile[t.n] !== undefined && teile[t.n] !== '')
   return (
     <form
@@ -167,14 +171,21 @@ function AddResult({ preset }: { preset: ModuleKey | null }) {
       {list.data && list.data.results.length > 0 && (
         <div>
           <h3 className="mb-1 font-bold">Entered results</h3>
+          <p className="mb-1 text-sm text-neutral-600">Void a typo or a duplicate: it stays here but counts for nothing. Restore undoes it.</p>
           <table className="w-full text-left text-sm">
             <tbody>
               {list.data.results.map((r) => (
-                <tr key={r.id} className="border-b border-neutral-200">
+                <tr key={r.id} className={`border-b border-neutral-200 ${r.voided ? 'text-neutral-500 line-through' : ''}`}>
                   <td className="py-1 pr-3">{formatDate(r.taken)}</td>
                   <td className="pr-3">{r.level} {r.module}</td>
                   <td className="pr-3">{KIND_LABEL[r.kind]}{r.teil ? `, Teil ${r.teil}` : ''}</td>
                   <td>{Math.round(r.points)} of {r.points_max}{r.raw !== null ? ` (raw ${r.raw} of ${r.raw_max})` : ''}</td>
+                  <td className="pl-3 text-right no-underline">
+                    {r.voided && <span className="mr-2 font-semibold no-underline">Voided</span>}
+                    <button type="button" className="underline" onClick={() => toggle.mutate(r)}>
+                      {r.voided ? 'Restore' : 'Void'}
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -100,3 +100,9 @@ listed as missing.
   Mature = known from placement or a card with stability of at least 21 days. Matching by lemma or de without
   article. Without the file: "Add the Goethe B1 word list to measure this."
 - Hours per skill: last 7 and 28 days, and weekly for 12 weeks (Monday start).
+
+**Voided results.** `exam_result.voided = true` removes a row from every calculation above (estimate, weights,
+forecast, evidence list). The row is kept and can be restored.
+
+**Word list file.** Built by `python -m scripts.build_wortliste` from the official PDF; see docs/PROGRESS.md.
+

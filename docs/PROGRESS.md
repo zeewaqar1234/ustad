@@ -655,7 +655,7 @@ Settings form kept a stale Teil or scores after switching module; fractional Les
 points accepted; forecast wording did not match the 3-checks-over-14-days gate; needed pace showed a partial number
 when modules had no trend (now "Not measured yet" naming them); pace counted all-time activity days instead of the
 28-day window.
-Not fixed, for Zee to decide: **an entered result cannot be corrected or removed** (a mistyped real exam of 85 instead
+Decided afterwards (see V2 follow-up): **an entered result cannot be corrected or removed** (a mistyped real exam of 85 instead
 of 58 would override everything). Rules say never delete user data, so no DELETE was added; options: a `voided`
 flag with a Remove button, or enter a newer real result.
 
@@ -665,4 +665,25 @@ Known limits:
 - B2 Sprechen is entered as one total out of 84 (per-Teil split not confirmed).
 - Word list coverage needs `data/private/goethe_b1_wortliste.txt` (one entry per line) on the Mac.
 - Forecasts need activity hours (V1 onward); a module with results but no recorded practice shows "No reliable trend yet".
+
+#### V2 follow-up: soft delete and the word list (2026-10-29)
+
+- `exam_result.voided` (migration `d3v2void04`, downgrade tested). `POST /api/exam-results/{id}/void` with
+  `{"voided": true|false}`; voided rows stay in the table and the list (struck through, "Void" / "Restore" in Settings) but
+  estimates, forecasts and evidence ignore them. Nothing is deleted.
+- Word list: `python -m scripts.build_wortliste` (run in `backend/`; reads `data/private/Goethe-Zertifikat_B1_Wortliste.pdf`
+  with poppler's `pdftohtml`, no new Python dependency) writes `data/private/goethe_b1_wortliste.txt`. This PDF has no bold
+  headwords, so entries are found by page position (alphabetical part from page 16, two columns, headword cell left of the
+  examples); regional notes (`A:`, `CH:`), tense continuations and inflection lines are skipped. Result on the real PDF: 2,901
+  lemmas (the official count is "circa 2400 lexikalische Einheiten"; the list also holds derived words and variants, so the
+  Progress line shows both numbers). Skim the file: a few wrap artefacts remain (for example a split word like "biss").
+- The upload committed the PDF to the repo, so it is in git history on `main`. It is now in `data/private/` (gitignored)
+  and no longer tracked. Its licence restricts storing it in a network; consider purging it from history.
+- B2 Sprechen stays one total out of 84 (no per-Teil split).
+
+| Check | Result |
+|---|---|
+| pytest | 348 passed, 15 skipped, 1 failed: `test_daily_loop` (sibling-card "due more than 1 h later" assertion). It fails on the previous commit too and depends on the time of day (run at 23:02 Berlin): the open item from V0 and V1. New tests: voided result excluded and restorable, voided rows do not feed the forecast, migration round trip with `voided`, word list extraction |
+| vitest, lint | 48 passed; ruff clean; oxlint 0 errors, 1 old warning; tsc clean |
+| Playwright 1440x900 | `e2e/v2.spec.ts` 2 passed on a fresh DB, now including Void and Restore in Settings |
 

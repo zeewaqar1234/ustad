@@ -65,7 +65,8 @@ def test_empty_db_every_module_not_measured_and_no_numbers(db):
     assert out["needed_pace"] is None
 
 
-def test_empty_db_api(authed):
+def test_empty_db_api(authed, tmp_path, monkeypatch):
+    monkeypatch.setattr(settings, "private_dir", tmp_path)
     r = authed.get("/api/standing")
     assert r.status_code == 200
     assert all(m["low"] is None for m in r.json()["modules"])
@@ -454,7 +455,42 @@ def test_migration_round_trip(tmp_path, monkeypatch):
     names = lambda: inspect(create_engine(url)).get_table_names()
     command.upgrade(cfg, "head")
     assert "exam_result" in names()
+    cols = lambda: {c["name"] for c in inspect(create_engine(url)).get_columns("exam_result")}
+    assert "voided" in cols()
+    command.downgrade(cfg, "c2v2stand03")
+    assert "exam_result" in names() and "voided" not in cols()
     command.downgrade(cfg, "b1e7v1evid02")
     assert "exam_result" not in names()
     command.upgrade(cfg, "head")
-    assert "exam_result" in names()
+    assert "exam_result" in names() and "voided" in cols()
+
+
+def test_voided_result_counts_for_nothing_and_can_be_restored(authed):
+    post(authed, module="lesen", kind="real_exam", points=85)  # typo for 58
+    first = authed.get("/api/exam-results").json()["results"][0]["id"]
+    m = {x["module"]: x for x in authed.get("/api/standing").json()["modules"]}["lesen"]
+    assert m["official"] and m["low"] == 85
+    out = authed.post(f"/api/exam-results/{first}/void", json={}).json()
+    m = {x["module"]: x for x in out["modules"]}["lesen"]
+    assert m["status"] == "none" and m["low"] is None and m["evidence"] == []
+    rows = authed.get("/api/exam-results").json()["results"]  # the row is kept, flagged
+    assert len(rows) == 1 and rows[0]["voided"] is True
+    post(authed, module="lesen", kind="real_exam", points=58)
+    m = {x["module"]: x for x in authed.get("/api/standing").json()["modules"]}["lesen"]
+    assert m["low"] == 58 and m["status"] == "below"
+    out = authed.post(f"/api/exam-results/{first}/void", json={"voided": False}).json()
+    assert {x["module"]: x for x in out["modules"]}["lesen"]["n"] == 2
+    assert authed.post("/api/exam-results/999/void", json={}).status_code == 404
+
+
+def test_voided_results_do_not_feed_the_forecast(db):
+    for d, p in ((20, 30), (10, 40), (0, 50)):
+        add_hours(db, "reading", d + 1, 4)
+        add_result(db, "lesen", p, d)
+    for d in range(28):
+        add_hours(db, "reading", d, 0.5)
+    assert module(db, "lesen")["forecast"]["state"] == "date"
+    row = db.query(ExamResult).filter_by(points=50).one()
+    row.voided = True
+    db.commit()
+    assert module(db, "lesen")["forecast"]["state"] == "need_more"

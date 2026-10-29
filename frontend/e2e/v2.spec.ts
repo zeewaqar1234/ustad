@@ -39,7 +39,7 @@ test('empty DB: the box says Not measured yet for every module and shows no numb
   await page.screenshot({ path: `${SHOTS}/v2-stand-empty.png` })
   await page.goto('/progress')
   await expect(page.getByRole('heading', { name: 'Fortschritt' })).toBeVisible()
-  await expect(page.getByText('Add the Goethe B1 word list to measure this.').first()).toBeVisible()
+  await expect(page.getByText(/Add the Goethe B1 word list to measure this\.|of \d+ words on the Goethe-Zertifikat B1 Wortliste/).first()).toBeVisible()
   await noSideScroll(page)
   await page.screenshot({ path: `${SHOTS}/v2-progress-empty.png`, fullPage: true })
 })
@@ -87,6 +87,12 @@ test('results entered in Settings change the box and the Progress page', async (
     data: { level: 'B1', module: 'schreiben', kind: 'real_exam', taken: daysAgo(3), points: 52 },
   })
   expect(w.ok()).toBeTruthy()
+  // Void the Hören Teil result (soft delete), see the box change, restore it
+  await page.getByRole('row', { name: /B1 hoeren/ }).getByRole('button', { name: 'Void' }).click()
+  await expect(page.getByRole('row', { name: /B1 hoeren/ }).getByText('Voided')).toBeVisible()
+  await expect.poll(async () => ((await (await page.request.get('/api/standing')).json()).modules as { module: string; status: string }[]).find((m) => m.module === 'hoeren')?.status).toBe('none')
+  await page.getByRole('row', { name: /B1 hoeren/ }).getByRole('button', { name: 'Restore' }).click()
+  await expect.poll(async () => ((await (await page.request.get('/api/standing')).json()).modules as { module: string; status: string }[]).find((m) => m.module === 'hoeren')?.status).not.toBe('none')
   await page.screenshot({ path: `${SHOTS}/v2-settings.png`, fullPage: true })
 
   await page.goto('/')
