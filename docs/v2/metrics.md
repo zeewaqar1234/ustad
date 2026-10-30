@@ -106,58 +106,54 @@ forecast, evidence list). The row is kept and can be restored.
 
 **Word list file.** Built by `python -m scripts.build_wortliste` from the official PDF; see docs/PROGRESS.md.
 
-## V2 redesign: internal readiness (what Zee's own work says)
+## Level and practice (V2 redo, 2026-10-30)
 
-Code: `services/readiness.py` (numbers), `services/insight.py` (wording). Parameters: `data/official/readiness_method.json`;
-entries there are modelling choices, not exam facts, and are listed so they can be checked. This replaces the official-points
-box on Today. The official layer (exam results, `services/standing.py`) stays on Progress and now also checks the estimate.
+Code: `services/readiness.py` (numbers), `services/insight.py` (wording). Parameters: `data/official/readiness_method.json`
+(modelling choices, written down so they can be checked). Shown on Today and at the top of Progress (`features/standing/LevelBox.tsx`).
+This replaces the first redesign, which compared the share of app answers right with the Goethe pass mark (60 of 100 points).
+Those are different quantities, so that comparison is gone. No number on this box is an exam score.
 
-**Evidence streams.** One stream per skill, taken from `evidence_event` (skill, source, outcome, band):
+**Level.** Only the placement test sets it (`profile.level_band`, rule in `services/placement.py`: bands A2, B1.1, B1.2, B2 in
+order, a band passes at 70 % right, the first band under 70 % is the one Zee works on). The ladder shows passed bands filled, the
+band being worked on hatched, and the goal as the accent line after B1.2 (B1 exam) or B2 (B2 exam). Practice never moves the level:
+the app's lessons are B1 material without sub-bands (all seed texts B1.1, patterns have no band), so practice cannot place Zee in a band.
 
-| Skill | Sources counted (weight) | Why |
-|---|---|---|
-| Grammatik | drill 1, recitation 1, placement 1 (B1.1, B1.2, B2 items only) | typed answers on the 40 B1 patterns |
-| Wortschatz | word list count if `data/private/goethe_b1_wortliste.txt` exists (an indicator, no pass line); else placement vocabulary items (B1 bands) | counts words in your cards that are mature (stability 21 days or more) or known from placement |
-| Lesen | reading_q 1 | exam-like questions on B1 texts |
-| Hören | diktat 0.5 | spelling from audio is a proxy, not comprehension |
-| Schreiben | homework 1, tagebuch 1, placement 1, voice_review (typed lines) 1 | grader errors and correct uses |
-| Sprechen | voice_review (spoken lines) 1, shadow 0.3 | recognition only for shadowing; pronunciation is not measured |
+**Line.** 70 %, the placement band rule (`placement.PASS`). An app rule, not a Goethe number.
 
-Not counted: SRS card reviews (the scheduler asks what you are about to forget, so their accuracy says little about the exam),
-A2 placement items (they say nothing about B1).
+**Evidence streams.** As before, one per skill from `evidence_event`:
 
-**Estimate.** Each event has weight `w = source weight x 0.5^(age days / 60)`. Successes `s` and failures `f` are the weighted counts.
-Posterior is Beta(1 + s, 1 + f), a uniform prior. Estimate `m = a / (a + b)`, spread `sd = sqrt(ab / ((a+b)^2 (a+b+1)))`, 95 %
-range `m -/+ 1.96 sd` clipped to 0..1. **Confidence** = 100 minus the width of that range in percentage points. With no
-evidence it is about 5 %; it says how narrow the range is and nothing else. A skill with no events is "No evidence yet".
-The line is `pass_points / module_max_points` of the chosen Goethe exam (60 %). Status: range low >= line "At or above";
-range high >= line "Near"; else "Below". For Lesen the share of items right is exactly the share of exam points, so that
-comparison is direct; for the other skills it is a proxy (see the proxy notes shown on the screen).
+| Skill | Sources counted (weight) |
+|---|---|
+| Grammatik | drill 1, recitation 1, placement 1 (B1.1, B1.2, B2 items only) |
+| Wortschatz | placement 1 (B1 bands only). The word list count is shown on Progress as an indicator and is not in this estimate |
+| Lesen | reading_q 1 |
+| Hören | diktat 0.5 (one answer per sentence) |
+| Schreiben | homework 1, tagebuch 1, placement 1, voice_review 1 |
+| Sprechen | voice_review 1, shadow 0.3 |
 
-**Overall.** Mean of the measured skills (range: mean of their lows and highs). Confidence = mean of the skills' confidence
-with unmeasured skills counted as 0, so it rises as more skills have evidence. The word list count is not in the overall.
+Not counted: SRS card reviews (the scheduler asks what you are about to forget), A2 placement items.
 
-**Trend and milestone.** At the end of each of the last 12 weeks the skill's estimate is recomputed from events up to that day
-(only with at least 2 effective events). Needs 3 such points spanning 14 days; least squares of the estimate against the
-cumulative practice hours of that skill; slope > 0 and R^2 >= 0.3, else "No reliable trend yet". Hours needed = (line - fitted
-estimate now) / slope; date = today + hours needed / weekly hours of the last 28 days. The milestone date is the latest date
-among skills below the line; if one of them has no trend the milestone says so instead of a date. With a target date: needed
-hours per week = hours needed (sum over skills below the line) / weeks left, shown next to the current pace.
+**Share right per skill.** Weight `w = source weight x 0.5^(age days / 60)`; successes `s`, failures `f` weighted. Beta(1 + s, 1 + f).
+Shown: mean `a / (a + b)` and `± h` where `h` = half the width of the 95 % range (`mean -/+ 1.96 sd`, clipped to 0..1), in points.
+Status: range low >= 70 % "70% or more"; range high >= 70 % "Around 70%, not clear yet"; else "Under 70%".
+**Practice since placement** pools the weighted counts of all skills into one Beta. **Skills at the line** = count with status "70% or more".
+**Move up** says "retake the placement test" only when every skill is at 70 % or more and Zee works on B1.1 or B1.2.
 
-**Calibration (the only real accuracy figure).** For each non-voided Lesen or Hören practice test or exam result, the reading
-or listening estimate is recomputed using only events before the test day and compared with the points. The mean absolute error
-over those tests is shown as "off by N points on average". Until a test is entered it says that nothing has been checked.
+**Last 4 weeks.** Unweighted by age: share right in the last 28 days minus share right in the 28 days before, in points (source weights apply).
+Shown only when both windows hold 10 answers; otherwise "not enough history". A skill measured only by placement says so.
 
-**Level label.** The placement test's result (`profile.level_band`) with its date; it covers grammar, vocabulary and a writing
-sample, and is not an official CEFR result. For a B2 goal the screen says the app's exercises are B1 level.
+**Time to goal.** Hours since placement = active hours from the placement day to today, all skills. Per skill: at the end of each of the
+last 12 weeks the estimate is recomputed from events up to that day (at least 2 effective events). With 3 such points over 14 days, least
+squares of the estimate against the skill's cumulative practice hours; slope > 0 and R^2 >= 0.3, else no estimate. If the fitted value
+is already at 70 % while the range still spans it, the skill needs more answers, not hours, and gets no hours figure.
+Hours needed = (0.70 - fitted now) / slope, summed over skills under the line; date = today + hours / the skill's weekly hours of the
+last 28 days; the latest date wins. Needed per week = hours needed / weeks to the target date. Skills measured only by placement or with
+no answers are left out and named. If any counted skill under the line has no estimate, no hours figure is shown and the reasons are listed.
+The Days bar is days since placement against days left to the target date (calendar only).
 
-**Analysis text.** `POST /api/readiness/insight` gives the local model a JSON of the numbers above and asks for a summary,
-strengths, weaknesses and next steps (schema `Insight`). Every number in its answer must appear in the facts; otherwise the answer is
-dropped and fixed sentences from the same facts are shown. Cached per facts hash. The model never produces a number or a level.
+**Check against practice tests.** On Progress only: for each Lesen or Hören practice test, the share right in the app before the test day
+against the test points; mean absolute difference.
 
-**Review fixes (same day).** Diktat counts one answer per sentence (right only if no word was wrong), not one per wrong word. The word
-list count has confidence 0, is not in the overall and is not given to the model as a score. The overall says "Partial: N of M skills
-measured" until every scored skill has evidence. Calibration skips tests with fewer than 2 effective earlier events and says how many.
-The analysis check also requires a number about a skill to belong to a skill named in the same sentence, allows only the placement label
-or the goal exam as a level name, and caps item length.
-
+**Explanation.** `POST /api/readiness/insight` as before, with the new facts (share right, ± points, answers, 4-week change, hours, pace).
+Every number in the model's answer must be in the facts and belong to the skill named in its sentence; level names only the placement
+label, the band worked on or the goal exam. Otherwise fixed sentences are shown.

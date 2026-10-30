@@ -724,3 +724,35 @@ wrong skill and let level names through; the goal question on Today reset the sa
 readiness call failed; Diktat counted one event per wrong word; calibration used tests with almost no earlier evidence; the overall status
 claimed "At or above" on one measured skill (now "Partial"). pytest 375 passed, vitest 55 passed.
 
+
+#### V2 redo: level ladder and time to goal (2026-10-30)
+
+Zee's feedback on the redesign above: too complex, cluttered, and phrases like "at or above the 60% line" were hard to follow and not solid.
+The root cause was a real error: the share of app answers right was compared with the Goethe pass mark (60 of 100 points). Those are different
+quantities. That comparison is removed. Zee chose (in this session) the "ladder + time" layout and hours based on his own trend.
+
+- One box (`features/standing/LevelBox.tsx`) on Today and at the top of Progress: level from the placement test on a band ladder
+  (A2, B1.1, B1.2, B2; passed filled, current hatched, goal as the accent line), practice since placement (share right on B1 work, ± points,
+  answers), time to goal (hours since placement against hours still needed, days since placement against days left, pace, needed h/week, date),
+  and one skill table (share right ± points, range bar with the 70 % tick, answers, change over the last 4 weeks, status). "Explain in words" keeps
+  the local-model wording with the number check. Dials, the overall readiness figure and "confidence %" are gone (`Dial.tsx`, `ReadinessBox.tsx` deleted).
+- The line is now the placement band rule (70 % right), an app rule, labelled as such. Practice never moves the level; it can suggest a retake.
+- Progress: the box, weekly history per skill, a plain table of practice tests entered (with the Lesen/Hören check), then hours, error tags,
+  patterns, word list. The module bars and module cards are removed from Progress (the data and the Settings forms are unchanged).
+- Formulas: docs/v2/metrics.md "Level and practice". Parameters added to `readiness_method.json`: `trend_days` 28, `trend_min_answers` 10,
+  `move_up_min_skills` 4 (assumptions, marked). No migration, no new dependency.
+- Bugs found on the way and fixed with tests: a 4-week "trend" that moved with no new answers (age discount only), now a window comparison;
+  a skill only placement measures blocked the time to goal forever, now named and left out; time to goal said "0.0 h more, every skill at the line"
+  while the table showed skills under 70 %; the hours bar was drawn full when the hours were unknown (now text only).
+- Subagent review: 9 findings, all fixed: "Since then" counted placement items and earlier answers; the retake suggestion could never appear because
+  vocabulary has only 8 placement items; "reached" copy while a placement-only skill was under the line; template strengths by mean, summary by range;
+  the model check rejected "B1 Board", "A2+" and "B1 work"; an unknown level label counted as every band passed; the writing-score step down was not
+  explained (now in the note); "Invalid Date" with a level but no placement row; colour-only wording of the line. Vacuous tests replaced.
+
+| Check | Result |
+|---|---|
+| pytest | 387 passed, 15 skipped (`tests/test_readiness.py` 38) |
+| vitest | 56 passed (`features/standing/level.test.tsx`: empty, placed ladder, time to goal, unknown hours, trend text, explain, goal form, missing placement date) |
+| Playwright 1440x900 | `e2e/v2.spec.ts` 3 passed on a fresh e2e DB (empty; results entered and voided; fixture evidence with the explanation); no horizontal scroll at 1024 and 1440 |
+| Screenshots | `docs/evidence/v2/v2-today-empty.png`, `v2-today-fixture.png`, `v2-today-analysis.png`, `v2-progress-empty.png`, `v2-progress-fixture.png`, `v2-settings.png` (fixture data, throwaway DB) |
+| Real local model, Zee's data | **Not run** here: no Ollama and no access to his database. The explanation was tested with a fake model and the fixed-sentence fallback |

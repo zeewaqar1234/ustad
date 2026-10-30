@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { ListRow, PageHeader } from '../../components/ui'
 import { api, type Daily } from '../../lib/api'
-import { ReadinessBox } from '../standing/ReadinessBox'
+import { LevelBox } from '../standing/LevelBox'
 import type { Homework } from '../../lib/grammar'
 import type { DiktatToday, TextList } from '../../lib/reading'
 
@@ -70,7 +70,7 @@ export function Home() {
   return (
     <div>
       <PageHeader title="Today" subtitle="Your daily loop, in order" />
-      <ReadinessBox />
+      <LevelBox />
       <div className="max-w-[720px]">
 
       {data.makeup && (
