@@ -53,8 +53,12 @@ def facts(db: Session, now: datetime) -> dict:
             {
                 "skill": s["label"],
                 "measured": s["measured"],
-                "readiness_pct": _pct(s["mean"]),
-                "range_pct": [_pct(s["lo"]), _pct(s["hi"])] if s["measured"] else None,
+                "census": bool(s.get("census")),
+                "readiness_pct": None if s.get("census") else _pct(s["mean"]),
+                "range_pct": [_pct(s["lo"]), _pct(s["hi"])]
+                if s["measured"] and not s.get("census")
+                else None,
+                "list_words_mature": s["n"] if s.get("census") else None,
                 "confidence_pct": s["confidence_pct"],
                 "events": s["n"],
                 "status": s["status_word"],
@@ -86,18 +90,44 @@ def _numbers(obj) -> set[str]:
     return {m.replace(",", ".") for m in _NUM.findall(json.dumps(obj, ensure_ascii=False))}
 
 
+_LEVEL = re.compile(r"\b[ABC][12](?:\.\d)?\b")
+
+
+def _numbers_of(obj) -> set[str]:
+    nums = _numbers(obj)
+    return nums | {n.rstrip("0").rstrip(".") for n in nums if "." in n}  # 74.0 may be written 74
+
+
 def numbers_ok(out: Insight, f: dict) -> bool:
-    allowed = _numbers(f)
-    # a number the facts hold as 74.0 may be written 74; as 3 hours may be written 3.0
-    allowed |= {n.rstrip("0").rstrip(".") for n in allowed if "." in n}
-    text = " ".join([out.summary, *out.strengths, *out.weaknesses, *out.next_steps])
-    return all(n.replace(",", ".") in allowed for n in _NUM.findall(text))
+    """Every number must come from the facts, a number about a skill must belong to a skill named in the same
+    sentence, a level label may only be the placement label or the goal exam, and each item stays short."""
+    cap = rd.rm()["insight"]["max_chars"]
+    items = [out.summary, *out.strengths, *out.weaknesses, *out.next_steps]
+    if (
+        any(len(t) > cap for t in [*out.strengths, *out.weaknesses, *out.next_steps])
+        or len(out.summary) > cap * 2
+    ):
+        return False
+    allowed_levels = {x for x in (f["placement_label"], f["goal"]["exam"].rsplit(" ", 1)[-1]) if x}
+    general = _numbers_of({k: v for k, v in f.items() if k != "skills"})
+    by_skill = {s["skill"]: _numbers_of(s) for s in f["skills"]}
+    everything = general.union(*by_skill.values())
+    for text in items:
+        if any(lv not in allowed_levels for lv in _LEVEL.findall(text)):
+            return False
+        for sentence in re.split(r"(?<=[.!?])\s+", text):
+            nums = {n.replace(",", ".") for n in _NUM.findall(_LEVEL.sub("", sentence))}
+            named = [name for name in by_skill if name.lower() in sentence.lower()]
+            allowed = general.union(*(by_skill[n] for n in named)) if named else everything
+            if not nums <= allowed:
+                return False
+    return True
 
 
 def template(f: dict) -> Insight:
     """No model: the same facts in fixed sentences."""
     ov = f["overall"]
-    measured = [s for s in f["skills"] if s["measured"]]
+    measured = [s for s in f["skills"] if s["measured"] and not s["census"]]
     if not measured:
         return Insight(
             summary="No skill has evidence yet, so the app shows no level. Take the placement test "

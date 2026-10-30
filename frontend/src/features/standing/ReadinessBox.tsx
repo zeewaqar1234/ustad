@@ -15,13 +15,13 @@ const MEASURE_TO: Record<string, string> = {
   speaking: '/voice',
 }
 
-function GoalPrompt() {
+function GoalPrompt({ goals }: { goals: Readiness['goals'] }) {
   const qc = useQueryClient()
-  const [exam, setExam] = useState<'B1' | 'B2'>('B1')
+  const [exam, setExam] = useState<'B1' | 'B2'>(goals.target_exam)
   const [date, setDate] = useState('')
   const [err, setErr] = useState('')
   const save = useMutation({
-    mutationFn: () => api('/api/goals', { target_exam: exam, target_date: date || null, weekly_hours: null }),
+    mutationFn: () => api('/api/goals', { target_exam: exam, target_date: date || null, weekly_hours: goals.weekly_hours }),
     onSuccess: () => qc.invalidateQueries(),
     onError: (e: Error) => setErr(e.message),
   })
@@ -189,7 +189,7 @@ export function ReadinessBox() {
           </dd>
         </dl>
       </div>
-      {!data.goals.target_date && <GoalPrompt />}
+      {!data.goals.target_date && <GoalPrompt goals={data.goals} />}
       <ul className="mt-3 grid grid-cols-6 gap-2" aria-label="Skills">
         {data.skills.map((s) => (
           <SkillDial key={s.skill} s={s} target={data.target.share} />

@@ -33,21 +33,33 @@ class Ev:
     source: str
     ok: bool
     band: str | None
+    ref: str = ""
 
 
 def load_events(db: Session) -> list[Ev]:
     out = []
+    sentences: dict[tuple[str, date], Ev] = {}
     for e in db.scalars(select(EvidenceEvent)):
-        out.append(
-            Ev(
-                local_date(e.ts),
-                e.skill,
-                e.source,
-                e.outcome == "correct",
-                (e.meta_json or {}).get("band"),
-            )
+        ev = Ev(
+            local_date(e.ts),
+            e.skill,
+            e.source,
+            e.outcome == "correct",
+            (e.meta_json or {}).get("band"),
+            e.source_ref,
         )
-    return out
+        if e.source == "diktat":
+            # one answer per sentence: every wrong word is its own event, so collapse them (right only if no word was wrong)
+            key = (e.source_ref, ev.day)
+            prev = sentences.get(key)
+            sentences[key] = (
+                ev
+                if prev is None
+                else Ev(ev.day, ev.skill, ev.source, prev.ok and ev.ok, None, ev.ref)
+            )
+        else:
+            out.append(ev)
+    return out + list(sentences.values())
 
 
 def target_share(level: str) -> float:
@@ -208,7 +220,7 @@ def vocab_census(db: Session) -> dict | None:
         "mean": mean,
         "lo": mean,
         "hi": mean,
-        "confidence_pct": method_percent(),
+        "confidence_pct": 0,
         "n": w["mature"],
         "n_eff": float(w["mature"]),
         "census": True,
@@ -221,6 +233,7 @@ def calibration(db: Session, events: list[Ev], level: str) -> dict:
     so they are directly comparable to the reading and listening readiness on the test day."""
     pairs = {"lesen": "reading", "hoeren": "listening"}
     rows = []
+    skipped = 0
     for r in db.scalars(
         select(ExamResult).where(ExamResult.level == level, ExamResult.voided.is_(False))
     ):
@@ -230,7 +243,8 @@ def calibration(db: Session, events: list[Ev], level: str) -> dict:
         est = skill_at(
             [e for e in events if e.day < r.taken], skill, r.taken
         )  # evidence before the test only
-        if est is None:
+        if est is None or est["n_eff"] < rm()["snapshot_min_n_eff"]:
+            skipped += 1  # too little evidence before that test to say anything
             continue
         actual = r.points / r.points_max
         rows.append(
@@ -242,6 +256,9 @@ def calibration(db: Session, events: list[Ev], level: str) -> dict:
                 "actual_pts": actual * st.exam(level)["module_max_points"],
             }
         )
+    if not rows and skipped:
+        return {"n": 0, "skipped": skipped,
+                "note": f"{skipped} practice tests had too little recorded practice before them to compare with."}  # fmt: skip
     if not rows:
         return {
             "n": 0,
@@ -249,7 +266,12 @@ def calibration(db: Session, events: list[Ev], level: str) -> dict:
             "Enter an official practice test for Lesen or Hören in Settings.",
         }
     errs = [abs(r["estimate_pts"] - r["actual_pts"]) for r in rows]
-    return {"n": len(rows), "mean_abs_error_pts": sum(errs) / len(errs), "rows": rows}
+    return {
+        "n": len(rows),
+        "skipped": skipped,
+        "mean_abs_error_pts": sum(errs) / len(errs),
+        "rows": rows,
+    }
 
 
 def level_info(db: Session) -> dict:
@@ -338,16 +360,20 @@ def readiness(db: Session, now: datetime) -> dict:
         lo = sum(s["lo"] for s in measured) / len(measured)
         hi = sum(s["hi"] for s in measured) / len(measured)
         mean = sum(s["mean"] for s in measured) / len(measured)
-        conf = sum(s["confidence_pct"] for s in skills) / len(
-            skills
+        conf = sum(s["confidence_pct"] for s in scored) / len(
+            scored
         )  # unmeasured skills count as 0
         overall.update(
             mean=mean,
             lo=lo,
             hi=hi,
             confidence_pct=st.half_up(conf),
-            status=status_of(lo, hi, target),
-            status_word=words[status_of(lo, hi, target)],
+            status=status_of(lo, hi, target) if len(measured) == len(scored) else "partial",
+            status_word=(
+                words[status_of(lo, hi, target)]
+                if len(measured) == len(scored)
+                else f"Partial: {len(measured)} of {len(scored)} skills measured"
+            ),
         )
     else:
         overall.update(

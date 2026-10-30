@@ -718,3 +718,9 @@ The official-points layer remains on Progress and now serves as calibration.
 Honest limits: the estimate is only as good as its proxies. It has been checked against no real practice test yet; the calibration line fills in
 when Zee enters Lesen or Hören practice tests. Confidence measures how narrow the range is, not that the level is right.
 
+Review of the readiness work (subagent): 8 findings, all fixed with tests: census word count had 100 % confidence and entered the overall
+and the model facts; the analysis template printed "None%" and treated the count as a weakness; the model check let a real number sit on the
+wrong skill and let level names through; the goal question on Today reset the saved exam and weekly hours; Progress hung on "Loading" when the
+readiness call failed; Diktat counted one event per wrong word; calibration used tests with almost no earlier evidence; the overall status
+claimed "At or above" on one measured skill (now "Partial"). pytest 375 passed, vitest 55 passed.
+

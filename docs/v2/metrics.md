@@ -155,3 +155,9 @@ sample, and is not an official CEFR result. For a B2 goal the screen says the ap
 strengths, weaknesses and next steps (schema `Insight`). Every number in its answer must appear in the facts; otherwise the answer is
 dropped and fixed sentences from the same facts are shown. Cached per facts hash. The model never produces a number or a level.
 
+**Review fixes (same day).** Diktat counts one answer per sentence (right only if no word was wrong), not one per wrong word. The word
+list count has confidence 0, is not in the overall and is not given to the model as a score. The overall says "Partial: N of M skills
+measured" until every scored skill has evidence. Calibration skips tests with fewer than 2 effective earlier events and says how many.
+The analysis check also requires a number about a skill to belong to a skill named in the same sentence, allows only the placement label
+or the goal exam as a level name, and caps item length.
+

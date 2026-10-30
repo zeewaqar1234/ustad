@@ -112,3 +112,28 @@ test('analysis: shown only after the click, with the source line', async () => {
   expect(screen.getByText(/Fixed sentences from the same numbers/)).toBeInTheDocument()
   expect(calls).toContain('POST /api/readiness/insight')
 })
+
+test('goal question keeps the saved exam and weekly hours', async () => {
+  const d = data({ goals: { target_exam: 'B2', target_date: null, weekly_hours: 5 } })
+  const calls: { url: string; body: string }[] = []
+  vi.stubGlobal(
+    'fetch',
+    vi.fn((url: string, init?: RequestInit) => {
+      calls.push({ url, body: String(init?.body ?? '') })
+      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(d) })
+    }),
+  )
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  render(
+    <QueryClientProvider client={qc}>
+      <MemoryRouter>
+        <ReadinessBox />
+      </MemoryRouter>
+    </QueryClientProvider>,
+  )
+  const date = await screen.findByLabelText('By when?')
+  fireEvent.change(date, { target: { value: '2027-03-01' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Set goal' }))
+  await waitFor(() => expect(calls.some((c) => c.url === '/api/goals')).toBe(true))
+  expect(JSON.parse(calls.find((c) => c.url === '/api/goals')!.body)).toEqual({ target_exam: 'B2', target_date: '2027-03-01', weekly_hours: 5 })
+})

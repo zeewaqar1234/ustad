@@ -300,7 +300,7 @@ export function Progress() {
   const sel = sp.get('module') as ModuleKey | null
   const { data, error } = useQuery({ queryKey: ['progress'], queryFn: () => api<ProgressData>('/api/progress') })
   const ready = useQuery({ queryKey: ['readiness'], queryFn: () => api<Readiness>('/api/readiness') })
-  if (error) return <p>Error: {(error as Error).message}</p>
+  if (error || ready.error) return <p>Error: {((error ?? ready.error) as Error).message}</p>
   if (!data || !ready.data) return <p>Loading…</p>
   const rd = ready.data
   const counts = { solid: 0, ok: 0, shaky: 0, new: 0 }

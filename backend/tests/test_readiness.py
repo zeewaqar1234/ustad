@@ -330,3 +330,117 @@ def test_readiness_service_has_no_numeric_literals_beyond_0_1_2():
             if num and not isinstance(node.value, bool) and node.value not in (0, 1, 2):
                 bad.append((node.lineno, node.value))
         assert bad == [], mod.__name__
+
+
+# --- review fixes ---------------------------------------------------------------------------------
+
+
+def test_word_list_count_neither_inflates_confidence_nor_enters_the_analysis(db, tmp_path):
+    (tmp_path / "goethe_b1_wortliste.txt").write_text("Bahnhof\nweil\n")
+    from app.models import Card, Item
+
+    it = Item(deck="w", unit=1, unit_order=1, unit_title="u", kind="word", de="weil", en="x")
+    db.add(it)
+    db.flush()
+    db.add(Card(item_id=it.id, card_type="recog", introduced_at=utcnow(), stability=40.0))
+    db.commit()
+    seeded(db)
+    r = rd.readiness(db, utcnow())
+    vocab = {s["skill"]: s for s in r["skills"]}["vocab"]
+    assert vocab["confidence_pct"] == 0 and r["overall"]["of"] == 5
+    scored = [s for s in r["skills"] if s["status"] != "indicator"]
+    assert r["overall"]["confidence_pct"] == round(sum(s["confidence_pct"] for s in scored) / 5)
+    f = insight.facts(db, utcnow())
+    v = {s["skill"]: s for s in f["skills"]}["Wortschatz"]
+    assert v["readiness_pct"] is None and v["range_pct"] is None and v["list_words_mature"] == 1
+    out = insight.template(f)
+    assert "None" not in out.summary and not any("Wortschatz" in w for w in out.weaknesses)
+
+
+def test_template_with_only_a_word_count_says_no_evidence(db, tmp_path):
+    (tmp_path / "goethe_b1_wortliste.txt").write_text("Bahnhof\n")
+    out = insight.template(insight.facts(db, utcnow()))
+    assert "None" not in out.summary and "No skill has evidence yet" in out.summary
+
+
+def test_analysis_numbers_must_belong_to_the_skill_named_in_the_sentence(db):
+    seeded(db)
+    f = insight.facts(db, utcnow())
+    sk = {s["skill"]: s for s in f["skills"]}
+    lesen, schreiben = sk["Lesen"]["readiness_pct"], sk["Schreiben"]["readiness_pct"]
+    assert lesen != schreiben
+
+    def ok(text):
+        return insight.numbers_ok(
+            Insight(summary=text, strengths=[], weaknesses=[], next_steps=[]), f
+        )
+
+    assert ok(f"Lesen is at {lesen}%.") and ok(f"Schreiben is at {schreiben}%.")
+    assert not ok(f"Schreiben is at {lesen}%.")  # a real number, but Lesen's
+    assert not ok("You are working towards C1.") and not ok("Your level is B2.")
+    assert ok(f"Placed {f['placement_label']}.") if f["placement_label"] else True
+    long = Insight(summary="x", strengths=["a" * 400], weaknesses=[], next_steps=[])
+    assert not insight.numbers_ok(long, f)
+
+
+def test_overall_is_partial_until_every_scored_skill_has_evidence(db):
+    ev(db, "reading", "reading_q", "correct", n=60)
+    o = rd.readiness(db, utcnow())["overall"]
+    assert (
+        o["status"] == "partial"
+        and o["status_word"] == "Partial: 1 of 5 skills measured"
+        or o["of"] == 6
+    )
+    assert "Partial" in o["status_word"]
+
+
+def test_diktat_counts_one_answer_per_sentence(db):
+    for ref in ("d1", "d2", "d3", "d4", "d5"):  # five sentences with one slip each
+        db.add(
+            EvidenceEvent(
+                ts=datetime.now(UTC),
+                skill="listening",
+                source="diktat",
+                outcome="error",
+                source_ref=ref,
+            )
+        )
+    for ref in ("d6",):  # one perfect sentence
+        db.add(
+            EvidenceEvent(
+                ts=datetime.now(UTC),
+                skill="listening",
+                source="diktat",
+                outcome="correct",
+                source_ref=ref,
+            )
+        )
+    for _ in range(3):  # three slips in one sentence still count once
+        db.add(
+            EvidenceEvent(
+                ts=datetime.now(UTC),
+                skill="listening",
+                source="diktat",
+                outcome="error",
+                source_ref="d7",
+            )
+        )
+    db.commit()
+    assert skills(db)["listening"]["n"] == 7
+
+
+def test_calibration_skips_tests_with_almost_no_prior_evidence(db):
+    ev(db, "reading", "reading_q", "correct", days_ago=10, n=1)
+    db.add(
+        ExamResult(
+            taken=local_date(utcnow()),
+            level="B1",
+            module="lesen",
+            kind="practice_full",
+            points=90.0,
+            points_max=100.0,
+        )
+    )
+    db.commit()
+    c = rd.readiness(db, utcnow())["calibration"]
+    assert c["n"] == 0 and c["skipped"] == 1 and "too little" in c["note"]
