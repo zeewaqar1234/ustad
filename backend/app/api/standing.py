@@ -1,7 +1,7 @@
 """V2: Stand box, Progress page, goals and exam results (docs/v2/metrics.md)."""
 
 from datetime import date
-from typing import Literal
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
@@ -10,7 +10,9 @@ from sqlalchemy import select
 from app.core.auth import require_user
 from app.core.clock import local_date
 from app.db import DB, utcnow
+from app.llm.provider import Provider, get_provider
 from app.models import ExamResult
+from app.services import insight, readiness
 from app.services import standing as st
 
 router = APIRouter(prefix="/api", dependencies=[Depends(require_user)])
@@ -108,3 +110,15 @@ def void_result(result_id: int, body: VoidIn, db: DB):
     row.voided = body.voided
     db.commit()
     return st.standing(db, utcnow())
+
+
+@router.get("/readiness")
+def get_readiness(db: DB):
+    return readiness.readiness(db, utcnow())
+
+
+@router.post("/readiness/insight")
+def readiness_insight(
+    db: DB, provider: Annotated[Provider, Depends(get_provider)], refresh: bool = False
+):
+    return insight.get_insight(db, provider, utcnow(), force=refresh)

@@ -77,7 +77,7 @@ function ModuleRow({ m, max }: { m: ModuleStand; max: number }) {
   )
 }
 
-export function StandBox({ data }: { data: Standing }) {
+export function StandBox({ data, compact }: { data: Standing; compact?: boolean }) {
   const forecasts = data.modules.filter((m) => m.status !== 'none' && !m.official)
   return (
     <section aria-label="Stand" className="mb-8 rounded-lg border border-neutral-300 bg-white px-5 py-4">
@@ -96,8 +96,8 @@ export function StandBox({ data }: { data: Standing }) {
           <ModuleRow key={m.module} m={m} max={data.module_max_points} />
         ))}
       </div>
-      <p className="mt-2 text-sm text-neutral-800">{paceLine(data)}</p>
-      {forecasts.length > 0 && (
+      {!compact && <p className="mt-2 text-sm text-neutral-800">{paceLine(data)}</p>}
+      {!compact && forecasts.length > 0 && (
         <p className="text-sm text-neutral-600">
           {forecasts.map((m) => `${m.label}: ${m.forecast.text}`).join(' · ')}
         </p>

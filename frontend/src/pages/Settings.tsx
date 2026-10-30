@@ -88,7 +88,7 @@ function AddResult({ preset }: { preset: ModuleKey | null }) {
       return api('/api/exam-results', body)
     },
     onSuccess: () => {
-      setMsg('Saved. The Stand box on Today has changed.')
+      setMsg('Saved. Progress shows it under practice tests.')
       setRaw(''); setPoints(''); setTeile({}); setNote('')
       qc.invalidateQueries()
     },

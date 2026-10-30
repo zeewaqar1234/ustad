@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { ListRow, PageHeader } from '../../components/ui'
 import { api, type Daily } from '../../lib/api'
-import type { Standing } from '../../lib/standing'
-import { StandBox } from '../standing/StandBox'
+import { ReadinessBox } from '../standing/ReadinessBox'
 import type { Homework } from '../../lib/grammar'
 import type { DiktatToday, TextList } from '../../lib/reading'
 
@@ -13,7 +12,6 @@ export function Home() {
   const { data, error } = useQuery({ queryKey: ['daily'], queryFn: () => api<Daily>('/api/daily') })
   const texts = useQuery({ queryKey: ['texts'], queryFn: () => api<TextList>('/api/texts') })
   const dik = useQuery({ queryKey: ['dictation'], queryFn: () => api<DiktatToday>('/api/dictation/today') })
-  const stand = useQuery({ queryKey: ['standing'], queryFn: () => api<Standing>('/api/standing') })
   const hw = useQuery({ queryKey: ['homework', 'today'], queryFn: () => api<Homework>('/api/homework/today') })
   if (error) return <p>Error: {(error as Error).message}</p>
   if (!data) return <p>Loading…</p>
@@ -72,7 +70,7 @@ export function Home() {
   return (
     <div>
       <PageHeader title="Today" subtitle="Your daily loop, in order" />
-      {stand.data && <StandBox data={stand.data} />}
+      <ReadinessBox />
       <div className="max-w-[720px]">
 
       {data.makeup && (

@@ -1,0 +1,53 @@
+{
+  "note": "Parameters of the internal readiness model (services/readiness.py). Nothing here is an official exam fact except where a source is named. Entries marked assumption are modelling choices, written down so they can be checked and changed; changing one changes every estimate. The model is calibrated against real practice tests as soon as Zee enters them (see calibration in docs/v2/metrics.md).",
+  "prior": {"alpha": 1, "beta": 1, "note": "Uniform Beta(1,1): no prior belief. With no evidence the range is the whole scale."},
+  "half_life_days": 60,
+  "half_life_note": "assumption: skills fade, older evidence counts less",
+  "ci_z": 1.96,
+  "min_events_shown": 1,
+  "snapshot_weeks": 12,
+  "snapshot_min_n_eff": 2,
+  "target_from": "pass_points / module_max_points of the chosen Goethe exam (data/official/goethe_b1.json), the share of points that passes",
+  "skills": ["vocab", "grammar", "reading", "listening", "writing", "speaking"],
+  "labels": {
+    "vocab": "Wortschatz", "grammar": "Grammatik", "reading": "Lesen", "listening": "Hören",
+    "writing": "Schreiben", "speaking": "Sprechen"
+  },
+  "streams": {
+    "vocab": {
+      "sources": {"placement": 1.0},
+      "placement_bands": ["B1.1", "B1.2", "B2"],
+      "census": "Share of the Goethe B1 word list that is mature in your cards (stability 21 days or more) or known from placement. Used when the word list file exists; otherwise the placement vocabulary items at B1 level.",
+      "measure": "Take the placement test, or add the Goethe B1 word list (data/private) for a count over your cards."
+    },
+    "grammar": {
+      "sources": {"drill": 1.0, "recitation": 1.0, "placement": 1.0},
+      "placement_bands": ["B1.1", "B1.2", "B2"],
+      "measure": "Do drill rounds in Grammatik."
+    },
+    "reading": {
+      "sources": {"reading_q": 1.0},
+      "measure": "Answer the questions after a text in Lesen."
+    },
+    "listening": {
+      "sources": {"diktat": 0.5},
+      "proxy": "Diktat measures spelling from audio, not comprehension, so each answer counts half. A listening comprehension task is not in the app yet.",
+      "measure": "Do the five Diktat sentences in Hören."
+    },
+    "writing": {
+      "sources": {"homework": 1.0, "tagebuch": 1.0, "placement": 1.0, "voice_review": 1.0},
+      "proxy": "Counts correct uses and errors the grader finds in your own sentences. Exam raters also mark task fulfilment and coherence; that needs the essay task (a later phase).",
+      "measure": "Write the daily task in Schreiben."
+    },
+    "speaking": {
+      "sources": {"voice_review": 1.0, "shadow": 0.3},
+      "proxy": "Counts correct uses and errors in spoken sessions; shadowing counts 0.3 because it measures recognition, not speaking. Pronunciation is not measured.",
+      "measure": "Finish a voice session and read its review in Sprechen."
+    }
+  },
+  "activity_skill": {
+    "vocab": "vocab", "grammar": "grammar", "reading": "reading", "listening": "listening",
+    "writing": "writing", "speaking": "speaking"
+  },
+  "insight": {"max_items": 3, "max_chars": 280}
+}

@@ -101,3 +101,12 @@ class SessionReview(BaseModel):
     @classmethod
     def _no_blank(cls, v: list[str]) -> list[str]:
         return [s.strip() for s in v if s.strip()]
+
+
+class Insight(BaseModel):
+    """Plain-English reading of numbers the app already computed (docs/llm.md, role Analyst)."""
+
+    summary: str = Field(min_length=1, max_length=600)
+    strengths: list[str] = Field(max_length=3)
+    weaknesses: list[str] = Field(max_length=3)
+    next_steps: list[str] = Field(max_length=3)

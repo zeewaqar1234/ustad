@@ -687,3 +687,34 @@ Known limits:
 | vitest, lint | 48 passed; ruff clean; oxlint 0 errors, 1 old warning; tsc clean |
 | Playwright 1440x900 | `e2e/v2.spec.ts` 2 passed on a fresh DB, now including Void and Restore in Settings |
 
+#### V2 redesign: internal readiness (2026-10-29)
+
+Zee's feedback: the first V2 only displayed entered official or mock scores. He wanted an internal estimate from his own work (his
+placement test and everything after), with a goal and date, pace, effort needed, dial-style charts, a confidence figure and AI analysis.
+This changes the brief's V2.2 rule ("drill accuracy never turns into exam points"): the new estimate is a separate layer, labelled as
+the app's estimate, with its assumptions in `data/official/readiness_method.json` and its formulas in docs/v2/metrics.md.
+The official-points layer remains on Progress and now serves as calibration.
+
+- Today: "Your level" box (`features/standing/ReadinessBox.tsx`): overall dial, level now (placement label and date), goal question
+  when none is set, six skill dials (95 % range arc, needle, accent pass tick), pace, milestone date, extra hours per week needed,
+  calibration line, and "Analyse these numbers" (local model, numbers checked, template fallback).
+- Progress: skill cards with dial, history band, forecast and proxy notes; the official-points box and module cards below.
+- Backend: `services/readiness.py`, `services/insight.py`, `GET /api/readiness`, `POST /api/readiness/insight`, `Insight` schema and
+  prompt. No migration, no new dependency. `make wortliste` builds the word list file from the PDF in `data/private/`.
+- What the app cannot know yet, stated on screen: Hören has no comprehension task (Diktat counts half); Schreiben and Sprechen have
+  no task-fulfilment or coherence marking until the essay phase; pronunciation is not measured; placement covers grammar, vocabulary and writing only.
+  A2 and A1 targets are not offered: no official A1/A2 point scales were verified for this repo.
+- A bug found by the e2e run: with the word list present, a count of 0 mature words was compared with the 60 % line and
+  dragged the overall to 0 %. The count is now an indicator with no line, outside the overall.
+
+| Check | Result |
+|---|---|
+| pytest | 369 passed, 15 skipped. New `tests/test_readiness.py` (20): empty DB has no numbers; Beta formula; range narrows with evidence; old evidence counts less; A2 placement and SRS reviews not counted; proxy sources discounted; status against the line; overall confidence counts unmeasured skills as 0; word-list count is an indicator; trend and milestone; milestone needs a trend per skill; calibration ignores voided results and uses only earlier events; B2 note; analysis rejects invented numbers, falls back to the template, is cached by facts; no numeric literals in the service |
+| vitest | 54 passed (new: dial empty and filled, box empty, box filled, milestone line, analysis only after the click) |
+| Playwright 1440x900 | `e2e/v2.spec.ts` 3 passed (empty DB with the goal question, official results with Void and Restore, fixture evidence with dials and the analysis); no horizontal scroll at 1024 and 1440 |
+| Screenshots | `docs/evidence/v2/v2-today-empty.png`, `v2-today-fixture.png`, `v2-today-analysis.png`, `v2-progress-empty.png`, `v2-progress-fixture.png`, `v2-settings.png` (fixture evidence from `scripts.e2e_fixture_readiness`, throwaway DB only) |
+| Real local model | **Not run** (no Ollama here); the analysis path is tested with a fake model and the template fallback |
+
+Honest limits: the estimate is only as good as its proxies. It has been checked against no real practice test yet; the calibration line fills in
+when Zee enters Lesen or Hören practice tests. Confidence measures how narrow the range is, not that the level is right.
+
