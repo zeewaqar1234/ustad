@@ -1,4 +1,4 @@
-.PHONY: gate-reset dev backend frontend install test lint migrate seed-build seed-build-fast grammar-build seed-load password lt-up lt-down lt-check test-ollama voice-build texts-build author
+.PHONY: wortliste gate-reset dev backend frontend install test lint migrate seed-build seed-build-fast grammar-build seed-load password lt-up lt-down lt-check test-ollama voice-build texts-build author
 
 install:
 	cd backend && uv sync
@@ -74,3 +74,7 @@ lt-down:
 lt-check:
 	@curl -s --noproxy localhost -X POST http://localhost:8010/v2/check \
 		--data-urlencode "text=Ich habe gestern nach Hause gegangen." -d language=de-DE
+
+# Goethe B1 word list for the Progress page: needs data/private/Goethe-Zertifikat_B1_Wortliste.pdf and poppler (pdftohtml).
+wortliste:
+	cd backend && uv run python -m scripts.build_wortliste

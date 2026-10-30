@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, useSearchParams } from 'react-router'
-import { Track } from '../features/standing/StandBox'
+import { Dial } from '../features/standing/Dial'
+import { InsightPanel } from '../features/standing/ReadinessBox'
+import { StandBox, Track } from '../features/standing/StandBox'
 import { PageHeader } from '../components/ui'
 import { api } from '../lib/api'
+import { milestoneLine, pct, type Readiness, rangeLabel, type SkillReadiness } from '../lib/readiness'
 import {
   formatDate,
   hoursText,
@@ -117,6 +120,57 @@ function History({ m, max }: { m: ModuleStand; max: number }) {
         </g>
       ))}
     </svg>
+  )
+}
+
+function SkillHistory({ s, target }: { s: SkillReadiness; target: number }) {
+  const h = s.history
+  if (h.length === 0) return null
+  const W = 300, H = 80
+  const x = (i: number) => (h.length === 1 ? W / 2 : 14 + (i / (h.length - 1)) * (W - 28))
+  const y = (v: number) => H - 8 - v * (H - 16)
+  const band = [...h.map((p, i) => `${x(i)},${y(p.hi)}`), ...h.map((_, i) => `${x(h.length - 1 - i)},${y(h[h.length - 1 - i].lo)}`)].join(' ')
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full max-w-[300px]" role="img" aria-label={`${s.label} readiness over the last weeks`}>
+      <line x1="0" x2={W} y1={y(target)} y2={y(target)} className="stroke-accent" strokeWidth="1.5" />
+      {h.length > 1 && <polygon points={band} fill="#d4d4d4" />}
+      {h.length > 1 && <polyline points={h.map((p, i) => `${x(i)},${y(p.mean)}`).join(' ')} fill="none" stroke="#262626" strokeWidth="1.5" />}
+      {h.map((p, i) => (
+        <g key={p.date}>
+          <circle cx={x(i)} cy={y(p.mean)} r="3" fill="#262626" />
+          {(i === 0 || i === h.length - 1) && (
+            <text x={x(i)} y={y(p.mean) - 6} fontSize="9" textAnchor="middle" fill="#171717">{pct(p.mean)}</text>
+          )}
+        </g>
+      ))}
+    </svg>
+  )
+}
+
+function SkillCard({ s, target }: { s: SkillReadiness; target: number }) {
+  return (
+    <article className="flex gap-4 rounded-lg border border-neutral-300 bg-white p-4">
+      <Dial mean={s.mean} lo={s.lo} hi={s.hi} target={s.census ? null : target} size={130} label={s.label} census={s.census} />
+      <div className="min-w-0 flex-1">
+        <h3 className="text-lg font-bold">{s.label}</h3>
+        {s.measured ? (
+          <>
+            <p className="font-semibold">{rangeLabel(s)} <span className="font-normal">· {s.status_word}</span></p>
+            <p className="text-sm text-neutral-700">
+              {s.census
+                ? `a count over your cards, not compared with the pass line`
+                : `confidence ${s.confidence_pct}%, from ${s.n} recorded answers`}
+              ; {s.pace_per_week.toFixed(1)} h/week practice (28 days)
+            </p>
+            <SkillHistory s={s} target={target} />
+            {s.forecast && <p className="text-sm text-neutral-700">Forecast: {s.forecast.text}</p>}
+          </>
+        ) : (
+          <p className="text-sm">No evidence yet. {s.measure}</p>
+        )}
+        {s.proxy && <p className="mt-1 text-xs text-neutral-600">{s.proxy}</p>}
+      </div>
+    </article>
   )
 }
 
@@ -245,21 +299,46 @@ export function Progress() {
   const [sp] = useSearchParams()
   const sel = sp.get('module') as ModuleKey | null
   const { data, error } = useQuery({ queryKey: ['progress'], queryFn: () => api<ProgressData>('/api/progress') })
-  if (error) return <p>Error: {(error as Error).message}</p>
-  if (!data) return <p>Loading…</p>
+  const ready = useQuery({ queryKey: ['readiness'], queryFn: () => api<Readiness>('/api/readiness') })
+  if (error || ready.error) return <p>Error: {((error ?? ready.error) as Error).message}</p>
+  if (!data || !ready.data) return <p>Loading…</p>
+  const rd = ready.data
   const counts = { solid: 0, ok: 0, shaky: 0, new: 0 }
   data.grammar.forEach((g) => { counts[g.state] += 1 })
   return (
     <div>
-      <PageHeader title="Fortschritt" subtitle={`${data.exam}: your own results against the official scale`} />
-      <section className="mb-8 max-w-[720px]">
-        <h2 className="mb-2 text-lg font-bold">Modules</h2>
-        <p className="mb-3 text-sm text-neutral-700">
-          Points come only from official practice tests and real exam results you enter. Pass = {data.pass_points} of {data.module_max_points} per module.
-          Level {data.level}: {data.cefr}{' '}
+      <PageHeader title="Fortschritt" subtitle={`Where you stand for ${rd.target.exam}, from your own work in the app`} />
+      <section className="mb-10">
+        <h2 className="mb-1 text-lg font-bold">Your skills</h2>
+        <p className="mb-3 max-w-[860px] text-sm text-neutral-700">
+          Each dial is the share of your recorded answers that were right, with older answers counting less. The grey arc is the
+          95% range: with few answers it is wide, and it narrows as you practise. Confidence is 100 minus the width of that range. The blue tick is
+          the {pct(rd.target.share)} line, the share of exam points that passes. This is the app&rsquo;s estimate from your practice,
+          not an exam result. Level {data.level}: {data.cefr}{' '}
           <a href={data.cefr_source} className="underline" target="_blank" rel="noreferrer">CEFR global scale</a>.
         </p>
+        <ul className="grid gap-4 xl:grid-cols-2">
+          {rd.skills.map((s) => (
+            <li key={s.skill}><SkillCard s={s} target={rd.target.share} /></li>
+          ))}
+        </ul>
+        <p className="mt-3 text-sm">{milestoneLine(rd)}</p>
+        <p className="text-sm text-neutral-700">
+          {rd.calibration.n > 0
+            ? `Checked against ${rd.calibration.n} of your Lesen and Hören practice tests, using only answers recorded before each test: off by ${rd.calibration.mean_abs_error_pts!.toFixed(0)} points on average. This is the measured accuracy of the estimate.`
+            : rd.calibration.note}
+        </p>
+        <InsightPanel />
       </section>
+
+      <section className="mb-8 max-w-[860px]">
+        <h2 className="mb-2 text-lg font-bold">Practice tests and official results</h2>
+        <p className="mb-3 text-sm text-neutral-700">
+          Optional. Points come only from official practice tests and real exam results you enter in Settings. They also check the estimate above.
+          Pass = {data.pass_points} of {data.module_max_points} per module.
+        </p>
+      </section>
+      <StandBox data={data} compact />
       <div className="mb-10 grid gap-4 xl:grid-cols-2">
         {data.modules.map((m) => <ModuleCard key={m.module} m={m} p={data} open={sel === m.module} />)}
       </div>
@@ -304,7 +383,7 @@ export function Progress() {
         <p className="mt-2">
           {data.wordlist.measured
             ? `${data.wordlist.mature} of ${data.wordlist.list_lemmas} words on the ${data.wordlist.list} are mature in your cards (stability 21 days or more) or known from placement. The official list holds about ${data.wordlist.list_size_official}.`
-            : `Not measured yet. ${data.wordlist.note}`}
+            : `Not measured yet. ${data.wordlist.note} On your Mac: put Goethe-Zertifikat_B1_Wortliste.pdf into data/private/, install poppler (brew install poppler), then run make wortliste and reload.`}
           {data.level === 'B2' && ' No official B2 word list exists; B1 list coverage is shown.'}
         </p>
       </section>

@@ -1,7 +1,7 @@
 """V2: Stand box, Progress page, goals and exam results (docs/v2/metrics.md)."""
 
 from datetime import date
-from typing import Literal
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
@@ -10,7 +10,9 @@ from sqlalchemy import select
 from app.core.auth import require_user
 from app.core.clock import local_date
 from app.db import DB, utcnow
+from app.llm.provider import Provider, get_provider
 from app.models import ExamResult
+from app.services import insight, readiness
 from app.services import standing as st
 
 router = APIRouter(prefix="/api", dependencies=[Depends(require_user)])
@@ -64,7 +66,7 @@ def list_results(db: DB):
     return {"results": [
         {"id": r.id, "taken": r.taken.isoformat(), "level": r.level, "module": r.module, "kind": r.kind,
          "teil": r.teil, "raw": r.raw, "raw_max": r.raw_max, "points": r.points,
-         "points_max": r.points_max, "note": r.note}
+         "points_max": r.points_max, "note": r.note, "voided": r.voided}
         for r in rows
     ]}  # fmt: skip
 
@@ -93,3 +95,30 @@ def add_result(body: ResultIn, db: DB):
     db.add(row)
     db.commit()
     return st.standing(db, utcnow())
+
+
+class VoidIn(BaseModel):
+    voided: bool = True
+
+
+@router.post("/exam-results/{result_id}/void")
+def void_result(result_id: int, body: VoidIn, db: DB):
+    """Soft delete: the row stays, but estimates, forecasts and pace ignore it. Undo with voided=false."""
+    row = db.get(ExamResult, result_id)
+    if row is None:
+        raise HTTPException(404, "No such result")
+    row.voided = body.voided
+    db.commit()
+    return st.standing(db, utcnow())
+
+
+@router.get("/readiness")
+def get_readiness(db: DB):
+    return readiness.readiness(db, utcnow())
+
+
+@router.post("/readiness/insight")
+def readiness_insight(
+    db: DB, provider: Annotated[Provider, Depends(get_provider)], refresh: bool = False
+):
+    return insight.get_insight(db, provider, utcnow(), force=refresh)

@@ -195,6 +195,8 @@ class ExamResult(Base):
     points_max: Mapped[float] = mapped_column(Float)
     note: Mapped[str] = mapped_column(Text, default="")
     meta_json: Mapped[dict] = mapped_column(JSON, default=dict)
+    # soft delete: a voided result stays in the table but counts for nothing (typo, duplicate)
+    voided: Mapped[bool] = mapped_column(Boolean, default=False, server_default="0")
 
 
 class CostLedger(Base):

@@ -503,7 +503,7 @@ def wordlist_coverage(db: Session) -> dict:
 
 
 def results_for(db: Session, level: str, module: str | None = None) -> list[ExamResult]:
-    q = select(ExamResult).where(ExamResult.level == level)
+    q = select(ExamResult).where(ExamResult.level == level, ExamResult.voided.is_(False))
     if module:
         q = q.where(ExamResult.module == module)
     return list(db.scalars(q.order_by(ExamResult.taken, ExamResult.id)))
