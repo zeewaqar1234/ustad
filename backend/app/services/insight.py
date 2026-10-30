@@ -1,4 +1,4 @@
-"""Plain-English analysis of the readiness numbers. The model only words facts the app computed: every number
+"""Plain-English analysis of the level and practice numbers. The model only words facts the app computed: every number
 it writes must appear in the facts, otherwise the answer is dropped and a fixed template is shown instead."""
 
 import hashlib
@@ -35,46 +35,52 @@ def facts(db: Session, now: datetime) -> dict:
         : rd.rm()["insight"]["max_items"]
     ]
     ms = r["milestone"]
+    pr = r["practice"]
     return {
         "placement_label": r["level"]["label"],
+        "working_on_band": r["level"]["working_on"],
         "goal": {
             "exam": r["target"]["exam"],
             "target_date": r["goals"]["target_date"],
-            "line_pct": _pct(r["target"]["share"]),
             "days_left": ms["days_left"],
         },
-        "overall": {
-            "measured_skills": r["overall"]["measured"],
-            "of": r["overall"]["of"],
-            "readiness_pct": _pct(r["overall"]["mean"]),
-            "confidence_pct": r["overall"]["confidence_pct"],
+        "line_pct": _pct(r["line"]["share"]),
+        "practice": {
+            "measured_skills": pr["measured"],
+            "of": pr["of"],
+            "practised_skills": pr["practised"],
+            "skills_at_line": pr["at_line"],
+            "right_pct": _pct(pr["mean"]),
+            "plus_minus_pts": pr["pm_pts"],
+            "answers": pr["n"],
         },
         "skills": [
             {
                 "skill": s["label"],
                 "measured": s["measured"],
-                "census": bool(s.get("census")),
-                "readiness_pct": None if s.get("census") else _pct(s["mean"]),
-                "range_pct": [_pct(s["lo"]), _pct(s["hi"])]
-                if s["measured"] and not s.get("census")
-                else None,
-                "list_words_mature": s["n"] if s.get("census") else None,
-                "confidence_pct": s["confidence_pct"],
-                "events": s["n"],
+                "right_pct": _pct(s["mean"]),
+                "plus_minus_pts": s["pm_pts"],
+                "answers": s["n"],
+                "trend_pts_28_days": s["trend_pts"],
                 "status": s["status_word"],
+                "at_line": s["status"] == "at_or_above",
                 "proxy": bool(s["proxy"]),
                 "how_to_measure": s["measure"],
-                "forecast": s["forecast"]["text"] if s["forecast"] else None,
             }
             for s in r["skills"]
         ],
+        "hours_since_placement": round(r["hours_since_placement"], 1)
+        if r["hours_since_placement"] is not None
+        else None,
         "pace_hours_per_week": round(r["pace"]["hours_per_week"], 1)
         if r["pace"]["measured"]
         else None,
         "milestone": {
             "state": ms.get("state"),
             "forecast_date": ms["forecast_date"],
-            "hours_needed": round(ms["hours_needed"], 1) if "hours_needed" in ms else None,
+            "hours_needed": round(ms["hours_needed"], 1)
+            if ms["hours_needed"] is not None
+            else None,
             "needed_per_week": round(ms["needed_per_week"], 1)
             if ms["needed_per_week"] is not None
             else None,
@@ -82,7 +88,6 @@ def facts(db: Session, now: datetime) -> dict:
         "error_tags_30_days": [
             {"tag": t, "errors": s["errors"], "recurring": s["recurring"]} for t, s in tags
         ],
-        "practice_test_check": r["calibration"].get("mean_abs_error_pts"),
     }
 
 
@@ -108,7 +113,9 @@ def numbers_ok(out: Insight, f: dict) -> bool:
         or len(out.summary) > cap * 2
     ):
         return False
-    allowed_levels = {x for x in (f["placement_label"], f["goal"]["exam"].rsplit(" ", 1)[-1]) if x}
+    labels = [f["placement_label"], f["working_on_band"], f["goal"]["exam"].rsplit(" ", 1)[-1]]
+    # quoting a label as given is fine ("A2+", "B1 Board"), and the app's lessons are "B1 work"
+    allowed_levels = {"B1", *(x for lb in labels if lb for x in [lb, *_LEVEL.findall(lb)])}
     general = _numbers_of({k: v for k, v in f.items() if k != "skills"})
     by_skill = {s["skill"]: _numbers_of(s) for s in f["skills"]}
     everything = general.union(*by_skill.values())
@@ -126,44 +133,38 @@ def numbers_ok(out: Insight, f: dict) -> bool:
 
 def template(f: dict) -> Insight:
     """No model: the same facts in fixed sentences."""
-    ov = f["overall"]
-    measured = [s for s in f["skills"] if s["measured"] and not s["census"]]
+    pr = f["practice"]
+    measured = [s for s in f["skills"] if s["measured"]]
     if not measured:
         return Insight(
-            summary="No skill has evidence yet, so the app shows no level. Take the placement test "
+            summary="No skill has answers yet, so there is nothing to analyse. Take the placement test "
             "and do the daily tasks; every answer narrows the range.",
             strengths=[],
             weaknesses=[],
-            next_steps=[f"{s['skill']}: nothing recorded yet." for s in f["skills"]][: _k()],
+            next_steps=[f"{s['skill']}: {s['how_to_measure']}" for s in f["skills"]][: _k()],
         )
     summary = (
-        f"{ov['measured_skills']} of {ov['of']} skills have evidence. Overall readiness is "
-        f"{ov['readiness_pct']}% against a {f['goal']['line_pct']}% line, with {ov['confidence_pct']}% confidence."
+        f"On B1 work you get {pr['right_pct']}% right, give or take {pr['plus_minus_pts']} points, "
+        f"from {pr['answers']} practice answers. {pr['skills_at_line']} of {pr['practised_skills']} practised skills "
+        f"are at {f['line_pct']}% or more."
+        if pr["right_pct"] is not None
+        else "Only the placement test has answers so far. Practice in the modules adds the first practice figures."
     )
-    best = sorted(measured, key=lambda s: -s["readiness_pct"])[: _k()]
-    worst = sorted(measured, key=lambda s: s["readiness_pct"])[: _k()]
+    at = [s for s in measured if s["at_line"]]  # by the range, the same rule as skills_at_line
+    under = [s for s in measured if not s["at_line"]]
+    best = sorted(at, key=lambda s: -s["right_pct"])[: _k()]
+    worst = sorted(under, key=lambda s: s["right_pct"])[: _k()]
     missing = [s for s in f["skills"] if not s["measured"]]
-    steps = []
-    for s in worst[:2]:
-        if s["status"].startswith("At or above"):
-            steps.append(
-                f"{s['skill']}: at the line, more answers narrow the {s['range_pct'][0]}% to {s['range_pct'][1]}% range."
-            )
-        else:
-            steps.append(f"{s['skill']}: {s['status'].lower()}. {s['how_to_measure']}")
-    steps += [f"{s['skill']}: no evidence yet. {s['how_to_measure']}" for s in missing[:1]]
+    steps = [f"{s['skill']}: {s['how_to_measure']}" for s in worst[:2]]
+    steps += [f"{s['skill']}: no answers yet. {s['how_to_measure']}" for s in missing[:1]]
     return Insight(
         summary=summary,
         strengths=[
-            f"{s['skill']}: {s['readiness_pct']}% from {s['events']} events."
-            for s in best
-            if s["status"].startswith("At or above")
-        ][: _k()],
+            f"{s['skill']}: {s['right_pct']}% right from {s['answers']} answers." for s in best
+        ],
         weaknesses=[
-            f"{s['skill']}: {s['readiness_pct']}%, {s['status'].lower()}."
-            for s in worst
-            if not s["status"].startswith("At or above")
-        ][: _k()],
+            f"{s['skill']}: {s['right_pct']}% right from {s['answers']} answers." for s in worst
+        ],
         next_steps=steps[: _k()],
     )
 

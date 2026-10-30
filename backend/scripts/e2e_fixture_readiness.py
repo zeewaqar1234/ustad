@@ -21,7 +21,7 @@ def main() -> int:
     today = local_date(now)
     # (skill, source, weeks back, correct, errors per week) rising accuracy over 8 weeks
     plan = [("reading", "reading_q", 8, 10, 6), ("grammar", "drill", 8, 14, 4), ("writing", "homework", 6, 12, 4),
-            ("speaking", "voice_review", 4, 10, 3), ("listening", "diktat", 5, 10, 4)]  # fmt: skip
+            ("speaking", "voice_review", 4, 10, 3), ("listening", "diktat", 6, 5, 10)]  # fmt: skip
     for skill, source, weeks, base, bad in plan:
         for w in range(weeks - 1, -1, -1):
             wrong = max(1, bad - (weeks - 1 - w) * 2 // 3)
@@ -33,6 +33,7 @@ def main() -> int:
                         skill=skill,
                         source=source,
                         outcome="error" if i < wrong else "correct",
+                        source_ref=f"{source}:{w}:{i}",  # Diktat counts one answer per sentence
                     )
                 )
             for d in range(7):
@@ -40,6 +41,9 @@ def main() -> int:
                 row = db.get(ActivityLog, (day, skill))
                 if row is None:
                     db.add(ActivityLog(date=day, skill=skill, seconds=20 * 60))
+    for i in range(8):  # placement vocabulary items at B1 level, 60 days ago
+        db.add(EvidenceEvent(ts=now - timedelta(days=60), skill="vocab", source="placement",
+                             outcome="error" if i < 3 else "correct", meta_json={"band": "B1.1"}))  # fmt: skip
     p = db.get(Profile, 1)
     p.level_band = "B1.1"
     db.add(PlacementResult(answers={}, by_band={}, level_band="B1.1", ts=now - timedelta(days=60)))

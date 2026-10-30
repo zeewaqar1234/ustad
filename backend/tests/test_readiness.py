@@ -51,27 +51,16 @@ def skills(db):
     return {s["skill"]: s for s in rd.readiness(db, utcnow())["skills"]}
 
 
-def test_empty_db_has_no_numbers(db):
-    r = rd.readiness(db, utcnow())
-    assert r["overall"]["mean"] is None and r["overall"]["confidence_pct"] == 0
-    assert all(
-        not s["measured"] and s["mean"] is None and s["status_word"] == "No evidence yet"
-        for s in r["skills"]
-    )
-    assert r["calibration"]["n"] == 0 and "not been checked" in r["calibration"]["note"]
-    assert r["milestone"]["forecast_date"] is None
-
-
 def test_posterior_is_wide_with_little_evidence_and_narrows_with_practice(db):
     p0 = rd.posterior(0, 0)
-    assert p0["mean"] == pytest.approx(0.5) and p0["confidence_pct"] <= 10
+    assert p0["mean"] == pytest.approx(0.5) and p0["pm_pts"] >= 45
     ev(db, "reading", "reading_q", "correct", n=4)
     ev(db, "reading", "reading_q", "error", n=1)
     few = skills(db)["reading"]
     ev(db, "reading", "reading_q", "correct", n=32)
     ev(db, "reading", "reading_q", "error", n=8)
     many = skills(db)["reading"]
-    assert few["confidence_pct"] < many["confidence_pct"]
+    assert few["pm_pts"] > many["pm_pts"]
     assert (many["hi"] - many["lo"]) < (few["hi"] - few["lo"])
     assert many["mean"] == pytest.approx(
         (1 + 36) / (2 + 45), abs=0.02
@@ -85,7 +74,7 @@ def test_posterior_formula():
     assert p["lo"] == pytest.approx(9 / 12 - 1.96 * sd) and p["hi"] == pytest.approx(
         9 / 12 + 1.96 * sd
     )
-    assert p["confidence_pct"] == round(100 * (1 - (p["hi"] - p["lo"])))
+    assert p["pm_pts"] == round(100 * (p["hi"] - p["lo"]) / 2)
 
 
 def test_old_evidence_counts_less(db):
@@ -111,10 +100,10 @@ def test_proxy_sources_are_discounted(db):
     ev(db, "listening", "diktat", "correct", n=10)
     ev(db, "reading", "reading_q", "correct", n=10)
     s = skills(db)
-    assert s["listening"]["confidence_pct"] < s["reading"]["confidence_pct"]
+    assert s["listening"]["pm_pts"] > s["reading"]["pm_pts"]
     assert s["listening"]["proxy"] and "not comprehension" in s["listening"]["proxy"]
     ev(db, "speaking", "shadow", "correct", n=10)
-    assert skills(db)["speaking"]["confidence_pct"] < s["reading"]["confidence_pct"]
+    assert skills(db)["speaking"]["pm_pts"] > s["reading"]["pm_pts"]
 
 
 def test_status_against_the_line(db):
@@ -123,43 +112,9 @@ def test_status_against_the_line(db):
     ev(db, "writing", "homework", "correct", n=6)
     ev(db, "writing", "homework", "error", n=4)
     s = skills(db)
-    assert s["reading"]["status"] == "at_or_above" and "60%" in s["reading"]["status_word"]
-    assert s["grammar"]["status"] == "below"
-    assert s["writing"]["status"] == "near"
-
-
-def test_overall_confidence_counts_unmeasured_skills_as_zero(db):
-    ev(db, "reading", "reading_q", "correct", n=30)
-    r = rd.readiness(db, utcnow())
-    one = skills(db)["reading"]["confidence_pct"]
-    assert r["overall"]["measured"] == 1 and r["overall"]["of"] == 6
-    assert r["overall"]["confidence_pct"] == round(one / 6)
-
-
-def test_vocab_uses_the_word_list_count_when_the_file_exists(db, tmp_path):
-    (tmp_path / "goethe_b1_wortliste.txt").write_text("Bahnhof\nweil\nlernen\nHaus\n")
-    from app.models import Card, Item
-
-    for i, de in enumerate(("der Bahnhof", "weil", "lernen")):
-        it = Item(deck="w", unit=1, unit_order=i, unit_title="u", kind="word", de=de, en="x")
-        db.add(it)
-        db.flush()
-        db.add(
-            Card(
-                item_id=it.id,
-                card_type="recog",
-                introduced_at=utcnow(),
-                stability=40.0 if i < 2 else 1.0,
-            )
-        )
-    db.commit()
-    v = skills(db)["vocab"]
-    assert v["census"] and v["mean"] == pytest.approx(2 / 4) and v["n"] == 2
-    assert v["status"] == "indicator" and v["status_word"] == "2 of 4 list words mature"
-    r = rd.readiness(db, utcnow())  # a word count is not part of the overall and has no pass line
-    assert (
-        r["overall"]["measured"] == 0 and r["overall"]["of"] == 5 and r["overall"]["mean"] is None
-    )
+    assert s["reading"]["status"] == "at_or_above" and s["reading"]["status_word"] == "70% or more"
+    assert s["grammar"]["status"] == "below" and s["grammar"]["status_word"] == "Under 70%"
+    assert s["writing"]["status"] == "near"  # 7 of 12 with a uniform prior: the range spans 70%
 
 
 def test_forecast_from_trend_and_needed_effort(authed, db):
@@ -226,19 +181,6 @@ def test_calibration_compares_with_practice_tests(db):
     assert c["mean_abs_error_pts"] == pytest.approx(abs(17 / 22 * 100 - 70), abs=0.5)
 
 
-def test_level_label_is_the_placement_result(db):
-    assert rd.level_info(db)["label"] is None
-    db.add(Profile(id=1, level_band="B1.1")) if db.get(Profile, 1) is None else setattr(
-        db.get(Profile, 1), "level_band", "B1.1"
-    )
-    db.add(PlacementResult(answers={}, by_band={}, level_band="B1.1"))
-    db.commit()
-    info = rd.level_info(db)
-    assert (
-        info["label"] == "B1.1" and info["taken"] and "Not an official CEFR result" in info["note"]
-    )
-
-
 def test_b2_goal_says_the_content_is_b1(authed):
     authed.post("/api/goals", json={"target_exam": "B2"})
     assert "B1 foundation" in authed.get("/api/readiness").json()["b2_note"]
@@ -273,7 +215,7 @@ def test_insight_accepts_only_numbers_from_the_facts(db):
     seeded(db)
     f = insight.facts(db, utcnow())
     good = Insight(
-        summary=f"Overall readiness is {f['overall']['readiness_pct']}%.",
+        summary=f"On B1 work you get {f['practice']['right_pct']}% right.",
         strengths=[],
         weaknesses=[],
         next_steps=[],
@@ -306,7 +248,7 @@ def test_insight_falls_back_to_the_template(db):
 def test_insight_from_the_model_is_cached_by_facts(db):
     seeded(db)
     f = insight.facts(db, utcnow())
-    reply = {"summary": f"Readiness is {f['overall']['readiness_pct']}%.", "strengths": ["Lesen is strong."],
+    reply = {"summary": f"You get {f['practice']['right_pct']}% right.", "strengths": ["Lesen is strong."],
              "weaknesses": [], "next_steps": ["Write the daily task in Schreiben."]}  # fmt: skip
     llm = FakeLLM(reply=reply)
     a = insight.get_insight(db, llm, utcnow())
@@ -335,39 +277,11 @@ def test_readiness_service_has_no_numeric_literals_beyond_0_1_2():
 # --- review fixes ---------------------------------------------------------------------------------
 
 
-def test_word_list_count_neither_inflates_confidence_nor_enters_the_analysis(db, tmp_path):
-    (tmp_path / "goethe_b1_wortliste.txt").write_text("Bahnhof\nweil\n")
-    from app.models import Card, Item
-
-    it = Item(deck="w", unit=1, unit_order=1, unit_title="u", kind="word", de="weil", en="x")
-    db.add(it)
-    db.flush()
-    db.add(Card(item_id=it.id, card_type="recog", introduced_at=utcnow(), stability=40.0))
-    db.commit()
-    seeded(db)
-    r = rd.readiness(db, utcnow())
-    vocab = {s["skill"]: s for s in r["skills"]}["vocab"]
-    assert vocab["confidence_pct"] == 0 and r["overall"]["of"] == 5
-    scored = [s for s in r["skills"] if s["status"] != "indicator"]
-    assert r["overall"]["confidence_pct"] == round(sum(s["confidence_pct"] for s in scored) / 5)
-    f = insight.facts(db, utcnow())
-    v = {s["skill"]: s for s in f["skills"]}["Wortschatz"]
-    assert v["readiness_pct"] is None and v["range_pct"] is None and v["list_words_mature"] == 1
-    out = insight.template(f)
-    assert "None" not in out.summary and not any("Wortschatz" in w for w in out.weaknesses)
-
-
-def test_template_with_only_a_word_count_says_no_evidence(db, tmp_path):
-    (tmp_path / "goethe_b1_wortliste.txt").write_text("Bahnhof\n")
-    out = insight.template(insight.facts(db, utcnow()))
-    assert "None" not in out.summary and "No skill has evidence yet" in out.summary
-
-
 def test_analysis_numbers_must_belong_to_the_skill_named_in_the_sentence(db):
     seeded(db)
     f = insight.facts(db, utcnow())
     sk = {s["skill"]: s for s in f["skills"]}
-    lesen, schreiben = sk["Lesen"]["readiness_pct"], sk["Schreiben"]["readiness_pct"]
+    lesen, schreiben = sk["Lesen"]["right_pct"], sk["Schreiben"]["right_pct"]
     assert lesen != schreiben
 
     def ok(text):
@@ -381,17 +295,6 @@ def test_analysis_numbers_must_belong_to_the_skill_named_in_the_sentence(db):
     assert ok(f"Placed {f['placement_label']}.") if f["placement_label"] else True
     long = Insight(summary="x", strengths=["a" * 400], weaknesses=[], next_steps=[])
     assert not insight.numbers_ok(long, f)
-
-
-def test_overall_is_partial_until_every_scored_skill_has_evidence(db):
-    ev(db, "reading", "reading_q", "correct", n=60)
-    o = rd.readiness(db, utcnow())["overall"]
-    assert (
-        o["status"] == "partial"
-        and o["status_word"] == "Partial: 1 of 5 skills measured"
-        or o["of"] == 6
-    )
-    assert "Partial" in o["status_word"]
 
 
 def test_diktat_counts_one_answer_per_sentence(db):
@@ -444,3 +347,214 @@ def test_calibration_skips_tests_with_almost_no_prior_evidence(db):
     db.commit()
     c = rd.readiness(db, utcnow())["calibration"]
     assert c["n"] == 0 and c["skipped"] == 1 and "too little" in c["note"]
+
+
+# --- level and practice (V2 redo) -----------------------------------------------------------------
+
+
+def place(db, label, days_ago=10):
+    p = db.get(Profile, 1)
+    if p is None:
+        db.add(Profile(id=1, level_band=label))
+    else:
+        p.level_band = label
+    db.add(PlacementResult(answers={}, by_band={}, level_band=label,
+                           ts=datetime.now(UTC) - timedelta(days=days_ago)))  # fmt: skip
+    db.commit()
+
+
+def test_empty_db_has_no_numbers(db):
+    r = rd.readiness(db, utcnow())
+    assert r["practice"]["mean"] is None and r["practice"]["pm_pts"] is None
+    assert r["practice"]["measured"] == 0 and r["practice"]["of"] == 6
+    assert all(not s["measured"] and s["mean"] is None and s["status_word"] == "Not measured yet"
+               for s in r["skills"])  # fmt: skip
+    assert r["level"]["label"] is None and r["hours_since_placement"] is None
+    assert "placement test" in r["move_up"]["text"]
+    assert r["calibration"]["n"] == 0 and r["milestone"]["forecast_date"] is None
+
+
+def test_line_is_the_placement_band_rule_not_exam_points(db):
+    from app.services import placement
+
+    r = rd.readiness(db, utcnow())
+    assert r["line"]["share"] == placement.PASS
+    assert "not a Goethe number" in r["line"]["source"]
+
+
+def test_level_comes_from_placement_and_ladder_follows_it(db):
+    place(db, "B1.1")
+    lv = rd.readiness(db, utcnow())["level"]
+    assert lv["label"] == "B1.1" and lv["working_on"] == "B1.1" and lv["passed"] == ["A2"]
+    assert (
+        lv["goal_band"] == "B1.2"
+        and not lv["goal_reached"]
+        and "Not an official CEFR" in lv["note"]
+    )
+    place(db, "B1 Board")
+    lv = rd.readiness(db, utcnow())["level"]
+    assert (
+        lv["working_on"] == "B2" and lv["passed"] == ["A2", "B1.1", "B1.2"] and lv["goal_reached"]
+    )
+    place(db, "A2+")
+    assert rd.readiness(db, utcnow())["level"]["passed"] == []
+
+
+def test_practice_pools_all_skills_and_counts_skills_at_the_line(db):
+    place(db, "B1.1")
+    ev(db, "reading", "reading_q", "correct", n=40)
+    ev(db, "grammar", "drill", "correct", n=10)
+    ev(db, "grammar", "drill", "error", n=30)
+    r = rd.readiness(db, utcnow())
+    pr = r["practice"]
+    assert pr["measured"] == 2 and pr["at_line"] == 1 and pr["n"] == 80
+    assert pr["mean"] == pytest.approx((1 + 50) / (2 + 80), abs=0.01)
+    assert not r["move_up"]["ready"] and r["move_up"]["text"].startswith("1 of 2 practised skills")
+
+
+def test_move_up_only_when_every_skill_is_at_the_line(db):
+    place(db, "B1.1")
+    for sk, src in [("vocab", "placement"), ("grammar", "drill"), ("reading", "reading_q"),
+                    ("writing", "homework"), ("speaking", "voice_review")]:  # fmt: skip
+        ev(db, sk, src, "correct", n=60, band="B1.1" if src == "placement" else None)
+    for i in range(60):  # Diktat counts one answer per sentence
+        db.add(EvidenceEvent(ts=datetime.now(UTC), skill="listening", source="diktat",
+                             outcome="correct", source_ref=f"s{i}"))  # fmt: skip
+    db.commit()
+    mu = rd.readiness(db, utcnow())["move_up"]
+    assert mu["ready"] and "Retake the placement test" in mu["text"]
+    assert "Not counted, no practice answers: Wortschatz" in mu["text"]  # vocab is placement-only
+    place(db, "B1 Board")  # beyond the B1 lessons: practice cannot speak for B2
+    mu = rd.readiness(db, utcnow())["move_up"]
+    assert not mu["ready"] and "B1 material" in mu["text"]
+
+
+def test_hours_since_placement_count_only_from_that_day(db):
+    hours(db, "reading", 20, 5)
+    place(db, "B1.1", days_ago=10)
+    hours(db, "reading", 5, 2)
+    hours(db, "grammar", 0, 1)
+    assert rd.readiness(db, utcnow())["hours_since_placement"] == pytest.approx(3)
+
+
+def test_trend_is_last_four_weeks_against_the_four_before(db):
+    ev(db, "reading", "reading_q", "correct", days_ago=35, n=5)
+    ev(db, "reading", "reading_q", "error", days_ago=35, n=5)  # 50 % then
+    ev(db, "reading", "reading_q", "correct", days_ago=3, n=8)
+    ev(db, "reading", "reading_q", "error", days_ago=3, n=2)  # 80 % now
+    assert skills(db)["reading"]["trend_pts"] == 30
+    ev(db, "grammar", "drill", "correct", n=30)  # nothing in the four weeks before
+    assert skills(db)["grammar"]["trend_pts"] is None
+
+
+def test_no_new_answers_means_no_trend_even_as_old_answers_fade(db):
+    ev(db, "vocab", "placement", "correct", days_ago=60, n=6, band="B1.1")
+    ev(db, "vocab", "placement", "error", days_ago=60, n=2, band="B1.1")
+    assert skills(db)["vocab"]["trend_pts"] is None
+
+
+def test_placement_only_skill_is_shown_but_left_out_of_time_to_goal(db):
+    ev(db, "vocab", "placement", "correct", days_ago=30, n=3, band="B1.1")
+    ev(db, "vocab", "placement", "error", days_ago=30, n=5, band="B1.1")
+    ev(db, "reading", "reading_q", "correct", n=60)
+    r = rd.readiness(db, utcnow())
+    v = {s["skill"]: s for s in r["skills"]}["vocab"]
+    assert v["measured"] and v["placement_only"] and v["history"] == []
+    assert (
+        v["forecast"]["state"] == "placement_only"
+        and "only the placement test" in v["forecast"]["text"]
+    )
+    ms = r["milestone"]
+    assert ms["state"] == "reached" and "Wortschatz" in ms["note"]
+
+
+def test_word_list_file_does_not_change_the_estimate(db, tmp_path):
+    (tmp_path / "goethe_b1_wortliste.txt").write_text("Bahnhof\nweil\n")
+    assert not skills(db)["vocab"]["measured"]
+
+
+def test_milestone_never_reached_while_a_counted_skill_is_under_the_line(db):
+    ev(db, "reading", "reading_q", "correct", n=60)
+    ev(db, "grammar", "drill", "correct", n=7)
+    ev(db, "grammar", "drill", "error", n=5)
+    assert rd.readiness(db, utcnow())["milestone"]["state"] != "reached"
+
+
+def test_empty_db_has_no_left_out_note(db):
+    assert rd.readiness(db, utcnow())["milestone"]["note"] is None
+
+
+def test_unclear_skills_are_named_but_do_not_block_hours():
+    fc = {"date": {"state": "date", "hours_needed": 12.0, "date": "2027-01-01", "text": ""},
+          "unclear": {"state": "unclear", "text": "Lesen: more answers will make it clear."}}  # fmt: skip
+    sk = [
+        {"label": "Hören", "measured": True, "placement_only": False, "status": "below", "forecast": fc["date"]},
+        {"label": "Lesen", "measured": True, "placement_only": False, "status": "near", "forecast": fc["unclear"]},
+    ]  # fmt: skip
+    goals = {"target_date": "2027-02-01"}
+    pace = {"measured": True, "hours_per_week": 3.0}
+    today = local_date(utcnow())
+    ms = rd.milestone(goals, sk, pace, today)
+    assert ms["state"] == "date" and ms["hours_needed"] == 12.0 and ms["unclear"] == ["Lesen"]
+    assert ms["slowest"] == "Hören"
+    ms = rd.milestone(goals, sk[1:], pace, today)
+    assert ms["state"] == "unclear" and ms["hours_needed"] is None and "more answers" in ms["text"]
+
+
+def test_practice_figure_leaves_out_placement_items_and_answers_before_placement(db):
+    ev(db, "reading", "reading_q", "error", days_ago=20, n=10)  # before placement
+    place(db, "B1.1", days_ago=10)
+    ev(db, "grammar", "placement", "correct", days_ago=10, n=8, band="B1.1")
+    pr = rd.readiness(db, utcnow())["practice"]
+    assert pr["n"] == 0 and pr["mean"] is None and pr["since_placement"]
+    ev(db, "reading", "reading_q", "correct", days_ago=2, n=4)
+    pr = rd.readiness(db, utcnow())["practice"]
+    assert pr["n"] == 4 and pr["mean"] == pytest.approx(5 / 6, abs=0.01)
+
+
+def test_move_up_needs_enough_practised_skills(db):
+    place(db, "B1.1")
+    ev(db, "reading", "reading_q", "correct", n=60)
+    mu = rd.readiness(db, utcnow())["move_up"]
+    assert not mu["ready"] and mu["text"].startswith("1 of 1 practised skills")
+
+
+def test_unknown_level_label_counts_as_not_placed(db):
+    place(db, "C1")
+    lv = rd.readiness(db, utcnow())["level"]
+    assert (
+        lv["label"] is None
+        and lv["passed"] == []
+        and not lv["goal_reached"]
+        and lv["taken"] is None
+    )
+
+
+def test_b2_class_counts_every_band_passed(db):
+    place(db, "B2.1")
+    lv = rd.readiness(db, utcnow())["level"]
+    assert (
+        lv["working_on"] is None
+        and lv["passed"] == ["A2", "B1.1", "B1.2", "B2"]
+        and lv["goal_reached"]
+    )
+
+
+def test_analysis_allows_labels_as_given_and_b1_work(db):
+    place(db, "B1 Board")
+    seeded(db)
+    f = insight.facts(db, utcnow())
+
+    def ok(text):
+        return insight.numbers_ok(
+            Insight(summary=text, strengths=[], weaknesses=[], next_steps=[]), f
+        )
+
+    assert ok("Placement put you in B1 Board.") and ok("This is B1 work.") and not ok("You are C1.")
+
+
+def test_template_strengths_follow_the_range_not_the_mean(db):
+    ev(db, "reading", "reading_q", "correct", n=3)
+    ev(db, "reading", "reading_q", "error", n=1)  # 67 % mean, wide range: not at the line
+    out = insight.template(insight.facts(db, utcnow()))
+    assert out.strengths == [] and "0 of 1 practised skills" in out.summary

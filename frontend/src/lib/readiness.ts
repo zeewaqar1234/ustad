@@ -12,48 +12,65 @@ export interface SkillReadiness {
   mean: number | null
   lo: number | null
   hi: number | null
-  confidence_pct: number
+  pm_pts: number | null
   n: number
-  status: 'none' | 'below' | 'near' | 'at_or_above' | 'indicator'
+  trend_pts: number | null
+  status: 'none' | 'below' | 'near' | 'at_or_above'
   status_word: string
   proxy: string | null
   measure: string
-  census?: boolean
   pace_per_week: number
   hours_28: number
   history: { date: string; mean: number; lo: number; hi: number; n: number }[]
+  placement_only: boolean
   forecast: Forecast | null
 }
 
 export interface Readiness {
   today: string
   goals: { target_exam: 'B1' | 'B2'; target_date: string | null; weekly_hours: number | null }
-  level: { label: string | null; taken: string | null; note: string }
-  target: { exam: string; level: string; share: number; source: string }
-  overall: {
+  level: {
+    label: string | null
+    taken: string | null
+    working_on: string | null
+    bands: string[]
+    passed: string[]
+    goal_band: string
+    goal_reached: boolean
+    note: string
+  }
+  line: { share: number; source: string }
+  target: { exam: string; level: 'B1' | 'B2' }
+  practice: {
     measured: number
     of: number
+    practised: number
+    at_line: number
+    n: number
+    since_placement: boolean
     mean: number | null
     lo: number | null
     hi: number | null
-    confidence_pct: number
-    status: string
-    status_word: string
+    pm_pts: number | null
   }
+  move_up: { ready: boolean; text: string }
   skills: SkillReadiness[]
   pace: { measured: boolean; note?: string; hours_per_week?: number; days_with_activity: number }
+  hours_since_placement: number | null
   milestone: {
     target_date: string | null
     days_left: number | null
     forecast_date: string | null
     needed_per_week: number | null
-    pace_per_week?: number | null
-    hours_needed?: number
+    pace_per_week: number | null
+    hours_needed: number | null
+    slowest?: string
+    unclear: string[]
     state?: string
-    text?: string
+    text: string | null
     note: string | null
   }
-  calibration: { n: number; note?: string; mean_abs_error_pts?: number }
+  calibration: { n: number; note?: string; mean_abs_error_pts?: number; skipped?: number }
   b2_note: string | null
 }
 
@@ -68,34 +85,14 @@ export interface InsightOut {
 
 export const pct = (x: number | null): string => (x === null ? '' : `${Math.round(x * 100)}%`)
 
-export function rangeLabel(s: { lo: number | null; hi: number | null; mean: number | null; census?: boolean }): string {
-  if (s.mean === null || s.lo === null || s.hi === null) return ''
-  return s.census ? pct(s.mean) : `${pct(s.lo)} to ${pct(s.hi)}`
+export const hours = (h: number): string => (h < 10 ? `${h.toFixed(1)} h` : `${Math.round(h)} h`)
+
+export function trendText(t: number | null): string {
+  if (t === null) return 'not enough history'
+  if (t === 0) return 'no change'
+  return `${t > 0 ? '+' : '−'}${Math.abs(t)} points`
 }
 
-export function milestoneLine(r: Readiness): string {
-  const m = r.milestone
-  const parts: string[] = []
-  if (r.pace.measured && r.pace.hours_per_week !== undefined) {
-    parts.push(`Pace: ${r.pace.hours_per_week.toFixed(1)} h/week (last 28 days)`)
-  } else {
-    parts.push(`Pace: ${(r.pace.note ?? 'No evidence yet').replace(/\.$/, '')}`)
-  }
-  if (m.state === 'date' && m.forecast_date) {
-    parts.push(`at this pace every measured skill reaches the line about ${new Date(`${m.forecast_date}T12:00:00`).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}`)
-  } else if (m.state === 'far') {
-    parts.push('more than a year at this pace')
-  } else if (m.state === 'reached') {
-    parts.push('every measured skill is at the line')
-  } else if (m.state === 'need_data' && m.text) {
-    parts.push(m.text.replace(/\.$/, ''))
-  }
-  if (m.needed_per_week !== null && m.needed_per_week !== undefined) {
-    const extra =
-      m.pace_per_week !== null && m.pace_per_week !== undefined && m.needed_per_week > m.pace_per_week
-        ? `, ${(m.needed_per_week - m.pace_per_week).toFixed(1)} h/week more than now`
-        : ''
-    parts.push(`for your date you need ${m.needed_per_week.toFixed(1)} h/week${extra}`)
-  }
-  return parts.join(' · ')
+export function dayText(iso: string): string {
+  return new Date(`${iso}T12:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }

@@ -1,6 +1,6 @@
 import { expect, type Page, test } from '@playwright/test'
 
-// V2: readiness box on Today, Progress page, goal and result forms at 1440x900 against the real backend,
+// V2: level box on Today, Progress page, goal and result forms at 1440x900 against the real backend,
 // on a fresh e2e DB. Test 1 runs on the empty DB. Test 2 enters official results through the forms.
 // Test 3 runs after `scripts.e2e_fixture_readiness` added fixture evidence to the throwaway DB (set E2E_FIXTURE=1).
 const PASSWORD = process.env.E2E_PASSWORD ?? ''
@@ -30,21 +30,20 @@ test('empty DB: no level, no numbers, a goal question', async ({ page }) => {
   test.skip(!!process.env.E2E_FIXTURE, 'fixture run')
   await login(page)
   const box = page.getByRole('region', { name: 'Your level' })
-  await expect(box.getByText('Not placed.')).toBeVisible()
-  await expect(box.getByText('Which exam do you want to pass?')).toBeVisible()
-  await expect(box.getByText('No data')).toHaveCount(7) // 6 skills + overall
-  await expect(box.getByText('No evidence yet', { exact: true })).toHaveCount(8) // 6 skills + the overall headline and status
-  await expect(box.getByRole('link', { name: 'how to measure' })).toHaveCount(6)
-  await expect(box.getByText(/confidence 0%, 0 of 6 skills measured/)).toBeVisible()
+  await expect(box.getByText(/Not placed yet/)).toBeVisible()
+  await expect(box.getByText('Which exam?')).toBeVisible()
+  await expect(box.getByRole('table', { name: 'Skills' }).getByText(/^Not measured yet/)).toHaveCount(6)
+  await expect(box.getByText(/±/)).toHaveCount(0)
   await noSideScroll(page)
   await page.screenshot({ path: `${SHOTS}/v2-today-empty.png` })
   // answer the goal question in the box
   await box.getByLabel('By when?').fill(daysAgo(-90))
   await box.getByRole('button', { name: 'Set goal' }).click()
   await expect(box.getByText(/Goethe-Zertifikat B1 by .*, (89|90|91) days left/)).toBeVisible()
+  await expect(box.getByRole('heading', { name: 'Time to goal' })).toBeVisible()
   await page.goto('/progress')
   await expect(page.getByRole('heading', { name: 'Fortschritt' })).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Your skills' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Each skill, week by week' })).toBeVisible()
   await expect(page.getByText(/Add the Goethe B1 word list to measure this|words on the Goethe-Zertifikat B1 Wortliste/).first()).toBeVisible()
   await noSideScroll(page)
   await page.screenshot({ path: `${SHOTS}/v2-progress-empty.png`, fullPage: true })
@@ -74,29 +73,28 @@ test('official results entered in Settings show on Progress and can be voided', 
   await expect(page.getByRole('row', { name: /B1 hoeren/ }).getByText('Voided')).toBeVisible()
   await page.getByRole('row', { name: /B1 hoeren/ }).getByRole('button', { name: 'Restore' }).click()
   await page.screenshot({ path: `${SHOTS}/v2-settings.png`, fullPage: true })
-  await page.goto('/progress?module=lesen')
-  const stand = page.getByRole('region', { name: 'Stand' })
-  await expect(stand.getByText('official result')).toHaveCount(0)
-  await expect(page.getByRole('heading', { name: 'Evidence' })).toBeVisible()
-  await expect(page.getByText('Official tasks')).toBeVisible()
+  await page.goto('/progress')
+  await expect(page.getByRole('heading', { name: 'Practice tests you entered' })).toBeVisible()
+  await expect(page.getByRole('row', { name: /Lesen .* 60 of 100 yes/ })).toBeVisible()
   await noSideScroll(page)
 })
 
-test('with practice evidence: dials, ranges, confidence, forecast and the analysis', async ({ page }) => {
+test('with practice evidence: ladder, time to goal, skill table and the explanation', async ({ page }) => {
   test.skip(!process.env.E2E_FIXTURE, 'needs the fixture evidence (E2E_FIXTURE=1)')
   await login(page)
   const box = page.getByRole('region', { name: 'Your level' })
   await expect(box.getByText(/B1\.1/).first()).toBeVisible()
-  await expect(box.getByText(/\d+% to \d+%/).first()).toBeVisible()
-  await expect(box.getByText(/confidence \d+%/).first()).toBeVisible()
-  await expect(box.getByText(/Pace: \d/)).toBeVisible()
+  await expect(box.getByTestId('band-B1.1')).toHaveAttribute('data-state', 'here')
+  await expect(box.getByText(/right on B1 work, ± \d+ points, from \d+ practice answers/)).toBeVisible()
+  await expect(box.getByText(/h practised since placement/)).toBeVisible()
+  await expect(box.getByText(/h\/week, last 4 weeks/)).toBeVisible()
   await noSideScroll(page)
   await page.screenshot({ path: `${SHOTS}/v2-today-fixture.png` })
-  await box.getByRole('button', { name: 'Analyse these numbers' }).click()
+  await box.getByRole('button', { name: 'Explain in words' }).click()
   await expect(page.getByTestId('insight')).toBeVisible({ timeout: 130_000 })
   await page.screenshot({ path: `${SHOTS}/v2-today-analysis.png` })
   await page.goto('/progress')
-  await expect(page.getByRole('heading', { name: 'Reading' }).or(page.getByRole('heading', { name: 'Lesen' })).first()).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Each skill, week by week' })).toBeVisible()
   await noSideScroll(page)
   await page.screenshot({ path: `${SHOTS}/v2-progress-fixture.png`, fullPage: true })
 })
