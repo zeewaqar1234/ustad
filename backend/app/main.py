@@ -17,6 +17,7 @@ from app.api import (
     mistakes,
     patterns,
     placement,
+    plan,
     podcast,
     recitation,
     review,
@@ -52,7 +53,7 @@ def _db_error(request: Request, exc: OperationalError):
 
 
 for r in (health, auth, daily, review, sabaq, stats, items, patterns, homework, mistakes,
-          recitation, placement, voice, texts, dictation, podcast, standing):  # fmt: skip
+          recitation, placement, voice, texts, dictation, podcast, standing, plan):  # fmt: skip
     app.include_router(r.router)
 
 

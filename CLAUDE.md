@@ -7,7 +7,7 @@ Per-topic docs: phases.md · learner_profile.md, llm.md · pedagogy.md, modules.
 architecture.md · content_sources.md · sources.md.
 
 ## Commands
-- make dev (backend :8000 + frontend :5173) · make test · make lint · make migrate · make gate-reset
+- make dev (backend :8000 + frontend :5173) · make test · make lint · make migrate
 - backend: cd backend && uv run pytest -q · frontend: cd frontend && npm run test
 - LanguageTool: make lt-up (docker compose, :8010) · make lt-check
 - If the Docker daemon is not running in a cloud container: start `dockerd` in the background.
@@ -33,8 +33,7 @@ architecture.md · content_sources.md · sources.md.
 - Visual: grayscale base + one accent colour only for the next action and the pass line. Everything
   readable printed in black and white. Right/wrong = weight/underline, not colour alone.
 - Copy tone: short, direct, specific. No hype, no em dashes, no exclamation marks, no fake praise.
-- Builder gate: before starting any phase >= V3, call GET /api/stats/gate. If study_days_last_7 < 5 and Zee
-  did not write "override for this phase", do bug fixes only and say why.
+- Builder gate: retired by Zee on 2026-10-31. No study-day check blocks any phase.
 - New dependency = one-line reason in docs/PROGRESS.md. Prefer none.
 - Schema change = Alembic migration with downgrade (and backfill where old rows convert). Never rename
   or delete user data.

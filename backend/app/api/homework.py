@@ -17,7 +17,7 @@ from app.core.clock import local_date
 from app.db import DB, utcnow
 from app.llm.provider import Provider, get_provider
 from app.models import Homework, Pattern
-from app.services import evidence, ghalti, grading
+from app.services import evidence, ghalti, grading, planner
 
 router = APIRouter(prefix="/api/homework", dependencies=[Depends(require_user)])
 LLM = Annotated[Provider, Depends(get_provider)]
@@ -38,7 +38,8 @@ WRITING_CAP_MS = (
 def _grade(db: Session, llm: Provider, h: Homework, text: str, elapsed_ms: int = 0) -> None:
     now = utcnow()
     pattern = db.get(Pattern, h.pattern_id) if h.pattern_id else None
-    tags = evidence.target_tags(pattern.tags if pattern and pattern.tags else [])
+    focus = [f["tag"] for f in planner.get_or_build(db, now).plan_json.get("focus", [])]
+    tags = evidence.target_tags([*(pattern.tags if pattern and pattern.tags else []), *focus])
     grade = grading.grade_text(db, llm, text, h.prompt if h.kind == "homework" else "", tags)
     evidence.add_activity(db, now, "writing", elapsed_ms, cap_ms=WRITING_CAP_MS)
     h.submission, h.grade_json, h.submitted_at = text, grade, now

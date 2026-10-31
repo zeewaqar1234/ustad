@@ -16,9 +16,10 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.db import utcnow
 from app.models import Attempt, Card, DictationItem, Item, ReadingText
 from app.reading.texts import ensure_seed
-from app.services import evidence
+from app.services import evidence, planner
 from app.srs.grader import _char_diff
 
 PER_DAY = 5
@@ -87,6 +88,11 @@ def todays(db: Session, d: date) -> list[DictationItem]:
         used = {r for (r,) in db.execute(select(DictationItem.ref))}
         rng = random.Random(d.toordinal())
         picked: list[tuple[str, str]] = []
+        for pk in planner.diktat_picks_for(
+            db, d, utcnow()
+        ):  # V4: sentences with today's focus structure
+            if pk["ref"] not in used and len(picked) < PER_DAY:
+                picked.append((pk["ref"], pk["de"]))
         for tier in _pool(db):
             fresh = [
                 c for c in tier if c[0] not in used

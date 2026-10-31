@@ -159,3 +159,17 @@ def check(p: Pattern, drill_id: str, answer: str = "", answers: list[str] | None
 def missing_words(text: str, must_include: list[str]) -> list[str]:
     low = text.lower()
     return [w for w in must_include if w.lower() not in low]
+
+
+def pick(items: list[Drill], n: int, seed: int) -> list[Drill]:
+    """n drills of mixed types for a review block. Same pick all day (seed = day), another one tomorrow.
+    One drill of each type first (free production last), then the rest in a shuffled order."""
+    rng = random.Random(seed)
+    by_type: dict[str, list[Drill]] = {}
+    for d in items:
+        by_type.setdefault(d.type, []).append(d)
+    firsts = [rng.choice(v) for t, v in by_type.items() if t != "free"]
+    rng.shuffle(firsts)
+    rest = [d for d in items if d not in firsts and d.type != "free"]
+    rng.shuffle(rest)
+    return (firsts + rest)[:n]

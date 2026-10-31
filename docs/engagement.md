@@ -49,7 +49,7 @@ Evidence base: self-determination theory (autonomy, competence, relatedness; Rya
 - Ustad's tone: strict, fair, specific, short. Never sarcastic, never shaming, never fake praise.
 - Weekly target set by Zee on Sunday (minutes, speaking sessions); report card compares target vs actual.
 
-### 6.6 Build-gate (anti-procrastination for the builder)
+### 6.6 Build-gate (retired 2026-10-31 by Zee; kept for history, no longer enforced)
 - The dashboard has a **"Builder gate"** card: study days in last 7. Claude Code must check it (via an API endpoint `/api/stats/gate`) at the start of every phase after Phase 1 and **refuse to start new feature work if < 5/7**, offering bug fixes only. This is written into CLAUDE.md.
 
 ## 7. Progress tracking and reporting

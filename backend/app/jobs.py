@@ -12,6 +12,7 @@ from app.core.config import settings
 from app.db import SessionLocal, utcnow
 from app.llm.provider import LLMInvalid, LLMUnavailable, OllamaProvider
 from app.reading import author
+from app.services import planner
 
 log = logging.getLogger(__name__)
 DAYS_AHEAD = 2
@@ -20,7 +21,9 @@ DAYS_AHEAD = 2
 def nightly_author() -> int:
     db = SessionLocal()
     try:
-        made = author.ensure(db, OllamaProvider(), local_date(utcnow()), days=DAYS_AHEAD)
+        now = utcnow()
+        made = author.ensure(db, OllamaProvider(), local_date(now), days=DAYS_AHEAD,
+                             constraints=planner.reading_constraints(db, now))  # fmt: skip
         db.commit()
         log.info("Author job: %d texts made", len(made))
         return len(made)

@@ -13,7 +13,7 @@ from app.core.clock import day_bounds, local_date
 from app.db import DB, utcnow
 from app.llm.provider import Provider, get_provider
 from app.models import Attempt, EvidenceEvent, Pattern
-from app.services import drills, evidence, ghalti, grading
+from app.services import drills, evidence, ghalti, grading, planner
 
 router = APIRouter(prefix="/api", dependencies=[Depends(require_user)])
 LLM = Annotated[Provider, Depends(get_provider)]
@@ -21,17 +21,9 @@ DONE_PCT = 0.8
 
 
 def current_pattern(db: Session) -> Pattern | None:
-    """Next pattern in the fixed order that is approved, not done and not known from placement."""
-    return db.scalar(
-        select(Pattern)
-        .where(
-            Pattern.status == "ok",
-            Pattern.done_at.is_(None),
-            Pattern.known_from_placement.is_(False),
-        )
-        .order_by(Pattern.order)
-        .limit(1)
-    )
+    """The pattern for new teaching today: the plan's (a focus tag can pull a pattern forward), else the
+    next in the fixed order that is approved, not done and not known from placement."""
+    return planner.current_pattern(db, utcnow())
 
 
 def _get(db: Session, code: str) -> Pattern:
@@ -69,12 +61,17 @@ def pattern_card(code: str, db: DB):
 
 
 @router.get("/drills/{code}")
-def drill_round(code: str, db: DB):
+def drill_round(code: str, db: DB, limit: int | None = None):
+    """A full round, or `limit` drills for a Sabqi review block (a different set each day, same set all day).
+    A limited round is practice only: it does not mark the pattern done."""
     p = _get(db, code)
     if p.status != "ok":
         raise HTTPException(409, "This pattern is waiting in the check queue.")
+    items = drills.generate(p)
+    if limit is not None:
+        items = drills.pick(items, limit, local_date(utcnow()).toordinal())
     return {"code": p.code, "title": p.title, "started": utcnow().isoformat(),
-            "drills": [d.public() for d in drills.generate(p)]}  # fmt: skip
+            "limited": limit is not None, "drills": [d.public() for d in items]}  # fmt: skip
 
 
 class DrillAnswerIn(BaseModel):

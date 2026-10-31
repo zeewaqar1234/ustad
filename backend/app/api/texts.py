@@ -11,6 +11,7 @@ from app.llm.provider import LLMInvalid, LLMUnavailable, Provider, get_provider
 from app.models import ReadingText
 from app.reading import author
 from app.reading import texts as svc
+from app.services import planner
 
 router = APIRouter(prefix="/api/texts", dependencies=[Depends(require_user)])
 LLM = Annotated[Provider, Depends(get_provider)]
@@ -42,7 +43,9 @@ def gloss(word: str, db: DB, text_id: int | None = None):
 def generate(db: DB, llm: LLM):
     """Make today's and tomorrow's texts now (the nightly job does the same at night)."""
     try:
-        made = author.ensure(db, llm, svc.today(utcnow()), days=2)
+        now = utcnow()
+        made = author.ensure(db, llm, svc.today(now), days=2,
+                             constraints=planner.reading_constraints(db, now))  # fmt: skip
     except (LLMUnavailable, LLMInvalid) as e:
         db.commit()  # texts finished before the failure stay
         raise HTTPException(503, f"The local model is offline or failed: {e}") from None

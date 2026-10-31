@@ -89,6 +89,7 @@ export interface DrillRound {
   code: string
   title: string
   started: string
+  limited?: boolean
   drills: Drill[]
 }
 
