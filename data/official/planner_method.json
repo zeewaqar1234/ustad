@@ -1,0 +1,103 @@
+{
+  "note": "Parameters of the V4 learner model and planner (services/learner.py, services/planner.py). Modelling choices of this app, not exam facts. Changing a value changes the plan; each is written in docs/v2/metrics.md.",
+  "half_life_days": 14,
+  "prior": {
+    "errors": 1,
+    "correct": 1,
+    "note": "smoothing: one error and one correct use are added to every tag"
+  },
+  "focus": {
+    "window_days": 30,
+    "min_opportunities": 5,
+    "min_rate": 0.25,
+    "max_tags": 2
+  },
+  "pattern": {
+    "last_events": 20,
+    "shaky_below": 0.6,
+    "solid_above": 0.85,
+    "solid_unseen_days": 14,
+    "review_min_events": 5
+  },
+  "weak_word_lapses": 2,
+  "samples_per_tag": 3,
+  "diktat_focus_sentences": 2,
+  "reading": {
+    "structure_min_uses": 3,
+    "density_low": 93,
+    "density_high": 99
+  },
+  "sabqi_drills": 5,
+  "plans_listed": 14,
+  "families": {
+    "Verb position": [
+      "V2_POSITION",
+      "VERB_FINAL",
+      "SEP_PREFIX",
+      "MIDDLE_FIELD_ORDER",
+      "CONNECTOR_CHOICE"
+    ],
+    "Case and gender": [
+      "CASE_AKK",
+      "CASE_DAT",
+      "PREP_CASE",
+      "GENDER",
+      "ADJ_ENDING",
+      "PLURAL"
+    ],
+    "Perfekt and tense": [
+      "AUX_HABEN_SEIN",
+      "PARTIZIP",
+      "TENSE_CHOICE"
+    ],
+    "Spelling": [
+      "SPELLING",
+      "UMLAUT",
+      "CAPITALISATION"
+    ],
+    "Words and register": [
+      "WORD_CHOICE",
+      "FALSE_FRIEND",
+      "REGISTER_DU_SIE"
+    ]
+  },
+  "speaking_goals": {
+    "VERB_FINAL": "Ask Zee questions that invite weil, dass or wenn answers, for example 'Warum ...?' and 'Was passiert, wenn ...?'.",
+    "V2_POSITION": "Ask Zee questions that invite a time or place first, for example 'Wann ...?' and 'Was machst du morgen?'.",
+    "AUX_HABEN_SEIN": "Ask Zee about the past, for example 'Was hast du gestern gemacht?' and 'Wohin bist du am Wochenende gefahren?'.",
+    "PARTIZIP": "Ask Zee about the past, for example 'Was hast du gestern gemacht?'.",
+    "CASE_AKK": "Ask Zee what he needs, buys or sees, so that he must name objects with an article.",
+    "CASE_DAT": "Ask Zee with whom and where, for example 'Mit wem arbeitest du?' and 'Wo wohnst du?'.",
+    "PREP_CASE": "Ask Zee where things are and where he goes, so that he must choose a preposition and its case.",
+    "ADJ_ENDING": "Ask Zee to describe a thing or a person so that he must put an adjective before a noun.",
+    "SEP_PREFIX": "Ask Zee about his daily routine, for example 'Wann stehst du auf?' and 'Was machst du nach der Arbeit?'.",
+    "TENSE_CHOICE": "Ask Zee about plans and about what happened, so that he must choose a tense.",
+    "MIDDLE_FIELD_ORDER": "Ask Zee for sentences with a time, a place and an object together."
+  },
+  "ignore_tags": [
+    "OTHER",
+    "PRONUNCIATION"
+  ],
+  "labels": {
+    "V2_POSITION": "verb in second position",
+    "VERB_FINAL": "verb at the end",
+    "SEP_PREFIX": "separable verbs",
+    "AUX_HABEN_SEIN": "haben or sein in the Perfekt",
+    "PARTIZIP": "Partizip forms",
+    "TENSE_CHOICE": "choice of tense",
+    "CASE_AKK": "Akkusativ",
+    "CASE_DAT": "Dativ",
+    "PREP_CASE": "case after prepositions",
+    "GENDER": "noun gender",
+    "ADJ_ENDING": "adjective endings",
+    "PLURAL": "plural forms",
+    "CONNECTOR_CHOICE": "choice of connector",
+    "MIDDLE_FIELD_ORDER": "order in the middle field",
+    "WORD_CHOICE": "word choice",
+    "FALSE_FRIEND": "false friends",
+    "REGISTER_DU_SIE": "du or Sie",
+    "SPELLING": "spelling",
+    "UMLAUT": "umlauts",
+    "CAPITALISATION": "capital letters"
+  }
+}

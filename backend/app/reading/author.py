@@ -18,6 +18,7 @@ from app.llm.provider import LLMInvalid, LLMUnavailable, Provider, complete_json
 from app.models import Item, Profile, ReadingText
 from app.reading import density
 from app.reading.texts import ensure_seed, known_items, known_words
+from app.services import structure
 from app.services.grading import lt_notes
 
 log = logging.getLogger(__name__)
@@ -93,11 +94,33 @@ def _feedback(d: density.Density) -> str:
             f"glossary.")  # fmt: skip
 
 
-def write_text(db: Session, llm: Provider, topic: str, for_date: date | None) -> ReadingText:
+def _structure_brief(c: dict) -> str:
+    return (f"\nPlanner constraint: use the structure '{c['label']}' ({c['tag']}) correctly at least "
+            f"{c['min_uses']} times in the text, in natural sentences.")  # fmt: skip
+
+
+def _missing(c: dict | None, text: str) -> int:
+    """How many uses of the planned structure are missing (0 = fine). A tag with no check is skipped and logged."""
+    if not c:
+        return 0
+    n = structure.count_uses(c["tag"], text)
+    if n is None:
+        log.info("Author: no structure check for tag %s, constraint not verified", c["tag"])
+        return 0
+    return max(c["min_uses"] - n, 0)
+
+
+def write_text(db: Session, llm: Provider, topic: str, for_date: date | None,
+               constraints: dict | None = None) -> ReadingText:  # fmt: skip
+    """`constraints` comes from the planner (services/planner.py `reading_constraints`): a structure to use
+    at least N times. Density and structure are checked together; one regeneration for both."""
     system = system_prompt(db)
     brief, episode = _brief(db, topic)
+    if constraints:
+        brief += _structure_brief(constraints)
     known = known_words(db)
     best: tuple[GradedText, density.Density] | None = None
+    best_score: tuple[int, float] | None = None
     user = brief
     for _ in range(2):  # first draft + at most one regeneration (docs/llm.md "Level control")
         try:
@@ -109,12 +132,21 @@ def write_text(db: Session, llm: Provider, topic: str, for_date: date | None) ->
         finally:
             db.commit()  # ledger rows now: do not hold the SQLite write lock through slow calls
         draft.topic, draft.series_episode = topic, episode
-        d = density.text_density(" ".join(s.de for s in draft.sentences), known)
-        if best is None or _distance(d.pct) < _distance(best[1].pct):
-            best = (draft, d)
-        if _distance(d.pct) == 0:
+        body = " ".join(s.de for s in draft.sentences)
+        d = density.text_density(body, known)
+        gap = _missing(constraints, body)
+        score = (gap, _distance(d.pct))
+        if best is None or best_score is None or score < best_score:
+            best, best_score = (draft, d), score
+        if score == (0, 0.0):
             break
-        user = f"{brief}\n\n{_feedback(d)}"
+        notes = []
+        if _distance(d.pct):
+            notes.append(_feedback(d))
+        if gap:
+            notes.append(f"The structure '{constraints['label']}' appears too rarely: use it at least "
+                         f"{constraints['min_uses']} times.")  # fmt: skip
+        user = f"{brief}\n\n" + " ".join(notes)
     assert best is not None
     draft, d = best
     notes: list[dict] = []
@@ -142,8 +174,10 @@ def topics_for(d: date) -> list[str]:
     return ["serial", ROTATION[d.toordinal() % len(ROTATION)]]
 
 
-def ensure(db: Session, llm: Provider, start: date, days: int) -> list[ReadingText]:
-    """Fill each day in [start, start+days) up to TEXTS_PER_DAY. LLMUnavailable propagates."""
+def ensure(db: Session, llm: Provider, start: date, days: int,
+           constraints: dict | None = None) -> list[ReadingText]:  # fmt: skip
+    """Fill each day in [start, start+days) up to TEXTS_PER_DAY. LLMUnavailable propagates.
+    The planner's constraint applies to the topic slot (slot 2); the story serial stays free."""
     ensure_seed(db)
     made = []
     for i in range(days):
@@ -152,6 +186,6 @@ def ensure(db: Session, llm: Provider, start: date, days: int) -> list[ReadingTe
             select(func.count()).select_from(ReadingText).where(ReadingText.for_date == d)
         )
         for topic in topics_for(d)[have:TEXTS_PER_DAY]:
-            made.append(write_text(db, llm, topic, d))
+            made.append(write_text(db, llm, topic, d, constraints if topic != "serial" else None))
             db.commit()  # keep finished texts if a later call fails
     return made

@@ -177,6 +177,18 @@ class ActivityLog(Base):
     seconds: Mapped[float] = mapped_column(Float, default=0)
 
 
+class DailyPlan(Base):
+    """V4: the day's plan, built once from the learner model (docs/v2/metrics.md, "V4"). `data_json` keeps the
+    numbers the plan was built from, so the Progress page can show why."""
+
+    __tablename__ = "daily_plan"
+    date: Mapped[date] = mapped_column(Date, primary_key=True)
+    created: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
+    plan_json: Mapped[dict] = mapped_column(JSON, default=dict)
+    data_json: Mapped[dict] = mapped_column(JSON, default=dict)
+    why: Mapped[str] = mapped_column(Text, default="")
+
+
 class ExamResult(Base):
     """V2: one exam-format result Zee entered (docs/v2/metrics.md). `points` is on the module's measurable
     scale: 0 to 100, or 0 to 84 for Sprechen without a real exam (Aussprache cannot be measured)."""

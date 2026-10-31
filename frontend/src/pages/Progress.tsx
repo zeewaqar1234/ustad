@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { Link } from 'react-router'
 import { LevelBox } from '../features/standing/LevelBox'
 import { PageHeader } from '../components/ui'
 import { api } from '../lib/api'
+import { usePlans, type PlanRecord } from '../lib/plan'
 import { pct, type Readiness, type SkillReadiness } from '../lib/readiness'
 import { formatDate, KIND_LABEL, type Progress as ProgressData } from '../lib/standing'
 
@@ -195,6 +197,66 @@ function TagWeeks({ p }: { p: ProgressData['tag_weeks'] }) {
   )
 }
 
+function PlanRow({ p }: { p: PlanRecord }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <tr className="border-b border-neutral-200 align-top">
+        <td className="py-1 pr-3 whitespace-nowrap">{formatDate(p.date)}</td>
+        <td className="pr-3">{p.why}</td>
+        <td className="pr-3">{p.focus.map((f) => f.label).join(', ') || 'none'}</td>
+        <td className="pr-3">{p.sabqi_drills.map((d) => d.title).join(', ') || 'none'}</td>
+        <td className="pr-3">{p.new_unit.pattern?.pulled_forward ? `yes, ${p.new_unit.pattern.title}` : 'no'}</td>
+        <td>
+          <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="underline">
+            {open ? 'Hide details' : 'Details'}
+          </button>
+        </td>
+      </tr>
+      {open && (
+        <tr className="border-b border-neutral-200">
+          <td colSpan={6} className="pb-2">
+            <p className="text-neutral-700">{p.data.rule}</p>
+            <table className="mt-1 text-left">
+              <thead>
+                <tr><th className="pr-4 font-semibold">Tag</th><th className="pr-4 font-semibold">Errors</th><th className="pr-4 font-semibold">Correct</th><th className="pr-4 font-semibold">Uses</th><th className="font-semibold">Rate</th></tr>
+              </thead>
+              <tbody>
+                {p.data.tags.map((t) => (
+                  <tr key={t.tag}><td className="pr-4">{t.tag}</td><td className="pr-4">{t.errors}</td><td className="pr-4">{t.correct}</td><td className="pr-4">{t.opportunities}</td><td>{Math.round(t.rate * 100)}%</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      )}
+    </>
+  )
+}
+
+function PlanHistory() {
+  const { data, error } = usePlans()
+  return (
+    <section className="mb-10">
+      <h2 className="mb-1 text-lg font-bold">Plan: what Ustad decided and why</h2>
+      {error ? (
+        <p className="text-sm">Error: {(error as Error).message}</p>
+      ) : !data ? (
+        <p className="text-sm">Loading…</p>
+      ) : data.plans.length === 0 ? (
+        <p className="text-sm">Not measured yet. Plans are saved once a day.</p>
+      ) : (
+        <table className="w-full text-left text-sm">
+          <thead>
+            <tr className="border-b border-neutral-400"><th className="py-1 pr-3">Date</th><th className="pr-3">Why</th><th className="pr-3">Focus</th><th className="pr-3">Targeted drills</th><th className="pr-3">Pattern pulled forward</th><th></th></tr>
+          </thead>
+          <tbody>{data.plans.map((p) => <PlanRow key={p.date} p={p} />)}</tbody>
+        </table>
+      )}
+    </section>
+  )
+}
+
 const STATE_STYLE: Record<string, string> = {
   solid: 'border-2 border-neutral-900 font-bold',
   ok: 'border border-neutral-700',
@@ -278,6 +340,8 @@ export function Progress() {
         <h2 className="mb-1 text-lg font-bold">Then and now</h2>
         <p>Not measured yet. Your first and latest graded essay will appear here side by side.</p>
       </section>
+
+      <PlanHistory />
     </div>
   )
 }

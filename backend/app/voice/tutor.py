@@ -20,7 +20,7 @@ from app.llm import prompt
 from app.llm.provider import LLMInvalid, LLMUnavailable, Provider, complete_json
 from app.llm.schemas import SessionReview, TutorReply
 from app.models import Profile, VoiceSession, VoiceTurn
-from app.services import evidence, ghalti
+from app.services import evidence, ghalti, planner
 from app.services.grading import _locate, _lt_only, locate_correct_uses, lt_check, lt_notes
 from app.voice.disfluency import clean
 
@@ -54,11 +54,14 @@ def _learner(db: Session) -> str:
 def system_prompt(db: Session, sc: dict) -> str:
     """Static parts first (tutor rules, learner, scenario), so the prefix repeats between turns."""
     chunks = "\n".join(f"- {c['de']} ({c['en']})" for c in sc["chunks"])
+    goal = (planner.get_or_build(db, utcnow()).plan_json.get("speaking_goal") or {}).get("text")
+    goal_line = (f"\n\nToday's speaking goal (set by the planner): {goal} Only ask; never correct "
+                 f"during the talk.") if goal else ""  # fmt: skip
     return (
         f"{prompt('tutor')}\n\n{_learner(db)}\n\n"
         f"Scenario: {sc['title']} ({sc['level']}).\nYou play: {sc['tutor_role_en']}.\n"
         f"Setting: {sc['setting_en']}\nZee's goal: {sc['goal_en']}\n"
-        f"Address him with '{sc['address']}'.\nUseful chunks he has seen:\n{chunks}"
+        f"Address him with '{sc['address']}'.\nUseful chunks he has seen:\n{chunks}{goal_line}"
     )
 
 

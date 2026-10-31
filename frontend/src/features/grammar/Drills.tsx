@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, useParams, useSearchParams } from 'react-router'
 import { Diff } from '../../components/Diff'
 import { Column, PageHeader } from '../../components/ui'
 import { GermanField } from '../../components/GermanField'
@@ -140,9 +140,10 @@ function Result({ drill, r, given }: { drill: Drill; r: DrillResult; given: stri
 export function Drills() {
   const { code = '' } = useParams()
   const qc = useQueryClient()
+  const limit = useSearchParams()[0].get('limit')
   const { data, error } = useQuery({
-    queryKey: ['drills', code],
-    queryFn: () => api<DrillRound>(`/api/drills/${code}`),
+    queryKey: ['drills', code, limit],
+    queryFn: () => api<DrillRound>(`/api/drills/${code}${limit ? `?limit=${encodeURIComponent(limit)}` : ''}`),
     staleTime: Infinity,
     refetchOnWindowFocus: false,
   })
@@ -155,6 +156,7 @@ export function Drills() {
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
   const [round, setRound] = useState<RoundResult | null>(null)
+  const [limitedDone, setLimitedDone] = useState(false)
   const shownAt = useRef(0)
 
   const drill = data?.drills[idx]
@@ -197,6 +199,11 @@ export function Drills() {
       setIdx(idx + 1)
       return
     }
+    if (data!.limited) {
+      setLimitedDone(true)
+      qc.removeQueries({ queryKey: ['drills', code] })
+      return
+    }
     setBusy(true)
     try {
       const r = await api<RoundResult>(`/api/drills/${code}/finish`, { started: data!.started })
@@ -210,6 +217,20 @@ export function Drills() {
       setBusy(false)
     }
   }
+
+  if (limitedDone)
+    return (
+      <Column>
+        <PageHeader
+          back={{ to: `/grammar/${code}`, label: 'Back to pattern' }}
+          title={data.title}
+          subtitle={`Done. ${data.drills.length} of ${data.drills.length} answered.`}
+        />
+        <Link to="/" className="self-start rounded-lg border border-neutral-400 px-5 py-3">
+          Back to Today
+        </Link>
+      </Column>
+    )
 
   if (round)
     return (
@@ -270,7 +291,7 @@ export function Drills() {
             autoFocus
             className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white disabled:opacity-60"
           >
-            {idx + 1 < data.drills.length ? 'Next' : busy ? 'Saving…' : 'Finish round'}
+            {idx + 1 < data.drills.length ? 'Next' : busy ? 'Saving…' : data.limited ? 'Done' : 'Finish round'}
           </button>
           <p className="text-xs text-neutral-600">Enter continues.</p>
         </>

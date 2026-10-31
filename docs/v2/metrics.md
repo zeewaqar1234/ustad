@@ -157,3 +157,35 @@ against the test points; mean absolute difference.
 **Explanation.** `POST /api/readiness/insight` as before, with the new facts (share right, ± points, answers, 4-week change, hours, pace).
 Every number in the model's answer must be in the facts and belong to the skill named in its sentence; level names only the placement
 label, the band worked on or the goal exam. Otherwise fixed sentences are shown.
+
+## V4: learner model and planner (2026-10-31)
+
+Code: `services/learner.py` (understand), `services/planner.py` (decide), `services/structure.py` (does a text use a
+structure). Parameters: `data/official/planner_method.json` (this app's modelling choices, not exam facts). Nothing here calls
+a model. Table `daily_plan` (one row per Berlin day, built on the first request, never changed afterwards; `data_json` keeps
+the numbers it was built from).
+
+**Per tag** (last 30 days, `evidence_event` rows with a tag, all skills): weight `0.5 ^ (age days / 14)`. errors and correct =
+raw counts; w_errors and w_correct = weighted sums; opportunities = errors + correct.
+`rate = (w_errors + 1) / (w_errors + w_correct + 2)` (prior: 1 error and 1 correct use).
+**Focus tags**: rate above 0.25 and at least 5 opportunities; highest rate first; ties go to the tag seen in more skills, then
+alphabetical; at most 2. OTHER and PRONUNCIATION are never a focus. Tags are grouped into families (Verb position, Case and
+gender, Perfekt and tense, Spelling, Words and register) in the method file; the `why` line says when both focus tags share one.
+
+**Per pattern**: accuracy over its last 20 events (pattern_code equals the pattern, or tag is one of its tags). new = no events,
+shaky = below 0.60, solid = above 0.85 and last seen more than 14 days ago, else ok. Weak words: cards with 2 or more lapses
+(reader look-ups are not recorded yet, so they are not counted).
+
+**Plan fields**: `focus` (with per-skill counts and up to 3 wrong sentences with their fix), `review_pattern` (a done pattern that is
+shaky with at least 5 events, lowest accuracy, 1 a day), `new_unit` (next Sabaq plus new pattern; absent on a makeup day; a focus
+tag with no taught pattern pulls the covering pattern forward), `sabqi_drills` (5 drills each: review pattern first, then the
+taught pattern of each focus tag; rule card first, drills after), `mazmoon` (at most 2 must-use: new pattern, first focus tag;
+the Mazmoon screen itself is Phase V3, not built), `reading` (structure to use at least 3 times, density 93 to 99), `diktat`
+(2 taught sentences containing a focus structure), `speaking_goal` (fixed question styles per tag, the tutor only asks),
+`use_task` (rote then use: new Sabaq chunks or a recitation today add one sentence task), `blocks` (one line per Today block).
+`why` is built from the numbers above, never by a model.
+
+**Wiring**: Author gets the constraint, checks it with `structure.count_uses` (regex per tag; tags without a check are skipped and
+logged) and regenerates once, together with the density check (the draft with fewer missing uses, then closer density, is kept).
+Tutor prompt gets the speaking goal. Diktat takes the picks first. The homework grader also looks for the focus tags. Today shows
+the plan; Progress lists the last 14 plans with their data.

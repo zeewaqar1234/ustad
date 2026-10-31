@@ -14,6 +14,7 @@ Read this first every session. Then read only the docs/ file for the current pha
 | V0 (v2 brief) | Done (evidence in "V2 phases" below) | 2026-10-26 |
 | V1 (v2 brief) | Done in code (evidence below); real-model correct-use run open | 2026-10-26 |
 | V2 (v2 brief) | Done in code (evidence below) | 2026-10-29 |
+| V4 (v2 brief) | Done in code (evidence below). V3 (Mazmoon) skipped, not built | 2026-10-31 |
 | 5–7 | Not started (work-writing templates of §5.6 scheduled in Phase 5) | |
 
 **Next session:** on Zee's machine: the Phase 3 STT word-loss test with his own speech, then
@@ -756,3 +757,27 @@ quantities. That comparison is removed. Zee chose (in this session) the "ladder 
 | Playwright 1440x900 | `e2e/v2.spec.ts` 3 passed on a fresh e2e DB (empty; results entered and voided; fixture evidence with the explanation); no horizontal scroll at 1024 and 1440 |
 | Screenshots | `docs/evidence/v2/v2-today-empty.png`, `v2-today-fixture.png`, `v2-today-analysis.png`, `v2-progress-empty.png`, `v2-progress-fixture.png`, `v2-settings.png` (fixture data, throwaway DB) |
 | Real local model, Zee's data | **Not run** here: no Ollama and no access to his database. The explanation was tested with a fake model and the fixed-sentence fallback |
+
+### V4: the adaptive Ustad (2026-10-31)
+
+Gate: retired by Zee on 2026-10-31 ("override for all phases and eliminate this builder gate"). Removed from CLAUDE.md and AGENTS.md;
+the endpoint and `make gate-reset` stay but block nothing. Scope decision by Zee: V4 only. **Mazmoon (Phase V3) is not built**, which is
+why no Mazmoon section exists in the app. The plan already stores the Mazmoon must-use for V3 to read.
+- Order of work, as Zee asked: first understand (`services/learner.py`: recency-weighted error rate per tag across all skills,
+  families, per-pattern state, weak words), then decide (`services/planner.py`), then act through the generators. Formulas: docs/v2/metrics.md "V4".
+- Table `daily_plan` (migration `e4v4plan05`, downgrade tested). API: `GET /api/plan`, `GET /api/plans`; `GET /api/drills/{code}?limit=5` (practice only).
+- Wired: Author constraint plus structure check and one regeneration, tutor speaking goal, Diktat picks, homework grader focus tags,
+  `current_pattern()` follows the plan (pull forward), Sabqi targeted drills, use task after new chunks or a recitation.
+- UI: Plan section and Targeted practice on Today, "Plan: what Ustad decided and why" on Progress. Dependencies: none.
+
+| Check | Result |
+|---|---|
+| pytest | 418 passed, 15 skipped, 1 failed: `test_daily_loop`, the known time-of-day failure (fails identically with the V4 changes stashed). New `tests/test_v4_planner.py`: 32 passed |
+| vitest, lint, typecheck, build | 59 passed; ruff clean; oxlint 0 errors, 1 old warning; tsc clean; vite build ok |
+| Screenshots 1440x900 | `docs/evidence/v2/v4-today-plan.png`, `v4-progress-plan.png`, `v4-sabqi-drill.png` (throwaway DB with seeded errors, not Zee's) |
+
+Not done or not verified:
+- Real-model run of the Author constraint (needs Ollama on Zee's Mac). The structure checks are regexes: they count where a structure appears, not whether it is right.
+- No Playwright e2e spec for V4; the brief's e2e is covered by an API-level pytest.
+- End-of-phase subagent diff review not run.
+- Diktat essay correction and Bolna "Say it" card wait for V3. Reader look-ups are not recorded, so weak words use card lapses only.
