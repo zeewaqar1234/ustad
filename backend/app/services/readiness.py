@@ -162,6 +162,20 @@ def _window(events: list[Ev], skill: str, start: date, end: date) -> tuple[float
     return s, f, n
 
 
+def weekly_shares(events: list[Ev], skill: str, today: date) -> list[dict]:
+    """Share right inside each of the last weeks (that week's answers only, no carry-over), for weeks with at
+    least trend_min_answers answers. The forecast fits these: a running estimate drifts as answers pile up and
+    would look like progress even for a flat skill."""
+    m, wd = rm(), st.method()["week_days"]
+    out = []
+    for i in range(m["snapshot_weeks"] - 1, -1, -1):
+        end = today - timedelta(days=i * wd)
+        s, f, n = _window(events, skill, end - timedelta(days=wd - 1), end)
+        if n >= m["trend_min_answers"] and s + f > 0:
+            out.append({"date": end.isoformat(), "mean": s / (s + f), "n": n})
+    return out
+
+
 def trend(events: list[Ev], skill: str, today: date) -> int | None:
     """Share right in the last trend_days minus the share right in the trend_days before, in points.
     None unless both windows hold trend_min_answers answers (the age discount plays no part here)."""
@@ -203,7 +217,7 @@ def skill_forecast(
     skills = (rm()["activity_skill"][skill],)
     xs = [st.hours_in(act, skills, first, d) for d in dates]
     fit = st._fit(xs, [s["mean"] for s in snaps])
-    if fit is None or fit[1] <= 0 or fit[2] < mt["forecast_min_r2"]:
+    if fit is None or fit[1] <= 0 or fit[2] < rm()["forecast_min_r2"]:
         return {"state": "no_trend", "text": f"{label}: no steady rise yet, so no estimate."}
     a, slope, r2 = fit
     fitted_now = a + slope * st.hours_in(act, skills, first, today)
@@ -302,6 +316,13 @@ def level_info(db: Session, goal_exam: str) -> dict:
     passed = [] if label is None else pl.BANDS[: pl.BANDS.index(working)] if working else pl.BANDS
     return {
         "label": label,
+        "plain": (
+            None
+            if label is None
+            else f"Working on {working}"
+            if working
+            else "All placement bands passed"
+        ),
         "taken": local_date(pr.ts).isoformat() if pr and label else None,
         "working_on": working,
         "bands": pl.BANDS,
@@ -339,6 +360,15 @@ def readiness(db: Session, now: datetime) -> dict:
             "pace_per_week": hours / weeks,
             "hours_28": hours,
         }
+        if cur is not None and cur["n"] < rm()["min_answers_for_percent"]:
+            need = rm()["min_answers_for_percent"]
+            skills.append(
+                {**row, "measured": False, "status": "few",
+                 "status_word": f"{cur['n']} answers so far; a percent needs {need}",
+                 "mean": None, "lo": None, "hi": None, "pm_pts": None, "n": cur["n"], "trend_pts": None,
+                 "history": [], "placement_only": placement_only(events, sk), "forecast": None}
+            )  # fmt: skip
+            continue
         if cur is None:
             skills.append(
                 {**row, "measured": False, "status": "none", "status_word": NO_EVIDENCE,
@@ -355,7 +385,7 @@ def readiness(db: Session, now: datetime) -> dict:
                 "text": f"{row['label']}: only the placement test measures this so far.",
             }
             if only_placement
-            else skill_forecast(snaps, sk, act, today, target, cur)
+            else skill_forecast(weekly_shares(events, sk, today), sk, act, today, target, cur)
         )
         skills.append(
             {**row, "measured": True, "status": status, "status_word": words[status],

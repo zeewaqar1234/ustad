@@ -1,7 +1,8 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router'
-import { Column, PageHeader } from '../../components/ui'
+import { useParams } from 'react-router'
+import { NextStep, Page, PageHeader, SectionTitle } from '../../components/ui'
+import { buttonClass } from '../../lib/ui'
 import { marked } from '../../components/marked'
 import { api } from '../../lib/api'
 import { humanTag } from '../../lib/grammar'
@@ -15,8 +16,7 @@ function Note({ children }: { children: React.ReactNode }) {
   return <p className="rounded-lg border border-dashed border-neutral-400 px-3 py-1.5 text-center text-sm text-neutral-700">{children}</p>
 }
 
-const btn =
-  'h-9 rounded-lg border border-neutral-400 bg-white px-3 text-sm font-semibold hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-neutral-900 disabled:opacity-40'
+const btn = `${buttonClass('secondary')} text-sm`
 
 function TutorBubble({ t }: { t: Turn }) {
   const [gloss, setGloss] = useState(false)
@@ -150,7 +150,7 @@ function Review(props: { data: VoiceSession; showFluency: boolean; busy: boolean
   const sum = data.review?.summary
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-xl font-bold">Say it better</h2>
+      <SectionTitle>Say it better</SectionTitle>
       {sum && sum.graded > 0 && !ltOnly && (
         <p className="rounded-lg border border-neutral-300 bg-white p-3 font-semibold">
           {sum.clean} of {sum.graded} {sum.graded === 1 ? 'line' : 'lines'} without errors
@@ -160,7 +160,7 @@ function Review(props: { data: VoiceSession; showFluency: boolean; busy: boolean
       {ltOnly && (
         <div className="flex flex-col gap-2 rounded-lg border border-neutral-400 p-4 text-sm">
           <p>Tutor offline: LanguageTool check only. Not added to the Ghalti Register yet.</p>
-          <button onClick={retry} disabled={busy} className="self-start font-semibold underline">
+          <button onClick={retry} disabled={busy} className={`self-start ${buttonClass('quiet')}`}>
             Review again
           </button>
         </div>
@@ -181,12 +181,7 @@ function Review(props: { data: VoiceSession; showFluency: boolean; busy: boolean
       ) : (
         <p>Nothing said in this session.</p>
       )}
-      <Link
-        to="/voice"
-        className="h-11 self-start rounded-lg bg-accent px-5 py-2.5 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
-      >
-        Done
-      </Link>
+      <NextStep message={<p className="font-semibold">Session done.</p>} />
     </section>
   )
 }
@@ -266,50 +261,52 @@ export function Session() {
   )
 
   return (
-    <Column>
-      <PageHeader
-        title={data.scenario.title}
-        subtitle={subtitle}
-        back={{ to: '/voice', label: 'Back to Sprechen' }}
-        actions={
-          <div className="flex shrink-0 gap-2">
-            <button onClick={() => setChunks((c) => !c)} aria-expanded={chunks} className={btn}>
-              {chunks ? 'Hide useful phrases' : 'Show useful phrases'}
-            </button>
-            {open && (
-              <button onClick={finish} disabled={busy} aria-label={said ? 'End and review' : 'End'} className={btn}>
-                End
+    <Page>
+      <div className="flex flex-col gap-4">
+        <PageHeader
+          title={data.scenario.title}
+          subtitle={subtitle}
+          back={{ to: '/voice', label: 'Back to Sprechen' }}
+          actions={
+            <div className="flex shrink-0 gap-2">
+              <button onClick={() => setChunks((c) => !c)} aria-expanded={chunks} className={btn}>
+                {chunks ? 'Hide useful phrases' : 'Show useful phrases'}
               </button>
-            )}
-          </div>
-        }
-      />
-      {chunks && (
-        <ul className="animate-fade flex flex-col gap-1 rounded-lg border border-neutral-300 bg-white px-4 py-3 text-sm" lang="de">
-          {data.scenario.chunks.map((c) => (
-            <li key={c.de}>
-              <button onClick={() => speak(c.de)} className="text-left">
-                <span className="font-semibold">{c.de}</span> <span className="text-neutral-600">{c.en}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+              {open && (
+                <button onClick={finish} disabled={busy} aria-label={said ? 'End and review' : 'End'} className={btn}>
+                  End
+                </button>
+              )}
+            </div>
+          }
+        />
+        {chunks && (
+          <ul className="animate-fade flex flex-col gap-1 rounded-lg border border-neutral-300 bg-white px-4 py-3 text-sm" lang="de">
+            {data.scenario.chunks.map((c) => (
+              <li key={c.de}>
+                <button onClick={() => speak(c.de)} className="text-left">
+                  <span className="font-semibold">{c.de}</span> <span className="text-neutral-600">{c.en}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
 
-      {open && !grading ? (
-        <>
-          <div ref={scroller} className="max-h-[50vh] min-h-48 overflow-y-auto rounded-lg border border-neutral-300 bg-neutral-50 p-4">
+        {open && !grading ? (
+          <>
+            <div ref={scroller} className="max-h-[50vh] min-h-48 overflow-y-auto rounded-lg border border-neutral-300 bg-neutral-50 p-4">
+              {messages}
+            </div>
+            <TalkInput busy={busy} onSend={send} />
+          </>
+        ) : (
+          <>
             {messages}
-          </div>
-          <TalkInput busy={busy} onSend={send} />
-        </>
-      ) : (
-        <>
-          {messages}
-          <div ref={reviewTop} className="scroll-mt-2" />
-          {!open && !grading && <Review data={data} showFluency={settings.show_fluency} busy={busy} retry={finish} />}
-        </>
-      )}
-    </Column>
+            <div ref={reviewTop} className="scroll-mt-2" />
+            {!open && !grading && <Review data={data} showFluency={settings.show_fluency} busy={busy} retry={finish} />}
+          </>
+        )}
+      </div>
+    </Page>
   )
 }

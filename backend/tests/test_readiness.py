@@ -54,8 +54,8 @@ def skills(db):
 def test_posterior_is_wide_with_little_evidence_and_narrows_with_practice(db):
     p0 = rd.posterior(0, 0)
     assert p0["mean"] == pytest.approx(0.5) and p0["pm_pts"] >= 45
-    ev(db, "reading", "reading_q", "correct", n=4)
-    ev(db, "reading", "reading_q", "error", n=1)
+    ev(db, "reading", "reading_q", "correct", n=8)
+    ev(db, "reading", "reading_q", "error", n=2)
     few = skills(db)["reading"]
     ev(db, "reading", "reading_q", "correct", n=32)
     ev(db, "reading", "reading_q", "error", n=8)
@@ -63,7 +63,7 @@ def test_posterior_is_wide_with_little_evidence_and_narrows_with_practice(db):
     assert few["pm_pts"] > many["pm_pts"]
     assert (many["hi"] - many["lo"]) < (few["hi"] - few["lo"])
     assert many["mean"] == pytest.approx(
-        (1 + 36) / (2 + 45), abs=0.02
+        (1 + 40) / (2 + 50), abs=0.02
     )  # uniform prior, little decay
 
 
@@ -97,12 +97,15 @@ def test_srs_reviews_do_not_count_as_accuracy(db):
 
 
 def test_proxy_sources_are_discounted(db):
-    ev(db, "listening", "diktat", "correct", n=10)
-    ev(db, "reading", "reading_q", "correct", n=10)
+    for i in range(20):  # Diktat counts one answer per sentence: give each its own sentence
+        db.add(EvidenceEvent(ts=datetime.now(UTC), skill="listening", source="diktat", outcome="correct",
+                             source_ref=f"diktat:{i}", meta_json={}))  # fmt: skip
+    db.commit()
+    ev(db, "reading", "reading_q", "correct", n=20)
     s = skills(db)
     assert s["listening"]["pm_pts"] > s["reading"]["pm_pts"]
     assert s["listening"]["proxy"] and "not comprehension" in s["listening"]["proxy"]
-    ev(db, "speaking", "shadow", "correct", n=10)
+    ev(db, "speaking", "shadow", "correct", n=20)
     assert skills(db)["speaking"]["pm_pts"] > s["reading"]["pm_pts"]
 
 
@@ -139,6 +142,7 @@ def test_forecast_from_trend_and_needed_effort(authed, db):
         "reached",
         "far",
         "no_trend",
+        "unclear",
     ), reading["forecast"]
     ms = r["milestone"]
     if reading["status"] != "at_or_above" and reading["forecast"]["state"] == "date":
@@ -454,8 +458,8 @@ def test_no_new_answers_means_no_trend_even_as_old_answers_fade(db):
 
 
 def test_placement_only_skill_is_shown_but_left_out_of_time_to_goal(db):
-    ev(db, "vocab", "placement", "correct", days_ago=30, n=3, band="B1.1")
-    ev(db, "vocab", "placement", "error", days_ago=30, n=5, band="B1.1")
+    ev(db, "vocab", "placement", "correct", days_ago=30, n=4, band="B1.1")
+    ev(db, "vocab", "placement", "error", days_ago=30, n=6, band="B1.1")
     ev(db, "reading", "reading_q", "correct", n=60)
     r = rd.readiness(db, utcnow())
     v = {s["skill"]: s for s in r["skills"]}["vocab"]
@@ -554,7 +558,41 @@ def test_analysis_allows_labels_as_given_and_b1_work(db):
 
 
 def test_template_strengths_follow_the_range_not_the_mean(db):
-    ev(db, "reading", "reading_q", "correct", n=3)
-    ev(db, "reading", "reading_q", "error", n=1)  # 67 % mean, wide range: not at the line
+    ev(db, "reading", "reading_q", "correct", n=7)
+    ev(db, "reading", "reading_q", "error", n=3)  # 67 % mean, wide range: not at the line
     out = insight.template(insight.facts(db, utcnow()))
     assert out.strengths == [] and "0 of 1 practised skills" in out.summary
+
+
+def test_under_ten_answers_show_a_count_not_a_percent(db):
+    ev(db, "reading", "reading_q", "error", n=1)
+    r = skills(db)["reading"]
+    assert r["mean"] is None and r["status"] == "few" and r["n"] == 1
+    assert "1 answers so far" in r["status_word"]
+
+
+def test_flat_skill_gets_no_forecast_date(session_factory):
+    """A skill stuck at 60 % for 6 weeks must not get a date. The old forecast fitted the running estimate,
+    which drifts upward as answers pile up, and gave dates for flat skills."""
+    import random
+
+    dated = 0
+    for seed in range(20):
+        db = session_factory()
+        db.query(EvidenceEvent).delete()
+        db.query(ActivityLog).delete()
+        db.commit()
+        rng = random.Random(seed)
+        for week in range(6):
+            for _ in range(12):
+                ev(
+                    db,
+                    "grammar",
+                    "drill",
+                    "correct" if rng.random() < 0.6 else "error",
+                    days_ago=week * 7,
+                )
+            hours(db, "grammar", week * 7, 2)
+        dated += skills(db)["grammar"]["forecast"]["state"] == "date"
+        db.close()
+    assert dated <= 1, f"{dated} of 20 flat histories got a date"

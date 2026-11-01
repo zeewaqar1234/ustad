@@ -1,8 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { type FormEvent, useState } from 'react'
 import { Link } from 'react-router'
+import { StatusChip } from '../../components/ui'
+import { SKILL_COLOR, type Skill } from '../../lib/ui'
 import { api } from '../../lib/api'
 import { dayText, hours, type InsightOut, pct, type Readiness, type SkillReadiness, trendText } from '../../lib/readiness'
+
+const SKILL_KEY: Record<string, Skill> = {
+  vocab: 'vocab', grammar: 'grammar', reading: 'read', listening: 'listen', writing: 'write', speaking: 'speak',
+}
+const STATUS_TONE = { at_or_above: 'ok', near: 'warn', below: 'fix', none: 'neutral', few: 'neutral' } as const
 
 const MEASURE_TO: Record<string, string> = {
   vocab: '/placement',
@@ -35,8 +42,8 @@ export function Ladder({ level, exam }: { level: Readiness['level']; exam: strin
         return (
           <g key={b} data-testid={`band-${b}`} data-state={passed ? 'passed' : here ? 'here' : 'ahead'}>
             <rect x={i * seg + 1} y={top} width={seg - 4} height={h} rx="4"
-              fill={passed ? '#262626' : here ? 'url(#lv-hatch)' : '#fff'}
-              stroke={passed || here ? '#171717' : '#a3a3a3'} strokeWidth={here ? 2.5 : 1} />
+              fill={passed ? '#166534' : here ? 'url(#lv-hatch)' : '#fff'}
+              stroke={passed ? '#166534' : here ? '#171717' : '#a3a3a3'} strokeWidth={here ? 2.5 : 1} />
             <text x={i * seg + seg / 2 - 1} y={top + h / 2 + 5} textAnchor="middle" fontSize="15"
               fontWeight={here ? 700 : 600} fill={passed ? '#fff' : here ? '#171717' : '#737373'}
               stroke={here ? '#fff' : 'none'} strokeWidth={here ? 4 : 0} paintOrder="stroke">{b}</text>
@@ -101,7 +108,7 @@ function GoalPrompt({ goals }: { goals: Readiness['goals'] }) {
         By when?
         <input type="date" className="rounded-lg border border-neutral-400 bg-white px-3 py-1.5 font-normal" value={date} onChange={(e) => setDate(e.target.value)} required />
       </label>
-      <button type="submit" className="rounded-lg bg-accent px-4 py-1.5 font-semibold text-white">
+      <button type="submit" className="rounded-lg bg-accent px-4 py-1.5 font-semibold text-white hover:brightness-110">
         Set goal
       </button>
       {err && <span role="alert" className="text-sm">{err}</span>}
@@ -113,7 +120,6 @@ function TimeToGoal({ d }: { d: Readiness }) {
   const m = d.milestone
   const done = d.hours_since_placement
   const pace = d.pace.measured ? d.pace.hours_per_week ?? 0 : null
-  const elapsed = d.level.taken ? Math.max(0, Math.round((Date.parse(`${d.today}T12:00:00`) - Date.parse(`${d.level.taken}T12:00:00`)) / 86400000)) : null
   return (
     <div className="flex flex-col gap-3">
       <h3 className="font-bold">Time to goal</h3>
@@ -141,9 +147,6 @@ function TimeToGoal({ d }: { d: Readiness }) {
         />
       ) : (
         <p className="text-sm">Hours: counted from your placement test. <Link to="/placement" className="underline">Take it</Link>.</p>
-      )}
-      {elapsed !== null && m.days_left !== null && m.days_left >= 0 && (
-        <SplitBar label="Days" done={elapsed} left={m.days_left} doneText={`${elapsed} since placement`} leftText={`${m.days_left} to your date`} />
       )}
       <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-0.5 text-sm">
         <dt className="font-semibold">Your pace</dt>
@@ -193,48 +196,53 @@ export function SkillTable({ d }: { d: Readiness }) {
         <thead>
           <tr className="border-b border-neutral-400">
             <th className="py-1.5 pr-3">Skill</th>
-            <th className="pr-3">Right on B1 work</th>
-            <th className="pr-3">Range (tick: {pct(d.line.share)})</th>
+            <th className="pr-3">Right in practice</th>
+            <th className="pr-3">Likely range (line: {pct(d.line.share)})</th>
             <th className="pr-3">Answers</th>
             <th className="pr-3">Last 4 weeks</th>
-            <th>Against {pct(d.line.share)}</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           {d.skills.map((s) => (
             <tr key={s.skill} className="border-b border-neutral-200" data-testid={`skill-${s.skill}`}>
-              <td className="py-1.5 pr-3 font-semibold">
+              <td className="py-2 pr-3 font-semibold">
+                <span className="mr-2 inline-block h-2.5 w-2.5 rounded-sm align-middle" style={{ background: SKILL_COLOR[SKILL_KEY[s.skill] ?? 'grammar'] }} aria-hidden="true" />
                 {s.label}
                 {s.proxy && <sup>*</sup>}
               </td>
               {s.measured ? (
                 <>
                   <td className="pr-3">
-                    <span className="font-bold">{pct(s.mean)}</span> <span className="text-neutral-700">± {s.pm_pts}</span>
+                    <span className="font-bold">{pct(s.mean)}</span>{' '}
+                    <span className="text-neutral-600">({pct(s.lo)} to {pct(s.hi)})</span>
                   </td>
                   <td className="pr-3"><RangeBar s={s} line={d.line.share} /></td>
                   <td className="pr-3">{s.n}</td>
                   <td className="pr-3">{s.placement_only ? 'placement test only' : trendText(s.trend_pts)}</td>
-                  <td className={s.status === 'at_or_above' ? 'font-bold' : s.status === 'below' ? 'underline' : ''}>{s.status_word}</td>
+                  <td><StatusChip tone={STATUS_TONE[s.status]}>{s.status_word}</StatusChip></td>
                 </>
               ) : (
                 <td colSpan={5} className="text-neutral-600">
-                  Not measured yet. <Link to={MEASURE_TO[s.skill]} className="underline">{s.measure}</Link>
+                  {s.status === 'few' ? `${s.status_word}.` : 'Not measured yet.'}{' '}
+                  <Link to={MEASURE_TO[s.skill]} className="underline">{s.measure}</Link>
                 </td>
               )}
             </tr>
           ))}
         </tbody>
       </table>
-      {d.practice.measured > 0 && (
-        <p className="mt-2 text-xs text-neutral-600">
-          ± is the 95% range in points: few answers give a wide range, more practice narrows it. Older answers count less.
-          Last 4 weeks: share right in the last 4 weeks minus the 4 weeks before, once each has 10 answers.
-        </p>
-      )}
-      {notes.map((s) => (
-        <p key={s.skill} className="text-xs text-neutral-600">* {s.label}: {s.proxy}</p>
-      ))}
+      <details className="mt-2 text-xs text-neutral-600">
+        <summary className="cursor-pointer font-semibold text-neutral-700">How these numbers are made</summary>
+        <div className="mt-1 flex flex-col gap-1">
+          <p>Right in practice: the share of your answers in the app that were right. The app&rsquo;s lessons are written at B1, so these are percents on B1 material, not a level.</p>
+          <p>Likely range: where the true share probably lies (95%). Few answers give a wide range; more practice narrows it. Older answers count less. A percent appears after 10 answers.</p>
+          <p>Status compares the range with the {pct(d.line.share)} line, the placement test&rsquo;s pass rule. Last 4 weeks: share right in the last 4 weeks minus the 4 weeks before, once each has 10 answers.</p>
+          {notes.map((s) => (
+            <p key={s.skill}>* {s.label}: {s.proxy}</p>
+          ))}
+        </div>
+      </details>
     </div>
   )
 }
@@ -299,35 +307,32 @@ export function LevelBox() {
   if (error) return <p>Error: {(error as Error).message}</p>
   if (!data) return null
   const lv = data.level
-  const pr = data.practice
   return (
-    <section aria-label="Your level" className="mb-8 flex flex-col gap-5 rounded-lg border border-neutral-300 bg-white px-6 py-5">
+    <section aria-label="Your level" className="mb-10 flex flex-col gap-5 rounded-xl border border-neutral-200 bg-white px-6 py-5 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
       <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-10">
         <div className="flex flex-col gap-2">
           <h3 className="font-bold">Your level</h3>
           {lv.label ? (
-            <p>
-              <span className="text-2xl font-bold">{lv.label}</span>{' '}
-              <span className="text-sm text-neutral-700">placement test{lv.taken ? `, ${dayText(lv.taken)}` : ''}. The app&rsquo;s own test, not an official CEFR result.</span>
-            </p>
+            <div>
+              <p className="text-2xl font-bold">{lv.plain ?? lv.label}</p>
+              <p className="text-sm text-neutral-700">
+                From the app&rsquo;s placement test{lv.taken ? `, ${dayText(lv.taken)}` : ''} (its label: {lv.label}). Not an official CEFR result. Only a retake moves it.
+              </p>
+            </div>
           ) : (
             <p>
               Not placed yet. <Link to="/placement" className="font-semibold underline">Take the placement test</Link> (about 20 minutes).
             </p>
           )}
           <Ladder level={lv} exam={data.target.exam.replace('Goethe-Zertifikat ', '') + ' exam'} />
-          <p className="text-sm">
-            {pr.mean !== null ? (
-              <>
-                {pr.since_placement ? 'Since then' : 'Practice so far'}: <span className="font-bold">{pct(pr.mean)}</span> right on B1 work, ± {pr.pm_pts} points, from {pr.n} practice answers.{' '}
-              </>
-            ) : (
-              `No practice answers${pr.since_placement ? ' since then' : ''} yet. `
-            )}
+          <p className={`text-sm ${data.move_up.ready ? 'rounded-lg bg-ok-soft p-3 text-ok' : ''}`}>
             {data.move_up.text}
-          </p>
-          <p className="text-xs text-neutral-600">
-            A band counts as passed at {pct(data.line.share)} right, the placement test&rsquo;s rule. Only the placement test moves your level.
+            {data.move_up.ready && (
+              <>
+                {' '}
+                <Link to="/placement" className="font-semibold underline">Retake the placement test</Link>
+              </>
+            )}
           </p>
           {data.b2_note && <p className="text-xs text-neutral-600">{data.b2_note}</p>}
         </div>

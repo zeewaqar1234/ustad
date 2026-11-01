@@ -10,7 +10,7 @@ async function login(page: Page) {
   await page.goto('/')
   await page.getByLabel('Password').fill(PASSWORD)
   await page.getByRole('button', { name: 'Log in' }).click()
-  await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: /^Guten (Morgen|Tag|Abend), Zee$/ })).toBeVisible()
 }
 
 // No horizontal scroll at the two supported widths (the page starts at 1440).
@@ -51,7 +51,7 @@ test('homework: red-pen view (LanguageTool only without Ollama), then Ghalti', a
   await noSideScroll(page)
   await page.screenshot({ path: `${SHOTS}/v0-p2-redpen.png`, fullPage: true })
   await page.goto('/ghalti')
-  await expect(page.getByRole('heading', { name: 'Ghalti Register' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Ghalti' })).toBeVisible()
   await noSideScroll(page)
   await page.screenshot({ path: `${SHOTS}/v0-p2-ghalti.png`, fullPage: true })
 })

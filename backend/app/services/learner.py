@@ -109,13 +109,17 @@ def pattern_state(accuracy: float | None, last_seen: datetime | None, now: datet
 
 
 def pattern_states(db: Session, now: datetime) -> dict[str, dict]:
-    """Per pattern: accuracy over its last 20 events (events with its pattern_code or one of its tags)."""
+    """Per pattern: accuracy over its last 20 events. Events with its pattern_code always count; events that only
+    share one of its tags count once the pattern is taught (done or known from placement): a mistake in a
+    structure you have not been taught yet is not a mark against that lesson. One rule for Today and Progress."""
     n = method()["pattern"]["last_events"]
     out: dict[str, dict] = {}
     for p in db.scalars(select(Pattern).order_by(Pattern.order)):
-        q = select(EvidenceEvent).where(
-            (EvidenceEvent.pattern_code == p.code) | EvidenceEvent.tag.in_(p.tags or [])
-        )
+        taught = p.done_at is not None or p.known_from_placement
+        cond = EvidenceEvent.pattern_code == p.code
+        if taught and p.tags:
+            cond = cond | EvidenceEvent.tag.in_(p.tags)
+        q = select(EvidenceEvent).where(cond)
         evs = list(
             db.scalars(q.order_by(EvidenceEvent.ts.desc(), EvidenceEvent.id.desc()).limit(n))
         )

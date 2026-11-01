@@ -6,7 +6,7 @@ import type { ShadowResult } from '../../lib/voice'
 // setting on (and an engine gives one; Web Speech does not).
 export function ShadowScore({ r, showFluency }: { r: ShadowResult; showFluency: boolean }) {
   return (
-    <div className="animate-fade flex flex-col gap-3 rounded-lg border border-neutral-300 bg-white p-4" role="status">
+    <div className="animate-fade flex flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-4" role="status">
       <p className="font-semibold">{shadowLine(r.matched, r.total)}</p>
       <p className="flex flex-wrap gap-2 text-lg" lang="de">
         {r.words.map((w, i) => (

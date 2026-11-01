@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { buttonClass } from '../../lib/ui'
 import { FATAL_MESSAGE, Recognizer, recognitionCtor } from '../../lib/speech'
 import { stopSpeaking } from '../../lib/tts'
 
@@ -121,13 +122,12 @@ export function TalkInput(props: {
     <button
       onClick={send}
       disabled={disabled}
-      className="h-11 shrink-0 rounded-lg bg-accent px-5 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 disabled:bg-neutral-300 disabled:text-neutral-600"
+      className={`h-11 shrink-0 ${buttonClass('primary')}`}
     >
       {sendLabel}
     </button>
   )
-  const secondary =
-    'h-11 rounded-lg border border-neutral-400 bg-white px-4 font-semibold text-neutral-900 hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900'
+  const secondary = `h-11 ${buttonClass('secondary')}`
 
   if (typing) {
     return (
@@ -218,9 +218,7 @@ export function TalkInput(props: {
             <button
               onClick={() => (listening ? stop() : start())}
               disabled={finishing || props.busy}
-              className={`h-11 min-w-28 rounded-lg px-5 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 disabled:opacity-60 ${
-                listening ? 'border-2 border-neutral-900 bg-white text-neutral-900' : 'bg-accent text-white'
-              }`}
+              className={`h-11 min-w-28 ${buttonClass(listening ? 'secondary' : 'primary')}`}
             >
               {finishing ? 'One moment…' : listening ? 'Stop' : 'Start'}
             </button>

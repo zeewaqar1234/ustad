@@ -1,56 +1,64 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Link } from 'react-router'
 import { GermanField } from '../../components/GermanField'
 import { RedPen } from '../../components/RedPen'
-import { Column, PageHeader } from '../../components/ui'
+import { Button, Column, NextStep, PageHeader, SectionTitle } from '../../components/ui'
 import { api } from '../../lib/api'
 import type { PlacementResult, PlacementTest } from '../../lib/grammar'
 
 function ResultView({ r }: { r: PlacementResult }) {
+  const bands = Object.entries(r.by_band).filter(([, v]) => v.total > 0)
   return (
     <Column>
       <PageHeader
-        title={r.level_band ? `Curriculum start: ${r.level_band} stage` : 'Not placed'}
+        title={r.level_band ? `Placement: you are working on ${r.level_band}` : 'Placement: not placed yet'}
         subtitle="This is the app's own placement, not an official CEFR result."
       />
-      <ul className="grid grid-cols-3 gap-2">
-        {Object.entries(r.by_band)
-          .filter(([, v]) => v.total > 0)
-          .map(([band, v]) => (
-            <li key={band} className="rounded-lg border border-neutral-300 bg-white p-2 text-center">
-              <span className="font-semibold">{band}:</span> {v.correct}/{v.total}
-            </li>
-          ))}
-      </ul>
       <p>
         {r.items_marked} {r.items_marked === 1 ? 'item' : 'items'} marked as known. They skip teaching and come
         back for a check later.
       </p>
-      <section className="flex flex-col gap-2">
-        <h2 className="text-xs tracking-wide text-neutral-500 uppercase">Writing sample</h2>
+      <section>
+        <SectionTitle>Writing sample</SectionTitle>
         <RedPen grade={r.writing} />
       </section>
-      <section className="flex flex-col gap-2">
-        <h2 className="text-xs tracking-wide text-neutral-500 uppercase">Answers</h2>
-        <ol className="flex flex-col divide-y divide-neutral-200 rounded-lg border border-neutral-300 bg-white text-sm">
-          {r.results.map((x, i) => (
-            <li key={x.id} className="flex gap-2 p-2" lang="de">
-              <span className="w-6 shrink-0 text-neutral-600">{i + 1}.</span>
-              <span className="w-5 shrink-0 font-bold" aria-label={x.ok ? 'right' : 'wrong'}>
-                {x.ok ? '✓' : '✗'}
-              </span>
-              <span className="min-w-0 break-words">
-                <span className={x.ok ? 'font-semibold' : 'line-through'}>{x.given || '(nothing)'}</span>
-                {!x.ok && <span className="font-semibold"> → {x.expected}</span>}
-              </span>
-            </li>
-          ))}
-        </ol>
-      </section>
-      <Link to="/" className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
-        Back to Today
-      </Link>
+      <details className="rounded-xl border border-neutral-200 bg-white p-4">
+        <summary className="cursor-pointer font-semibold">Details</summary>
+        <div className="mt-3 flex flex-col gap-3">
+          {bands.length > 0 && (
+            <ul className="grid grid-cols-3 gap-2">
+              {bands.map(([band, v]) => (
+                <li key={band} className="rounded-lg border border-neutral-200 p-2 text-center">
+                  <span className="font-semibold">{band}:</span> {v.correct}/{v.total}
+                </li>
+              ))}
+            </ul>
+          )}
+          <ol className="flex flex-col divide-y divide-neutral-200 rounded-lg border border-neutral-200 text-sm">
+            {r.results.map((x, i) => (
+              <li key={x.id} className="flex gap-2 p-2" lang="de">
+                <span className="w-6 shrink-0 text-neutral-600">{i + 1}.</span>
+                <span className="w-5 shrink-0 font-bold" aria-label={x.ok ? 'right' : 'wrong'}>
+                  {x.ok ? '✓' : '✗'}
+                </span>
+                <span className="min-w-0 break-words">
+                  <span className={x.ok ? 'font-semibold text-ok' : 'text-fix line-through'}>{x.given || '(nothing)'}</span>
+                  {!x.ok && <span className="font-bold text-ok"> → {x.expected}</span>}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </details>
+      <NextStep
+        back={null}
+        next={{ to: '/', label: 'Back to Today' }}
+        message={
+          <Button kind="quiet" to="/progress">
+            See your level on Progress
+          </Button>
+        }
+      />
     </Column>
   )
 }
@@ -81,7 +89,7 @@ export function Placement() {
         <PageHeader
           back={{ to: '/settings', label: 'Back to Settings' }}
           title="Placement test"
-          subtitle={`${data.items.length} short questions and one writing sample. No timer and no feedback until the end. Skip what you do not know.`}
+          subtitle={`${data.items.length} short questions and one writing sample. No timer and no feedback until the end. Press I don't know for anything you do not know.`}
         />
         {data.last_result && (
           <p className="text-sm text-neutral-700">
@@ -89,9 +97,11 @@ export function Placement() {
             replaces your stage.
           </p>
         )}
-        <button onClick={() => setStarted(true)} className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
-          Start
-        </button>
+        <div>
+          <Button kind="primary" onClick={() => setStarted(true)}>
+            Start
+          </Button>
+        </div>
       </Column>
     )
 
@@ -118,8 +128,8 @@ export function Placement() {
     return (
       <Column>
         {header}
-        <section className="rounded-lg border border-neutral-300 bg-white p-4">
-          <p className="text-xs tracking-wide text-neutral-500 uppercase">Writing sample</p>
+        <section className="rounded-xl border border-neutral-200 bg-white p-4">
+          <p className="text-sm font-semibold text-neutral-600">Writing sample</p>
           <p className="mt-1">{data.writing.prompt_en}</p>
           <p className="mt-1 text-sm text-neutral-600">At least {data.writing.min_sentences} sentences.</p>
         </section>
@@ -128,20 +138,12 @@ export function Placement() {
           {busy && <p className="text-sm text-neutral-700">Sending to the tutor… This can take a minute.</p>}
           {err && <p className="text-sm">Error: {err}</p>}
           <div className="flex gap-2">
-            <button
-              onClick={submit}
-              disabled={busy || !writing.trim()}
-              className="rounded-lg bg-neutral-900 px-5 py-3 text-white disabled:opacity-60"
-            >
-              Finish test
-            </button>
-            <button
-              onClick={() => setStep(step - 1)}
-              disabled={busy || step === 0}
-              className="rounded-lg border border-neutral-400 px-5 py-3"
-            >
+            <Button kind="primary" onClick={submit} disabled={busy || !writing.trim()}>
+              Finish
+            </Button>
+            <Button onClick={() => setStep(step - 1)} disabled={busy || step === 0}>
               Previous question
-            </button>
+            </Button>
           </div>
         </div>
       </Column>
@@ -152,7 +154,7 @@ export function Placement() {
   return (
     <Column>
       {header}
-      <section className="rounded-lg border border-neutral-300 bg-white p-4">
+      <section className="rounded-xl border border-neutral-200 bg-white p-4">
         <p className="text-xl" lang="de">
           {item.prompt}
         </p>
@@ -168,7 +170,7 @@ export function Placement() {
                 aria-checked={value === c}
                 onClick={() => set(c)}
                 lang="de"
-                className={`rounded-lg border-2 border-neutral-900 p-3 text-left text-lg ${value === c ? 'bg-neutral-900 text-white' : 'bg-white hover:bg-neutral-100'}`}
+                className={`rounded-lg border-2 p-3 text-left text-lg ${value === c ? 'border-neutral-900 bg-neutral-900 font-semibold text-white' : 'border-neutral-300 bg-white hover:border-neutral-900'}`}
               >
                 {value === c && <span className="sr-only">Selected: </span>}
                 {c}
@@ -179,16 +181,12 @@ export function Placement() {
           <GermanField key={item.id} value={value} onChange={set} label="Your answer in German" placeholder="Type in German" />
         )}
         <div className="flex gap-2">
-          <button onClick={() => setStep(step + 1)} className="rounded-lg bg-neutral-900 px-5 py-3 text-white">
-            {value.trim() ? 'Next' : 'Skip'}
-          </button>
-          <button
-            onClick={() => setStep(step - 1)}
-            disabled={step === 0}
-            className="rounded-lg border border-neutral-400 px-5 py-3 disabled:opacity-40"
-          >
+          <Button kind="primary" onClick={() => setStep(step + 1)}>
+            {value.trim() ? 'Next' : "I don't know"}
+          </Button>
+          <Button onClick={() => setStep(step - 1)} disabled={step === 0}>
             Previous question
-          </button>
+          </Button>
         </div>
       </div>
     </Column>

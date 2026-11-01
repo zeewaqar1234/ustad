@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router'
-import { ListRow, PageHeader } from '../components/ui'
+import { Button, Card, ListRow, Page, PageHeader, SectionTitle } from '../components/ui'
 import { api } from '../lib/api'
 import { formatDate, KIND_LABEL, type ModuleKey, type Standing } from '../lib/standing'
 
@@ -32,9 +32,9 @@ function GoalsForm({ initial }: { initial: Standing['goals'] }) {
     <form
       id="goal"
       onSubmit={(e: FormEvent) => { e.preventDefault(); setMsg(''); save.mutate() }}
-      className="flex flex-col gap-3 rounded-lg border border-neutral-300 bg-white p-4"
     >
-      <h2 className="text-lg font-bold">Goal</h2>
+      <Card className="flex flex-col gap-3">
+      <SectionTitle>Your goal</SectionTitle>
       <div className="grid grid-cols-3 gap-4">
         <label className={label}>Target exam
           <select className={field} value={exam} onChange={(e) => setExam(e.target.value as 'B1' | 'B2')}>
@@ -50,9 +50,10 @@ function GoalsForm({ initial }: { initial: Standing['goals'] }) {
         </label>
       </div>
       <div className="flex items-center gap-4">
-        <button className="rounded-lg border border-neutral-900 px-4 py-2 font-semibold" type="submit">Save goal</button>
+        <Button type="submit">Save goal</Button>
         <span role="status" className="text-sm">{msg}</span>
       </div>
+      </Card>
     </form>
   )
 }
@@ -104,9 +105,9 @@ function AddResult({ preset }: { preset: ModuleKey | null }) {
       id="result"
       ref={ref}
       onSubmit={(e: FormEvent) => { e.preventDefault(); setMsg(''); add.mutate() }}
-      className="flex flex-col gap-3 rounded-lg border border-neutral-300 bg-white p-4"
     >
-      <h2 className="text-lg font-bold">Add a result</h2>
+      <Card className="flex flex-col gap-3">
+      <SectionTitle>Add a test result</SectionTitle>
       <p className="text-sm text-neutral-700">
         Only official material counts: a real certificate, or an official Goethe practice test (Übungssatz or Modellsatz) scored
         by the answer key. Practice results are estimates and can be wrong; a real result replaces them.
@@ -165,12 +166,12 @@ function AddResult({ preset }: { preset: ModuleKey | null }) {
         <input className={field} value={note} maxLength={300} onChange={(e) => setNote(e.target.value)} placeholder="Which test, for example Übungssatz Erwachsene" />
       </label>
       <div className="flex items-center gap-4">
-        <button className="rounded-lg border border-neutral-900 px-4 py-2 font-semibold disabled:opacity-40" type="submit" disabled={!complete || add.isPending}>Save result</button>
+        <Button type="submit" disabled={!complete || add.isPending}>Save result</Button>
         <span role="status" className="text-sm">{msg}</span>
       </div>
       {list.data && list.data.results.length > 0 && (
         <div>
-          <h3 className="mb-1 font-bold">Entered results</h3>
+          <h3 className="mb-1 font-bold">Your results</h3>
           <p className="mb-1 text-sm text-neutral-600">Void a typo or a duplicate: it stays here but counts for nothing. Restore undoes it.</p>
           <table className="w-full text-left text-sm">
             <tbody>
@@ -179,7 +180,7 @@ function AddResult({ preset }: { preset: ModuleKey | null }) {
                   <td className="py-1 pr-3">{formatDate(r.taken)}</td>
                   <td className="pr-3">{r.level} {r.module}</td>
                   <td className="pr-3">{KIND_LABEL[r.kind]}{r.teil ? `, Teil ${r.teil}` : ''}</td>
-                  <td>{Math.round(r.points)} of {r.points_max}{r.raw !== null ? ` (raw ${r.raw} of ${r.raw_max})` : ''}</td>
+                  <td>{Math.round(r.points)} of {r.points_max} points</td>
                   <td className="pl-3 text-right no-underline">
                     {r.voided && <span className="mr-2 font-semibold no-underline">Voided</span>}
                     <button type="button" className="underline" onClick={() => toggle.mutate(r)}>
@@ -192,6 +193,7 @@ function AddResult({ preset }: { preset: ModuleKey | null }) {
           </table>
         </div>
       )}
+      </Card>
     </form>
   )
 }
@@ -201,26 +203,29 @@ export function Settings() {
   const [sp] = useSearchParams()
   const preset = sp.get('result') as ModuleKey | null
   return (
-    <div className="max-w-[960px]">
-      <PageHeader title="Settings" subtitle="Goal, results, and tools you use now and then" />
+    <Page wide>
+      <PageHeader title="Settings" subtitle="Your goal, your test results, and tools you use now and then." />
       <div className="flex flex-col gap-4">
         <Goals />
         <AddResult preset={preset} />
-        <h2 className="mt-4 text-lg font-bold">Tools</h2>
+        <div className="mt-4">
+          <SectionTitle>Tools</SectionTitle>
+        </div>
         <ListRow title="Placement test" sub="your starting stage" status="The app's own test. Not an official CEFR result." to="/placement" />
         <ListRow title="Check queue" sub="German waiting for your approval" to="/check" />
         <ListRow title="Sources" sub="free listening and reading material" to="/listen/sources" />
-        <button
-          onClick={async () => {
-            await api('/auth/logout', {})
-            qc.clear()
-            location.assign('/login')
-          }}
-          className="mt-4 self-start rounded-lg border border-neutral-900 px-4 py-2 font-semibold"
-        >
-          Log out
-        </button>
+        <div className="mt-4">
+          <Button
+            onClick={async () => {
+              await api('/auth/logout', {})
+              qc.clear()
+              location.assign('/login')
+            }}
+          >
+            Log out
+          </Button>
+        </div>
       </div>
-    </div>
+    </Page>
   )
 }

@@ -149,6 +149,16 @@ def tag_stats(db: Session, now: datetime) -> dict[str, dict]:
     return stats
 
 
+def _pattern_for(db: Session, tag: str) -> str | None:
+    """The pattern that teaches a tag (same rule as the planner): a taught one first, else the first in order."""
+    from app.models import Pattern
+    from app.services.planner import _covering
+
+    taught, untaught = _covering(list(db.scalars(select(Pattern).order_by(Pattern.order))), tag)
+    p = taught or untaught
+    return p.code if p else None
+
+
 def register(db: Session, now: datetime | None = None) -> dict:
     now = now or utcnow()
     rows = list(db.scalars(select(Mistake).order_by(Mistake.last_ts.desc())))
@@ -176,7 +186,7 @@ def register(db: Session, now: datetime | None = None) -> dict:
             ),
             key=lambda r: -r["count"],
         ),
-        "top_tags": [{"tag": t, **{k: v for k, v in s.items()}} for t, s in top if s["errors"]],
+        "top_tags": [{"tag": t, **dict(s.items()), "pattern": _pattern_for(db, t)} for t, s in top if s["errors"]],
         "top10": [view(m) for m in sorted(rows, key=lambda m: (-m.count, -m.last_ts.timestamp()))[:10]],
         "rows": [view(m) for m in rows],
     }  # fmt: skip

@@ -9,7 +9,7 @@ async function login(page: Page) {
   await page.goto('/')
   await page.getByLabel('Password').fill(PASSWORD)
   await page.getByRole('button', { name: 'Log in' }).click()
-  await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: /^Guten (Morgen|Tag|Abend), Zee$/ })).toBeVisible()
 }
 
 async function noSideScroll(page: Page) {
@@ -39,8 +39,7 @@ test('reader: tap to gloss, English hidden by default, answers only after Check'
   await login(page)
     await page.goto('/read')
   await expect(page.getByRole('heading', { name: 'Lesen' })).toBeVisible()
-  await expect(page.getByText('reading', { exact: true }).first()).toBeVisible()
-  await expect(page.getByLabel('Known words').first()).toBeVisible()
+  await expect(page.getByText('Short texts at your level, with questions after.')).toBeVisible()
   await noSideScroll(page)
   await page.screenshot({ path: `${SHOTS}/v0-reader-list.png`, fullPage: true })
 
@@ -71,7 +70,7 @@ test('reader: tap to gloss, English hidden by default, answers only after Check'
   await mcButtons.first().click()
   for (const sel of await q.locator('select').all()) await sel.selectOption({ index: 1 })
   await q.getByRole('button', { name: 'Check' }).click()
-  await expect(page.getByText(/Score: \d+%/)).toBeVisible()
+  await expect(page.getByText(/\d+ of \d+ questions right\./)).toBeVisible()
   await noSideScroll(page)
   await q.screenshot({ path: `${SHOTS}/v0-reader-questions.png` })
 })

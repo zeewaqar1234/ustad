@@ -781,3 +781,45 @@ Not done or not verified:
 - No Playwright e2e spec for V4; the brief's e2e is covered by an API-level pytest.
 - End-of-phase subagent diff review not run.
 - Diktat essay correction and Bolna "Say it" card wait for V3. Reader look-ups are not recorded, so weak words use card lapses only.
+
+### Review and redesign (2026-11-01)
+
+Zee: "the app feels uncohesive, not like a tutor; Today and Progress are confusing with numbers and text; are A2+ and B1
+hardcoded?" Two read-only audits (number logic; every screen) first, then fixes. Formulas: docs/v2/metrics.md "Review fixes".
+
+**Levels.** Not hardcoded: `profile.level_band` is set only by the placement test (first band under 70 % right). But the label
+"A2+" meant "under 70 % on the A2 items", which reads as the opposite. Now shown as "Working on A2" (the stored label is kept and
+shown as "its label"). "B1" is hardcoded in one honest sense: all lessons, texts and patterns are written at B1, so every practice
+percent is a percent on B1 material. The screens now say that once, in "How these numbers are made". The move-up check now also
+runs for A2: at the line on B1 material in 4 or more skills suggests a placement retake. Generated texts no longer store the
+model's own level label.
+
+**Logic fixes (backend, with tests).**
+- Forecast dates for flat skills: fitted to weekly shares, R^2 >= 0.6. Simulation, 60 flat histories: 13 dates before, 0 after.
+- No percent under 10 answers ("4 answers so far; a percent needs 10").
+- One grammar pattern state for Today and Progress (they disagreed); tag-only events count once a pattern is taught.
+- Plan "why" line without raw tag codes; "use it" task names the pattern it links to.
+- Ghalti habits link to the pattern that teaches them (`top_tags[].pattern`); Grammatik shows "Done, now shaky".
+
+**Frontend.**
+- Design tokens in `index.css`: accent for the next action, ok/fix/warn tints, one colour per skill (rule changed in CLAUDE.md
+  and AGENTS.md at Zee's request). Shared parts in `components/ui.tsx` (Card, Button, TutorNote, NextStep, StatusChip, Verdict,
+  Page, SectionTitle) and `lib/ui.ts` (GLOSSARY, skill colours, button classes). Tag codes shown in plain English.
+- Today: greeting, an "Ustad" note built from the plan's numbers (most repeated mistake, where, what today does about it, the
+  wrong sentence behind a click), one ordered session list with the next step highlighted (revision, fix, this week's cards, new
+  lesson, new grammar, use it), four coloured skill tiles, a small level summary. The full level box moved to Progress only.
+- Progress: level box with ranges "(63% to 82%)" and status chips, footnotes behind "How these numbers are made", no Days bar,
+  mistakes by week with plain names and tints, grammar grid with state chips, coloured hours chart (patterns kept for print).
+- Every exercise ends with a next step (Diktat, Reader, review, Sabaq, drills, writing, Pahara, speaking, Takrar no longer
+  loops forever, placement). One button system, one wording ("I don't know", "Finish", "Try again"), one Right / Almost / Not yet
+  verdict. Ghalti is a tutor view with the numbers behind "All numbers". Dead `StandBox.tsx` removed.
+- Dependencies: none.
+
+| Check | Result |
+|---|---|
+| pytest | 421 passed, 15 skipped |
+| vitest, lint, typecheck, build | 57 passed; oxlint 0 errors, 1 old warning; tsc clean; build ok |
+| Screenshots 1440x900 | `docs/evidence/v2/review-*.png` (throwaway DB with fixture evidence, not Zee's) |
+| Playwright 1440x900 | fresh e2e DB: 15 passed, 1 skipped (fixture-only spec), 1 failed: podcast build, which needs a fake Piper as in V0 (button only shows when Piper is configured; logic unchanged). Specs updated for the new copy. |
+
+Not done: the Mazmoon essay (Phase V3) is still not built. The Commute Podcast e2e needs a fake Piper and was not run here.

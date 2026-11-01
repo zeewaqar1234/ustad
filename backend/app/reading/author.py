@@ -41,6 +41,7 @@ BRIEFS = {
 }
 
 
+TEXT_LEVEL = "B1"  # the level the Author is asked to write at; never the model's own label
 NOT_PLACED = "Level not placed yet; write at B1 and keep sentences short."
 
 
@@ -157,7 +158,7 @@ def write_text(db: Session, llm: Provider, topic: str, for_date: date | None,
             break
         notes += n
     t = ReadingText(
-        kind="generated", title=draft.title, topic=topic, level=draft.level,
+        kind="generated", title=draft.title, topic=topic, level=TEXT_LEVEL,
         series_episode=episode, body_de=" ".join(s.de for s in draft.sentences),
         sentences_json=[s.model_dump() for s in draft.sentences],
         glossary_json=[g.model_dump() for g in draft.glossary],

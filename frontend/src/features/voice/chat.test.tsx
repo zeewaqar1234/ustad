@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { RecognitionLike } from '../../lib/speech'
 import type { VoiceSession } from '../../lib/voice'
 import { Session } from './Session'
+import { Shadowing } from './Shadowing'
 import { TalkInput } from './TalkInput'
 
 const turns: VoiceSession['turns'] = [
@@ -73,6 +74,9 @@ describe('chat session', () => {
     expect(screen.queryByText(/stars?\b/i)).toBeNull()
     expect(screen.getByText(/Not graded/)).toBeInTheDocument()
     expect(screen.getByText('Ich bin gegangen.')).toBeInTheDocument()
+    // the session ends with a way back to Today, not to the Sprechen list
+    expect(screen.getByText('Session done.')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Back to Today' })).toHaveAttribute('href', '/')
   })
 
   it('End shows a patient grading card while the review runs', async () => {
@@ -81,6 +85,42 @@ describe('chat session', () => {
     await act(async () => fireEvent.click(screen.getByRole('button', { name: 'End and review' })))
     expect(screen.getByText('Ustad is checking your German.')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Start' })).toBeNull()
+  })
+})
+
+describe('Takrar (shadowing)', () => {
+  afterEach(() => {
+    cleanup()
+    vi.unstubAllGlobals()
+  })
+
+  it('ends after the last sentence instead of starting over', async () => {
+    const shadow = { reference: 'Ich bin da.', heard: 'Ich bin da', words: [{ word: 'Ich', ok: true }, { word: 'bin', ok: true }, { word: 'da', ok: true }], matched: 3, total: 3, pct: 100 }
+    const list = { source: 'sabaq', sentences: [{ item_id: 1, de: 'Ich bin da.', en: 'I am here.' }] }
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((_url: string, init?: RequestInit) =>
+        Promise.resolve(new Response(JSON.stringify(init?.body ? shadow : list), { status: 200 })),
+      ),
+    )
+    const qc = new QueryClient()
+    qc.setQueryData(['voice', 'shadow'], list)
+    qc.setQueryData(['voice', 'settings'], { show_fluency: false })
+    render(
+      <QueryClientProvider client={qc}>
+        <MemoryRouter initialEntries={['/voice/shadow']}>
+          <Shadowing />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    )
+    expect(screen.getByText(/Listen and repeat\./)).toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText('Your answer in German'), { target: { value: 'Ich bin da' } })
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Check' })))
+    expect(await screen.findByText('Every word heard.')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Finish' }))
+    expect(screen.getByText('All 1 sentence done.')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Back to Today' })).toHaveAttribute('href', '/')
+    expect(screen.queryByText('Ich bin da.')).toBeNull()
   })
 })
 

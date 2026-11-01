@@ -9,7 +9,7 @@ async function login(page: Page) {
   await page.goto('/')
   await page.getByLabel('Password').fill(PASSWORD)
   await page.getByRole('button', { name: 'Log in' }).click()
-  await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: /^Guten (Morgen|Tag|Abend), Zee$/ })).toBeVisible()
 }
 
 async function expectNoSideScroll(page: Page, where = 'page') {
@@ -37,9 +37,9 @@ test('daily loop: Manzil done unlocks Sabaq, attempt before answer', async ({ pa
   await login(page)
   // Sabaq stays locked until Manzil is done; the one due card was answered in the test above.
   await page.goto('/review/manzil')
-  await expect(page.getByRole('heading', { name: 'Manzil done.' })).toBeVisible()
+  await expect(page.getByText('Manzil done.')).toBeVisible()
   await page.goto('/')
-  await page.getByRole('link', { name: 'Start Sabaq' }).click()
+  await page.getByRole('link', { name: 'Start' }).click()
   await expect(page.getByText('Try first: say it in German')).toBeVisible()
   await page.screenshot({ path: `${SHOTS}/v0-sabaq-prompt.png`, fullPage: true })
   await page.getByLabel('Your answer in German').fill('und')

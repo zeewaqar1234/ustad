@@ -30,8 +30,9 @@ architecture.md · content_sources.md · sources.md.
   no PWA, no touch-only interactions, no bottom sheets. Keyboard first.
 - No emoji, no decorative or "AI-looking" icons (sparkles, robots, avatars, gradients, orbs, confetti).
   Text labels first; plain monochrome line icons only for play, stop, mic, close.
-- Visual: grayscale base + one accent colour only for the next action and the pass line. Everything
-  readable printed in black and white. Right/wrong = weight/underline, not colour alone.
+- Visual (changed by Zee 2026-11-01, "some colours"): neutral base; accent blue only for the next action
+  and the pass line; calm meaning colours ok/fix/warn and one colour per skill, all as tokens in
+  frontend/src/index.css. Colour always comes with a word, weight or underline; readable printed in B/W.
 - Copy tone: short, direct, specific. No hype, no em dashes, no exclamation marks, no fake praise.
 - Builder gate: retired by Zee on 2026-10-31. No study-day check blocks any phase.
 - New dependency = one-line reason in docs/PROGRESS.md. Prefer none.

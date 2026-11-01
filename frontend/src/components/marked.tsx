@@ -8,10 +8,8 @@ export function marked(text: string, errors: { start: number; end: number }[]): 
     if (e.start < pos || e.end > text.length || e.start >= e.end) return
     if (e.start > pos) out.push(<span key={`t${i}`}>{text.slice(pos, e.start)}</span>)
     out.push(
-      <span key={`e${i}`} data-testid="error-span">
-        <u className="decoration-neutral-900 decoration-wavy decoration-2 underline-offset-4">
-          {text.slice(e.start, e.end)}
-        </u>
+      <span key={`e${i}`} data-testid="error-span" className="text-fix">
+        <u className="decoration-fix decoration-wavy decoration-2 underline-offset-4">{text.slice(e.start, e.end)}</u>
         <sup className="ml-0.5 font-sans text-xs font-bold">{i + 1}</sup>
       </span>,
     )

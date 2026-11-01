@@ -100,11 +100,16 @@
   "trend_days": 28,
   "trend_note": "Trend = share right in the last trend_days minus the share right in the trend_days before, in points. Shown only when both windows hold trend_min_answers answers (assumption: fewer is noise).",
   "move_up_bands": [
+    "A2",
     "B1.1",
     "B1.2"
   ],
-  "move_up_note": "The app's lessons are B1 material, so practice can only speak for the B1.1 and B1.2 bands.",
+  "move_up_note": "The app's lessons are B1 material. Practice at 70% or more on them says A2 is behind you and speaks for B1.1 and B1.2; it cannot speak for B2.",
   "trend_min_answers": 10,
   "move_up_min_skills": 4,
-  "move_up_min_skills_note": "assumption: at least 4 of the 6 skills need practice answers before practice can suggest a retake"
+  "move_up_min_skills_note": "assumption: at least 4 of the 6 skills need practice answers before practice can suggest a retake",
+  "min_answers_for_percent": 10,
+  "min_answers_for_percent_note": "assumption: under 10 answers a share is noise, so the skill shows its answer count and no percent",
+  "forecast_min_r2": 0.6,
+  "forecast_min_r2_note": "assumption: weekly shares are noisy; a rise must explain 60% of their spread before a date is shown (at 0.3, flat skills got dates)"
 }

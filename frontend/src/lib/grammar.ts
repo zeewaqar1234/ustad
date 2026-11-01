@@ -43,6 +43,8 @@ export interface PatternRow {
   known: boolean
   best_pct: number
   rounds: number
+  /** learner model state: new / shaky / ok / solid */
+  state?: string
 }
 
 export interface PatternList {
@@ -158,7 +160,7 @@ export interface Register {
     rate: number | null
     recurring: boolean
   }[]
-  top_tags: { tag: string; errors: number; correct: number; rate: number | null; recurring: boolean }[]
+  top_tags: { tag: string; errors: number; correct: number; rate: number | null; recurring: boolean; pattern?: string | null }[]
   top10: Mistake[]
   rows: Mistake[]
 }
@@ -226,9 +228,35 @@ export interface GrammarReview {
   placement: { id: string; prompt: string; answer: string; notes: ReviewNote[] }[]
 }
 
-/** VERB_FINAL -> "verb final". */
+/** Plain names for the grader's error tags (same wording as data/official/planner_method.json). */
+export const TAG_LABEL: Record<string, string> = {
+  V2_POSITION: 'verb in second place',
+  VERB_FINAL: 'verb at the end',
+  SEP_PREFIX: 'separable verb',
+  AUX_HABEN_SEIN: 'haben or sein',
+  PARTIZIP: 'Partizip form',
+  TENSE_CHOICE: 'choice of tense',
+  CASE_AKK: 'Akkusativ',
+  CASE_DAT: 'Dativ',
+  PREP_CASE: 'case after a preposition',
+  GENDER: 'noun gender',
+  ADJ_ENDING: 'adjective ending',
+  PLURAL: 'plural form',
+  CONNECTOR_CHOICE: 'choice of connector',
+  MIDDLE_FIELD_ORDER: 'word order in the middle',
+  WORD_CHOICE: 'word choice',
+  FALSE_FRIEND: 'false friend',
+  REGISTER_DU_SIE: 'du or Sie',
+  SPELLING: 'spelling',
+  UMLAUT: 'umlaut',
+  CAPITALISATION: 'capital letter',
+  PRONUNCIATION: 'pronunciation',
+  OTHER: 'other',
+}
+
+/** VERB_FINAL -> "verb at the end". Unknown tags fall back to lower case words. */
 export function humanTag(tag: string): string {
-  return tag.replaceAll('_', ' ').toLowerCase()
+  return TAG_LABEL[tag] ?? tag.replaceAll('_', ' ').toLowerCase()
 }
 
 export const STAGE_NAME: Record<number, string> = { 0: 'Full table', 1: 'Gaps', 2: 'Blank' }

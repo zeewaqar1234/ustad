@@ -59,7 +59,10 @@ describe('Diktat', () => {
     expect(container.textContent).not.toContain('Termin')
     fireEvent.change(screen.getByLabelText('Write what you hear'), { target: { value: 'Ich mochte einen termin vereinbaren' } })
     fireEvent.keyDown(screen.getByLabelText('Write what you hear'), { key: 'Enter' })
-    expect(await screen.findByText('60% of words right')).toBeInTheDocument()
+    expect(await screen.findByText('Not yet.')).toBeInTheDocument()
+    expect(screen.getByText('2 words to fix.')).toBeInTheDocument()
+    // percentages and kind counts sit behind Details
+    expect(screen.getByText('60% of words right').closest('details')).not.toBeNull()
     expect(screen.getByText(`Correct: ${SAY}`)).toBeInTheDocument()
     expect(screen.getByLabelText('Difference to the correct answer')).toBeInTheDocument()
     expect(screen.getByText('umlaut × 1')).toBeInTheDocument()
@@ -100,10 +103,40 @@ describe('Diktat', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Check' }))
     expect(await screen.findByText(/1 done today/)).toBeInTheDocument()
     expect(screen.getByText(/Sentence 1 of 2/)).toBeInTheDocument()
-    expect(screen.getByText('60% of words right')).toBeInTheDocument()
+    expect(screen.getByText('2 words to fix.')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(await screen.findByText(/Sentence 2 of 2/)).toBeInTheDocument()
     expect(screen.queryByText('Wir fahren mit der Bahn.')).toBeNull()
+  })
+
+  it('ends with one headline and a way back to Today when all are done', async () => {
+    const right: DiktatResult = {
+      ...checked,
+      accuracy: 100,
+      diff: [['equal', SAY]],
+      words: checked.words.map((w) => ({ ...w, given: w.expected, kind: 'ok' as const })),
+      counts: { ok: 5 },
+    }
+    const done: DiktatToday = {
+      ...today,
+      total: 2,
+      done: 2,
+      sentences: [
+        { ...today.sentences[0], done: true, result: right },
+        { ref: 'item:9', say: 'Wir fahren mit der Bahn.', words: 5, done: true, result: checked },
+      ],
+    }
+    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(new Response(JSON.stringify(done), { status: 200 }))))
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+    render(
+      <QueryClientProvider client={qc}>
+        <MemoryRouter>
+          <Diktat />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    )
+    expect(await screen.findByText(/1 of 2 sentences fully right/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Back to Today' })).toHaveAttribute('href', '/')
   })
 })
 
@@ -127,7 +160,7 @@ describe('Podcast', () => {
         </MemoryRouter>
       </QueryClientProvider>,
     )
-    const link = await screen.findByRole('link', { name: 'Download mp3' })
+    const link = await screen.findByRole('link', { name: 'Download audio' })
     expect(link).toHaveAttribute('download', 'ustad-podcast-2026-10-26.mp3')
     expect(link).toHaveAttribute('href', '/api/podcast/audio/1')
     expect(screen.queryByText(/offline/i)).toBeNull()

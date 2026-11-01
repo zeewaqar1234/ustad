@@ -1,13 +1,13 @@
 import { humanTag, type WritingGrade } from '../lib/grammar'
 import { marked } from './marked'
 
-/** Report-card view of a graded text. Grayscale: underline + number mark each error. */
+/** Report-card view of a graded text. Wavy underline + number mark each error; colour only helps. */
 export function RedPen({ grade }: { grade: WritingGrade }) {
   const ltOnly = grade.source === 'languagetool_only'
   const errors = [...grade.errors].sort((a, b) => a.start - b.start)
   const points = grade.teaching_points.slice(0, 3)
   return (
-    <div className="flex flex-col gap-3 rounded-lg border-2 border-neutral-900 bg-white p-4" role="status">
+    <div className="flex flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-4" role="status">
       <p className="flex items-baseline justify-between gap-2">
         {ltOnly || grade.score_10 === null ? (
           <span className="text-sm font-semibold">No score: tutor offline, LanguageTool check only</span>
@@ -22,7 +22,7 @@ export function RedPen({ grade }: { grade: WritingGrade }) {
       </p>
 
       <div>
-        <p className="text-xs tracking-wide text-neutral-500 uppercase">Your text</p>
+        <p className="text-sm font-semibold text-neutral-600">Your text</p>
         <p className="mt-1 text-lg leading-loose break-words whitespace-pre-wrap" lang="de">
           {marked(grade.original, errors)}
         </p>
@@ -34,14 +34,14 @@ export function RedPen({ grade }: { grade: WritingGrade }) {
             <li key={i} className="flex gap-2">
               <span className="w-5 shrink-0 font-bold">{i + 1}.</span>
               <span className="min-w-0 break-words">
-                <span lang="de" className="line-through">
+                <span lang="de" className="text-fix line-through decoration-2">
                   {e.span}
                 </span>{' '}
                 →{' '}
-                <span lang="de" className="font-semibold">
+                <span lang="de" className="font-bold text-ok">
                   {e.fix || '(remove)'}
                 </span>{' '}
-                · <span className="uppercase">{humanTag(e.tag)}</span> · {e.reason_en}
+                · <span className="font-semibold">{humanTag(e.tag)}</span>: {e.reason_en}
               </span>
             </li>
           ))}
@@ -50,8 +50,8 @@ export function RedPen({ grade }: { grade: WritingGrade }) {
 
       {grade.corrected_text && (
         <div className="border-t border-neutral-200 pt-3">
-          <p className="text-xs tracking-wide text-neutral-500 uppercase">Corrected</p>
-          <p className="mt-1 font-semibold break-words whitespace-pre-wrap" lang="de">
+          <p className="text-sm font-semibold text-neutral-600">Corrected</p>
+          <p className="mt-1 font-bold break-words whitespace-pre-wrap text-ok" lang="de">
             {grade.corrected_text}
           </p>
         </div>
@@ -59,7 +59,7 @@ export function RedPen({ grade }: { grade: WritingGrade }) {
 
       {points.length > 0 && (
         <div className="border-t border-neutral-200 pt-3">
-          <p className="text-xs tracking-wide text-neutral-500 uppercase">To remember</p>
+          <p className="text-sm font-semibold text-neutral-600">To remember</p>
           <ul className="mt-1 list-disc pl-5 text-sm">
             {points.map((p) => (
               <li key={p}>{p}</li>

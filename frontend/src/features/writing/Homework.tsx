@@ -2,7 +2,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { GermanField } from '../../components/GermanField'
 import { RedPen } from '../../components/RedPen'
-import { Column, PageHeader } from '../../components/ui'
+import { Button, Column, NextStep, PageHeader, SectionTitle } from '../../components/ui'
+import { GLOSSARY } from '../../lib/ui'
 import { api } from '../../lib/api'
 import { useActiveTime } from '../../lib/activeTime'
 import { countWords } from '../../lib/words'
@@ -68,8 +69,10 @@ function Today() {
   const open = !data.grade
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-xl font-bold">Homework</h2>
-      <p className="rounded-lg border border-neutral-300 bg-white p-4">{data.prompt}</p>
+      <SectionTitle>Homework</SectionTitle>
+      <p className="rounded-xl border border-neutral-200 bg-white p-4" style={{ borderLeft: '4px solid var(--color-skill-write)' }}>
+        {data.prompt}
+      </p>
       {open ? (
         <form
           className="flex flex-col gap-2"
@@ -88,13 +91,11 @@ function Today() {
           <WordCount text={text} />
           {busy && <Busy />}
           {err && <p className="text-sm">Error: {err}</p>}
-          <button
-            type="submit"
-            disabled={!text.trim() || busy}
-            className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white disabled:opacity-60"
-          >
-            Submit
-          </button>
+          <div>
+            <Button kind="primary" type="submit" disabled={!text.trim() || busy}>
+              Submit
+            </Button>
+          </div>
         </form>
       ) : (
         <>
@@ -103,15 +104,14 @@ function Today() {
             <>
               {busy && <Busy />}
               {err && <p className="text-sm">Error: {err}</p>}
-              <button
-                onClick={() => send('regrade', {})}
-                disabled={busy}
-                className="self-start rounded-lg border-2 border-neutral-900 px-5 py-3 disabled:opacity-60"
-              >
-                Grade again with the tutor
-              </button>
+              <div>
+                <Button onClick={() => send('regrade', {})} disabled={busy}>
+                  Grade again with the tutor
+                </Button>
+              </div>
             </>
           )}
+          <NextStep message={<p>Homework done. Your mistakes go to Ghalti and come back as cards.</p>} />
         </>
       )}
     </section>
@@ -142,21 +142,23 @@ function Tagebuch() {
   }
 
   return (
-    <section className="flex flex-col gap-3 border-t border-neutral-300 pt-4">
-      <h2 className="text-xl font-bold">Tagebuch</h2>
-      <p className="text-sm text-neutral-700">Diary. Write about anything. The tutor corrects it.</p>
+    <section className="flex flex-col gap-3 border-t border-neutral-200 pt-4">
+      <SectionTitle hint={`Tagebuch: ${GLOSSARY.Tagebuch}. Write about anything. The tutor corrects it.`}>Tagebuch</SectionTitle>
       {result?.grade ? (
         <>
           <RedPen grade={result.grade} />
-          <button
-            onClick={() => {
-              setResult(null)
-              setText('')
-            }}
-            className="self-start rounded-lg border border-neutral-400 px-5 py-3"
-          >
-            New entry
-          </button>
+          <NextStep message={<p>Entry corrected.</p>} />
+          <div>
+            <Button
+              kind="quiet"
+              onClick={() => {
+                setResult(null)
+                setText('')
+              }}
+            >
+              New entry
+            </Button>
+          </div>
         </>
       ) : (
         <form
@@ -176,13 +178,11 @@ function Tagebuch() {
           <WordCount text={text} />
           {busy && <Busy />}
           {err && <p className="text-sm">Error: {err}</p>}
-          <button
-            type="submit"
-            disabled={!text.trim() || busy}
-            className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white disabled:opacity-60"
-          >
-            Correct my entry
-          </button>
+          <div>
+            <Button type="submit" disabled={!text.trim() || busy}>
+              Correct my entry
+            </Button>
+          </div>
         </form>
       )}
     </section>
@@ -195,17 +195,17 @@ function History() {
   const rows = (data ?? []).filter((h) => h.grade && h.id !== null)
   if (rows.length === 0) return null
   return (
-    <section className="flex flex-col gap-2 border-t border-neutral-300 pt-4">
-      <h2 className="text-xl font-bold">History</h2>
+    <section className="flex flex-col gap-2 border-t border-neutral-200 pt-4">
+      <SectionTitle>History</SectionTitle>
       {rows.map((h) => (
-        <div key={h.id} className="rounded-lg border border-neutral-300 bg-white">
+        <div key={h.id} className="rounded-xl border border-neutral-200 bg-white">
           <button
             onClick={() => setOpen(open === h.id ? null : h.id)}
             aria-expanded={open === h.id}
             className="flex w-full items-center justify-between gap-2 p-3 text-left"
           >
             <span>
-              {shortDate(h.assigned)} · {h.kind === 'tagebuch' ? 'Tagebuch' : 'Homework'}
+              {shortDate(h.assigned)} · {h.kind === 'tagebuch' ? 'Tagebuch (diary)' : 'Homework'}
             </span>
             <span className="font-semibold">
               {scoreText(h.grade)}, {open === h.id ? 'Hide' : 'Show'}

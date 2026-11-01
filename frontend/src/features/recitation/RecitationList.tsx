@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { ListRow, PageHeader, StatusPill } from '../../components/ui'
+import { ListRow, Page, PageHeader, StatusChip } from '../../components/ui'
+import { GLOSSARY } from '../../lib/ui'
 import { api } from '../../lib/api'
 import { STAGE_NAME, type RecitationRow } from '../../lib/grammar'
 import { useRecitationMode } from './useRecitationMode'
@@ -13,11 +14,11 @@ export function RecitationList() {
   if (error) return <p>Error: {(error as Error).message}</p>
   if (!data) return <p>Loading…</p>
   return (
-    <div className="max-w-[720px]">
+    <Page>
       <PageHeader
         back={{ to: '/grammar', label: 'Back to Grammatik' }}
         title="Pahara"
-        subtitle="Recite grammar tables. Stage 1 shows the full table, stage 2 has gaps, stage 3 is blank. A clean recital opens the next stage the next day."
+        subtitle={`Pahara: ${GLOSSARY.Pahara}. Stage 1 shows the full table, stage 2 has gaps, stage 3 is blank. A clean recital opens the next stage the next day.`}
       />
       <div className="mb-4 flex gap-2" role="group" aria-label="How to recite">
         {(['type', 'speak'] as const).map((m) => (
@@ -39,10 +40,11 @@ export function RecitationList() {
             to={`/recitation/${t.code}${mode === 'speak' ? '?mode=speak' : ''}`}
             title={t.title}
             status={`Stage ${t.stage + 1}: ${STAGE_NAME[t.stage] ?? t.stage}${t.passes > 0 ? `, ${t.passes} clean` : ''}`}
-            right={t.passed_today ? <StatusPill strong>Clean today</StatusPill> : undefined}
+            skill="grammar"
+            right={t.passed_today ? <StatusChip tone="ok">Clean today</StatusChip> : undefined}
           />
         ))}
       </div>
-    </div>
+    </Page>
   )
 }

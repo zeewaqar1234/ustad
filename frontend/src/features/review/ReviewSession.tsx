@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router'
-import { Column, PageHeader } from '../../components/ui'
+import { Button, Column, NextStep, PageHeader } from '../../components/ui'
+import { buttonClass, GLOSSARY } from '../../lib/ui'
 import { Feedback } from '../../components/Feedback'
 import { ItemCard } from '../../components/ItemCard'
 import { UmlautKeys } from '../../components/UmlautKeys'
@@ -11,7 +11,6 @@ import { api, RATING_LABEL, type AnswerResult, type CardPrompt, type ItemReveal 
 type Block = 'manzil' | 'sabqi'
 
 const TITLE: Record<Block, string> = { manzil: 'Manzil', sabqi: 'Sabqi' }
-const SUB: Record<Block, string> = { manzil: 'Old revision', sabqi: 'Recent revision' }
 
 export function ReviewSession({ block }: { block: Block }) {
   const qc = useQueryClient()
@@ -97,19 +96,24 @@ export function ReviewSession({ block }: { block: Block }) {
   if (card === null)
     return (
       <Column>
-        <PageHeader title={`${TITLE[block]} done.`} subtitle={`${count.done} cards, ${count.right} right first time.`} />
-        <Link to="/" className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
-          Back to Today
-        </Link>
+        <PageHeader title={TITLE[block]} subtitle={`${GLOSSARY[TITLE[block]]}.`} />
+        <NextStep
+          message={
+            <p>
+              <span className="font-semibold">{TITLE[block]} done.</span> {count.done}{' '}
+              {count.done === 1 ? 'card' : 'cards'}, {count.right} right first time.
+            </p>
+          }
+        />
       </Column>
     )
 
   return (
     <Column>
-      <PageHeader title={TITLE[block]} subtitle={`${SUB[block]}. ${left} left.`} />
+      <PageHeader title={TITLE[block]} subtitle={`${GLOSSARY[TITLE[block]]}. ${left} left.`} />
 
-      <section className="rounded-lg border border-neutral-300 bg-white p-4">
-        <p className="text-xs tracking-wide text-neutral-500 uppercase">{promptLabel(card)}</p>
+      <section className="rounded-xl border border-neutral-200 bg-white p-4">
+        <p className="text-sm font-semibold text-neutral-600">{promptLabel(card)}</p>
         <p className="mt-1 text-xl" lang={card.mode === 'type' && card.card_type === 'produce' ? 'en' : 'de'}>
           {card.symbol && card.card_type !== 'gender' && <span className="mr-1.5">{card.symbol}</span>}
           {card.prompt}
@@ -121,9 +125,11 @@ export function ReviewSession({ block }: { block: Block }) {
         <>
           {result.grade && <Feedback grade={result.grade} given={answer} />}
           <ItemCard item={result.item} />
-          <button onClick={loadNext} className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
-            Next
-          </button>
+          <div>
+            <Button kind="primary" onClick={loadNext}>
+              Next
+            </Button>
+          </div>
           <p className="text-xs text-neutral-600">Enter continues.</p>
         </>
       ) : card.mode === 'type' ? (
@@ -149,16 +155,10 @@ export function ReviewSession({ block }: { block: Block }) {
           />
           <UmlautKeys onKey={(ch) => setAnswer((v) => insertAt(input.current, v, ch))} />
           <div className="flex gap-2">
-            <button type="submit" className="rounded-lg bg-neutral-900 px-5 py-3 text-white">
+            <Button kind="primary" type="submit">
               Check
-            </button>
-            <button
-              type="button"
-              onClick={() => submit({ answer: '' })}
-              className="rounded-lg border border-neutral-400 px-5 py-3"
-            >
-              I don't know
-            </button>
+            </Button>
+            <Button onClick={() => submit({ answer: '' })}>I don't know</Button>
           </div>
           <p className="text-xs text-neutral-600">Enter checks. After the answer, Enter continues.</p>
         </form>
@@ -172,7 +172,7 @@ export function ReviewSession({ block }: { block: Block }) {
                   setAnswer(c)
                   submit({ answer: c })
                 }}
-                className="rounded-lg border-2 border-neutral-900 p-4 text-xl"
+                className={`${buttonClass('secondary')} text-xl`}
               >
                 {c} <span className="text-xs text-neutral-600">({i + 1})</span>
               </button>
@@ -189,7 +189,7 @@ export function ReviewSession({ block }: { block: Block }) {
               <button
                 key={r}
                 onClick={() => submit({ self_rating: r })}
-                className="rounded-lg border-2 border-neutral-900 px-1 py-3"
+                className={buttonClass('secondary')}
               >
                 {RATING_LABEL[r]} <span className="text-xs text-neutral-600">({r})</span>
               </button>
@@ -199,9 +199,11 @@ export function ReviewSession({ block }: { block: Block }) {
         </>
       ) : (
         <>
-          <button onClick={reveal} className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
-            Show answer
-          </button>
+          <div>
+            <Button kind="primary" onClick={reveal}>
+              Show answer
+            </Button>
+          </div>
           <p className="text-xs text-neutral-600">Enter shows the answer.</p>
         </>
       )}

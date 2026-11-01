@@ -189,3 +189,20 @@ the Mazmoon screen itself is Phase V3, not built), `reading` (structure to use a
 logged) and regenerates once, together with the density check (the draft with fewer missing uses, then closer density, is kept).
 Tutor prompt gets the speaking goal. Diktat takes the picks first. The homework grader also looks for the focus tags. Today shows
 the plan; Progress lists the last 14 plans with their data.
+
+## Review fixes (2026-11-01)
+
+These replace the matching rules above where they differ.
+- **Readiness forecast** (`readiness.weekly_shares`): fitted to the share right inside each week (that week's answers only,
+  weeks with at least 10 answers), not to the running estimate. The running estimate drifts as answers pile up and gave
+  dates for flat skills. A date needs R^2 of at least 0.6 (`readiness_method.json` `forecast_min_r2`). Check: 60 simulated flat
+  histories at 60 % right gave 13 dates with the old rule and 0 with the new one.
+- **Few answers**: under 10 answers a skill shows its answer count ("4 answers so far; a percent needs 10"), no percent
+  (`min_answers_for_percent`).
+- **Range**: shown as "(62% to 81%)", the 95 % range, instead of "± points".
+- **Level wording**: `level.plain` = "Working on <band>" (the first placement band under 70 %); the stored label (for example
+  "A2+") is shown only as "its label". "A2+" never meant "above A2".
+- **Move-up check** now also runs for A2: practice at the line on B1 material in at least 4 skills suggests a placement retake.
+- **One pattern state** for Today and Progress (`learner.pattern_states`): the last 20 events of the pattern; events that only
+  share a tag count once the pattern is taught. Progress's grammar grid no longer has its own 14-day weighted rule.
+- **Generated texts**: `text.level` is the level the Author is asked to write at ("B1"), never the model's own label.

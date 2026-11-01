@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Column, PageHeader } from '../../components/ui'
+import { Page, PageHeader, SectionTitle } from '../../components/ui'
+import { buttonClass } from '../../lib/ui'
 import { embedUrl, youtubeId } from './youtube'
 
 interface Source {
@@ -108,7 +109,7 @@ function YouTubeBox() {
   const [id, setId] = useState<string | null>(null)
   const [bad, setBad] = useState(false)
   return (
-    <section className="flex flex-col gap-2 rounded-lg border border-neutral-300 bg-white p-4">
+    <section className="flex flex-col gap-2 rounded-xl border border-neutral-200 bg-white p-4">
       <h2 className="font-semibold">Watch a YouTube video here</h2>
       <p className="text-sm text-neutral-700">Paste a link. German captions are switched on in the player.</p>
       <div className="flex gap-2">
@@ -125,7 +126,7 @@ function YouTubeBox() {
             setId(v)
             setBad(!v)
           }}
-          className="rounded-lg bg-accent px-4 py-2 font-semibold text-white"
+          className={buttonClass('secondary')}
         >
           Open
         </button>
@@ -149,34 +150,35 @@ function YouTubeBox() {
 
 export function Sources() {
   return (
-    <Column>
-      <PageHeader
-        title="Sources"
-        subtitle="This app is private. Keep it that way: nothing here may be shared."
-        back={{ to: '/listen', label: 'Back to Hören' }}
-      />
-      {GROUPS.map((g) => (
-        <section key={g.title} className="flex flex-col gap-2">
-          <h2 className="font-semibold">{g.title}</h2>
-          <p className="text-sm text-neutral-600">{g.note}</p>
-          {g.items.map((s) => (
-            <a
-              key={s.name}
-              href={s.url}
-              target="_blank"
-              rel="noreferrer"
-              className="flex flex-col rounded-lg border border-neutral-300 bg-white px-4 py-3 hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-neutral-900"
-            >
-              <span className="font-semibold">
-                {s.name} <span className="font-normal text-neutral-600">(opens site)</span>
-              </span>
-              <span className="text-sm">{s.use}</span>
-              <span className="text-xs text-neutral-600">{s.licence}</span>
-            </a>
-          ))}
-        </section>
-      ))}
-      <YouTubeBox />
-    </Column>
+    <Page>
+      <div className="flex flex-col gap-4">
+        <PageHeader
+          title="Sources"
+          subtitle="Where to find German to read, hear and watch. This app is private: nothing here may be shared."
+          back={{ to: '/listen', label: 'Back to Hören' }}
+        />
+        {GROUPS.map((g) => (
+          <section key={g.title} className="flex flex-col gap-2">
+            <SectionTitle hint={g.note}>{g.title}</SectionTitle>
+            {g.items.map((s) => (
+              <a
+                key={s.name}
+                href={s.url}
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-col rounded-xl border border-neutral-200 bg-white px-4 py-3 hover:border-neutral-400 focus-visible:outline-2 focus-visible:outline-neutral-900"
+              >
+                <span className="font-semibold">
+                  {s.name} <span className="font-normal text-neutral-600">(opens site)</span>
+                </span>
+                <span className="text-sm">{s.use}</span>
+                <span className="text-xs text-neutral-600">{s.licence}</span>
+              </a>
+            ))}
+          </section>
+        ))}
+        <YouTubeBox />
+      </div>
+    </Page>
   )
 }
