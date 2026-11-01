@@ -820,6 +820,6 @@ model's own level label.
 | pytest | 421 passed, 15 skipped |
 | vitest, lint, typecheck, build | 57 passed; oxlint 0 errors, 1 old warning; tsc clean; build ok |
 | Screenshots 1440x900 | `docs/evidence/v2/review-*.png` (throwaway DB with fixture evidence, not Zee's) |
-| Playwright 1440x900 | fresh e2e DB: 14 passed, 2 failed before the last spec fixes. Failures: podcast (needs a fake Piper, as in V0) and one stale Settings cell text, since updated. Specs updated for the new copy. |
+| Playwright 1440x900 | fresh e2e DB: 15 passed, 1 skipped (fixture-only spec), 1 failed: podcast build, which needs a fake Piper as in V0 (button only shows when Piper is configured; logic unchanged). Specs updated for the new copy. |
 
 Not done: the Mazmoon essay (Phase V3) is still not built. The Commute Podcast e2e needs a fake Piper and was not run here.
