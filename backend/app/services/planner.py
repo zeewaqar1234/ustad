@@ -206,19 +206,22 @@ def build(db: Session, now: datetime) -> dict:
     )
     use_task = None
     if new_unit["sabaq"] or recited:
-        code = (new_unit["pattern"] or {}).get("code") or (
-            focus[0]["taught_pattern"] if focus else None
-        )
-        what = new_unit["sabaq"]["title"] if new_unit["sabaq"] else f"table {recited}"
-        use_task = {"pattern_code": code, "kind": "free_drill",
-                    "text": f"Write one new sentence of your own with the forms from {what}."}  # fmt: skip
+        pat = new_unit["pattern"]
+        code = (pat or {}).get("code") or (focus[0]["taught_pattern"] if focus else None)
+        words = (f"a word from today's lesson ({new_unit['sabaq']['title']})" if new_unit["sabaq"]
+                 else f"the forms from table {recited}")  # fmt: skip
+        if pat:
+            text = f"Write one sentence of your own with {pat['title']}, using {words}."
+        else:
+            text = f"Write one new sentence of your own with {words}."
+        use_task = {"pattern_code": code, "kind": "free_drill", "text": text}
 
     # 3. describe, from numbers only
     if focus:
         f0 = focus[0]
         skills = _errors_by_skill(f0["by_skill"])
         why = (
-            f"Focus: {f0['label']} ({f0['tag']}). {f0['errors']} errors in {f0['opportunities']} uses "
+            f"Focus: {f0['label']}. {f0['errors']} errors in {f0['opportunities']} uses "
             f"in {m['focus']['window_days']} days" + (f" ({skills})." if skills else ".")
         )
         if len(focus) > 1:

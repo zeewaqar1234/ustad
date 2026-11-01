@@ -2,7 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { LevelBox } from '../features/standing/LevelBox'
-import { PageHeader } from '../components/ui'
+import { PageHeader, SectionTitle, StatusChip } from '../components/ui'
+import { humanTag } from '../lib/grammar'
 import { api } from '../lib/api'
 import { usePlans, type PlanRecord } from '../lib/plan'
 import { pct, type Readiness, type SkillReadiness } from '../lib/readiness'
@@ -14,25 +15,26 @@ const SKILL_LABEL: Record<string, string> = {
   speaking: 'Sprechen (speaking)', vocab: 'Vocabulary', grammar: 'Grammar',
 }
 // Fills are patterns, not colours, so the chart reads printed in black and white.
+// Each skill has its colour, and also a pattern, so the chart still reads printed in black and white.
 const FILL: Record<string, string> = {
-  reading: 'url(#p-dots)', listening: 'url(#p-diag)', writing: '#262626', speaking: 'url(#p-cross)',
-  vocab: '#a3a3a3', grammar: 'url(#p-horiz)',
+  reading: 'url(#p-dots)', listening: 'url(#p-diag)', writing: 'var(--color-skill-write)', speaking: 'url(#p-cross)',
+  vocab: 'var(--color-skill-vocab)', grammar: 'url(#p-horiz)',
 }
 
 function Patterns() {
   return (
     <defs>
       <pattern id="p-dots" width="6" height="6" patternUnits="userSpaceOnUse">
-        <rect width="6" height="6" fill="#fff" /><circle cx="3" cy="3" r="1.3" fill="#262626" />
+        <rect width="6" height="6" fill="#e6f2f0" /><circle cx="3" cy="3" r="1.4" fill="var(--color-skill-read)" />
       </pattern>
       <pattern id="p-diag" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <rect width="6" height="6" fill="#fff" /><rect width="2.5" height="6" fill="#262626" />
+        <rect width="6" height="6" fill="#f0eafc" /><rect width="2.5" height="6" fill="var(--color-skill-listen)" />
       </pattern>
       <pattern id="p-cross" width="6" height="6" patternUnits="userSpaceOnUse">
-        <rect width="6" height="6" fill="#fff" /><path d="M0 3H6M3 0V6" stroke="#262626" strokeWidth="1" />
+        <rect width="6" height="6" fill="#fbe9f1" /><path d="M0 3H6M3 0V6" stroke="var(--color-skill-speak)" strokeWidth="1.2" />
       </pattern>
       <pattern id="p-horiz" width="6" height="4" patternUnits="userSpaceOnUse">
-        <rect width="6" height="4" fill="#fff" /><rect width="6" height="1.6" fill="#262626" />
+        <rect width="6" height="4" fill="#eef0f3" /><rect width="6" height="1.6" fill="var(--color-skill-grammar)" />
       </pattern>
     </defs>
   )
@@ -101,7 +103,7 @@ function SkillHistory({ s, target }: { s: SkillReadiness; target: number }) {
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full max-w-[300px]" role="img" aria-label={`${s.label} readiness over the last weeks`}>
       <line x1="0" x2={W} y1={y(target)} y2={y(target)} className="stroke-accent" strokeWidth="1.5" />
-      {h.length > 1 && <polygon points={band} fill="#d4d4d4" />}
+      {h.length > 1 && <polygon points={band} fill="#e5e7eb" />}
       {h.length > 1 && <polyline points={h.map((p, i) => `${x(i)},${y(p.mean)}`).join(' ')} fill="none" stroke="#262626" strokeWidth="1.5" />}
       {h.map((p, i) => (
         <g key={p.date}>
@@ -117,7 +119,7 @@ function SkillHistory({ s, target }: { s: SkillReadiness; target: number }) {
 
 function SkillHistoryCard({ s, line }: { s: SkillReadiness; line: number }) {
   return (
-    <article className="rounded-lg border border-neutral-300 bg-white p-3">
+    <article className="h-full rounded-xl border border-neutral-200 bg-white p-3">
       <h3 className="font-bold">{s.label}</h3>
       {s.history.length === 0 ? (
         <p className="text-sm text-neutral-600">
@@ -184,15 +186,21 @@ function TagWeeks({ p }: { p: ProgressData['tag_weeks'] }) {
         <tbody>
           {p.tags.map((t) => (
             <tr key={t.tag} className="border-b border-neutral-200">
-              <td className="py-1 pr-4 font-semibold">{t.tag}</td>
+              <td className="py-1 pr-4 font-semibold">{humanTag(t.tag)}</td>
               {t.weeks.map((w) => (
-                <td key={w.week_start} className="px-1 text-center" title={`${w.uses} uses`}>{w.rate_pct === null ? '.' : `${Math.round(w.rate_pct)}%`}</td>
+                <td
+                  key={w.week_start}
+                  className={`px-1.5 text-center ${w.rate_pct === null ? 'text-neutral-400' : w.rate_pct >= 50 ? 'bg-fix-soft font-semibold text-fix' : w.rate_pct >= 25 ? 'bg-warn-soft text-warn' : 'bg-ok-soft text-ok'}`}
+                  title={`${w.uses} uses`}
+                >
+                  {w.rate_pct === null ? '·' : `${Math.round(w.rate_pct)}%`}
+                </td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-      <p className="mt-1 text-sm text-neutral-600">Wrong share per week. A dot means fewer than {p.min_uses} uses that week.</p>
+      <p className="mt-1 text-sm text-neutral-600">Share wrong per week. A dot means fewer than {p.min_uses} uses that week, too few to say.</p>
     </div>
   )
 }
@@ -216,14 +224,14 @@ function PlanRow({ p }: { p: PlanRecord }) {
       {open && (
         <tr className="border-b border-neutral-200">
           <td colSpan={6} className="pb-2">
-            <p className="text-neutral-700">{p.data.rule}</p>
+            <p className="text-neutral-700">{p.data.rule}. Weighted rate: recent answers count more, and one right and one wrong are added so a few answers cannot look extreme.</p>
             <table className="mt-1 text-left">
               <thead>
-                <tr><th className="pr-4 font-semibold">Tag</th><th className="pr-4 font-semibold">Errors</th><th className="pr-4 font-semibold">Correct</th><th className="pr-4 font-semibold">Uses</th><th className="font-semibold">Rate</th></tr>
+                <tr><th className="pr-4 font-semibold">Mistake</th><th className="pr-4 font-semibold">Errors</th><th className="pr-4 font-semibold">Correct</th><th className="pr-4 font-semibold">Uses</th><th className="font-semibold">Weighted rate</th></tr>
               </thead>
               <tbody>
                 {p.data.tags.map((t) => (
-                  <tr key={t.tag}><td className="pr-4">{t.tag}</td><td className="pr-4">{t.errors}</td><td className="pr-4">{t.correct}</td><td className="pr-4">{t.opportunities}</td><td>{Math.round(t.rate * 100)}%</td></tr>
+                  <tr key={t.tag}><td className="pr-4">{humanTag(t.tag)}</td><td className="pr-4">{t.errors}</td><td className="pr-4">{t.correct}</td><td className="pr-4">{t.opportunities}</td><td>{Math.round(t.rate * 100)}%</td></tr>
                 ))}
               </tbody>
             </table>
@@ -239,6 +247,7 @@ function PlanHistory() {
   return (
     <section className="mb-10">
       <h2 className="mb-1 text-lg font-bold">Plan: what Ustad decided and why</h2>
+      <p className="mb-3 text-sm text-neutral-600">One plan a day, made from your answers before the day starts. Nothing is decided by a language model.</p>
       {error ? (
         <p className="text-sm">Error: {(error as Error).message}</p>
       ) : !data ? (
@@ -258,11 +267,13 @@ function PlanHistory() {
 }
 
 const STATE_STYLE: Record<string, string> = {
-  solid: 'border-2 border-neutral-900 font-bold',
-  ok: 'border border-neutral-700',
-  shaky: 'border border-dashed border-neutral-900 underline',
-  new: 'border border-neutral-300 text-neutral-500',
+  solid: 'border border-ok/40 bg-ok-soft',
+  ok: 'border border-neutral-300 bg-white',
+  shaky: 'border border-dashed border-warn bg-warn-soft',
+  new: 'border border-neutral-200 bg-white text-neutral-500',
 }
+const STATE_TONE = { solid: 'ok', ok: 'neutral', shaky: 'warn', new: 'neutral' } as const
+const STATE_WORD = { solid: 'Solid', ok: 'OK', shaky: 'Shaky', new: 'Not practised' } as const
 
 export function Progress() {
   const { data, error } = useQuery({ queryKey: ['progress'], queryFn: () => api<ProgressData>('/api/progress') })
@@ -273,15 +284,40 @@ export function Progress() {
   const counts = { solid: 0, ok: 0, shaky: 0, new: 0 }
   data.grammar.forEach((g) => { counts[g.state] += 1 })
   return (
-    <div>
-      <PageHeader title="Fortschritt" subtitle="Your level, your time to goal, and how each skill is moving" />
+    <div className="mx-auto w-full max-w-[1040px]">
+      <PageHeader title="Fortschritt" subtitle="Where you stand, what is moving, and what Ustad decided. App measures, not exam points." />
       <LevelBox />
 
       <section className="mb-10">
-        <h2 className="mb-1 text-lg font-bold">Each skill, week by week</h2>
-        <p className="mb-3 text-sm text-neutral-700">
-          Share right on B1 work as it stood at the end of each week. The grey band is the range, the straight line across is {pct(rd.line.share)}.
+        <SectionTitle hint="Share wrong per week for your most frequent mistakes, from all skills.">Your mistakes, week by week</SectionTitle>
+        <TagWeeks p={data.tag_weeks} />
+        <p className="mt-3 text-sm">
+          {data.error_rate.measured
+            ? `Verb position, last ${data.error_rate.window_days} days: ${Math.round(data.error_rate.rate_pct ?? 0)}% wrong of ${data.error_rate.opportunities} uses. Your target: below ${data.error_rate.target_pct}%.`
+            : `Verb position: ${data.error_rate.note}`}
         </p>
+      </section>
+
+      <section className="mb-10">
+        <SectionTitle hint={`${counts.solid} solid, ${counts.ok} OK, ${counts.shaky} shaky, ${counts.new} not practised. Solid: over 85% right and not seen for 14 days. Shaky: under 60% right.`}>
+          Grammar patterns
+        </SectionTitle>
+        <ul className="grid grid-cols-4 gap-2" aria-label="Grammar pattern states">
+          {data.grammar.map((g) => (
+            <li key={g.code}>
+              <Link to={`/grammar/${g.code}`} className={`flex h-full flex-col gap-1 rounded-lg px-2.5 py-2 text-sm hover:border-neutral-500 focus-visible:outline-2 focus-visible:outline-neutral-900 ${STATE_STYLE[g.state]}`}>
+                <span className="line-clamp-2">{g.title}</span>
+                <span><StatusChip tone={STATE_TONE[g.state]}>{STATE_WORD[g.state]}</StatusChip></span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mb-10">
+        <SectionTitle hint={`Share right in practice at the end of each week. The band is the likely range, the blue line is ${pct(rd.line.share)}.`}>
+          Each skill, week by week
+        </SectionTitle>
         <ul className="grid grid-cols-3 gap-3">
           {rd.skills.map((s) => (
             <li key={s.skill}><SkillHistoryCard s={s} line={rd.line.share} /></li>
@@ -289,56 +325,27 @@ export function Progress() {
         </ul>
       </section>
 
-      <PracticeTests p={data} rd={rd} />
-
       <section className="mb-10">
-        <h2 className="mb-1 text-lg font-bold">Hours per skill</h2>
-        <p className="mb-3 text-sm text-neutral-600">Indicators: app measures, not exam points.</p>
+        <SectionTitle hint="Active time only: pauses longer than a minute are not counted.">Hours per skill</SectionTitle>
         <WeeklyHours data={data.weekly_hours} />
       </section>
 
-      <section className="mb-10">
-        <h2 className="mb-1 text-lg font-bold">Error rate per tag, by week</h2>
-        <p className="mb-3 text-sm text-neutral-600">Indicators: app measures, not exam points. Top {data.tag_weeks.tags.length || 5} tags by errors in the last 12 weeks.</p>
-        <TagWeeks p={data.tag_weeks} />
-        <p className="mt-3 text-sm">
-          {data.error_rate.measured
-            ? `Verb position (${data.error_rate.tags.join(', ')}), last ${data.error_rate.window_days} days: ${Math.round(data.error_rate.rate_pct ?? 0)}% wrong of ${data.error_rate.opportunities} uses. Your target: below ${data.error_rate.target_pct}%.`
-            : `Verb position error rate: ${data.error_rate.note}`}
-        </p>
-      </section>
-
-      <section className="mb-10">
-        <h2 className="mb-1 text-lg font-bold">Grammar patterns</h2>
-        <p className="mb-3 text-sm text-neutral-600">
-          Indicators: app measures, not exam points. {counts.solid} solid, {counts.ok} ok, {counts.shaky} shaky, {counts.new} new.
-        </p>
-        <ul className="grid grid-cols-4 gap-2 xl:grid-cols-5" aria-label="Grammar pattern states">
-          {data.grammar.map((g) => (
-            <li key={g.code}>
-              <Link to={`/grammar/${g.code}`} className={`block rounded-lg px-2 py-1.5 text-sm focus-visible:outline-2 focus-visible:outline-neutral-900 ${STATE_STYLE[g.state]}`}>
-                <span className="block truncate">{g.title}</span>
-                <span className="block text-xs">{g.state}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <PracticeTests p={data} rd={rd} />
 
       <section className="mb-10 max-w-[720px]">
-        <h2 className="mb-1 text-lg font-bold">Goethe word list</h2>
-        <p className="text-sm text-neutral-600">Indicators: app measures, not exam points.</p>
-        <p className="mt-2">
+        <SectionTitle>Goethe word list</SectionTitle>
+        <p>
           {data.wordlist.measured
-            ? `${data.wordlist.mature} of ${data.wordlist.list_lemmas} words on the ${data.wordlist.list} are mature in your cards (stability 21 days or more) or known from placement. The official list holds about ${data.wordlist.list_size_official}.`
-            : `Not measured yet. ${data.wordlist.note} On your Mac: put Goethe-Zertifikat_B1_Wortliste.pdf into data/private/, install poppler (brew install poppler), then run make wortliste and reload.`}
+            ? `${data.wordlist.mature} of ${data.wordlist.list_lemmas} words on the ${data.wordlist.list} are well learned in your cards (stable for 21 days or more) or known from placement. The official list holds about ${data.wordlist.list_size_official}.`
+            : `Not measured yet. ${data.wordlist.note}`}
           {data.level === 'B2' && ' No official B2 word list exists; B1 list coverage is shown.'}
         </p>
-      </section>
-
-      <section className="mb-10 max-w-[720px]">
-        <h2 className="mb-1 text-lg font-bold">Then and now</h2>
-        <p>Not measured yet. Your first and latest graded essay will appear here side by side.</p>
+        {!data.wordlist.measured && (
+          <details className="mt-1 text-sm text-neutral-600">
+            <summary className="cursor-pointer">How to add it</summary>
+            On your Mac: put Goethe-Zertifikat_B1_Wortliste.pdf into data/private/, install poppler (brew install poppler), then run make wortliste and reload.
+          </details>
+        )}
       </section>
 
       <PlanHistory />

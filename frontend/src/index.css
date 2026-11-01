@@ -1,14 +1,31 @@
 @import "tailwindcss";
 
-/* Design tokens (docs/V2_BRIEF.md §2, V0). Grayscale base, one accent for the next action and the pass
-   line only. Success and error are never colour alone: use weight and underline styles. */
+/* Design tokens. Neutral base, one accent for the next action and the pass line, a few calm colours for
+   meaning (right, fix, attention) and for the four skills. Every colour is a dark 700-800 shade on text or a
+   pale tint behind it, so pages still read printed in black and white. Meaning never rests on colour alone:
+   each colour comes with a word, weight or underline. */
 @theme {
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --color-accent: #1d4ed8;
-  --radius-lg: 6px;
+  --color-accent-soft: #eef3fe;
+  --color-ok: #166534;
+  --color-ok-soft: #effaf2;
+  --color-fix: #991b1b;
+  --color-fix-soft: #fdf1f1;
+  --color-warn: #92400e;
+  --color-warn-soft: #fdf7ea;
+  --color-note: #faf6ee;
+  --color-page: #f6f6f4;
+  --color-skill-read: #0f766e;
+  --color-skill-listen: #6d28d9;
+  --color-skill-write: #c2410c;
+  --color-skill-speak: #be185d;
+  --color-skill-grammar: #475569;
+  --color-skill-vocab: #4d7c0f;
+  --radius-lg: 8px;
   --radius-md: 6px;
-  --radius-xl: 6px;
-  --radius-2xl: 6px;
+  --radius-xl: 10px;
+  --radius-2xl: 12px;
   --animate-fade: fade 0.2s ease-out both;
 
   @keyframes fade {
@@ -24,6 +41,12 @@ html {
 body {
   font-family: var(--font-sans);
   line-height: 1.55;
+  color: #171717;
+}
+
+@media print {
+  aside { display: none; }
+  main { margin-left: 0 !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {

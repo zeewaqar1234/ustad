@@ -13,7 +13,7 @@ from app.core.clock import day_bounds, local_date
 from app.db import DB, utcnow
 from app.llm.provider import Provider, get_provider
 from app.models import Attempt, EvidenceEvent, Pattern
-from app.services import drills, evidence, ghalti, grading, planner
+from app.services import drills, evidence, ghalti, grading, learner, planner
 
 router = APIRouter(prefix="/api", dependencies=[Depends(require_user)])
 LLM = Annotated[Provider, Depends(get_provider)]
@@ -36,13 +36,14 @@ def _get(db: Session, code: str) -> Pattern:
 @router.get("/patterns")
 def list_patterns(db: DB):
     cur = current_pattern(db)
+    states = learner.pattern_states(db, utcnow())
     rows = db.scalars(select(Pattern).order_by(Pattern.order))
     return {
         "current": cur.code if cur else None,
         "patterns": [
             {"code": p.code, "order": p.order, "group": p.group, "title": p.title,
              "status": p.status, "done": p.done_at is not None, "known": p.known_from_placement,
-             "best_pct": p.best_pct, "rounds": p.rounds}
+             "best_pct": p.best_pct, "rounds": p.rounds, "state": states[p.code]["state"]}
             for p in rows
         ],
     }  # fmt: skip

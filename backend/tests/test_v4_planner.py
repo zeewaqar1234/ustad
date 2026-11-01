@@ -162,7 +162,7 @@ def test_why_is_built_from_numbers(db):
     ev(db, "VERB_FINAL", "error", 3, skill="speaking")
     ev(db, "VERB_FINAL", "correct", 4)
     why = planner.build(db, utcnow())["why"]
-    assert why.startswith("Focus: verb at the end (VERB_FINAL). 7 errors in 11 uses in 30 days")
+    assert why.startswith("Focus: verb at the end. 7 errors in 11 uses in 30 days")
     assert "writing 4, speaking 3" in why
 
 

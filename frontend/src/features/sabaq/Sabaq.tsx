@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router'
-import { Column, PageHeader } from '../../components/ui'
+import { Button, Column, NextStep, PageHeader } from '../../components/ui'
+import { GLOSSARY } from '../../lib/ui'
 import { Feedback } from '../../components/Feedback'
 import { ItemCard } from '../../components/ItemCard'
 import { UmlautKeys } from '../../components/UmlautKeys'
@@ -57,11 +57,8 @@ export function Sabaq() {
   if (data.locked)
     return (
       <Column>
-        <PageHeader title="Sabaq" subtitle="New material" />
-        <p>{data.locked}</p>
-        <Link to="/" className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
-          Back to Today
-        </Link>
+        <PageHeader title="Sabaq" subtitle={`${GLOSSARY.Sabaq}.`} />
+        <NextStep message={<p>{data.locked}</p>} />
       </Column>
     )
 
@@ -88,22 +85,24 @@ export function Sabaq() {
     <Column>
       <PageHeader
         title={data.title}
-        subtitle={`Sabaq, new material. ${doneCount} of ${data.items.length} done. ${data.scenario}`}
+        subtitle={`Sabaq, ${GLOSSARY.Sabaq}. ${doneCount} of ${data.items.length} done. ${data.scenario}`}
       />
 
       {result ? (
         <>
           <Feedback grade={result.grade} given={answer} />
           <ItemCard item={result.item} />
-          <button onClick={next} className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
-            {doneCount === data.items.length ? 'Finish' : 'Next'}
-          </button>
+          <div>
+            <Button kind="primary" onClick={next}>
+              {doneCount === data.items.length ? 'Finish' : 'Next'}
+            </Button>
+          </div>
           <p className="text-xs text-neutral-600">Enter continues.</p>
         </>
       ) : current ? (
         <>
-          <section className="rounded-lg border border-neutral-300 bg-white p-4">
-            <p className="text-xs tracking-wide text-neutral-500 uppercase">Try first: say it in German</p>
+          <section className="rounded-xl border border-neutral-200 bg-white p-4">
+            <p className="text-sm font-semibold text-neutral-600">Try first: say it in German</p>
             <p className="mt-1 text-xl">{current.prompt}</p>
             {current.hint && <p className="mt-1 text-sm text-neutral-600">{current.hint}</p>}
           </section>
@@ -129,28 +128,23 @@ export function Sabaq() {
             />
             <UmlautKeys onKey={(ch) => setAnswer((v) => insertAt(input.current, v, ch))} />
             <div className="flex gap-2">
-              <button type="submit" className="rounded-lg bg-neutral-900 px-5 py-3 text-white">
+              <Button kind="primary" type="submit">
                 Check
-              </button>
-              <button
-                type="button"
-                onClick={() => submit('')}
-                className="rounded-lg border border-neutral-400 px-5 py-3"
-              >
-                No idea
-              </button>
+              </Button>
+              <Button onClick={() => submit('')}>I don't know</Button>
             </div>
             <p className="text-xs text-neutral-600">Enter checks. The answer shows after your attempt.</p>
           </form>
         </>
       ) : (
-        <div className="flex flex-col gap-4">
-          <p className="font-semibold">Sabaq done. {data.items.length} new items.</p>
-          <p className="text-sm text-neutral-700">They come back in Manzil and Sabqi.</p>
-          <Link to="/" className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white">
-            Back to Today
-          </Link>
-        </div>
+        <NextStep
+          message={
+            <>
+              <p className="font-semibold">Sabaq done. {data.items.length} new items.</p>
+              <p className="text-sm text-neutral-700">They come back in Manzil and Sabqi.</p>
+            </>
+          }
+        />
       )}
     </Column>
   )

@@ -60,25 +60,43 @@ const homeRoutes = (plan: Plan) => ({
   '/api/dictation': { done: 0, total: 3 }, '/api/homework': { status: 'open' },
 })
 
-test('Today: why line, focus, hidden example, targeted practice links', async () => {
-  mount(<Home />, homeRoutes(fullPlan))
-  expect(await screen.findByText(fullPlan.why)).toBeInTheDocument()
-  expect(screen.getByText(/Verb position/, { selector: 'span' })).toBeInTheDocument()
-  expect(screen.queryByText(/You wrote/)).toBeNull()
-  fireEvent.click(screen.getByRole('button', { name: 'Show examples' }))
-  expect(screen.getByText(/You wrote: Ich morgen gehe/)).toBeInTheDocument()
-  expect(screen.getByRole('heading', { name: 'Targeted practice' })).toBeInTheDocument()
-  expect(screen.getByRole('link', { name: 'Start 5 drills' }).getAttribute('href')).toBe('/grammar/verb2/drills?limit=5')
-  expect(screen.getByRole('link', { name: 'Re-read the rule' }).getAttribute('href')).toBe('/grammar/verb2')
-  expect(screen.getByRole('link', { name: 'Write it' }).getAttribute('href')).toBe('/grammar/verb2/drills?limit=5')
+const readiness = {
+  today: '2026-10-31', goals: { target_exam: 'B1', target_date: null, weekly_hours: null },
+  level: { label: 'A2+', plain: 'Working on A2', taken: '2026-09-02', working_on: 'A2', bands: [], passed: [], goal_band: 'B1.2', goal_reached: false, note: '' },
+  line: { share: 0.7, source: '' }, target: { exam: 'Goethe-Zertifikat B1', level: 'B1' },
+  move_up: { ready: true, text: 'Every practised skill is at 70% or more on B1 work.' },
+  skills: [
+    { skill: 'grammar', measured: true, placement_only: false, status: 'at_or_above' },
+    { skill: 'reading', measured: true, placement_only: false, status: 'near' },
+  ],
+  milestone: { days_left: null },
+}
+
+test('Today: tutor note names the mistake in plain words, hides the sentence, puts the fix first', async () => {
+  mount(<Home />, { ...homeRoutes(fullPlan), '/api/readiness': readiness })
+  expect(await screen.findByText(/Your most repeated mistake lately/)).toBeInTheDocument()
+  expect(screen.getByText('Verb position', { selector: 'span' })).toBeInTheDocument()
+  expect(screen.queryByText('Ich morgen gehe')).toBeNull()
+  fireEvent.click(screen.getByRole('button', { name: 'Show me where I went wrong' }))
+  expect(screen.getByText('Ich morgen gehe')).toBeInTheDocument()
+  expect(screen.getByText('Ich gehe morgen')).toBeInTheDocument()
+  const session = screen.getByRole('list', { name: "Today's session" })
+  const items = session.querySelectorAll('li')
+  expect(items[1].textContent).toContain('Fix: Verb second')
+  // Manzil is done, so the fix is the next step and carries the only Start button
+  const start = screen.getByRole('link', { name: 'Start' })
+  expect(start.getAttribute('href')).toBe('/grammar/verb2/drills?limit=5')
+  expect(screen.getByText('Working on A2')).toBeInTheDocument()
+  expect(screen.getByText('1 of 2 practised skills at 70% or more right.')).toBeInTheDocument()
+  expect(screen.getByRole('link', { name: 'Retake the placement test' })).toBeInTheDocument()
 })
 
-test('Today: empty plan shows the why line only', async () => {
-  mount(<Home />, homeRoutes(emptyPlan))
-  expect(await screen.findByText(emptyPlan.why)).toBeInTheDocument()
-  expect(screen.queryByText('Targeted practice')).toBeNull()
-  expect(screen.queryByRole('button', { name: 'Show examples' })).toBeNull()
-  expect(screen.queryByText(/Makeup day: no new unit/)).toBeNull()
+test('Today: no focus means no fix step and a plain note', async () => {
+  mount(<Home />, { ...homeRoutes(emptyPlan), '/api/readiness': { ...readiness, move_up: { ready: false, text: '' } } })
+  expect(await screen.findByText(/No mistake repeats often enough/)).toBeInTheDocument()
+  expect(screen.queryByText(/Fix:/)).toBeNull()
+  expect(screen.queryByRole('button', { name: 'Show me where I went wrong' })).toBeNull()
+  expect(screen.getByRole('link', { name: 'Start' }).getAttribute('href')).toBe('/review/sabqi')
 })
 
 test('Progress: plan table row with details', async () => {
@@ -101,6 +119,6 @@ test('Progress: plan table row with details', async () => {
   expect(await screen.findByText(fullPlan.why)).toBeInTheDocument()
   expect(screen.getByText('Verb second')).toBeInTheDocument()
   fireEvent.click(screen.getByRole('button', { name: 'Details' }))
-  expect(screen.getByText('Top tag by errors with 8 or more uses.')).toBeInTheDocument()
+  expect(screen.getByText(/Top tag by errors with 8 or more uses\./)).toBeInTheDocument()
   expect(screen.getByText('60%')).toBeInTheDocument()
 })

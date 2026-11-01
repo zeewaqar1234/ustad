@@ -15,7 +15,7 @@ export interface SkillReadiness {
   pm_pts: number | null
   n: number
   trend_pts: number | null
-  status: 'none' | 'below' | 'near' | 'at_or_above'
+  status: 'none' | 'few' | 'below' | 'near' | 'at_or_above'
   status_word: string
   proxy: string | null
   measure: string
@@ -31,6 +31,8 @@ export interface Readiness {
   goals: { target_exam: 'B1' | 'B2'; target_date: string | null; weekly_hours: number | null }
   level: {
     label: string | null
+    /** plain words: "Working on A2" */
+    plain?: string | null
     taken: string | null
     working_on: string | null
     bands: string[]

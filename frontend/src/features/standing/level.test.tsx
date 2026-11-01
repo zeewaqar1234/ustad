@@ -83,24 +83,23 @@ test('empty: no level, no number for any skill, asks for placement and the goal'
 
 test('placed: ladder shows passed, current band and goal; numbers come from the API', async () => {
   mount(placed())
-  expect(await screen.findByText('B1.1', { selector: 'span' })).toBeInTheDocument()
+  expect(await screen.findByText(/its label: B1\.1/)).toBeInTheDocument()
   expect(screen.getByTestId('band-A2').getAttribute('data-state')).toBe('passed')
   expect(screen.getByTestId('band-B1.1').getAttribute('data-state')).toBe('here')
   expect(screen.getByTestId('band-B1.2').getAttribute('data-state')).toBe('ahead')
   expect(screen.getByTestId('goal-line')).toBeInTheDocument()
-  expect(screen.getByText(/Since then: .*right on B1 work, ± 7 points, from 120 practice answers/)).toBeInTheDocument()
-  expect(screen.getByText(/not an official CEFR result/)).toBeInTheDocument()
+  expect(screen.getByText(/Not an official CEFR result/)).toBeInTheDocument()
   const row = screen.getByTestId('skill-reading')
   expect(row.textContent).toContain('78%')
-  expect(row.textContent).toContain('± 7')
+  expect(row.textContent).toMatch(/\(\d+% to \d+%\)/)
   expect(row.textContent).toContain('+6 points')
   expect(row.textContent).toContain('70% or more')
 })
 
-test('time to goal: hours bar, days bar, pace, needed and date', async () => {
+test('time to goal: hours bar, pace, needed and date (no separate days bar)', async () => {
   mount(placed())
   expect(await screen.findByRole('img', { name: /Hours: 46 h practised since placement, about 32 h more/ })).toBeInTheDocument()
-  expect(screen.getByRole('img', { name: /Days: 60 since placement, 90 to your date/ })).toBeInTheDocument()
+  expect(screen.queryByRole('img', { name: /^Days:/ })).toBeNull()
   expect(screen.getByText('3.1 h/week, last 4 weeks')).toBeInTheDocument()
   expect(screen.getByText(/4\.0 h\/week to make your date, 0\.9 h\/week more than now/)).toBeInTheDocument()
   expect(screen.getByText(/about 15 Dec 2026 \(Hören is slowest\)\. Lesen: more answers decide/)).toBeInTheDocument()
@@ -142,6 +141,6 @@ test('goal question keeps the saved exam and weekly hours', async () => {
 test('a level without a placement date shows no date instead of Invalid Date', async () => {
   const d = placed()
   mount({ ...d, level: { ...d.level, taken: null } })
-  expect(await screen.findByText(/^placement test\. The app/)).toBeInTheDocument()
+  expect(await screen.findByText(/^From the app’s placement test \(its label/)).toBeInTheDocument()
   expect(screen.queryByText(/Invalid Date/)).toBeNull()
 })

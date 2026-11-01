@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Column, PageHeader } from '../../components/ui'
+import { Button, NextStep, Page, PageHeader } from '../../components/ui'
+import { GLOSSARY } from '../../lib/ui'
 import { api } from '../../lib/api'
 import { speak } from '../../lib/tts'
 import type { ShadowResult, ShadowSentence } from '../../lib/voice'
@@ -23,17 +24,37 @@ export function Shadowing() {
 
   if (error) return <p>Error: {(error as Error).message}</p>
   if (!data) return <p>Loading…</p>
+  const subtitle = `${GLOSSARY.Takrar[0].toUpperCase()}${GLOSSARY.Takrar.slice(1)}.`
+  const back = { to: '/voice', label: 'Back to Sprechen' }
   if (!data.sentences.length)
     return (
-      <Column>
-        <PageHeader title="Takrar" subtitle="Repeat sentences after Ustad." back={{ to: '/voice', label: 'Back to Sprechen' }} />
-        <p className="rounded-lg border border-neutral-300 bg-white p-4">No sentences yet. Do today's Sabaq first; its sentences come here.</p>
-      </Column>
+      <Page>
+        <div className="flex flex-col gap-4">
+          <PageHeader title="Takrar" subtitle={subtitle} back={back} />
+          <p className="rounded-xl border border-neutral-200 bg-white p-4">
+            No sentences yet. Do today's lesson (Sabaq) first; its sentences come here.
+          </p>
+        </div>
+      </Page>
     )
 
   const n = data.sentences.length
-  const idx = i % n
-  const s = data.sentences[idx]
+  if (i >= n)
+    return (
+      <Page>
+        <div className="flex flex-col gap-4">
+          <PageHeader title="Takrar" subtitle={subtitle} back={back} />
+          <NextStep message={<p className="font-semibold">All {n} {n === 1 ? 'sentence' : 'sentences'} done.</p>} />
+          <div>
+            <Button kind="quiet" onClick={() => setI(0)}>
+              Go through them again
+            </Button>
+          </div>
+        </div>
+      </Page>
+    )
+  const s = data.sentences[i]
+  const last = i === n - 1
 
   async function play() {
     setNoAudio((await speak(s.de)) === 'none')
@@ -54,52 +75,46 @@ export function Shadowing() {
   }
 
   return (
-    <Column>
-      <PageHeader
-        title="Takrar"
-        subtitle={`${data.source === 'sabaq' ? "Today's Sabaq" : 'Recent sentences'}, ${idx + 1} of ${n}. Listen, then say it.`}
-        back={{ to: '/voice', label: 'Back to Sprechen' }}
-      />
+    <Page>
+      <div className="flex flex-col gap-4">
+        <PageHeader
+          title="Takrar"
+          subtitle={`${subtitle} ${data.source === 'sabaq' ? "Today's lesson" : 'Recent sentences'}, ${i + 1} of ${n}.`}
+          back={back}
+        />
 
-      <section className="flex flex-col gap-2 rounded-lg border border-neutral-300 bg-white p-5">
-        <p className="text-2xl leading-snug font-semibold" lang="de">
-          {s.de}
-        </p>
-        <p className="text-neutral-600">{s.en}</p>
-        <button
-          onClick={play}
-          className="mt-2 h-11 self-start rounded-lg border border-neutral-400 px-4 font-semibold hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-neutral-900"
-        >
-          Play
-        </button>
-        {noAudio && <p className="text-sm">No German voice on this device. Read it from the card.</p>}
-      </section>
-
-      {result ? (
-        <>
-          <ShadowScore r={result} showFluency={settings.show_fluency} />
-          <div className="flex gap-2">
-            <button
-              onClick={() => setResult(null)}
-              className="h-11 rounded-lg border border-neutral-400 bg-white px-5 font-semibold hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-neutral-900"
-            >
-              Again
-            </button>
-            <button
-              onClick={() => {
-                setResult(null)
-                setI((k) => k + 1)
-              }}
-              className="h-11 rounded-lg bg-accent px-5 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
-            >
-              Next
-            </button>
+        <section className="flex flex-col gap-2 rounded-xl border border-neutral-200 bg-white p-5">
+          <p className="text-2xl leading-snug font-semibold" lang="de">
+            {s.de}
+          </p>
+          <p className="text-neutral-600">{s.en}</p>
+          <div className="mt-2">
+            <Button onClick={play}>Play</Button>
           </div>
-        </>
-      ) : (
-        <TalkInput key={s.item_id} busy={busy} sendLabel="Check" onSend={check} />
-      )}
-      {err && <p className="text-sm font-semibold underline">Error: {err}</p>}
-    </Column>
+          {noAudio && <p className="text-sm">No German voice on this device. Read it from the card.</p>}
+        </section>
+
+        {result ? (
+          <>
+            <ShadowScore r={result} showFluency={settings.show_fluency} />
+            <div className="flex gap-2">
+              <Button onClick={() => setResult(null)}>Again</Button>
+              <Button
+                kind="primary"
+                onClick={() => {
+                  setResult(null)
+                  setI((k) => k + 1)
+                }}
+              >
+                {last ? 'Finish' : 'Next'}
+              </Button>
+            </div>
+          </>
+        ) : (
+          <TalkInput key={s.item_id} busy={busy} sendLabel="Check" onSend={check} />
+        )}
+        {err && <p className="text-sm font-semibold underline">Error: {err}</p>}
+      </div>
+    </Page>
   )
 }

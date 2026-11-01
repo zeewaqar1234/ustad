@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router'
-import { Column, PageHeader } from '../../components/ui'
+import { Button, Card as Box, Page, PageHeader, SectionTitle } from '../../components/ui'
 import { api } from '../../lib/api'
 import { CONTEXT_LABEL, humanTag, type PatternCard as Card } from '../../lib/grammar'
 
@@ -16,14 +16,20 @@ export function PatternCard() {
   const blocked = data.status === 'needs_review'
 
   return (
-    <Column>
+    <Page>
+      <div className="flex flex-col gap-4">
       <PageHeader
         back={{ to: '/grammar', label: 'Back to Grammatik' }}
         title={data.title}
-        subtitle={`Pattern ${data.order}${data.done ? ', done' : ''}. ${data.rule_en}`}
+        subtitle={`Pattern ${data.order}${data.done ? ', done' : ''}.`}
       />
 
-      <section className="max-w-full overflow-x-auto rounded-lg border border-neutral-300 bg-white">
+      <Box skill="grammar">
+        <p className="text-sm font-semibold text-neutral-600">The rule</p>
+        <p className="mt-1 text-lg">{data.rule_en}</p>
+      </Box>
+
+      <section className="max-w-full overflow-x-auto rounded-xl border border-neutral-200 bg-white">
         <table className="w-full border-collapse text-sm" lang="de">
           <thead>
             <tr>
@@ -31,7 +37,7 @@ export function PatternCard() {
                 <th
                   key={i}
                   lang="en"
-                  className="border-b-2 border-neutral-900 px-2 py-2 text-left text-xs font-semibold whitespace-nowrap uppercase"
+                  className="border-b-2 border-neutral-900 px-2 py-2 text-left text-xs font-semibold whitespace-nowrap"
                 >
                   {l}
                 </th>
@@ -53,9 +59,9 @@ export function PatternCard() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-xs tracking-wide text-neutral-500 uppercase">Examples</h2>
+        <SectionTitle>Examples</SectionTitle>
         {data.examples.map((ex) => (
-          <div key={ex.de} className="rounded-lg border border-neutral-300 bg-white p-3">
+          <div key={ex.de} className="rounded-xl border border-neutral-200 bg-white p-3">
             <p className="text-xs text-neutral-500">{CONTEXT_LABEL[ex.context] ?? ex.context}</p>
             <p className="font-semibold" lang="de">
               {ex.de}
@@ -65,14 +71,12 @@ export function PatternCard() {
         ))}
       </section>
 
-      <section className="rounded-lg border border-neutral-300 bg-white p-3">
-        <h2 className="text-xs tracking-wide text-neutral-500 uppercase">
-          Common error · {humanTag(err.tag)}
-        </h2>
-        <p className="mt-1 text-neutral-600 line-through" lang="de">
+      <section className="rounded-xl border border-neutral-200 bg-white p-3">
+        <h2 className="text-sm font-semibold text-neutral-600">Common error: {humanTag(err.tag)}</h2>
+        <p className="mt-1 text-fix line-through" lang="de">
           {err.wrong}
         </p>
-        <p className="font-semibold" lang="de">
+        <p className="font-bold text-ok" lang="de">
           {err.right}
         </p>
         <p className="mt-1 text-sm text-neutral-700">{err.note_en}</p>
@@ -80,24 +84,20 @@ export function PatternCard() {
 
       <div className="flex flex-wrap items-center gap-3">
         {blocked ? (
-          <p className="w-full rounded-lg border-2 border-neutral-900 p-3 text-sm">
+          <p className="w-full rounded-lg border border-warn/30 bg-warn-soft p-3 text-sm">
             In check queue. Drills open after you approve this pattern.{' '}
             <Link to="/check" className="underline">
               Check queue
             </Link>
           </p>
         ) : (
-          <Link
-            to={`/grammar/${data.code}/drills`}
-            className="rounded-lg bg-neutral-900 px-5 py-3 text-white"
-          >
+          <Button kind="primary" to={`/grammar/${data.code}/drills`}>
             Start drills
-          </Link>
+          </Button>
         )}
-        <Link to="/homework" className="rounded-lg border border-neutral-400 px-5 py-3">
-          Homework for this pattern
-        </Link>
+        <Button to="/homework">Homework for this pattern</Button>
       </div>
-    </Column>
+      </div>
+    </Page>
   )
 }

@@ -24,6 +24,7 @@ import { VoiceHome } from './features/voice/VoiceHome'
 import { Homework } from './features/writing/Homework'
 import { api, AuthError } from './lib/api'
 import { CheckQueue } from './pages/CheckQueue'
+import { SKILL_COLOR, type Skill } from './lib/ui'
 import { Login } from './pages/Login'
 
 function ReviewRoute() {
@@ -53,20 +54,22 @@ function ReaderRoute() {
   return <Reader key={id} />
 }
 
-const NAV: { heading?: string; items: { to: string; label: string; sub: string; end?: boolean }[] }[] = [
-  { items: [{ to: '/', label: 'Today', sub: 'the daily loop', end: true }] },
+type NavItem = { to: string; label: string; sub: string; end?: boolean; skill?: Skill }
+
+const NAV: { heading?: string; items: NavItem[] }[] = [
+  { items: [{ to: '/', label: 'Today', sub: 'your plan for today', end: true }] },
   {
     heading: 'Practice',
     items: [
-      { to: '/read', label: 'Lesen', sub: 'reading' },
-      { to: '/listen', label: 'Hören', sub: 'listening' },
-      { to: '/homework', label: 'Schreiben', sub: 'writing' },
-      { to: '/voice', label: 'Sprechen', sub: 'speaking' },
+      { to: '/read', label: 'Lesen', sub: 'reading', skill: 'read' },
+      { to: '/listen', label: 'Hören', sub: 'listening', skill: 'listen' },
+      { to: '/homework', label: 'Schreiben', sub: 'writing', skill: 'write' },
+      { to: '/voice', label: 'Sprechen', sub: 'speaking', skill: 'speak' },
     ],
   },
   {
     items: [
-      { to: '/grammar', label: 'Grammatik', sub: 'patterns and Pahara' },
+      { to: '/grammar', label: 'Grammatik', sub: 'patterns and tables' },
       { to: '/ghalti', label: 'Ghalti', sub: 'your mistakes' },
       { to: '/progress', label: 'Fortschritt', sub: 'progress' },
     ],
@@ -77,19 +80,28 @@ function Shell({ children }: { children: React.ReactNode }) {
   const link = ({ isActive }: { isActive: boolean }) =>
     `block rounded-lg px-3 py-2 ${isActive ? 'bg-neutral-900 text-white' : 'hover:bg-neutral-200'}`
   return (
-    <div className="flex min-h-screen min-w-[1024px] bg-neutral-50">
-      <aside className="fixed inset-y-0 left-0 flex w-[220px] flex-col border-r border-neutral-300 bg-neutral-100 p-3">
+    <div className="flex min-h-screen min-w-[1024px] bg-page">
+      <aside className="fixed inset-y-0 left-0 flex w-[220px] flex-col border-r border-neutral-200 bg-neutral-100 p-3">
         <NavLink to="/" className="mb-4 px-3 py-2 text-xl font-bold">
           Ustad
         </NavLink>
         <nav className="flex flex-1 flex-col gap-4 overflow-y-auto" aria-label="Main">
           {NAV.map((g, i) => (
             <div key={i} className="flex flex-col gap-1">
-              {g.heading && <p className="px-3 text-xs font-semibold uppercase text-neutral-600">{g.heading}</p>}
+              {g.heading && <p className="px-3 text-xs font-semibold text-neutral-600">{g.heading}</p>}
               {g.items.map((it) => (
                 <NavLink key={it.to} to={it.to} end={it.end} className={link}>
-                  <span className="block font-semibold leading-tight">{it.label}</span>
-                  <span className="block text-xs opacity-70">{it.sub}</span>
+                  <span className="flex items-center gap-2 font-semibold leading-tight">
+                    {it.skill && (
+                      <span
+                        aria-hidden
+                        className="inline-block h-2 w-2 shrink-0 rounded-[2px]"
+                        style={{ background: SKILL_COLOR[it.skill] }}
+                      />
+                    )}
+                    {it.label}
+                  </span>
+                  <span className={`block text-xs opacity-70 ${it.skill ? 'pl-4' : ''}`}>{it.sub}</span>
                 </NavLink>
               ))}
             </div>
@@ -97,7 +109,7 @@ function Shell({ children }: { children: React.ReactNode }) {
         </nav>
         <NavLink to="/settings" className={link}>
           <span className="block font-semibold leading-tight">Settings</span>
-          <span className="block text-xs opacity-70">placement, check queue, sources</span>
+          <span className="block text-xs opacity-70">goal, results, tools</span>
         </NavLink>
       </aside>
       <main className="ml-[220px] flex-1 px-8 py-8">

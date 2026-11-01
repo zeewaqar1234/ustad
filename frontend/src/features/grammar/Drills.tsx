@@ -1,8 +1,9 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router'
+import { useParams, useSearchParams } from 'react-router'
 import { Diff } from '../../components/Diff'
-import { Column, PageHeader } from '../../components/ui'
+import { Button, Column, NextStep, PageHeader, Verdict } from '../../components/ui'
+import { buttonClass } from '../../lib/ui'
 import { GermanField } from '../../components/GermanField'
 import { RedPen } from '../../components/RedPen'
 import { UmlautKeys } from '../../components/UmlautKeys'
@@ -38,7 +39,7 @@ function Blanks(props: { prompt: string; values: string[]; onChange: (v: string[
   }
   return (
     <div className="flex flex-col gap-3">
-      <p className="rounded-lg border border-neutral-300 bg-white p-4 text-xl leading-loose" lang="de">
+      <p className="rounded-xl border border-neutral-200 bg-white p-4 text-xl leading-loose" lang="de">
         {parts.map((p, i) => (
           <span key={i}>
             {p}
@@ -71,9 +72,7 @@ function Result({ drill, r, given }: { drill: Drill; r: DrillResult; given: stri
   if (drill.type === 'free') {
     return (
       <div className="flex flex-col gap-3">
-        <p className="font-semibold" role="status">
-          {r.correct ? 'Correct.' : 'Not yet.'}
-        </p>
+        <Verdict kind={r.correct ? 'right' : 'wrong'} />
         {r.missing && r.missing.length > 0 && (
           <p className="text-sm">
             Missing: <span lang="de" className="font-semibold">{r.missing.join(', ')}</span>
@@ -83,20 +82,20 @@ function Result({ drill, r, given }: { drill: Drill; r: DrillResult; given: stri
       </div>
     )
   }
-  const head = r.correct ? (r.verdict === 'close' ? 'Correct. Small slip below.' : 'Correct.') : 'Not yet.'
+  const kind = r.correct ? (r.verdict === 'close' ? 'almost' : 'right') : 'wrong'
   return (
-    <div className="rounded-lg border-2 border-neutral-900 bg-white p-4" role="status">
-      <p className="font-semibold">{head}</p>
+    <div className="flex flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-4">
+      <Verdict kind={kind}>{kind === 'almost' ? 'Small slip below.' : undefined}</Verdict>
       {r.blanks ? (
-        <ol className="mt-2 flex flex-col gap-1 text-sm">
+        <ol className="flex flex-col gap-1 text-sm">
           {r.blanks.map((b, i) => (
             <li key={i} lang="de">
               {i + 1}. <span aria-label={b.ok ? 'right' : 'wrong'}>{b.ok ? '✓' : '✗'}</span>{' '}
-              <span className={b.ok ? 'font-semibold' : 'line-through'}>{b.given || '(nothing)'}</span>
+              <span className={b.ok ? 'font-semibold text-ok' : 'text-fix line-through'}>{b.given || '(nothing)'}</span>
               {!b.ok && (
                 <>
                   {' '}
-                  → <span className="font-semibold">{b.expected}</span>
+                  → <span className="font-bold text-ok">{b.expected}</span>
                 </>
               )}
             </li>
@@ -104,35 +103,31 @@ function Result({ drill, r, given }: { drill: Drill; r: DrillResult; given: stri
         </ol>
       ) : (
         r.verdict !== 'exact' && (
-          <>
-            <p className="mt-2 text-sm text-neutral-600">You wrote</p>
+          <div>
+            <p className="text-sm text-neutral-600">Your answer</p>
             <p className="font-mono" lang="de">
               {given || '(nothing)'}
             </p>
-          </>
+          </div>
         )
       )}
       {(r.verdict !== 'exact' || r.blanks) && r.expected && (
-        <>
-          <p className="mt-2 text-sm text-neutral-600">Correct</p>
-          <p className="font-mono font-semibold" lang="de">
+        <div>
+          <p className="text-sm text-neutral-600">Correct</p>
+          <p className="font-mono font-semibold text-ok" lang="de">
             {r.expected}
           </p>
-        </>
-      )}
-      {given && r.diff && r.diff.length > 0 && r.verdict !== 'exact' && (
-        <div className="mt-2">
-          <Diff parts={r.diff} />
         </div>
       )}
+      {given && r.diff && r.diff.length > 0 && r.verdict !== 'exact' && <Diff parts={r.diff} />}
       {r.notes && r.notes.length > 0 && (
-        <ul className="mt-2 list-disc pl-5 text-sm">
+        <ul className="list-disc pl-5 text-sm">
           {r.notes.map((n) => (
             <li key={n}>{n}</li>
           ))}
         </ul>
       )}
-      {r.explain && <p className="mt-2 text-sm text-neutral-700">{r.explain}</p>}
+      {r.explain && <p className="text-sm text-neutral-700">{r.explain}</p>}
     </div>
   )
 }
@@ -221,38 +216,38 @@ export function Drills() {
   if (limitedDone)
     return (
       <Column>
-        <PageHeader
-          back={{ to: `/grammar/${code}`, label: 'Back to pattern' }}
-          title={data.title}
-          subtitle={`Done. ${data.drills.length} of ${data.drills.length} answered.`}
-        />
-        <Link to="/" className="self-start rounded-lg border border-neutral-400 px-5 py-3">
-          Back to Today
-        </Link>
+        <PageHeader back={{ to: `/grammar/${code}`, label: 'Back to pattern' }} title={data.title} subtitle="Drills" />
+        <NextStep message={<p className="font-semibold">Done. {data.drills.length} answered.</p>} />
       </Column>
     )
 
   if (round)
     return (
       <Column>
-        <PageHeader
-          back={{ to: `/grammar/${code}`, label: 'Back to pattern' }}
-          title={data.title}
-          subtitle={`${Math.round(round.pct * round.total)} of ${round.total} right first time.`}
+        <PageHeader back={{ to: `/grammar/${code}`, label: 'Back to pattern' }} title={data.title} subtitle="Drills" />
+        <NextStep
+          message={
+            <div className="flex flex-col gap-2">
+              <p className="font-semibold">
+                {Math.round(round.pct * round.total)} of {round.total} right first time.
+              </p>
+              {round.newly_done ? (
+                <p>Pattern done. Next pattern unlocked.</p>
+              ) : (
+                !round.done && (
+                  <>
+                    <p className="text-sm text-neutral-700">Not done yet. Try another round later.</p>
+                    <details className="text-sm text-neutral-700">
+                      <summary className="cursor-pointer">How a pattern counts as done</summary>
+                      <p className="mt-1">80% right first time in one round marks the pattern done.</p>
+                    </details>
+                  </>
+                )
+              )}
+            </div>
+          }
+          next={round.newly_done ? { to: '/grammar', label: 'Next pattern' } : { to: '/grammar', label: 'Back to Grammatik' }}
         />
-        {round.newly_done ? (
-          <p className="rounded-lg border-2 border-neutral-900 p-3 font-semibold">Pattern done. Next pattern unlocked.</p>
-        ) : (
-          !round.done && <p className="text-sm text-neutral-700">80% right first time marks the pattern done. Try another round later.</p>
-        )}
-        <div className="flex gap-3">
-          <Link to="/grammar" className="rounded-lg bg-neutral-900 px-5 py-3 text-white">
-            Back to Grammatik
-          </Link>
-          <Link to="/" className="rounded-lg border border-neutral-400 px-5 py-3">
-            Back to Today
-          </Link>
-        </div>
       </Column>
     )
 
@@ -269,8 +264,8 @@ export function Drills() {
         subtitle={`Drills. Question ${idx + 1} of ${data.drills.length}.`}
       />
 
-      <section className="rounded-lg border border-neutral-300 bg-white p-4">
-        <p className="text-xs tracking-wide text-neutral-500 uppercase">{TYPE_LABEL[drill.type] ?? drill.type}</p>
+      <section className="rounded-xl border border-neutral-200 bg-white p-4">
+        <p className="text-sm font-semibold text-neutral-600">{TYPE_LABEL[drill.type] ?? drill.type}</p>
         <p className="mt-1">{drill.instruction}</p>
         {drill.mode === 'tokens' && <p className="mt-1 text-xl">{drill.prompt}</p>}
         {drill.mode === 'type' && drill.prompt && (
@@ -285,13 +280,8 @@ export function Drills() {
         <>
           <Result drill={drill} r={result} given={given} />
           {err && <p className="text-sm">Error: {err}</p>}
-          <button
-            onClick={next}
-            disabled={busy}
-            autoFocus
-            className="self-start rounded-lg bg-neutral-900 px-5 py-3 text-white disabled:opacity-60"
-          >
-            {idx + 1 < data.drills.length ? 'Next' : busy ? 'Saving…' : data.limited ? 'Done' : 'Finish round'}
+          <button onClick={next} disabled={busy} autoFocus className={`${buttonClass('primary')} self-start`}>
+            {idx + 1 < data.drills.length ? 'Next' : busy ? 'Saving…' : 'Finish'}
           </button>
           <p className="text-xs text-neutral-600">Enter continues.</p>
         </>
@@ -321,31 +311,17 @@ export function Drills() {
           {busy && isFree && <p className="text-sm text-neutral-700">Sending to the tutor…</p>}
           {err && <p className="text-sm">Error: {err}</p>}
           <div className="flex gap-2">
-            <button
-              type="submit"
-              disabled={!canCheck || busy}
-              className="rounded-lg bg-neutral-900 px-5 py-3 text-white disabled:opacity-60"
-            >
+            <Button kind="primary" type="submit" disabled={!canCheck || busy}>
               Check
-            </button>
+            </Button>
             {isFree ? (
-              <button
-                type="button"
-                disabled={busy}
-                onClick={() => next()}
-                className="rounded-lg border border-neutral-400 px-5 py-3"
-              >
-                Skip
-              </button>
-            ) : (
-              <button
-                type="button"
-                disabled={busy}
-                onClick={() => submit(true)}
-                className="rounded-lg border border-neutral-400 px-5 py-3"
-              >
+              <Button disabled={busy} onClick={() => next()}>
                 I don't know
-              </button>
+              </Button>
+            ) : (
+              <Button disabled={busy} onClick={() => submit(true)}>
+                I don't know
+              </Button>
             )}
           </div>
           <p className="text-xs text-neutral-600">

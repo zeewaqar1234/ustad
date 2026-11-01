@@ -2,7 +2,7 @@ import type { ItemReveal } from '../lib/api'
 
 export function ItemCard({ item }: { item: ItemReveal }) {
   return (
-    <div className="rounded-lg border border-neutral-300 bg-white p-4">
+    <div className="rounded-xl border border-neutral-200 bg-white p-4">
       <p className="text-xl font-semibold" lang="de">
         {item.symbol && <span className="mr-1.5" aria-hidden>{item.symbol}</span>}
         {item.de}

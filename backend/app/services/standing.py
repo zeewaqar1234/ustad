@@ -383,34 +383,16 @@ def needed_pace(goals: dict, modules: list[dict], today: date) -> dict | None:
 
 
 def grammar_states(db: Session, today: date) -> list[dict]:
-    mt = method()["indicators"]
-    out = []
-    for p in db.scalars(select(Pattern).order_by(Pattern.order)):
-        evs = list(db.scalars(
-            select(EvidenceEvent).where(EvidenceEvent.pattern_code == p.code)
-            .order_by(EvidenceEvent.ts.desc()).limit(mt["grammar_attempts"])
-        ))  # fmt: skip
-        if not evs:
-            out.append(
-                {"code": p.code, "title": p.title, "state": "new", "accuracy": None, "events": 0}
-            )
-            continue
-        ws = [
-            1 / 2 ** (max((today - local_date(e.ts)).days, 0) / mt["grammar_half_life_days"])
-            for e in evs
-        ]
-        acc = sum(w for w, e in zip(ws, evs) if e.outcome == "correct") / sum(ws)
-        seen = (today - local_date(evs[0].ts)).days
-        if acc < mt["grammar_shaky_below"]:
-            state = "shaky"
-        elif acc > mt["grammar_solid_above"] and seen > mt["grammar_solid_unseen_days"]:
-            state = "solid"
-        else:
-            state = "ok"
-        out.append(
-            {"code": p.code, "title": p.title, "state": state, "accuracy": acc, "events": len(evs)}
-        )
-    return out
+    """Same rule as the planner (services/learner.py pattern_states), so Today and Progress never disagree."""
+    from app.db import utcnow
+    from app.services import learner
+
+    states = learner.pattern_states(db, utcnow())
+    return [
+        {"code": p.code, "title": p.title, "state": states[p.code]["state"],
+         "accuracy": states[p.code]["accuracy"], "events": states[p.code]["events"]}
+        for p in db.scalars(select(Pattern).order_by(Pattern.order))
+    ]  # fmt: skip
 
 
 def error_rate(db: Session, now: datetime, since_days: int | None = None) -> dict:
